@@ -9,6 +9,12 @@ library(stringr)
 # File path for the data
 file_path <- "data.xlsx"
 
+# ── Unit convention ──────────────────────────────────────────
+# Yields enter the panel in percent (e.g. 6.02 = 6.02%). All downstream
+# objects — yoy_infl, trend_inf, cycle, CF, GCF, FXGCF, rx, rx_USD — are
+# kept in percent / percentage points. FX log returns are scaled to %
+# in `rx_raw` for unit consistency with yields.
+
 # Curve map
 curve_map <- read_excel(file_path, sheet = "curve_translation") %>%
   mutate(indicator = trimws(indicator))   # remove any stray whitespace
@@ -179,9 +185,11 @@ rx_raw <- yields_wide %>%
     rx_5  = 5  * y_5  - 4  * y4_lead  - y_1,
     rx_10 = 10 * y_10 - 9  * y9_lead  - y_1,
     # 12-month log FX return: s_{i,t+12} - s_{i,t}, with s = log(USD per FX)
+    # Yields are in percent, so scale the log return to percent (× 100)
+    # so that fx_ret, y_1, rx_n and y1_US share the same units in eq (11).
     s         = log(fx_USD),
     s_lead12  = dplyr::lead(s, 12),
-    fx_ret    = s_lead12 - s,
+    fx_ret    = (s_lead12 - s) * 100,
     # USD excess return for a global investor (eq 11):
     # rx^(n),USD = (p^(n-1)_{t+12} - p^(n)_t) + (s_{t+12} - s_t) - y^(1)_{US,t}
     # Note: p^(n-1)_{t+12} - p^(n)_t = rx^(n) + y^(1)_{i,t}  (under p = -n*y)
@@ -258,8 +266,7 @@ local_cf <- reg_data %>%
 
 us_data <- local_cf %>%
   filter(country == "US") %>%
-  filter(!is.na(rx), !is.na(CF)) %>%
-  mutate(CF = CF/100)
+  filter(!is.na(rx), !is.na(CF))
 
 fit_us <- lm(rx ~ CF, data = us_data)
 summary(fit_us)
