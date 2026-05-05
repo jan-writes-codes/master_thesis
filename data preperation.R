@@ -231,6 +231,32 @@ rx_avg <- rx_raw %>%
   select(country, ym, date, rx, rx_USD)
 
 
+# ── Cochrane-Piazzesi (2005) baseline factor ────────────────
+# 1-year forwards from the available zero-yield panel:
+#   f_{n-1 → n} = n * y_n - (n-1) * y_{n-1}
+# with (n-1, n) ∈ {(1,2), (4,5), (9,10)} so all four regressors exist
+# in the data. Regress maturity-averaged rx on y_1 + the three forwards;
+# the country-specific CP factor is the in-sample fitted value.
+cp_in <- rx_raw %>%
+  select(country, ym, date, y_1, y_2, y_4, y_5, y_9, y_10) %>%
+  mutate(
+    f_2  = 2  * y_2  - 1 * y_1,
+    f_5  = 5  * y_5  - 4 * y_4,
+    f_10 = 10 * y_10 - 9 * y_9
+  ) %>%
+  left_join(rx_avg %>% select(country, ym, rx), by = c("country", "ym"))
+
+cp_factor <- cp_in %>%
+  filter(!is.na(rx), !is.na(y_1), !is.na(f_2), !is.na(f_5), !is.na(f_10)) %>%
+  group_by(country) %>%
+  group_modify(~ {
+    fit <- lm(rx ~ y_1 + f_2 + f_5 + f_10, data = .x)
+    .x %>% mutate(CP = as.numeric(predict(fit, newdata = .x)))
+  }) %>%
+  ungroup() %>%
+  select(country, ym, date, y_1, f_2, f_5, f_10, CP)
+
+
 # ── Step 6: Average cycle (eq 5) & 1Y cycle ──────────────────
 # Eq (5) averages cycles over N = {1, 2, 5, 10}. The yields panel also
 # carries 4y and 9y (kept for the eq-10 lead leg of rx^(5) and rx^(10));

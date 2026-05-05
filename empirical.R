@@ -1,37 +1,51 @@
 # empirical
-# Expanding window: for each t, estimate eq(4) on data up to t,
-# then predict CF at t+1
+# =============================================================
+# Out-of-sample CF (eq 4-6) for ALL countries via expanding window.
+# At each t, eq (4) is re-fit on the training sample 1..t and used
+# to predict CF at t+1 -- removing the in-sample lookahead that the
+# panel-wide `local_cf` carries by construction.
+# =============================================================
 
 library(lmtest)
 library(sandwich)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(broom)
+library(plm)
 
-min_window <- 120   
-# @Todo window size
+min_train <- 120   # 10 years of monthly observations
 
-local_cf_oos <- reg_data %>%
-  filter(country == "DE") %>%
-  arrange(date) %>%
-  mutate(CF_oos = NA_real_)
-
-for (t in min_window:(nrow(local_cf_oos) - 1)) {
-  train <- local_cf_oos[1:t, ]
-  fit   <- lm(rx ~ cycle_1y + c_bar, data = train, na.action = na.exclude)
-  local_cf_oos$CF_oos[t + 1] <- predict(fit, newdata = local_cf_oos[t + 1, ])
+# Generic 1-step-ahead expanding-window OLS predictor.
+oos_predict <- function(df, formula, min_train = 120) {
+  df    <- df %>% arrange(ym)
+  T_obs <- nrow(df)
+  yhat  <- rep(NA_real_, T_obs)
+  if (T_obs <= min_train) return(yhat)
+  for (t in min_train:(T_obs - 1)) {
+    train <- df[1:t, , drop = FALSE]
+    fit   <- lm(formula, data = train, na.action = na.exclude)
+    yhat[t + 1] <- as.numeric(predict(fit, newdata = df[t + 1, , drop = FALSE]))
+  }
+  yhat
 }
 
-# Now test eq (18) out-of-sample
-fit_oos <- lm(rx ~ CF_oos, data = local_cf_oos %>% filter(!is.na(CF_oos), !is.na(rx)))
-# @Todo what makes this different to 
-coeftest(fit_oos, vcov = NeweyWest(fit_oos, lag = 18, prewhite = FALSE))
-coeftest(fit_oos, vcov = NeweyWest(fit_oos, prewhite = FALSE))
-summary(fit_oos)
+local_cf_oos <- reg_data %>%
+  group_by(country) %>%
+  arrange(ym, .by_group = TRUE) %>%
+  group_modify(~ .x %>% mutate(
+    CF_oos = oos_predict(.x, rx ~ cycle_1y + c_bar, min_train)
+  )) %>%
+  ungroup()
 
-# Extract residuals from the OOS regression
-resid_oos <- residuals(fit_oos)
+# Sanity check: US OOS regression + residual ACF
+us_oos <- local_cf_oos %>% filter(country == "US", !is.na(CF_oos), !is.na(rx))
+fit_us_oos <- lm(rx ~ CF_oos, data = us_oos)
+cat("\n====== US: rx ~ CF_oos (Newey-West, 12m overlap) ======\n")
+print(coeftest(fit_us_oos, vcov = NeweyWest(fit_us_oos, lag = 18, prewhite = FALSE)))
 
-# ACF plot
-acf(resid_oos, lag.max = 100, na.action = na.omit,
-    main = "Residual Autocorrelation — US OOS Predictability Regression",
+acf(residuals(fit_us_oos), lag.max = 100, na.action = na.omit,
+    main = "US: rx ~ CF_oos -- residual ACF",
     xlab = "Lag (months)", ylab = "ACF")
 
 
@@ -69,9 +83,11 @@ library(boot)       # block bootstrap
 
 panel <- local_cf %>%
   select(country, ym, date, CF) %>%
-  left_join(rx_avg  %>% select(country, ym, rx, rx_USD), by = c("country","ym")) %>%
-  left_join(gcf     %>% select(ym, GCF),                  by = "ym") %>%
-  left_join(fxgcf   %>% select(ym, FXGCF),                by = "ym") %>%
+  left_join(rx_avg    %>% select(country, ym, rx, rx_USD),       by = c("country","ym")) %>%
+  left_join(gcf       %>% select(ym, GCF),                       by = "ym") %>%
+  left_join(fxgcf     %>% select(ym, FXGCF),                     by = "ym") %>%
+  left_join(cp_factor %>% select(country, ym, y_1, f_2, f_5, f_10, CP),
+                                                                  by = c("country","ym")) %>%
   arrange(country, date) %>%
   filter(!is.na(rx), !is.na(CF), !is.na(GCF), !is.na(FXGCF))
 
@@ -382,6 +398,101 @@ cw_fxgcf <- panel %>%
            dm_p_two_sided = 2 * pnorm(-abs(ct[1,3])),
            n_forecasts = length(d))
   })
+
+# -------------------------------------------------------------
+# 10b. US replication: Cieslak-Povala (2015) vs. Cochrane-Piazzesi (2005)
+#      In-sample and out-of-sample R^2; subsumption tests in the
+#      encompassing regression rx ~ cycle_1y + c_bar + y_1 + f_2 + f_5 + f_10.
+# -------------------------------------------------------------
+us_data <- reg_data %>%
+  filter(country == "US") %>%
+  left_join(cp_factor %>% select(country, ym, y_1, f_2, f_5, f_10),
+            by = c("country", "ym")) %>%
+  filter(!is.na(rx), !is.na(cycle_1y), !is.na(c_bar),
+         !is.na(y_1), !is.na(f_2), !is.na(f_5), !is.na(f_10)) %>%
+  arrange(ym)
+
+# In-sample fits (HAC SEs, NW lag = 18 for 12m overlapping returns)
+nw_us <- function(m) NeweyWest(m, lag = 18, prewhite = FALSE)
+
+m_cf  <- lm(rx ~ cycle_1y + c_bar,                                data = us_data)
+m_cp  <- lm(rx ~ y_1 + f_2 + f_5 + f_10,                          data = us_data)
+m_enc <- lm(rx ~ cycle_1y + c_bar + y_1 + f_2 + f_5 + f_10,       data = us_data)
+
+cat("\n====== US in-sample: CP-2015 (CF = cycle_1y + c_bar) ======\n")
+print(coeftest(m_cf,  nw_us(m_cf)))
+cat("\n====== US in-sample: CP-2005 (y_1 + 1y forwards) ======\n")
+print(coeftest(m_cp,  nw_us(m_cp)))
+cat("\n====== US in-sample: encompassing (CF + forwards) ======\n")
+print(coeftest(m_enc, nw_us(m_enc)))
+
+cat("\n-- Wald: do CP-2005 forwards add to CF? (H0: y_1=f_2=f_5=f_10=0) --\n")
+print(waldtest(m_cf, m_enc, vcov = nw_us(m_enc), test = "Chisq"))
+cat("\n-- Wald: does CF add to CP-2005? (H0: cycle_1y=c_bar=0) --\n")
+print(waldtest(m_cp, m_enc, vcov = nw_us(m_enc), test = "Chisq"))
+
+# Out-of-sample R^2 (Campbell-Thompson 2008): benchmark = recursive mean
+oos_R2 <- function(df, formula, min_train = 120) {
+  df    <- df %>% arrange(ym)
+  T_obs <- nrow(df)
+  y     <- df$rx
+  yhat  <- rep(NA_real_, T_obs)
+  bench <- rep(NA_real_, T_obs)
+  if (T_obs <= min_train + 1) return(NA_real_)
+  for (t in min_train:(T_obs - 1)) {
+    train <- df[1:t, , drop = FALSE]
+    fit   <- lm(formula, data = train, na.action = na.exclude)
+    yhat[t + 1]  <- as.numeric(predict(fit, newdata = df[t + 1, , drop = FALSE]))
+    bench[t + 1] <- mean(train$rx, na.rm = TRUE)
+  }
+  ok <- !is.na(yhat) & !is.na(y) & !is.na(bench)
+  if (!any(ok)) return(NA_real_)
+  1 - sum((y[ok] - yhat[ok])^2) / sum((y[ok] - bench[ok])^2)
+}
+
+# Diebold-Mariano on squared OOS forecast errors (CF vs CP-2005)
+oos_forecasts <- function(df, formula, min_train = 120) {
+  df    <- df %>% arrange(ym)
+  T_obs <- nrow(df)
+  yhat  <- rep(NA_real_, T_obs)
+  if (T_obs <= min_train + 1) return(yhat)
+  for (t in min_train:(T_obs - 1)) {
+    train <- df[1:t, , drop = FALSE]
+    fit   <- lm(formula, data = train, na.action = na.exclude)
+    yhat[t + 1] <- as.numeric(predict(fit, newdata = df[t + 1, , drop = FALSE]))
+  }
+  yhat
+}
+
+f_cf_oos  <- oos_forecasts(us_data, rx ~ cycle_1y + c_bar,                          min_train)
+f_cp_oos  <- oos_forecasts(us_data, rx ~ y_1 + f_2 + f_5 + f_10,                    min_train)
+f_enc_oos <- oos_forecasts(us_data, rx ~ cycle_1y + c_bar + y_1 + f_2 + f_5 + f_10, min_train)
+
+us_R2_tab <- tibble(
+  model = c("CP-2015 (CF)", "CP-2005 (forwards)", "Encompassing"),
+  R2_in  = c(summary(m_cf)$r.squared,
+             summary(m_cp)$r.squared,
+             summary(m_enc)$r.squared),
+  R2_oos = c(oos_R2(us_data, rx ~ cycle_1y + c_bar),
+             oos_R2(us_data, rx ~ y_1 + f_2 + f_5 + f_10),
+             oos_R2(us_data, rx ~ cycle_1y + c_bar + y_1 + f_2 + f_5 + f_10))
+)
+cat("\n====== US: in-sample vs OOS R^2 ======\n")
+print(us_R2_tab)
+
+# DM test: CF vs CP-2005 squared-error loss differential
+d_us  <- (us_data$rx - f_cf_oos)^2 - (us_data$rx - f_cp_oos)^2
+d_us  <- d_us[!is.na(d_us)]
+if (length(d_us) >= 30) {
+  L_dm <- max(ceiling(1.5 * 12), ceiling(1.3 * sqrt(length(d_us))))
+  m_dm <- lm(d_us ~ 1)
+  vc   <- NeweyWest(m_dm, lag = L_dm, prewhite = FALSE, adjust = TRUE)
+  ct   <- coeftest(m_dm, vcov. = vc)
+  cat("\n====== US Diebold-Mariano: CF vs CP-2005 (negative => CF better) ======\n")
+  print(ct)
+  cat(sprintf("two-sided p = %.4f, n_forecasts = %d\n",
+              2 * pnorm(-abs(ct[1, "t value"])), length(d_us)))
+}
 
 # -------------------------------------------------------------
 # 11. Print a tidy summary
