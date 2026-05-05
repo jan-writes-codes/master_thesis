@@ -4,7 +4,7 @@ library(ggplot2)
 
 cycle %>%
   mutate(maturity_label = paste0(maturity, "Y")) %>%
-  ggplot(aes(x = date.x, y = cycle, colour = maturity_label)) +
+  ggplot(aes(x = date, y = cycle, colour = maturity_label)) +
   geom_line(linewidth = 0.4) +
   facet_wrap(~ country, scales = "free_y", ncol = 3) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey40") +
