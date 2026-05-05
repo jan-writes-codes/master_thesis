@@ -9,6 +9,12 @@ library(stringr)
 # File path for the data
 file_path <- "data.xlsx"
 
+# ── Unit convention ──────────────────────────────────────────
+# Yields enter the panel in percent (e.g. 6.02 = 6.02%). All downstream
+# objects — yoy_infl, trend_inf, cycle, CF, GCF, FXGCF, rx, rx_USD — are
+# kept in percent / percentage points. FX log returns are scaled to %
+# in `rx_raw` for unit consistency with yields.
+
 # Curve map
 curve_map <- read_excel(file_path, sheet = "curve_translation") %>%
   mutate(indicator = trimws(indicator))   # remove any stray whitespace
@@ -179,9 +185,11 @@ rx_raw <- yields_wide %>%
     rx_5  = 5  * y_5  - 4  * y4_lead  - y_1,
     rx_10 = 10 * y_10 - 9  * y9_lead  - y_1,
     # 12-month log FX return: s_{i,t+12} - s_{i,t}, with s = log(USD per FX)
+    # Yields are in percent, so scale the log return to percent (× 100)
+    # so that fx_ret, y_1, rx_n and y1_US share the same units in eq (11).
     s         = log(fx_USD),
     s_lead12  = dplyr::lead(s, 12),
-    fx_ret    = s_lead12 - s,
+    fx_ret    = (s_lead12 - s) * 100,
     # USD excess return for a global investor (eq 11):
     # rx^(n),USD = (p^(n-1)_{t+12} - p^(n)_t) + (s_{t+12} - s_t) - y^(1)_{US,t}
     # Note: p^(n-1)_{t+12} - p^(n)_t = rx^(n) + y^(1)_{i,t}  (under p = -n*y)
@@ -202,10 +210,11 @@ K_rx  <- length(N_rx)
 
 rx_avg <- rx_raw %>%
   mutate(
-    # Durations (eq 14)
-    D_2  = 2  / (1 + y_2),
-    D_5  = 5  / (1 + y_5),
-    D_10 = 10 / (1 + y_10),
+    # Durations (eq 14): yields are in percent, so divide by 100 for the
+    # discount-rate denominator. rx is also in percent; rx_tilde stays in %.
+    D_2  = 2  / (1 + y_2  / 100),
+    D_5  = 5  / (1 + y_5  / 100),
+    D_10 = 10 / (1 + y_10 / 100),
     # Duration-standardized local-currency rx (eq 13)
     rx_tilde_2  = rx_2  / D_2,
     rx_tilde_5  = rx_5  / D_5,
@@ -220,6 +229,32 @@ rx_avg <- rx_raw %>%
     rx_USD = (rx_tilde_2_USD + rx_tilde_5_USD + rx_tilde_10_USD) / K_rx
   ) %>%
   select(country, ym, date, rx, rx_USD)
+
+
+# ── Cochrane-Piazzesi (2005) baseline factor ────────────────
+# 1-year forwards from the available zero-yield panel:
+#   f_{n-1 → n} = n * y_n - (n-1) * y_{n-1}
+# with (n-1, n) ∈ {(1,2), (4,5), (9,10)} so all four regressors exist
+# in the data. Regress maturity-averaged rx on y_1 + the three forwards;
+# the country-specific CP factor is the in-sample fitted value.
+cp_in <- rx_raw %>%
+  select(country, ym, date, y_1, y_2, y_4, y_5, y_9, y_10) %>%
+  mutate(
+    f_2  = 2  * y_2  - 1 * y_1,
+    f_5  = 5  * y_5  - 4 * y_4,
+    f_10 = 10 * y_10 - 9 * y_9
+  ) %>%
+  left_join(rx_avg %>% select(country, ym, rx), by = c("country", "ym"))
+
+cp_factor <- cp_in %>%
+  filter(!is.na(rx), !is.na(y_1), !is.na(f_2), !is.na(f_5), !is.na(f_10)) %>%
+  group_by(country) %>%
+  group_modify(~ {
+    fit <- lm(rx ~ y_1 + f_2 + f_5 + f_10, data = .x)
+    .x %>% mutate(CP = as.numeric(predict(fit, newdata = .x)))
+  }) %>%
+  ungroup() %>%
+  select(country, ym, date, y_1, f_2, f_5, f_10, CP)
 
 
 # ── Step 6: Average cycle (eq 5) & 1Y cycle ──────────────────
@@ -258,8 +293,7 @@ local_cf <- reg_data %>%
 
 us_data <- local_cf %>%
   filter(country == "US") %>%
-  filter(!is.na(rx), !is.na(CF)) %>%
-  mutate(CF = CF/100)
+  filter(!is.na(rx), !is.na(CF))
 
 fit_us <- lm(rx ~ CF, data = us_data)
 summary(fit_us)
