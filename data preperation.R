@@ -223,7 +223,13 @@ rx_avg <- rx_raw %>%
 
 
 # ── Step 6: Average cycle (eq 5) & 1Y cycle ──────────────────
+# Eq (5) averages cycles over N = {1, 2, 5, 10}. The yields panel also
+# carries 4y and 9y (kept for the eq-10 lead leg of rx^(5) and rx^(10));
+# they must be excluded from c_bar to match the proposal.
+N_cycle <- c(1, 2, 5, 10)
+
 cycle_avg <- cycle %>%
+  filter(maturity %in% N_cycle) %>%
   group_by(country, ym, date) %>%
   summarise(c_bar = mean(cycle, na.rm = TRUE), .groups = "drop")
 
