@@ -210,10 +210,11 @@ K_rx  <- length(N_rx)
 
 rx_avg <- rx_raw %>%
   mutate(
-    # Durations (eq 14)
-    D_2  = 2  / (1 + y_2),
-    D_5  = 5  / (1 + y_5),
-    D_10 = 10 / (1 + y_10),
+    # Durations (eq 14): yields are in percent, so divide by 100 for the
+    # discount-rate denominator. rx is also in percent; rx_tilde stays in %.
+    D_2  = 2  / (1 + y_2  / 100),
+    D_5  = 5  / (1 + y_5  / 100),
+    D_10 = 10 / (1 + y_10 / 100),
     # Duration-standardized local-currency rx (eq 13)
     rx_tilde_2  = rx_2  / D_2,
     rx_tilde_5  = rx_5  / D_5,
