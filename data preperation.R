@@ -76,7 +76,9 @@ library(purrr)
 
 # --- CP trend inflation: equation (3) ---
 # Parameters
-v <- 0.9       # @Todo: estimated from survey data; CP use ~0.9-0.99, check your thesis spec
+# Cieslak & Povala (2015), §2.2: v calibrated to inflation survey data at
+# 0.987 (monthly updating), with M = 120 months.
+v <- 0.987
 M <- 120       # 10-year window
 
 # Precompute weights: w_j = v^j, then normalize by (1-v)/(1-v^M)
@@ -192,8 +194,11 @@ rx_raw <- yields_wide %>%
 
 # ── Eq (14): Duration D_{i,t}^{(n)} = n / (1 + y_{i,t}^{(n)}) ───
 # ── Eq (13): rx~_{i,t+12}^{(n)} = rx^{(n)} / D^{(n)}          ───
-# ── Eq (12): rx_{i,t+12} = (1/K) * sum over n of rx~^{(n)}    ───
-# K = 3 (maturities 2, 5, 10 — we skip n=1 since rx^{(1)} needs y^{(0)} which is undefined)
+# ── Eq (12): rx_{i,t+12} = (1/K_rx) * sum over n in N_rx of rx~^{(n)}
+# N_rx = {2, 5, 10}: rx^{(1)} requires y^{(0)} (eq 10) which is not defined,
+# so the maturity set used for the rx average is N \ {1}, with K_rx = 3.
+N_rx  <- c(2, 5, 10)
+K_rx  <- length(N_rx)
 
 rx_avg <- rx_raw %>%
   mutate(
@@ -205,20 +210,26 @@ rx_avg <- rx_raw %>%
     rx_tilde_2  = rx_2  / D_2,
     rx_tilde_5  = rx_5  / D_5,
     rx_tilde_10 = rx_10 / D_10,
-    # Maturity-averaged local-currency rx (eq 12), K = 3
-    rx = (1/3) * (rx_tilde_2 + rx_tilde_5 + rx_tilde_10),
+    # Maturity-averaged local-currency rx (eq 12) over N_rx
+    rx = (rx_tilde_2 + rx_tilde_5 + rx_tilde_10) / K_rx,
     # Duration-standardized USD rx (eq 13 applied to eq 11)
     rx_tilde_2_USD  = rx_2_USD  / D_2,
     rx_tilde_5_USD  = rx_5_USD  / D_5,
     rx_tilde_10_USD = rx_10_USD / D_10,
-    # Maturity-averaged USD rx (eq 12), K = 3
-    rx_USD = (1/3) * (rx_tilde_2_USD + rx_tilde_5_USD + rx_tilde_10_USD)
+    # Maturity-averaged USD rx (eq 12) over N_rx
+    rx_USD = (rx_tilde_2_USD + rx_tilde_5_USD + rx_tilde_10_USD) / K_rx
   ) %>%
   select(country, ym, date, rx, rx_USD)
 
 
 # ── Step 6: Average cycle (eq 5) & 1Y cycle ──────────────────
+# Eq (5) averages cycles over N = {1, 2, 5, 10}. The yields panel also
+# carries 4y and 9y (kept for the eq-10 lead leg of rx^(5) and rx^(10));
+# they must be excluded from c_bar to match the proposal.
+N_cycle <- c(1, 2, 5, 10)
+
 cycle_avg <- cycle %>%
+  filter(maturity %in% N_cycle) %>%
   group_by(country, ym, date) %>%
   summarise(c_bar = mean(cycle, na.rm = TRUE), .groups = "drop")
 
