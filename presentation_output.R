@@ -35,9 +35,50 @@ source("empirical.R")
 source("plots.R")
 
 # -------------------------------------------------------------
-# 2. Save every plot defined in `plots` to figures/
+# 2. Save the plots that presentation/main.tex references.
+#    Listed explicitly so a name mismatch errors loudly instead
+#    of silently producing a presentation with missing figures.
 # -------------------------------------------------------------
-save_all_plots(dir = FIG_DIR, width = 9, height = 6)
+required_plots <- c(
+  "yield_ts", "inflation_trend",
+  "cycles_by_country", "local_cf", "gcf",
+  "coef_eq19", "us_replication_R2", "r2_compare", "fitted_vs_realized",
+  "trend_panel", "gdp_weights", "fxgcf_vs_gcf",
+  "cf_corr_heatmap", "tstat_panel", "residual_acf_panel", "cf_oos_vs_in"
+)
+
+# Rebuild coef_eq19 here so it does not depend on plots.R having
+# successfully assigned it (e.g. if tab_19 was missing at source time).
+plots$coef_eq19 <- tab_19 %>%
+  dplyr::filter(term %in% c("CF", "GCF"),
+                !is.na(estimate), !is.na(std_err)) %>%
+  dplyr::mutate(lo = estimate - 1.96 * std_err,
+                hi = estimate + 1.96 * std_err) %>%
+  ggplot2::ggplot(ggplot2::aes(country, estimate, colour = term)) +
+  ggplot2::geom_pointrange(ggplot2::aes(ymin = lo, ymax = hi),
+                           position = ggplot2::position_dodge(width = 0.5)) +
+  ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  ggplot2::scale_colour_manual(values = c(CF = "#08519c", GCF = "#a50f15"),
+                               name = NULL) +
+  ggplot2::labs(title = "Eq (19): rx ~ CF + GCF coefficients (HAC +/- 1.96 SE)",
+                subtitle = "Does the global CF subsume the local CF?",
+                x = NULL, y = "Coefficient") +
+  theme_thesis +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+missing_plots <- setdiff(required_plots, names(plots))
+if (length(missing_plots) > 0) {
+  stop("Missing plot definitions in `plots`: ",
+       paste(missing_plots, collapse = ", "))
+}
+
+for (nm in required_plots) {
+  ggplot2::ggsave(
+    filename = file.path(FIG_DIR, paste0(nm, ".pdf")),
+    plot     = plots[[nm]],
+    width    = 9, height = 6
+  )
+}
 
 # -------------------------------------------------------------
 # 3. LaTeX-table helpers (no kableExtra dependency)
