@@ -656,6 +656,103 @@ plots$cycle_persistence <- cycle %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # =============================================================
+# 12. Fully-OOS factors: GCF_oos, FXGCF_oos and OOS R²
+# =============================================================
+
+# 12a. In-sample vs OOS GCF
+plots$gcf_oos_vs_in <- gcf %>%
+  select(ym, date, GCF) %>%
+  full_join(gcf_oos %>% select(ym, GCF_oos), by = "ym") %>%
+  pivot_longer(c(GCF, GCF_oos), names_to = "type", values_to = "value") %>%
+  filter(!is.na(value)) %>%
+  ggplot(aes(date, value, colour = type)) +
+  geom_line(linewidth = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_colour_manual(values = c(GCF = "#08519c", GCF_oos = "#d94801"),
+                      labels = c("In-sample GCF", "OOS GCF (expanding)"),
+                      name = NULL) +
+  labs(title = "Global cycle factor: in-sample vs out-of-sample",
+       y = "GCF", x = NULL) +
+  theme_thesis
+
+# 12b. In-sample vs OOS FXGCF
+plots$fxgcf_oos_vs_in <- fxgcf %>%
+  select(ym, date, FXGCF) %>%
+  full_join(fxgcf_oos %>% select(ym, FXGCF_oos), by = "ym") %>%
+  pivot_longer(c(FXGCF, FXGCF_oos), names_to = "type", values_to = "value") %>%
+  filter(!is.na(value)) %>%
+  ggplot(aes(date, value, colour = type)) +
+  geom_line(linewidth = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_colour_manual(values = c(FXGCF = "#08519c", FXGCF_oos = "#a50f15"),
+                      labels = c("In-sample FXGCF", "OOS FXGCF (recursive δ)"),
+                      name = NULL) +
+  labs(title = "FX-Global cycle factor: in-sample vs out-of-sample",
+       y = "FXGCF", x = NULL) +
+  theme_thesis
+
+# 12c. All three OOS factors on one panel
+plots$oos_factors_combined <- bind_rows(
+  local_cf_oos %>%
+    filter(country == "US") %>%
+    transmute(date, factor = "CF_oos (US)", value = CF_oos),
+  gcf_oos   %>% transmute(date, factor = "GCF_oos",   value = GCF_oos),
+  fxgcf_oos %>% transmute(date, factor = "FXGCF_oos", value = FXGCF_oos)
+) %>%
+  filter(!is.na(value)) %>%
+  ggplot(aes(date, value, colour = factor)) +
+  geom_line(linewidth = 0.45) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_colour_manual(values = c("CF_oos (US)" = "#08519c",
+                                 "GCF_oos"     = "#4dac26",
+                                 "FXGCF_oos"   = "#a50f15"),
+                      name = NULL) +
+  labs(title = "Out-of-sample factor time series",
+       subtitle = "All three factors use only information available at t-1",
+       y = "Factor value", x = NULL) +
+  theme_thesis
+
+# 12d. OOS R² across specs and countries
+plots$oos_R2_compare <- oos_R2_tab %>%
+  filter(!is.na(R2_oos)) %>%
+  mutate(spec = factor(spec,
+                       levels = c("rx ~ CF_oos",
+                                  "rx ~ GCF_oos",
+                                  "rx_USD ~ GCF_oos",
+                                  "rx_USD ~ FXGCF_oos"))) %>%
+  ggplot(aes(country, R2_oos, fill = spec)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  geom_hline(yintercept = 0, colour = "grey40") +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_brewer(palette = "Set2", name = NULL) +
+  labs(title = "Out-of-sample R² (Campbell-Thompson) per country and spec",
+       subtitle = "Negative values indicate the factor underperforms the recursive mean",
+       x = NULL, y = "OOS R²") +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 12e. Clark-West t-stat distribution across countries (OOS factors)
+plots$cw_oos_tstat <- bind_rows(
+  cw_local_oos %>% transmute(country, test = "Local rx", t = cw_t,
+                             p_one_sided = cw_p_one_sided),
+  cw_usd_oos   %>% transmute(country, test = "USD rx",   t = cw_t,
+                             p_one_sided = cw_p_one_sided)
+) %>%
+  ggplot(aes(country, t, fill = test)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  geom_hline(yintercept = c(1.282, 1.645, 2.326),
+             linetype = c("dotted", "dashed", "dotdash"),
+             colour = "grey40") +
+  scale_fill_manual(values = c("Local rx" = "#08519c",
+                               "USD rx"   = "#a50f15"),
+                    name = NULL) +
+  labs(title = "Clark-West statistic with OOS factors",
+       subtitle = "GCF_oos vs CF_oos + GCF_oos. Lines: 10%/5%/1% one-sided crit.",
+       x = NULL, y = "CW t-stat") +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# =============================================================
 # Convenience: write every plot to disk
 # =============================================================
 save_all_plots <- function(dir = "plots", width = 10, height = 7) {

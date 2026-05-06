@@ -44,7 +44,10 @@ required_plots <- c(
   "cycles_by_country", "local_cf", "gcf",
   "coef_eq19", "us_replication_R2", "r2_compare", "fitted_vs_realized",
   "trend_panel", "gdp_weights", "fxgcf_vs_gcf",
-  "cf_corr_heatmap", "tstat_panel", "residual_acf_panel", "cf_oos_vs_in"
+  "cf_corr_heatmap", "tstat_panel", "residual_acf_panel", "cf_oos_vs_in",
+  # OOS factors and tests
+  "gcf_oos_vs_in", "fxgcf_oos_vs_in", "oos_factors_combined",
+  "oos_R2_compare", "cw_oos_tstat"
 )
 
 # Rebuild coef_eq19 here so it does not depend on plots.R having
@@ -352,6 +355,72 @@ write_tabular(
   header = colnames(coverage_rows),
   align  = "lllr",
   file   = "sample_coverage.tex"
+)
+
+# -------------------------------------------------------------
+# 12. OOS factor tables: per-country Campbell-Thompson R²,
+#     Clark-West with OOS factors, Diebold-Mariano on FXGCF_oos.
+# -------------------------------------------------------------
+oos_R2_wide <- oos_R2_tab %>%
+  select(country, spec, R2_oos) %>%
+  pivot_wider(names_from = spec, values_from = R2_oos) %>%
+  arrange(country)
+
+oos_R2_rows <- oos_R2_wide %>%
+  transmute(
+    Country               = country,
+    `rx $\\sim$ CF$_{oos}$`        = fmt_pct(`rx ~ CF_oos`),
+    `rx $\\sim$ GCF$_{oos}$`       = fmt_pct(`rx ~ GCF_oos`),
+    `rx$^{USD}$ $\\sim$ GCF$_{oos}$`   = fmt_pct(`rx_USD ~ GCF_oos`),
+    `rx$^{USD}$ $\\sim$ FXGCF$_{oos}$` = fmt_pct(`rx_USD ~ FXGCF_oos`)
+  )
+write_tabular(
+  rows   = as.matrix(oos_R2_rows),
+  header = colnames(oos_R2_rows),
+  align  = "lrrrr",
+  file   = "oos_R2_factors.tex"
+)
+
+cw_oos_rows <- bind_rows(
+  cw_local_oos %>% transmute(
+    Country = country,
+    Test    = "rx",
+    `$\\Delta$MSPE-adj` = fmt_num(cw_mean, 4),
+    `$t$`               = fmt_num(cw_t, 2),
+    `$p$ (1-sided)`     = fmt_num(cw_p_one_sided, 3),
+    `$n_{fcst}$`        = fmt_int(n_forecasts)
+  ),
+  cw_usd_oos %>% transmute(
+    Country = country,
+    Test    = "rx$^{USD}$",
+    `$\\Delta$MSPE-adj` = fmt_num(cw_mean, 4),
+    `$t$`               = fmt_num(cw_t, 2),
+    `$p$ (1-sided)`     = fmt_num(cw_p_one_sided, 3),
+    `$n_{fcst}$`        = fmt_int(n_forecasts)
+  )
+) %>% arrange(Test, Country)
+
+write_tabular(
+  rows   = as.matrix(cw_oos_rows),
+  header = colnames(cw_oos_rows),
+  align  = "llrrrr",
+  file   = "oos_clark_west_factors.tex"
+)
+
+dm_oos_rows <- dm_fxgcf_oos %>%
+  arrange(country) %>%
+  transmute(
+    Country  = country,
+    `DM mean ($e^2_{GCF_{oos}}-e^2_{FXGCF_{oos}}$)` = fmt_num(dm_mean, 4),
+    `$t$`             = fmt_num(dm_t, 2),
+    `$p$ (2-sided)`   = fmt_num(dm_p_two_sided, 3),
+    `$n_{fcst}$`      = fmt_int(n_forecasts)
+  )
+write_tabular(
+  rows   = as.matrix(dm_oos_rows),
+  header = colnames(dm_oos_rows),
+  align  = "lrrrr",
+  file   = "oos_dm_fxgcf_factors.tex"
 )
 
 cat(sprintf(

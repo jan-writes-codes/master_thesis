@@ -540,3 +540,221 @@ print(cw_usd)
 cat("\n====== Out-of-sample Diebold-Mariano: GCF vs FXGCF ======\n")
 print(cw_fxgcf)
 
+
+# =============================================================
+# 12. Fully out-of-sample factor versions
+# -------------------------------------------------------------
+# `local_cf_oos$CF_oos` already implements expanding-window OOS
+# eq (4). We extend the OOS chain:
+#   GCF_oos_t   = sum_i w_{i,t} * CF_oos_{i,t}      (eq 7 with OOS CF)
+#   FXGCF_oos_t = δ̂_0(1..t-1) + δ̂_1(1..t-1)*GCF_oos_t   (eq 17, recursive δ)
+# All three factors at time t therefore use information available
+# at most through t-1.
+#
+# Tests on the OOS factors:
+#   - Campbell-Thompson OOS R² (recursive-mean benchmark) per country
+#   - Clark-West: GCF_oos vs CF_oos+GCF_oos for rx and rx_USD
+#   - Diebold-Mariano: GCF_oos vs FXGCF_oos for rx_USD (same dim)
+# =============================================================
+
+# 12a. OOS GCF: GDP-weighted sum of CF_oos
+gcf_oos <- local_cf_oos %>%
+  mutate(y = as.integer(format(date, "%Y"))) %>%
+  left_join(gdp %>% select(y, country, gdp_val),
+            by = c("y", "country")) %>%
+  group_by(ym) %>%
+  mutate(
+    gdp_total = sum(gdp_val[!is.na(CF_oos)], na.rm = TRUE),
+    w_oos     = ifelse(is.na(CF_oos), NA_real_, gdp_val / gdp_total)
+  ) %>%
+  group_by(ym, date) %>%
+  summarise(
+    GCF_oos     = sum(w_oos * CF_oos, na.rm = TRUE),
+    n_countries = sum(!is.na(CF_oos) & !is.na(w_oos)),
+    .groups     = "drop"
+  ) %>%
+  mutate(GCF_oos = ifelse(n_countries == 0, NA_real_, GCF_oos)) %>%
+  arrange(date)
+
+# 12b. OOS FXGCF: recursive δ̂ on rx_USD_bar ~ GCF_oos
+fxgcf_oos_data <- gcf_oos %>%
+  select(ym, date, GCF_oos) %>%
+  left_join(rx_usd_bar %>% select(ym, rx_USD_bar), by = "ym") %>%
+  arrange(ym) %>%
+  mutate(FXGCF_oos = NA_real_)
+
+min_train_fx <- 60
+for (t in seq_len(nrow(fxgcf_oos_data))) {
+  if (t <= min_train_fx) next
+  train <- fxgcf_oos_data[1:(t - 1), ] %>%
+    filter(!is.na(rx_USD_bar), !is.na(GCF_oos))
+  if (nrow(train) < min_train_fx) next
+  fit <- lm(rx_USD_bar ~ GCF_oos, data = train)
+  if (!is.na(fxgcf_oos_data$GCF_oos[t])) {
+    fxgcf_oos_data$FXGCF_oos[t] <-
+      as.numeric(predict(fit, newdata = fxgcf_oos_data[t, ]))
+  }
+}
+
+fxgcf_oos <- fxgcf_oos_data %>% select(ym, date, GCF_oos, FXGCF_oos)
+
+# 12c. OOS panel for tests
+panel_oos <- local_cf_oos %>%
+  select(country, ym, date, CF_oos) %>%
+  left_join(rx_avg    %>% select(country, ym, rx, rx_USD), by = c("country","ym")) %>%
+  left_join(gcf_oos   %>% select(ym, GCF_oos),             by = "ym") %>%
+  left_join(fxgcf_oos %>% select(ym, FXGCF_oos),           by = "ym") %>%
+  arrange(country, date)
+
+# 12d. Campbell-Thompson OOS R² for the 4 headline specs.
+# Forecast at t uses β̂(1..t-1) * factor_t (factor itself is OOS).
+oos_R2_factor <- function(df, target, predictor, min_train = 120) {
+  df <- df %>% arrange(ym)
+  df <- df[!is.na(df[[predictor]]), , drop = FALSE]
+  T_obs <- nrow(df)
+  if (T_obs <= min_train + 1) return(c(R2 = NA_real_, n_fcst = 0L))
+  y     <- df[[target]]
+  x     <- df[[predictor]]
+  yhat  <- rep(NA_real_, T_obs)
+  bench <- rep(NA_real_, T_obs)
+  for (t in min_train:(T_obs - 1)) {
+    train <- df[1:t, , drop = FALSE]
+    if (sum(!is.na(train[[target]]) & !is.na(train[[predictor]])) < 30) next
+    fit <- lm(as.formula(sprintf("%s ~ %s", target, predictor)),
+              data = train, na.action = na.exclude)
+    yhat[t + 1]  <- as.numeric(predict(fit, newdata = df[t + 1, , drop = FALSE]))
+    bench[t + 1] <- mean(train[[target]], na.rm = TRUE)
+  }
+  ok <- !is.na(yhat) & !is.na(y) & !is.na(bench)
+  if (!any(ok)) return(c(R2 = NA_real_, n_fcst = 0L))
+  c(R2 = 1 - sum((y[ok] - yhat[ok])^2) / sum((y[ok] - bench[ok])^2),
+    n_fcst = sum(ok))
+}
+
+ct_specs <- list(
+  list(label = "rx ~ CF_oos",         target = "rx",     predictor = "CF_oos"),
+  list(label = "rx ~ GCF_oos",        target = "rx",     predictor = "GCF_oos"),
+  list(label = "rx_USD ~ GCF_oos",    target = "rx_USD", predictor = "GCF_oos"),
+  list(label = "rx_USD ~ FXGCF_oos",  target = "rx_USD", predictor = "FXGCF_oos")
+)
+
+oos_R2_tab <- panel_oos %>%
+  group_by(country) %>%
+  group_split() %>%
+  set_names(map_chr(., ~ unique(.x$country))) %>%
+  imap_dfr(function(df, cn) {
+    map_dfr(ct_specs, function(s) {
+      r <- oos_R2_factor(df %>% filter(!is.na(.data[[s$target]])),
+                         s$target, s$predictor)
+      tibble(country = cn, spec = s$label,
+             R2_oos  = unname(r["R2"]),
+             n_fcst  = as.integer(unname(r["n_fcst"])))
+    })
+  })
+
+# 12e. Clark-West with OOS factors
+cw_oos_test <- function(df, target, small_pred, large_pred, min_train = 60) {
+  df <- df %>%
+    arrange(ym) %>%
+    filter(!is.na(.data[[target]]),
+           !is.na(.data[[small_pred]]),
+           !is.na(.data[[large_pred]]))
+  T_obs <- nrow(df)
+  if (T_obs <= min_train + 12) return(NULL)
+  y <- df[[target]]
+  fhat_s <- rep(NA_real_, T_obs)
+  fhat_l <- rep(NA_real_, T_obs)
+  for (t in (min_train + 1):T_obs) {
+    train <- df[1:(t - 1), ]
+    m_s <- lm(as.formula(sprintf("%s ~ %s", target, small_pred)), data = train)
+    m_l <- lm(as.formula(sprintf("%s ~ %s + %s", target, small_pred, large_pred)),
+              data = train)
+    fhat_s[t] <- as.numeric(predict(m_s, newdata = df[t, ]))
+    fhat_l[t] <- as.numeric(predict(m_l, newdata = df[t, ]))
+  }
+  e_s <- (y - fhat_s)^2
+  e_l <- (y - fhat_l)^2
+  adj <- (fhat_s - fhat_l)^2
+  f_stat <- e_s - e_l + adj
+  f_stat <- f_stat[!is.na(f_stat)]
+  if (length(f_stat) < 30) return(NULL)
+  L  <- nw_lag_for(length(f_stat), h = 12)
+  m  <- lm(f_stat ~ 1)
+  vc <- NeweyWest(m, lag = L, prewhite = FALSE, adjust = TRUE)
+  ct <- coeftest(m, vcov. = vc)
+  tibble(
+    cw_mean        = ct[1, "Estimate"],
+    cw_se          = ct[1, "Std. Error"],
+    cw_t           = ct[1, "t value"],
+    cw_p_one_sided = pnorm(ct[1, "t value"], lower.tail = FALSE),
+    n_forecasts    = length(f_stat)
+  )
+}
+
+cw_local_oos <- panel_oos %>%
+  group_by(country) %>%
+  group_split() %>%
+  set_names(map_chr(., ~ unique(.x$country))) %>%
+  imap_dfr(function(df, cn) {
+    out <- cw_oos_test(df, "rx", "GCF_oos", "CF_oos")
+    if (is.null(out)) return(NULL)
+    out %>% mutate(country = cn,
+                   test = "Local OOS: GCF_oos vs CF_oos+GCF_oos")
+  })
+
+cw_usd_oos <- panel_oos %>%
+  group_by(country) %>%
+  group_split() %>%
+  set_names(map_chr(., ~ unique(.x$country))) %>%
+  imap_dfr(function(df, cn) {
+    out <- cw_oos_test(df, "rx_USD", "GCF_oos", "CF_oos")
+    if (is.null(out)) return(NULL)
+    out %>% mutate(country = cn,
+                   test = "USD OOS: GCF_oos vs CF_oos+GCF_oos")
+  })
+
+# 12f. Diebold-Mariano: GCF_oos vs FXGCF_oos for rx_USD
+dm_fxgcf_oos <- panel_oos %>%
+  group_by(country) %>%
+  group_split() %>%
+  set_names(map_chr(., ~ unique(.x$country))) %>%
+  imap_dfr(function(df, cn) {
+    df <- df %>%
+      arrange(ym) %>%
+      filter(!is.na(rx_USD), !is.na(GCF_oos), !is.na(FXGCF_oos))
+    T_obs <- nrow(df)
+    if (T_obs <= min_train + 12) return(NULL)
+    fA <- fB <- rep(NA_real_, T_obs)
+    for (t in (min_train + 1):T_obs) {
+      train <- df[1:(t - 1), ]
+      mA <- lm(rx_USD ~ GCF_oos,   data = train)
+      mB <- lm(rx_USD ~ FXGCF_oos, data = train)
+      fA[t] <- as.numeric(predict(mA, newdata = df[t, ]))
+      fB[t] <- as.numeric(predict(mB, newdata = df[t, ]))
+    }
+    eA <- (df$rx_USD - fA)^2
+    eB <- (df$rx_USD - fB)^2
+    d  <- na.omit(eA - eB)
+    if (length(d) < 30) return(NULL)
+    L  <- nw_lag_for(length(d), h = 12)
+    m  <- lm(d ~ 1)
+    vc <- NeweyWest(m, lag = L, prewhite = FALSE, adjust = TRUE)
+    ct <- coeftest(m, vcov. = vc)
+    tibble(country = cn,
+           test = "USD OOS: GCF_oos vs FXGCF_oos (DM)",
+           dm_mean = ct[1, 1], dm_se = ct[1, 2], dm_t = ct[1, 3],
+           dm_p_two_sided = 2 * pnorm(-abs(ct[1, 3])),
+           n_forecasts = length(d))
+  })
+
+cat("\n====== OOS R² (Campbell-Thompson, recursive-mean benchmark) ======\n")
+print(oos_R2_tab %>%
+        pivot_wider(id_cols = country,
+                    names_from = spec, values_from = R2_oos))
+
+cat("\n====== Clark-West with OOS factors ======\n")
+print(cw_local_oos)
+print(cw_usd_oos)
+
+cat("\n====== Diebold-Mariano with OOS factors: GCF_oos vs FXGCF_oos ======\n")
+print(dm_fxgcf_oos)
