@@ -169,6 +169,18 @@ plots$fx_ts <- fx_long %>%
        y = "USD per unit of FX", x = NULL) +
   theme_thesis
 
+# 1e. Nominal GDP in USD (annual, log scale)
+plots$gdp_levels <- gdp %>%
+  filter(!is.na(gdp_val)) %>%
+  ggplot(aes(date, gdp_val, colour = country)) +
+  geom_line(linewidth = 0.45) +
+  geom_point(size = 0.9) +
+  scale_y_log10(labels = scales::label_comma()) +
+  labs(title = "Nominal GDP in USD (annual, log scale)",
+       subtitle = "Local-currency GDP scaled by year-end FX/USD",
+       x = NULL, y = "GDP (USD)", colour = "Country") +
+  theme_thesis
+
 # =============================================================
 # 2. Inflation and trend inflation (eq 3)
 # =============================================================
