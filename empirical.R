@@ -714,6 +714,10 @@ cw_usd_oos <- panel_oos %>%
   })
 
 # 12f. Diebold-Mariano: GCF_oos vs FXGCF_oos for rx_USD
+# Use a local min_train of 60 (matches the in-sample cw_fxgcf variant).
+# The fully-OOS chain already eats the first ~15 years of the sample
+# building CF_oos, GCF_oos and FXGCF_oos, so the global min_train = 120
+# leaves no rows behind once panel_oos is filtered for non-NA factors.
 dm_fxgcf_oos <- panel_oos %>%
   group_by(country) %>%
   group_split() %>%
@@ -723,9 +727,14 @@ dm_fxgcf_oos <- panel_oos %>%
       arrange(ym) %>%
       filter(!is.na(rx_USD), !is.na(GCF_oos), !is.na(FXGCF_oos))
     T_obs <- nrow(df)
-    if (T_obs <= min_train + 12) return(NULL)
+    min_train_dm <- 60
+    if (T_obs <= min_train_dm + 12) {
+      message(sprintf("dm_fxgcf_oos: skipping %s (T_obs = %d <= %d)",
+                      cn, T_obs, min_train_dm + 12))
+      return(NULL)
+    }
     fA <- fB <- rep(NA_real_, T_obs)
-    for (t in (min_train + 1):T_obs) {
+    for (t in (min_train_dm + 1):T_obs) {
       train <- df[1:(t - 1), ]
       mA <- lm(rx_USD ~ GCF_oos,   data = train)
       mB <- lm(rx_USD ~ FXGCF_oos, data = train)
@@ -735,7 +744,11 @@ dm_fxgcf_oos <- panel_oos %>%
     eA <- (df$rx_USD - fA)^2
     eB <- (df$rx_USD - fB)^2
     d  <- na.omit(eA - eB)
-    if (length(d) < 30) return(NULL)
+    if (length(d) < 30) {
+      message(sprintf("dm_fxgcf_oos: skipping %s (n_forecasts = %d < 30)",
+                      cn, length(d)))
+      return(NULL)
+    }
     L  <- nw_lag_for(length(d), h = 12)
     m  <- lm(d ~ 1)
     vc <- NeweyWest(m, lag = L, prewhite = FALSE, adjust = TRUE)
