@@ -99,15 +99,9 @@ FXGCF_t = \hat\delta_0+\hat\delta_1\,GCF_t
     \item \textbf{Data}: G10 zero yields, core CPI, FX vs USD, nominal GDP -- monthly panel, 1990s--2025.
     \item \textbf{Trend inflation}: DMA filter ($v=0.987$, $M=120$); cycle component as residual of $y\sim\pi^e$.
     \item \textbf{Returns}: maturity-averaged duration-standardized $rx$ (local) and $rx^{USD}$ (US investor).
-    \item \textbf{Factors}: country-level CF, GDP-weighted GCF, FX-adjusted FXGCF, Cochrane--Piazzesi (2005) baseline -- with fully-OOS variants ($CF^{oos}, GCF^{oos}, FXGCF^{oos}$).
+    \item \textbf{Factors}: country-level CF, GDP-weighted GCF, FX-adjusted FXGCF -- with fully-OOS variants ($CF^{oos}, GCF^{oos}, FXGCF^{oos}$).
     \item \textbf{Inference}: per-country HAC (Newey--West, $L=18$) and panel Driscoll--Kraay SEs; nested Wald, Clark--West, Diebold--Mariano (in-sample \emph{and} on OOS factors).
     \item \textbf{Replication}: US Cieslak--Povala vs.\ Cochrane--Piazzesi -- in-sample and OOS $R^2$.
-\end{itemize}
-\end{block}
-\begin{block}{In progress}
-\begin{itemize}
-    \item Robustness checks (sub-samples, alternative trend windows).
-    \item Drafting Sections 4 (results) and 5 (discussion) of the thesis.
 \end{itemize}
 \end{block}
 \end{frame}
@@ -143,7 +137,6 @@ Right: annual nominal GDP in USD, log scale.
 \begin{frame}{Cycles and cycle factors}
 \centering
 \includegraphics[width=0.95\textwidth]{cycles_by_country.pdf}\\[-2pt]
-\small Cycle component $c_{i,t}^{(n)}$ from $y\sim\pi^e$; cross-country co-movement is visible at long maturities.
 \end{frame}
 
 \begin{frame}{Local CF and Global CF}
@@ -158,6 +151,12 @@ Right: annual nominal GDP in USD, log scale.
 \scriptsize\textbf{In-sample (CF)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq18_local_cf.tex}}
 
+\vspace{0.1cm}
+\tiny HAC SEs (Newey--West, $L=\max(18,\,1.3\sqrt{T})$).\quad
+\end{frame}
+
+\begin{frame}{Eq.\ (18) -- Local CF predicts local returns}
+\centering
 \vspace{0.15cm}
 \scriptsize\textbf{Out-of-sample (CF$^{oos}$)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq18_local_cf_oos.tex}}
@@ -172,6 +171,9 @@ $^{*}/^{**}/^{***}$ at the 10\%/5\%/1\% level.
 \scriptsize\textbf{In-sample (GCF)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq20_global_cf.tex}}
 
+\end{frame}
+\begin{frame}{Eq.\ (20) -- Global CF predicts local returns}
+\centering
 \vspace{0.15cm}
 \scriptsize\textbf{Out-of-sample (GCF$^{oos}$)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq20_global_cf_oos.tex}}
@@ -179,28 +181,38 @@ $^{*}/^{**}/^{***}$ at the 10\%/5\%/1\% level.
 
 \begin{frame}{Eq.\ (19) -- Does GCF subsume local CF?}
 \centering
+\vspace{0.15cm}
 \scriptsize\textbf{In-sample (CF + GCF)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq19_subsumption.tex}}
-
-\vspace{0.15cm}
-\scriptsize\textbf{Out-of-sample (CF$^{oos}$ + GCF$^{oos}$)}\\
-\adjustbox{max width=\textwidth}{\input{tables/eq19_subsumption_oos.tex}}
-
 \vspace{0.1cm}
+
 \tiny Wald $p$: $H_0:\beta_{CF}=0$ in $rx_{i,t+12}=\alpha_i+\beta_i\,CF_{i,t}+\gamma_i\,GCF_t+\varepsilon$.
 \end{frame}
 
-\begin{frame}{Eq.\ (19) -- Coefficients with HAC bands}
+\begin{frame}{Eq.\ (19) -- Does GCF subsume local CF?}
 \centering
-\includegraphics[width=0.95\textwidth]{coef_eq19.pdf}\\
-\small Per-country point estimates of $\beta_{CF}$ and $\gamma_{GCF}$ (eq.\ 19) with $\pm 1.96\,SE$.
+\vspace{0.15cm}
+\scriptsize\textbf{Out-of-sample (CF$^{oos}$ + GCF$^{oos}$)}\\
+\adjustbox{max width=\textwidth}{\input{tables/eq19_subsumption_oos.tex}}
+\vspace{0.1cm}
+
+\tiny Wald $p$: $H_0:\beta_{CF}=0$ in $rx_{i,t+12}=\alpha_i+\beta_i\,CF_{i,t}+\gamma_i\,GCF_t+\varepsilon$.
 \end{frame}
+
+%\begin{frame}{Eq.\ (19) -- Coefficients with HAC bands}
+%\centering
+%\includegraphics[width=0.95\textwidth]{coef_eq19.pdf}\\
+%\small Per-country point estimates of $\beta_{CF}$ and $\gamma_{GCF}$ (eq.\ 19) with $\pm 1.96\,SE$.
+%\end{frame}
 
 \begin{frame}{Eq.\ (22) -- USD investor on GCF}
 \centering
 \scriptsize\textbf{In-sample (GCF)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq22_usd_gcf.tex}}
+\end{frame}
 
+\begin{frame}{Eq.\ (22) -- USD investor on GCF}
+\centering
 \vspace{0.15cm}
 \scriptsize\textbf{Out-of-sample (GCF$^{oos}$)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq22_usd_gcf_oos.tex}}
@@ -210,47 +222,51 @@ $^{*}/^{**}/^{***}$ at the 10\%/5\%/1\% level.
 \centering
 \scriptsize\textbf{In-sample (FXGCF)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq23_usd_fxgcf.tex}}
+\end{frame}
 
+\begin{frame}{Eq.\ (23) -- USD investor on FXGCF}
+\centering
 \vspace{0.15cm}
 \scriptsize\textbf{Out-of-sample (FXGCF$^{oos}$)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq23_usd_fxgcf_oos.tex}}
 \end{frame}
 
-\begin{frame}{Pooled panel -- Driscoll--Kraay SEs}
-\centering
-\adjustbox{max width=\textwidth}{\input{tables/panel_dk.tex}}
-
-\vspace{0.2cm}
-\small Country fixed effects; DK lag $=\max(18,\,1.3\sqrt{T})$ to handle the 12m return overlap and cross-sectional dependence in GCF.
-\end{frame}
-
-\begin{frame}{Out-of-sample: Clark--West}
-\centering
-\adjustbox{max width=\textwidth}{\input{tables/oos_clark_west.tex}}
-
-\vspace{0.2cm}
-\small Expanding window with $\geq 60$ months of training. CW tests the nested-model null that the small ($GCF$-only) model is the DGP; one-sided $p$.
-\end{frame}
-
-\begin{frame}{Out-of-sample: GCF vs.\ FXGCF (Diebold--Mariano)}
-\centering
-\adjustbox{max width=\textwidth}{\input{tables/oos_dm_fxgcf.tex}}
-
-\vspace{0.2cm}
-\small Negative DM mean $\Rightarrow$ FXGCF squared OOS errors are smaller than GCF's.
-\end{frame}
-
+%\begin{frame}{Pooled panel -- Driscoll--Kraay SEs}
+%\centering
+%\adjustbox{max width=\textwidth}{\input{tables/panel_dk.tex}}
+%
+%\vspace{0.2cm}
+%\small Country fixed effects; DK lag $=\max(18,\,1.3\sqrt{T})$
+%\end{frame}
+%
+%\begin{frame}{Out-of-sample: Clark--West}
+%\centering
+%\adjustbox{max width=\textwidth}{\input{tables/oos_clark_west.tex}}
+%
+%\vspace{0.2cm}
+%\small Expanding window with $\geq 60$ months of training. CW tests the nested-model null that the small ($GCF$-only) model is the DGP; one-sided $p$.
+%\end{frame}
+%
+%\begin{frame}{Out-of-sample: GCF vs.\ FXGCF (Diebold--Mariano)}
+%\centering
+%\adjustbox{max width=\textwidth}{\input{tables/oos_dm_fxgcf.tex}}
+%
+%\vspace{0.2cm}
+%\small Negative DM mean $\Rightarrow$ FXGCF squared OOS errors are smaller than GCF's.
+%\end{frame}
+%
 %---- Fully-OOS factor analysis ---------------------------------
 \begin{frame}{Fully out-of-sample factors}
 The previous OOS tests used \emph{in-sample} factors as regressors.
 Extending the OOS chain so that every factor at $t$ uses only data through $t-1$:
 \begin{itemize}
-    \item $CF^{oos}_{i,t} = \hat\gamma_{i,1}(1{:}t{-}1)\,c_{i,t}^{(1)}+\hat\gamma_{i,2}(1{:}t{-}1)\,\bar c_{i,t}$
-    \item $GCF^{oos}_t = \sum_i w_{i,t}\,CF^{oos}_{i,t}$ \hfill (eq.\ 7 with OOS local CF)
-    \item $FXGCF^{oos}_t = \hat\delta_0(1{:}t{-}1) + \hat\delta_1(1{:}t{-}1)\,GCF^{oos}_t$
+    \item $CF^{oos}_{i,t} = \hat\gamma_{i,1}(1{:}t{-}1)\,c_{i,t}^{(1)}+\hat\gamma_{i,2}^{(1{:}t{-}1)} \,\bar c_{i,t}$
+    \item $GCF^{oos}_t = \sum_i w_{i,t}\,CF^{oos}_{i,t}$ 
+    \item $FXGCF^{oos}_t = \hat\delta_0^{(1{:}t{-}1)} + \hat\delta_1^{(1{:}t{-}1)}\,GCF^{oos}_t$
 \end{itemize}
 
 \vspace{0.2cm}
+\raggedright
 This removes the look-ahead bias that the in-sample $\hat\gamma_{i,j}$ and $\hat\delta_j$ otherwise carry.
 \end{frame}
 
@@ -258,6 +274,7 @@ This removes the look-ahead bias that the in-sample $\hat\gamma_{i,j}$ and $\hat
 \centering
 \includegraphics[width=0.49\textwidth]{gcf_oos_vs_in.pdf}\hfill
 \includegraphics[width=0.49\textwidth]{fxgcf_oos_vs_in.pdf}\\[2pt]
+\raggedright
 \small Burn-in: 120 months for $CF^{oos}$ (and hence $GCF^{oos}$), plus 60 more for $FXGCF^{oos}$. OOS series track the in-sample factors closely thereafter.
 \end{frame}
 
@@ -271,7 +288,8 @@ This removes the look-ahead bias that the in-sample $\hat\gamma_{i,j}$ and $\hat
 \adjustbox{max width=\textwidth}{\input{tables/oos_R2_factors.tex}}
 
 \vspace{0.2cm}
-\small Benchmark: recursive mean of $rx$. Negative values indicate the factor underperforms the historical mean OOS.
+
+\small Benchmark: mean of $rx$ and $rx^{USD}$.
 \end{frame}
 
 \begin{frame}{OOS $R^2$ across countries}
@@ -279,28 +297,28 @@ This removes the look-ahead bias that the in-sample $\hat\gamma_{i,j}$ and $\hat
 \includegraphics[width=0.95\textwidth]{oos_R2_compare.pdf}
 \end{frame}
 
-\begin{frame}{Clark--West with OOS factors}
-\centering
-\adjustbox{max width=\textwidth}{\input{tables/oos_clark_west_factors.tex}}
-
-\vspace{0.2cm}
-\small $H_0$: $GCF^{oos}$-only model is the DGP. Reject in favour of $CF^{oos}+GCF^{oos}$ when $t$ exceeds the one-sided critical value.
-\end{frame}
-
-\begin{frame}{Clark--West $t$-stats by country}
-\centering
-\includegraphics[width=0.95\textwidth]{cw_oos_tstat.pdf}\\[2pt]
-\small Reference lines at $1.282/1.645/2.326$ (10\%/5\%/1\% one-sided).
-\end{frame}
-
-\begin{frame}{Diebold--Mariano: $GCF^{oos}$ vs.\ $FXGCF^{oos}$}
-\centering
-\adjustbox{max width=\textwidth}{\input{tables/oos_dm_fxgcf_factors.tex}}
-
-\vspace{0.2cm}
-\small Negative DM mean $\Rightarrow$ $FXGCF^{oos}$ outperforms $GCF^{oos}$ for the USD investor.
-\end{frame}
-
+%\begin{frame}{Clark--West with OOS factors}
+%\centering
+%\adjustbox{max width=\textwidth}{\input{tables/oos_clark_west_factors.tex}}
+%
+%\vspace{0.2cm}
+%\small $H_0$: $GCF^{oos}$-only model is the DGP. Reject in favour of $CF^{oos}+GCF^{oos}$ when $t$ exceeds the one-sided critical value.
+%\end{frame}
+%
+%\begin{frame}{Clark--West $t$-stats by country}
+%\centering
+%\includegraphics[width=0.95\textwidth]{cw_oos_tstat.pdf}\\[2pt]
+%\small Reference lines at $1.282/1.645/2.326$ (10\%/5\%/1\% one-sided).
+%\end{frame}
+%
+%\begin{frame}{Diebold--Mariano: $GCF^{oos}$ vs.\ $FXGCF^{oos}$}
+%\centering
+%\adjustbox{max width=\textwidth}{\input{tables/oos_dm_fxgcf_factors.tex}}
+%
+%\vspace{0.2cm}
+%\small Negative DM mean $\Rightarrow$ $FXGCF^{oos}$ outperforms $GCF^{oos}$ for the USD investor.
+%\end{frame}
+%
 \begin{frame}{US replication -- CP-2015 vs.\ CP-2005}
 \centering
 \adjustbox{max width=0.85\textwidth}{\input{tables/us_replication_R2.tex}}
@@ -325,17 +343,15 @@ This removes the look-ahead bias that the in-sample $\hat\gamma_{i,j}$ and $\hat
 
 \begin{frame}{Open methodological points}
 \begin{enumerate}
-    \item \textbf{Small-sample inference.}
-    \cite{bauer_robust_2018} show that standard predictive-regression tests over-reject in small $T$.
-    \emph{Plan:} bootstrap inference on $\beta_{CF}$ and $\gamma_{GCF}$; report bias-corrected $p$-values.
+    %\item \textbf{Small-sample inference.}
+    %\cite{bauer_robust_2018} show that standard predictive-regression tests over-reject in small $T$.
+    %\emph{Plan:} bootstrap inference on $\beta_{CF}$ and $\gamma_{GCF}$; report bias-corrected $p$-values.
 
     \item \textbf{Look-ahead in the factors.}
-    Addressed: $CF^{oos}, GCF^{oos}, FXGCF^{oos}$ are fully recursive.
-    \emph{Remaining:} report headline tables on both versions and quantify the look-ahead premium.
+    Adressed in the OOS-factors. Rechecking of values and ensuring there is no look ahead bias.
 
     \item \textbf{Multiple testing.}
-    Eleven countries $\times$ several specifications inflate FWER.
-    \emph{Plan:} headline FDR via Benjamini--Hochberg, plus Bonferroni as a sanity check.
+    Robustness checks, adjusting p-values for repeated testing
 
     \item \textbf{Trend inflation specification.}
     $v=0.987,\,M=120$ is calibrated to US survey data.
@@ -348,24 +364,18 @@ This removes the look-ahead bias that the in-sample $\hat\gamma_{i,j}$ and $\hat
     \item \textbf{Sample heterogeneity.}
     Pre-/post-GFC and pre-/post-ZLB regimes likely change CF dynamics.
     \emph{Plan:} structural-break diagnostics, sub-sample regressions.
-
-    \item \textbf{Currency-risk decomposition.}
-    Why does FXGCF help (or not)?
-    \emph{Plan:} decompose $rx^{USD}$ into local $rx$ + FX excess return; attribute the FXGCF gain.
-
     \item \textbf{Economic value.}
-    Statistical $R^2$ vs.\ a portfolio metric \citep{gargano_bond_2019}.
+    Statistical $R^2$ vs.\ a portfolio metric.
     \emph{Plan:} CER gain from a mean-variance investor timing on CF / GCF / FXGCF.
 
     \item \textbf{Connection to the literature.}
-    Position results against \cite{bauer_interest_2020} and \cite{zhang_global_2021} on long-run trends, and \cite{wright_term_2011} on inflation uncertainty.
 \end{enumerate}
 \end{frame}
 
 %==========================================================
 \section{Plan to Completion}
 %==========================================================
-
+\raggedright
 \begin{frame}{Plan to completion}
 \textbf{05/2026 (now)} -- finish robustness battery (sub-samples, $v$/$M$ grid, OOS-only CF), bootstrap inference, write Section 4 (Results).\\[6pt]
 \textbf{06/2026} -- Section 5 (Discussion) tying results to \cite{dahlquist_international_2013}, \cite{bauer_interest_2020}, \cite{wright_term_2011}; economic-value exercise; full draft to supervisor.\\[6pt]
@@ -374,9 +384,8 @@ This removes the look-ahead bias that the in-sample $\hat\gamma_{i,j}$ and $\hat
 \vspace{0.4cm}
 \textbf{What I would like input on today}
 \begin{itemize}
-    \item Priority ordering of the open points -- which carry most weight?
-    \item Scope of the economic-value section -- is a CER exercise expected?
-    \item Presentation choice for the headline result table.
+    \item OOS results -- which lookback period is adequate?
+    \item Is a CER exercise adequate?
 \end{itemize}
 \end{frame}
 
@@ -432,12 +441,12 @@ This removes the look-ahead bias that the in-sample $\hat\gamma_{i,j}$ and $\hat
 \includegraphics[width=0.95\textwidth]{tstat_panel.pdf}
 \end{frame}
 
-\begin{frame}{Residual ACF: $rx\sim CF$}
-\centering
-\includegraphics[width=0.95\textwidth]{residual_acf_panel.pdf}\\
-\small 12-month overlap induces ACF up to $\sim$ lag 12.
-\end{frame}
-
+%\begin{frame}{Residual ACF: $rx\sim CF$}f
+%\centering
+%\includegraphics[width=0.95\textwidth]{residual_acf_panel.pdf}\\
+%\small 12-month overlap induces ACF up to $\sim$ lag 12.
+%\end{frame}
+%
 \begin{frame}{In-sample vs.\ OOS local CF}
 \centering
 \includegraphics[width=0.95\textwidth]{cf_oos_vs_in.pdf}
