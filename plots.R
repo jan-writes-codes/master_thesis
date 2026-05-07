@@ -579,7 +579,7 @@ plots$us_replication_R2 <- us_R2_tab %>%
   pivot_longer(c(R2_in, R2_oos), names_to = "kind", values_to = "R2") %>%
   mutate(kind = recode(kind, R2_in = "In-sample", R2_oos = "Out-of-sample"),
          model = factor(model,
-                        levels = c("CP-2015 (CF)", "CP-2005 (forwards)", "Encompassing"))) %>%
+                        levels = c("CP-2015 (CF)", "CP-2005 (forwards)", "Our model (CF + GCF)"))) %>%
   ggplot(aes(model, R2, fill = kind)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   geom_hline(yintercept = 0, colour = "grey40") +

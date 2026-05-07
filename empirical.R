@@ -408,8 +408,11 @@ us_data <- reg_data %>%
   filter(country == "US") %>%
   left_join(cp_factor %>% select(country, ym, y_1, f_2, f_5, f_10),
             by = c("country", "ym")) %>%
+  left_join(gcf %>% select(ym, GCF),
+            by = "ym") %>%
   filter(!is.na(rx), !is.na(cycle_1y), !is.na(c_bar),
-         !is.na(y_1), !is.na(f_2), !is.na(f_5), !is.na(f_10)) %>%
+         !is.na(y_1), !is.na(f_2), !is.na(f_5), !is.na(f_10),
+         !is.na(GCF)) %>%
   arrange(ym)
 
 # In-sample fits (HAC SEs, NW lag = 18 for 12m overlapping returns)
@@ -418,6 +421,7 @@ nw_us <- function(m) NeweyWest(m, lag = 18, prewhite = FALSE)
 m_cf  <- lm(rx ~ cycle_1y + c_bar,                                data = us_data)
 m_cp  <- lm(rx ~ y_1 + f_2 + f_5 + f_10,                          data = us_data)
 m_enc <- lm(rx ~ cycle_1y + c_bar + y_1 + f_2 + f_5 + f_10,       data = us_data)
+m_our <- lm(rx ~ cycle_1y + c_bar + GCF,                          data = us_data)
 
 cat("\n====== US in-sample: CP-2015 (CF = cycle_1y + c_bar) ======\n")
 print(coeftest(m_cf,  nw_us(m_cf)))
@@ -425,6 +429,8 @@ cat("\n====== US in-sample: CP-2005 (y_1 + 1y forwards) ======\n")
 print(coeftest(m_cp,  nw_us(m_cp)))
 cat("\n====== US in-sample: encompassing (CF + forwards) ======\n")
 print(coeftest(m_enc, nw_us(m_enc)))
+cat("\n====== US in-sample: Our model (CF + GCF) ======\n")
+print(coeftest(m_our, nw_us(m_our)))
 
 cat("\n-- Wald: do CP-2005 forwards add to CF? (H0: y_1=f_2=f_5=f_10=0) --\n")
 print(waldtest(m_cf, m_enc, vcov = nw_us(m_enc), test = "Chisq"))
@@ -469,13 +475,13 @@ f_cp_oos  <- oos_forecasts(us_data, rx ~ y_1 + f_2 + f_5 + f_10,                
 f_enc_oos <- oos_forecasts(us_data, rx ~ cycle_1y + c_bar + y_1 + f_2 + f_5 + f_10, min_train)
 
 us_R2_tab <- tibble(
-  model = c("CP-2015 (CF)", "CP-2005 (forwards)", "Encompassing"),
+  model = c("CP-2015 (CF)", "CP-2005 (forwards)", "Our model (CF + GCF)"),
   R2_in  = c(summary(m_cf)$r.squared,
              summary(m_cp)$r.squared,
-             summary(m_enc)$r.squared),
+             summary(m_our)$r.squared),
   R2_oos = c(oos_R2(us_data, rx ~ cycle_1y + c_bar),
              oos_R2(us_data, rx ~ y_1 + f_2 + f_5 + f_10),
-             oos_R2(us_data, rx ~ cycle_1y + c_bar + y_1 + f_2 + f_5 + f_10))
+             oos_R2(us_data, rx ~ cycle_1y + c_bar + GCF))
 )
 cat("\n====== US: in-sample vs OOS R^2 ======\n")
 print(us_R2_tab)
