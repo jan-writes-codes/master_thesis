@@ -99,8 +99,8 @@ FXGCF_t = \hat\delta_0+\hat\delta_1\,GCF_t
     \item \textbf{Data}: G10 zero yields, core CPI, FX vs USD, nominal GDP -- monthly panel, 1990s--2025.
     \item \textbf{Trend inflation}: DMA filter ($v=0.987$, $M=120$); cycle component as residual of $y\sim\pi^e$.
     \item \textbf{Returns}: maturity-averaged duration-standardized $rx$ (local) and $rx^{USD}$ (US investor).
-    \item \textbf{Factors}: country-level CF, GDP-weighted GCF, FX-adjusted FXGCF, Cochrane--Piazzesi (2005) baseline.
-    \item \textbf{Inference}: per-country HAC (Newey--West, $L=18$) and panel Driscoll--Kraay SEs; nested Wald, Clark--West, Diebold--Mariano.
+    \item \textbf{Factors}: country-level CF, GDP-weighted GCF, FX-adjusted FXGCF, Cochrane--Piazzesi (2005) baseline -- with fully-OOS variants ($CF^{oos}, GCF^{oos}, FXGCF^{oos}$).
+    \item \textbf{Inference}: per-country HAC (Newey--West, $L=18$) and panel Driscoll--Kraay SEs; nested Wald, Clark--West, Diebold--Mariano (in-sample \emph{and} on OOS factors).
     \item \textbf{Replication}: US Cieslak--Povala vs.\ Cochrane--Piazzesi -- in-sample and OOS $R^2$.
 \end{itemize}
 \end{block}
@@ -205,6 +205,67 @@ $^{*}/^{**}/^{***}$ at the 10\%/5\%/1\% level.
 \small Negative DM mean $\Rightarrow$ FXGCF squared OOS errors are smaller than GCF's.
 \end{frame}
 
+%---- Fully-OOS factor analysis ---------------------------------
+\begin{frame}{Fully out-of-sample factors}
+The previous OOS tests used \emph{in-sample} factors as regressors.
+Extending the OOS chain so that every factor at $t$ uses only data through $t-1$:
+\begin{itemize}
+    \item $CF^{oos}_{i,t} = \hat\gamma_{i,1}(1{:}t{-}1)\,c_{i,t}^{(1)}+\hat\gamma_{i,2}(1{:}t{-}1)\,\bar c_{i,t}$
+    \item $GCF^{oos}_t = \sum_i w_{i,t}\,CF^{oos}_{i,t}$ \hfill (eq.\ 7 with OOS local CF)
+    \item $FXGCF^{oos}_t = \hat\delta_0(1{:}t{-}1) + \hat\delta_1(1{:}t{-}1)\,GCF^{oos}_t$
+\end{itemize}
+
+\vspace{0.2cm}
+This removes the look-ahead bias that the in-sample $\hat\gamma_{i,j}$ and $\hat\delta_j$ otherwise carry.
+\end{frame}
+
+\begin{frame}{In-sample vs.\ OOS GCF and FXGCF}
+\centering
+\includegraphics[width=0.49\textwidth]{gcf_oos_vs_in.pdf}\hfill
+\includegraphics[width=0.49\textwidth]{fxgcf_oos_vs_in.pdf}\\[2pt]
+\small OOS series tracks the in-sample factor closely once $\geq 60$ months of training are available.
+\end{frame}
+
+\begin{frame}{OOS factors -- combined view}
+\centering
+\includegraphics[width=0.95\textwidth]{oos_factors_combined.pdf}
+\end{frame}
+
+\begin{frame}{Campbell--Thompson OOS $R^2$ on OOS factors}
+\centering
+\adjustbox{max width=\textwidth}{\input{tables/oos_R2_factors.tex}}
+
+\vspace{0.2cm}
+\small Benchmark: recursive mean of $rx$. Negative values indicate the factor underperforms the historical mean OOS.
+\end{frame}
+
+\begin{frame}{OOS $R^2$ across countries}
+\centering
+\includegraphics[width=0.95\textwidth]{oos_R2_compare.pdf}
+\end{frame}
+
+\begin{frame}{Clark--West with OOS factors}
+\centering
+\adjustbox{max width=\textwidth}{\input{tables/oos_clark_west_factors.tex}}
+
+\vspace{0.2cm}
+\small $H_0$: $GCF^{oos}$-only model is the DGP. Reject in favour of $CF^{oos}+GCF^{oos}$ when $t$ exceeds the one-sided critical value.
+\end{frame}
+
+\begin{frame}{Clark--West $t$-stats by country}
+\centering
+\includegraphics[width=0.95\textwidth]{cw_oos_tstat.pdf}\\[2pt]
+\small Reference lines at $1.282/1.645/2.326$ (10\%/5\%/1\% one-sided).
+\end{frame}
+
+\begin{frame}{Diebold--Mariano: $GCF^{oos}$ vs.\ $FXGCF^{oos}$}
+\centering
+\adjustbox{max width=\textwidth}{\input{tables/oos_dm_fxgcf_factors.tex}}
+
+\vspace{0.2cm}
+\small Negative DM mean $\Rightarrow$ $FXGCF^{oos}$ outperforms $GCF^{oos}$ for the USD investor.
+\end{frame}
+
 \begin{frame}{US replication -- CP-2015 vs.\ CP-2005}
 \centering
 \adjustbox{max width=0.85\textwidth}{\input{tables/us_replication_R2.tex}}
@@ -233,9 +294,9 @@ $^{*}/^{**}/^{***}$ at the 10\%/5\%/1\% level.
     \cite{bauer_robust_2018} show that standard predictive-regression tests over-reject in small $T$.
     \emph{Plan:} bootstrap inference on $\beta_{CF}$ and $\gamma_{GCF}$; report bias-corrected $p$-values.
 
-    \item \textbf{Look-ahead in the local CF.}
-    The in-sample $CF_{i,t}$ uses $\hat\gamma_{i,1},\hat\gamma_{i,2}$ from the full sample.
-    \emph{Plan:} use the expanding-window $CF^{oos}$ already implemented for all OOS results.
+    \item \textbf{Look-ahead in the factors.}
+    Addressed: $CF^{oos}, GCF^{oos}, FXGCF^{oos}$ are fully recursive.
+    \emph{Remaining:} report headline tables on both versions and quantify the look-ahead premium.
 
     \item \textbf{Multiple testing.}
     Eleven countries $\times$ several specifications inflate FWER.
