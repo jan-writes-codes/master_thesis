@@ -771,3 +771,67 @@ print(cw_usd_oos)
 
 cat("\n====== Diebold-Mariano with OOS factors: GCF_oos vs FXGCF_oos ======\n")
 print(dm_fxgcf_oos)
+
+
+# =============================================================
+# 13. Per-country regressions on the OOS factors
+# -------------------------------------------------------------
+# Mirrors the in-sample tables for eq (18), (20), (19), (22), (23)
+# but replaces CF / GCF / FXGCF with their fully-OOS counterparts.
+# Uses the same HAC machinery (run_country_lm / tidy_country) so
+# the output schemas match tab_18 .. tab_23 exactly.
+# =============================================================
+
+panel_oos_clean <- panel_oos %>%
+  filter(!is.na(rx),  !is.na(CF_oos), !is.na(GCF_oos), !is.na(FXGCF_oos))
+panel_oos_usd <- panel_oos_clean %>% filter(!is.na(rx_USD))
+
+run_oos_country <- function(panel, formula) {
+  panel %>%
+    group_by(country) %>%
+    group_split() %>%
+    set_names(map_chr(., ~ unique(.x$country))) %>%
+    imap(~ if (nrow(.x) >= 30) run_country_lm(.x, formula) else NULL)
+}
+
+tidy_or_null <- function(res, country, model) {
+  if (is.null(res)) return(NULL)
+  tidy_country(res, country, model)
+}
+
+res_18_oos <- run_oos_country(panel_oos_clean, rx     ~ CF_oos)
+res_20_oos <- run_oos_country(panel_oos_clean, rx     ~ GCF_oos)
+res_19_oos <- run_oos_country(panel_oos_clean, rx     ~ CF_oos + GCF_oos)
+res_22_oos <- run_oos_country(panel_oos_usd,   rx_USD ~ GCF_oos)
+res_23_oos <- run_oos_country(panel_oos_usd,   rx_USD ~ FXGCF_oos)
+
+tab_18_oos <- imap_dfr(res_18_oos, ~ tidy_or_null(.x, .y, "eq18_oos"))
+tab_20_oos <- imap_dfr(res_20_oos, ~ tidy_or_null(.x, .y, "eq20_oos"))
+tab_19_oos <- imap_dfr(res_19_oos, ~ tidy_or_null(.x, .y, "eq19_oos"))
+tab_22_oos <- imap_dfr(res_22_oos, ~ tidy_or_null(.x, .y, "eq22_oos"))
+tab_23_oos <- imap_dfr(res_23_oos, ~ tidy_or_null(.x, .y, "eq23_oos"))
+
+# Nested Wald for the OOS subsumption test
+nested_local_oos_per_country <- imap_dfr(res_19_oos, function(big, cn) {
+  small <- res_20_oos[[cn]]
+  if (is.null(big) || is.null(small)) return(NULL)
+  w <- waldtest(small$fit, big$fit, vcov = big$vcov, test = "Chisq")
+  tibble(
+    country = cn,
+    test    = "H0: beta_CF_oos = 0 in eq(19)_oos",
+    chisq   = w$Chisq[2],
+    df      = w$Df[2],
+    p_value = w$`Pr(>Chisq)`[2]
+  )
+})
+
+cat("\n====== OOS per-country regressions (eq 18, 20, 19, 22, 23 with OOS factors) ======\n")
+print(tab_18_oos %>% filter(term == "CF_oos") %>%
+        select(country, estimate, std_err, t_stat, p_value, r_sq, T_obs))
+print(tab_20_oos %>% filter(term == "GCF_oos") %>%
+        select(country, estimate, std_err, t_stat, p_value, r_sq, T_obs))
+print(nested_local_oos_per_country)
+print(tab_22_oos %>% filter(term == "GCF_oos") %>%
+        select(country, estimate, std_err, t_stat, p_value, r_sq))
+print(tab_23_oos %>% filter(term == "FXGCF_oos") %>%
+        select(country, estimate, std_err, t_stat, p_value, r_sq))

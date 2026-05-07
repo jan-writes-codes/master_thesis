@@ -147,24 +147,39 @@ Right: YoY core CPI vs.\ DMA trend $\pi^e$.
 
 \begin{frame}{Eq.\ (18) -- Local CF predicts local returns}
 \centering
+\scriptsize\textbf{In-sample (CF)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq18_local_cf.tex}}
 
-\vspace{0.2cm}
-\small HAC SEs (Newey--West, $L=\max(18,\,1.3\sqrt{T})$). \quad
+\vspace{0.15cm}
+\scriptsize\textbf{Out-of-sample (CF$^{oos}$)}\\
+\adjustbox{max width=\textwidth}{\input{tables/eq18_local_cf_oos.tex}}
+
+\vspace{0.1cm}
+\tiny HAC SEs (Newey--West, $L=\max(18,\,1.3\sqrt{T})$).\quad
 $^{*}/^{**}/^{***}$ at the 10\%/5\%/1\% level.
 \end{frame}
 
 \begin{frame}{Eq.\ (20) -- Global CF predicts local returns}
 \centering
+\scriptsize\textbf{In-sample (GCF)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq20_global_cf.tex}}
+
+\vspace{0.15cm}
+\scriptsize\textbf{Out-of-sample (GCF$^{oos}$)}\\
+\adjustbox{max width=\textwidth}{\input{tables/eq20_global_cf_oos.tex}}
 \end{frame}
 
 \begin{frame}{Eq.\ (19) -- Does GCF subsume local CF?}
 \centering
+\scriptsize\textbf{In-sample (CF + GCF)}\\
 \adjustbox{max width=\textwidth}{\input{tables/eq19_subsumption.tex}}
 
-\vspace{0.2cm}
-\small Wald $p$: $H_0:\beta_{CF}=0$ in $rx_{i,t+12}=\alpha_i+\beta_i CF_{i,t}+\gamma_i GCF_t+\varepsilon$.
+\vspace{0.15cm}
+\scriptsize\textbf{Out-of-sample (CF$^{oos}$ + GCF$^{oos}$)}\\
+\adjustbox{max width=\textwidth}{\input{tables/eq19_subsumption_oos.tex}}
+
+\vspace{0.1cm}
+\tiny Wald $p$: $H_0:\beta_{CF}=0$ in $rx_{i,t+12}=\alpha_i+\beta_i\,CF_{i,t}+\gamma_i\,GCF_t+\varepsilon$.
 \end{frame}
 
 \begin{frame}{Eq.\ (19) -- Coefficients with HAC bands}
@@ -173,12 +188,24 @@ $^{*}/^{**}/^{***}$ at the 10\%/5\%/1\% level.
 \small Per-country point estimates of $\beta_{CF}$ and $\gamma_{GCF}$ (eq.\ 19) with $\pm 1.96\,SE$.
 \end{frame}
 
-\begin{frame}{USD investor view -- eq.\ (22) and eq.\ (23)}
+\begin{frame}{Eq.\ (22) -- USD investor on GCF}
 \centering
-\textbf{Eq.\ (22): $rx^{USD}\sim GCF$}\\[2pt]
-\adjustbox{max width=0.95\textwidth}{\input{tables/eq22_usd_gcf.tex}}\\[6pt]
-\textbf{Eq.\ (23): $rx^{USD}\sim FXGCF$}\\[2pt]
-\adjustbox{max width=0.95\textwidth}{\input{tables/eq23_usd_fxgcf.tex}}
+\scriptsize\textbf{In-sample (GCF)}\\
+\adjustbox{max width=\textwidth}{\input{tables/eq22_usd_gcf.tex}}
+
+\vspace{0.15cm}
+\scriptsize\textbf{Out-of-sample (GCF$^{oos}$)}\\
+\adjustbox{max width=\textwidth}{\input{tables/eq22_usd_gcf_oos.tex}}
+\end{frame}
+
+\begin{frame}{Eq.\ (23) -- USD investor on FXGCF}
+\centering
+\scriptsize\textbf{In-sample (FXGCF)}\\
+\adjustbox{max width=\textwidth}{\input{tables/eq23_usd_fxgcf.tex}}
+
+\vspace{0.15cm}
+\scriptsize\textbf{Out-of-sample (FXGCF$^{oos}$)}\\
+\adjustbox{max width=\textwidth}{\input{tables/eq23_usd_fxgcf_oos.tex}}
 \end{frame}
 
 \begin{frame}{Pooled panel -- Driscoll--Kraay SEs}
@@ -223,7 +250,7 @@ This removes the look-ahead bias that the in-sample $\hat\gamma_{i,j}$ and $\hat
 \centering
 \includegraphics[width=0.49\textwidth]{gcf_oos_vs_in.pdf}\hfill
 \includegraphics[width=0.49\textwidth]{fxgcf_oos_vs_in.pdf}\\[2pt]
-\small OOS series tracks the in-sample factor closely once $\geq 60$ months of training are available.
+\small Burn-in: 120 months for $CF^{oos}$ (and hence $GCF^{oos}$), plus 60 more for $FXGCF^{oos}$. OOS series track the in-sample factors closely thereafter.
 \end{frame}
 
 \begin{frame}{OOS factors -- combined view}

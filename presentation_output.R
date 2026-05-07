@@ -423,6 +423,87 @@ write_tabular(
   file   = "oos_dm_fxgcf_factors.tex"
 )
 
+# -------------------------------------------------------------
+# 13. OOS twin tables (mirror eq 18, 20, 19, 22, 23 with OOS factors)
+# -------------------------------------------------------------
+eq18_oos_rows <- tab_18_oos %>%
+  filter(term == "CF_oos") %>%
+  arrange(country) %>%
+  transmute(
+    Country  = country,
+    `$\\hat\\beta$` = paste0(fmt_num(estimate, 3), star(p_value)),
+    `HAC SE` = fmt_num(std_err, 3),
+    `$t$`    = fmt_num(t_stat, 2),
+    `$R^2$`  = fmt_pct(r_sq),
+    `$T$`    = fmt_int(T_obs)
+  )
+write_tabular(rows = as.matrix(eq18_oos_rows), header = colnames(eq18_oos_rows),
+              align = "lrrrrr", file = "eq18_local_cf_oos.tex")
+
+eq20_oos_rows <- tab_20_oos %>%
+  filter(term == "GCF_oos") %>%
+  arrange(country) %>%
+  transmute(
+    Country  = country,
+    `$\\hat\\gamma$` = paste0(fmt_num(estimate, 3), star(p_value)),
+    `HAC SE` = fmt_num(std_err, 3),
+    `$t$`    = fmt_num(t_stat, 2),
+    `$R^2$`  = fmt_pct(r_sq),
+    `$T$`    = fmt_int(T_obs)
+  )
+write_tabular(rows = as.matrix(eq20_oos_rows), header = colnames(eq20_oos_rows),
+              align = "lrrrrr", file = "eq20_global_cf_oos.tex")
+
+eq19_oos_wide <- tab_19_oos %>%
+  filter(term %in% c("CF_oos", "GCF_oos")) %>%
+  select(country, term, estimate, std_err, p_value, r_sq) %>%
+  pivot_wider(names_from = term,
+              values_from = c(estimate, std_err, p_value)) %>%
+  left_join(
+    nested_local_oos_per_country %>% select(country, p_wald = p_value),
+    by = "country"
+  ) %>%
+  arrange(country)
+
+eq19_oos_rows <- eq19_oos_wide %>%
+  transmute(
+    Country = country,
+    `$\\hat\\beta_{CF^{oos}}$`    = paste0(fmt_num(estimate_CF_oos, 3),  star(p_value_CF_oos)),
+    `(SE)`                        = paste0("(", fmt_num(std_err_CF_oos, 3), ")"),
+    `$\\hat\\gamma_{GCF^{oos}}$`  = paste0(fmt_num(estimate_GCF_oos, 3), star(p_value_GCF_oos)),
+    `(SE) `                       = paste0("(", fmt_num(std_err_GCF_oos, 3), ")"),
+    `$R^2$`                       = fmt_pct(r_sq),
+    `Wald $p$`                    = fmt_num(p_wald, 3)
+  )
+write_tabular(rows = as.matrix(eq19_oos_rows), header = colnames(eq19_oos_rows),
+              align = "lrrrrrr", file = "eq19_subsumption_oos.tex")
+
+eq22_oos_rows <- tab_22_oos %>%
+  filter(term == "GCF_oos") %>%
+  arrange(country) %>%
+  transmute(
+    Country  = country,
+    `$\\hat\\gamma$` = paste0(fmt_num(estimate, 3), star(p_value)),
+    `HAC SE` = fmt_num(std_err, 3),
+    `$t$`    = fmt_num(t_stat, 2),
+    `$R^2$`  = fmt_pct(r_sq)
+  )
+write_tabular(rows = as.matrix(eq22_oos_rows), header = colnames(eq22_oos_rows),
+              align = "lrrrr", file = "eq22_usd_gcf_oos.tex")
+
+eq23_oos_rows <- tab_23_oos %>%
+  filter(term == "FXGCF_oos") %>%
+  arrange(country) %>%
+  transmute(
+    Country  = country,
+    `$\\hat\\delta$` = paste0(fmt_num(estimate, 3), star(p_value)),
+    `HAC SE` = fmt_num(std_err, 3),
+    `$t$`    = fmt_num(t_stat, 2),
+    `$R^2$`  = fmt_pct(r_sq)
+  )
+write_tabular(rows = as.matrix(eq23_oos_rows), header = colnames(eq23_oos_rows),
+              align = "lrrrr", file = "eq23_usd_fxgcf_oos.tex")
+
 cat(sprintf(
   "\nWrote %d figure PDFs to %s and %d LaTeX tables to %s.\n",
   length(plots), FIG_DIR, length(list.files(TAB_DIR, pattern = "\\.tex$")), TAB_DIR
