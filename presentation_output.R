@@ -40,7 +40,9 @@ source("plots.R")
 #    of silently producing a presentation with missing figures.
 # -------------------------------------------------------------
 required_plots <- c(
-  "yield_ts", "inflation_trend",
+  # Raw input data (for supervisor sanity check)
+  "yield_ts", "inflation_trend", "fx_ts", "gdp_levels",
+  # Factors and downstream results
   "cycles_by_country", "local_cf", "gcf",
   "coef_eq19", "us_replication_R2", "r2_compare", "fitted_vs_realized",
   "trend_panel", "gdp_weights", "fxgcf_vs_gcf",
