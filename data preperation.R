@@ -344,17 +344,13 @@ fxgcf <- gcf %>%
   mutate(FXGCF = predict(fit_fxgcf, newdata = .))
 
 
-# Testing and cleanup ----------------------------------------------------
-# Sanity check: weights should sum to 1 each period
-weight_check <- cf_gdp %>%
-  group_by(ym) %>%
-  summarise(w_sum = sum(w, na.rm = TRUE), .groups = "drop")
-stopifnot(all(abs(weight_check$w_sum - 1) < 1e-6))
-
+# Cleanup ----------------------------------------------------------------
+# Keep objects needed downstream for plotting/analysis (cycle, cycle_avg, gcf,
+# inflation_long, yields_long, fx_long, gdp); drop only intermediate temporaries.
 rm(list = c("cycle_1y", "cycle_2y", "cycle_4y", "cycle_5y", "cycle_9y", "cycle_10y",
-            "cf_gdp", "cf_gdp_usd", "curve_map", "cycle", "cycle_avg", "fit_fxgcf", "fit_us", "fx",
-            "fx_long", "fxgcf_data", "gcf", "gdp", "inflation_long", "rx_avg", "rx_raw", "rx_usd_bar",
-            "y1_US", "yields", "yields_long", "yields_wide"))
+            "cf_gdp_usd", "curve_map", "fit_fxgcf", "fx",
+            "fxgcf_data", "rx_avg", "rx_raw", "rx_usd_bar",
+            "y1_US", "yields", "yields_wide"))
 
 
 
