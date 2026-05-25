@@ -274,17 +274,18 @@ reg_data <- cycle_1y %>%
   left_join(cycle_9y, by = c("country", "ym", "date")) %>%
   left_join(cycle_10y, by = c("country", "ym", "date")) %>%
   left_join(rx_avg,    by = c("country", "ym", "date")) %>%
-  # Compute time-varying GDP weights across all available G10 countries  (Eq 8)
   mutate(y = as.integer(format(date, "%Y"))) %>%
   left_join(gdp %>% select(y, country, gdp_val),
             by = c("y", "country")) %>%
+  filter(!is.na(rx_t12), !is.na(rx_USD_t12), !is.na(cycle_1y), !is.na(c_bar)) %>%
+  # Time-varying GDP weights computed over the countries that actually enter
+  # the estimation panel each month, so that sum_i w_{i,t} = 1  (Eq 8)
   group_by(ym) %>%
   mutate(
     gdp_total = sum(gdp_val, na.rm = TRUE),
     w         = gdp_val / gdp_total
   ) %>%
   ungroup() %>%
-  filter(!is.na(rx_t12), !is.na(rx_USD_t12), !is.na(cycle_1y), !is.na(c_bar)) %>%
 # Local CF ---------------------------------------------------------------
   group_by(country) %>%
   group_modify(~ {
