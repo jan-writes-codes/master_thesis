@@ -21,7 +21,7 @@ us_data <- reg_data %>%
   filter(country == "US") %>%
   filter(date <= "2014/12/31")
 
-fit_us <- lm(rx_2_t12 ~ I(CF-y_1), data = us_data)
+fit_us <- lm(rx_2_t12 ~ CF, data = us_data)
 summary(fit_us)
 
 # Table 1

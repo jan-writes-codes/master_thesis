@@ -383,7 +383,7 @@ gcf_fxgcf_rho <- with(fxgcf %>% filter(!is.na(GCF), !is.na(FXGCF)), cor(GCF, FXG
 plots$fxgcf_vs_gcf <- fxgcf %>%
   ggplot(aes(date)) +
   geom_line(aes(y = GCF,   colour = "GCF (eq 7)"),    linewidth = 0.5) +
-  geom_line(aes(y = FXGCF, colour = "FXGCF (DH)"),    linewidth = 0.5) +
+  geom_line(aes(y = FXGCF_bu, colour = "FXGCF (DH)"),    linewidth = 0.5) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   scale_colour_manual(values = c("GCF (eq 7)" = "#08519c",
                                  "FXGCF (DH)" = "#a50f15"),
@@ -415,13 +415,17 @@ plots$r2_usd_gcf_vs_fxgcf <- bind_rows(
   run_by_country(panel, rx_USD_t12 ~ GCF)   %>% filter(term == "GCF")   %>%
     transmute(country, model = "rx_USD ~ GCF (eq22)",   r_sq),
   run_by_country(panel, rx_USD_t12 ~ FXGCF) %>% filter(term == "FXGCF") %>%
-    transmute(country, model = "rx_USD ~ FXGCF (eq23)", r_sq)
+    transmute(country, model = "rx_USD ~ FXGCF (eq23)", r_sq),
+  run_by_country(panel, rx_USD_t12 ~ FXGCF_bu) %>% filter(term == "FXGCF_bu") %>%
+    transmute(country, model = "rx_USD ~ FXGCF_bu (eq23)", r_sq)
 ) %>%
   ggplot(aes(country, r_sq, fill = model)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
   scale_fill_manual(values = c("rx_USD ~ GCF (eq22)" = "#08519c",
-                               "rx_USD ~ FXGCF (eq23)" = "#a50f15"), name = NULL) +
+                               "rx_USD ~ FXGCF (eq23)" = "#a50f15",
+                               "rx_USD ~ FXGCF_bu (eq23)" = "#a5af15"),
+                    , name = NULL) +
   labs(title = TeX("USD-investor $R^2$: GCF vs FX-adjusted GCF"),
        subtitle = "Value of the FX adjustment for a USD investor",
        x = NULL, y = TeX("$R^2$")) +
