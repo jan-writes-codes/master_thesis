@@ -40,10 +40,10 @@ theme_thesis <- theme_bw(base_size = 11) +
 mat_palette <- c("1Y" = "#2166ac", "2Y" = "#4dac26", "4Y" = "#e08214",
                  "5Y" = "#d6604d", "9Y" = "#c51b7d", "10Y" = "#762a83")
 
-# Country-month panel with all three factors side by side.
+# Country-month panel with all factors side by side.
 panel <- reg_data %>%
-  left_join(gcf   %>% select(ym, GCF),   by = "ym") %>%
-  left_join(fxgcf %>% select(ym, FXGCF), by = "ym")
+  left_join(gcf   %>% select(ym, GCF),              by = "ym") %>%
+  left_join(fxgcf %>% select(ym, FXGCF, FXGCF_bu),  by = "ym")
 
 # -------------------------------------------------------------
 # HAC (Newey-West) predictive regression helper.
@@ -377,23 +377,23 @@ plots$r2_cf_vs_gcf <- bind_rows(
 # 6. Currency / FX-adjusted global factor (novel contribution)
 # =============================================================
 
-# 6a. GCF vs FX-adjusted GCF over time (eq 17)
+# 6a. GCF vs FX-adjusted GCF over time
+gcf_fxgcf_rho <- with(fxgcf %>% filter(!is.na(GCF), !is.na(FXGCF)), cor(GCF, FXGCF))
+
 plots$fxgcf_vs_gcf <- fxgcf %>%
   ggplot(aes(date)) +
   geom_line(aes(y = GCF,   colour = "GCF (eq 7)"),    linewidth = 0.5) +
-  geom_line(aes(y = FXGCF, colour = "FXGCF (eq 17)"), linewidth = 0.5) +
+  geom_line(aes(y = FXGCF, colour = "FXGCF (DH)"),    linewidth = 0.5) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   scale_colour_manual(values = c("GCF (eq 7)" = "#08519c",
-                                 "FXGCF (eq 17)" = "#a50f15"),
+                                 "FXGCF (DH)" = "#a50f15"),
                       name = NULL) +
   labs(title = "Global cycle factor vs FX-adjusted global cycle factor",
+       subtitle = sprintf("Correlation = %.2f (DH-2013 report ~0.50)", gcf_fxgcf_rho),
        y = "Factor value", x = NULL) +
   theme_thesis
 
 # 6b. USD investor: does the global CF subsume the local CF? (eq 21)
-# Note: FXGCF is currently an affine transform of GCF, so per-country
-# rx_USD ~ FXGCF (eq 23) has the same R^2/t-stats as rx_USD ~ GCF (eq 22);
-# the informative USD-investor comparison is the eq-21 subsumption test.
 plots$coef_eq21 <- tab21 %>%
   filter(term %in% c("CF", "GCF")) %>%
   mutate(lo = estimate - 1.96 * std_err,
@@ -406,6 +406,66 @@ plots$coef_eq21 <- tab21 %>%
   labs(title = "Eq (21): rx_USD ~ CF + GCF coefficients (HAC +/-1.96 SE)",
        subtitle = "Does the global CF subsume the local CF? (USD investor)",
        x = NULL, y = "Coefficient") +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 6c. USD investor: the value of the FX adjustment (eq 22 vs eq 23)
+# Now that FXGCF is built per DH (not affine in GCF), these are genuinely different.
+plots$r2_usd_gcf_vs_fxgcf <- bind_rows(
+  run_by_country(panel, rx_USD_t12 ~ GCF)   %>% filter(term == "GCF")   %>%
+    transmute(country, model = "rx_USD ~ GCF (eq22)",   r_sq),
+  run_by_country(panel, rx_USD_t12 ~ FXGCF) %>% filter(term == "FXGCF") %>%
+    transmute(country, model = "rx_USD ~ FXGCF (eq23)", r_sq)
+) %>%
+  ggplot(aes(country, r_sq, fill = model)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c("rx_USD ~ GCF (eq22)" = "#08519c",
+                               "rx_USD ~ FXGCF (eq23)" = "#a50f15"), name = NULL) +
+  labs(title = TeX("USD-investor $R^2$: GCF vs FX-adjusted GCF"),
+       subtitle = "Value of the FX adjustment for a USD investor",
+       x = NULL, y = TeX("$R^2$")) +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# =============================================================
+# 7. Robustness: top-down (baseline) vs bottom-up FXGCF
+# =============================================================
+# Baseline FXGCF is DH-style top-down (fitted of avg USD return on avg cycles).
+# FXGCF_bu is the bottom-up GDP-weighted average of per-country CF_USD. These
+# two constructions should largely agree -- a robustness check, not a main result.
+
+fxgcf_bu_rho <- with(fxgcf %>% filter(!is.na(FXGCF), !is.na(FXGCF_bu)),
+                     cor(FXGCF, FXGCF_bu))
+
+# 7a. Robustness: FXGCF (top-down) vs FXGCF_bu (bottom-up) over time
+plots$rob_fxgcf_ts <- fxgcf %>%
+  ggplot(aes(date)) +
+  geom_line(aes(y = FXGCF,    colour = "FXGCF (top-down, baseline)"),  linewidth = 0.5) +
+  geom_line(aes(y = FXGCF_bu, colour = "FXGCF (bottom-up)"),           linewidth = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_colour_manual(values = c("FXGCF (top-down, baseline)" = "#a50f15",
+                                 "FXGCF (bottom-up)" = "#08519c"), name = NULL) +
+  labs(title = "Robustness: FXGCF construction (top-down vs bottom-up)",
+       subtitle = sprintf("Correlation = %.2f", fxgcf_bu_rho),
+       y = "Factor value", x = NULL) +
+  theme_thesis
+
+# 7b. Robustness: USD-investor R^2 under the two FXGCF constructions
+plots$rob_fxgcf_r2 <- bind_rows(
+  run_by_country(panel, rx_USD_t12 ~ FXGCF)    %>% filter(term == "FXGCF")    %>%
+    transmute(country, model = "FXGCF (top-down)",  r_sq),
+  run_by_country(panel, rx_USD_t12 ~ FXGCF_bu) %>% filter(term == "FXGCF_bu") %>%
+    transmute(country, model = "FXGCF (bottom-up)", r_sq)
+) %>%
+  ggplot(aes(country, r_sq, fill = model)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c("FXGCF (top-down)" = "#a50f15",
+                               "FXGCF (bottom-up)" = "#08519c"), name = NULL) +
+  labs(title = TeX("Robustness: USD-investor $R^2$ across FXGCF constructions"),
+       subtitle = "Top-down (baseline) vs bottom-up should be similar",
+       x = NULL, y = TeX("$R^2$")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
