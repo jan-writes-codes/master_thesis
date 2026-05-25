@@ -289,13 +289,15 @@ reg_data <- cycle_1y %>%
 # Local CF ---------------------------------------------------------------
   group_by(country) %>%
   group_modify(~ {
-    fit <- lm(rx_t12 ~ cycle_1y + c_bar, data = .x, na.action = na.exclude)
+    fit     <- lm(rx_t12     ~ cycle_1y + c_bar, data = .x, na.action = na.exclude)
+    fit_usd <- lm(rx_USD_t12 ~ cycle_1y + c_bar, data = .x, na.action = na.exclude)
     .x %>% mutate(
       gamma_0 = coef(fit)[["(Intercept)"]],
       gamma_1 = coef(fit)[["cycle_1y"]],
       gamma_2 = coef(fit)[["c_bar"]],
       CF_alt = gamma_0 + gamma_1 * cycle_1y + gamma_2 * c_bar,    # eq (6)
-      CF = predict(fit, new_data = .)    # eq (6)
+      CF = predict(fit, new_data = .),    # eq (6)
+      CF_USD = predict(fit_usd)           # USD analog of eq (6); used for bottom-up FXGCF
     )
   }) %>%
   ungroup()
@@ -313,44 +315,63 @@ group_by(ym, date) %>%
   arrange(date)
 
 
-# FX Global Cycle Factor (FXGCF) ---------------------------------------------
-# Equation 15
-# Attach USD excess returns to the weighted panel
-cf_gdp_usd <- reg_data %>%
-  left_join(rx_avg %>% select(country, ym, rx_USD_t12),
-            by = c("country", "ym")) %>%
-  rename(rx_USD_t12 = rx_USD_t12.x)
+# FX-adjusted Global Cycle Factor (FXGCF) ------------------------------------
+# Following Dahlquist-Hasseltoft (2013) FXGCP: the FX-adjusted global factor is
+# the FITTED VALUE of the (GDP-weighted) average USD-investor excess return on
+# the cycle PREDICTOR MENU -- it is NOT a regression on GCF (that would be an
+# affine transform of GCF). DH report corr(FXGCP, GCP) ~ 0.50.
 
-# GDP-weighted cross-country average of USD excess returns (eq 15)
-rx_usd_bar <- cf_gdp_usd %>%
+# Dependent variable: GDP-weighted cross-country average USD excess return (incl. US)
+rx_usd_bar <- reg_data %>%
   group_by(ym, date) %>%
   summarise(
-    rx_USD_bar_t12 = sum(w * rx_USD_t12, na.rm = TRUE),
+    rx_USD_bar_t12  = sum(w * rx_USD_t12, na.rm = TRUE),
     n_countries_usd = sum(!is.na(rx_USD_t12) & !is.na(w)),
     .groups = "drop"
   ) %>%
   arrange(date)
 
-# Equation 16
-fxgcf_data <- gcf %>%
-  select(ym, date, GCF) %>%
-  left_join(rx_usd_bar %>% select(ym, rx_USD_bar_t12), by = "ym") %>%
-  filter(!is.na(rx_USD_bar_t12), !is.na(GCF))
+# Predictor menu: GDP-weighted cross-country average cycle predictors
+glob_pred <- reg_data %>%
+  group_by(ym, date) %>%
+  summarise(
+    cyc1_bar = sum(w * cycle_1y, na.rm = TRUE),
+    cbar_bar = sum(w * c_bar,    na.rm = TRUE),
+    .groups  = "drop"
+  )
 
-fit_fxgcf <- lm(rx_USD_bar_t12 ~ GCF, data = fxgcf_data)
-# Eq (17): FXGCF_t = delta_0_hat + delta_1_hat * GCF_t  (fitted values)
-fxgcf <- gcf %>%
-  select(ym, date, GCF) %>%
-  filter(!is.na(GCF)) %>%
-  mutate(FXGCF = predict(fit_fxgcf, newdata = .))
+# Baseline (top-down, DH-faithful): FXGCF = fitted(rx_USD_bar ~ avg cycle predictors)
+fxgcf_data <- rx_usd_bar %>%
+  left_join(glob_pred, by = c("ym", "date")) %>%
+  filter(!is.na(rx_USD_bar_t12), !is.na(cyc1_bar), !is.na(cbar_bar))
+
+fit_fxgcf <- lm(rx_USD_bar_t12 ~ cyc1_bar + cbar_bar, data = fxgcf_data)
+
+# Robustness (bottom-up, parallel to GCF): GDP-weighted average of per-country CF_USD
+fxgcf_bu <- reg_data %>%
+  group_by(ym, date) %>%
+  summarise(FXGCF_bu = sum(w * CF_USD, na.rm = TRUE), .groups = "drop")
+
+fxgcf <- glob_pred %>%
+  mutate(FXGCF = predict(fit_fxgcf, newdata = .)) %>%
+  select(ym, date, FXGCF) %>%
+  left_join(gcf %>% select(ym, GCF), by = "ym") %>%
+  left_join(fxgcf_bu, by = c("ym", "date")) %>%
+  select(ym, date, GCF, FXGCF, FXGCF_bu)
+
+# Sanity: FXGCF must not be collinear with GCF (DH report corr ~ 0.50)
+fxgcf_diag <- fxgcf %>% filter(!is.na(GCF), !is.na(FXGCF), !is.na(FXGCF_bu))
+cat(sprintf("FXGCF diagnostics: cor(GCF, FXGCF) = %.3f ; cor(FXGCF, FXGCF_bu) = %.3f\n",
+            cor(fxgcf_diag$GCF, fxgcf_diag$FXGCF),
+            cor(fxgcf_diag$FXGCF, fxgcf_diag$FXGCF_bu)))
 
 
 # Cleanup ----------------------------------------------------------------
 # Keep objects needed downstream for plotting/analysis (cycle, cycle_avg, gcf,
 # inflation_long, yields_long, fx_long, gdp); drop only intermediate temporaries.
 rm(list = c("cycle_1y", "cycle_2y", "cycle_4y", "cycle_5y", "cycle_9y", "cycle_10y",
-            "cf_gdp_usd", "curve_map", "fit_fxgcf", "fx",
-            "fxgcf_data", "rx_avg", "rx_raw", "rx_usd_bar",
+            "curve_map", "fit_fxgcf", "fx", "fxgcf_data", "glob_pred", "fxgcf_bu",
+            "fxgcf_diag", "rx_avg", "rx_raw", "rx_usd_bar",
             "y1_US", "yields", "yields_wide"))
 
 
