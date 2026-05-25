@@ -196,7 +196,31 @@ plots$beta_loadings <- cycle %>%
 
 us_rho <- with(us_data, cor(c_bar, CF, use = "complete.obs"))
 
-# 3a. c_bar vs CF for the US (CP-2015 reference correlation ~ 0.61)
+# 3a. CP-2015 Fig. 2 replication: return-forecasting factor and average cycle (US)
+plots$us_cf_cbar_ts <- us_data %>%
+  select(date, CF, c_bar) %>%
+  pivot_longer(c(CF, c_bar), names_to = "series", values_to = "value") %>%
+  ggplot(aes(date, value, colour = series, linetype = series)) +
+  geom_hline(yintercept = 0, colour = "grey60") +
+  geom_line(linewidth = 0.5) +
+  annotate("text",
+           x = max(us_data$date, na.rm = TRUE),
+           y = min(c(us_data$CF, us_data$c_bar), na.rm = TRUE),
+           hjust = 1, vjust = 0,
+           label = sprintf("Correlation = %.2f", us_rho)) +
+  scale_colour_manual(values = c(CF = "#08519c", c_bar = "grey40"),
+                      labels = c(CF = TeX("$\\widehat{cf}_t$ (CF)"),
+                                 c_bar = TeX("$\\bar{c}_t$")),
+                      name = NULL) +
+  scale_linetype_manual(values = c(CF = "dashed", c_bar = "solid"),
+                        labels = c(CF = TeX("$\\widehat{cf}_t$ (CF)"),
+                                   c_bar = TeX("$\\bar{c}_t$")),
+                        name = NULL) +
+  labs(title = "US: return-forecasting factor and average cycle (CP-2015 Fig. 2)",
+       y = "Factor (pp)", x = NULL) +
+  theme_thesis
+
+# 3b. c_bar vs CF for the US (CP-2015 reference correlation ~ 0.61)
 plots$us_cbar_vs_cf <- us_data %>%
   ggplot(aes(c_bar, CF)) +
   geom_point(size = 0.8, alpha = 0.5, colour = "#525252") +
@@ -206,7 +230,7 @@ plots$us_cbar_vs_cf <- us_data %>%
        x = TeX("$\\bar{c}_{US,t}$"), y = TeX("$CF_{US,t}$")) +
   theme_thesis
 
-# 3b. US predictive scatter: rx_{t+12} vs CF
+# 3c. US predictive scatter: rx_{t+12} vs CF
 plots$us_rx_vs_cf <- us_data %>%
   ggplot(aes(CF, rx_t12)) +
   geom_point(size = 0.8, alpha = 0.5, colour = "#525252") +
@@ -248,6 +272,27 @@ plots$r2_cf_by_country <- tab18 %>%
   labs(title = TeX("In-sample $R^2$ of $rx \\sim CF$ by country"),
        x = NULL, y = TeX("$R^2$")) +
   theme_thesis + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 4d. In-sample R^2 by country and maturity: rx^(n) ~ country-specific CF
+plots$r2_cf_by_country_maturity <- bind_rows(
+  run_by_country(panel, rx_2_t12  ~ CF) %>% filter(term == "CF") %>%
+    transmute(country, maturity = "2Y",  r_sq),
+  run_by_country(panel, rx_5_t12  ~ CF) %>% filter(term == "CF") %>%
+    transmute(country, maturity = "5Y",  r_sq),
+  run_by_country(panel, rx_10_t12 ~ CF) %>% filter(term == "CF") %>%
+    transmute(country, maturity = "10Y", r_sq)
+) %>%
+  mutate(maturity = factor(maturity, levels = c("2Y", "5Y", "10Y"))) %>%
+  ggplot(aes(country, maturity, fill = r_sq)) +
+  geom_tile(colour = "white") +
+  geom_text(aes(label = sprintf("%.0f%%", 100 * r_sq)), size = 2.6) +
+  scale_fill_gradient(low = "white", high = "#08519c",
+                      labels = percent_format(accuracy = 1), name = TeX("$R^2$")) +
+  labs(title = TeX("In-sample $R^2$ of $rx^{(n)} \\sim CF$ by country and maturity"),
+       x = NULL, y = "Maturity") +
+  theme_thesis +
+  theme(panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1))
 
 # =============================================================
 # 5. Global integration (DH 2013; subquestions 1 & 2)
