@@ -37,8 +37,8 @@ theme_thesis <- theme_bw(base_size = 11) +
     plot.title       = element_text(face = "bold")
   )
 
-mat_palette <- c("1Y" = "#2166ac", "2Y" = "#4dac26",
-                 "5Y" = "#d6604d", "10Y" = "#762a83")
+mat_palette <- c("1Y" = "#2166ac", "2Y" = "#4dac26", "4Y" = "#e08214",
+                 "5Y" = "#d6604d", "9Y" = "#c51b7d", "10Y" = "#762a83")
 
 # Country-month panel with all three factors side by side.
 panel <- reg_data %>%
@@ -92,9 +92,9 @@ tab21 <- run_by_country(panel, rx_USD_t12 ~ CF + GCF)   # USD:   rx_USD ~ CF + G
 
 # 1a. Zero-coupon yields by country and maturity
 plots$yield_ts <- yields_long %>%
-  filter(maturity %in% c(1, 2, 5, 10), !is.na(yield)) %>%
+  filter(!is.na(yield)) %>%
   mutate(maturity_label = factor(paste0(maturity, "Y"),
-                                 levels = c("1Y", "2Y", "5Y", "10Y"))) %>%
+                                 levels = c("1Y", "2Y", "4Y", "5Y", "9Y", "10Y"))) %>%
   ggplot(aes(date, yield, colour = maturity_label)) +
   geom_line(linewidth = 0.4) +
   facet_wrap(~ country, ncol = 3, scales = "free_y") +
@@ -166,9 +166,8 @@ plots$yield_decomp <- cycle %>%
 
 # 2c. Cycle component by country and maturity (eq 1-2)
 plots$cycles_by_country <- cycle %>%
-  filter(maturity %in% c(1, 2, 5, 10)) %>%
   mutate(maturity_label = factor(paste0(maturity, "Y"),
-                                 levels = c("1Y", "2Y", "5Y", "10Y"))) %>%
+                                 levels = c("1Y", "2Y", "4Y", "5Y", "9Y", "10Y"))) %>%
   ggplot(aes(date, cycle, colour = maturity_label)) +
   geom_line(linewidth = 0.4) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
