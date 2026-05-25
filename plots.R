@@ -1,6 +1,7 @@
 # plots
 
 library(ggplot2)
+library(latex2exp)
 
 cycle %>%
   mutate(maturity_label = paste0(maturity, "Y")) %>%
@@ -214,19 +215,29 @@ plots$trend_panel <- inflation_long %>%
 # =============================================================
 
 # 3a. Cycle component by country and maturity
+library(latex2exp)
+
 plots$cycles_by_country <- cycle %>%
   filter(maturity %in% c(1, 2, 5, 10)) %>%
-  mutate(maturity_label = factor(paste0(maturity, "Y"),
-                                 levels = c("1Y", "2Y", "5Y", "10Y"))) %>%
+  mutate(
+    maturity_label = factor(
+      paste0(maturity, "Y"),
+      levels = c("1Y", "2Y", "5Y", "10Y")
+    )
+  ) %>%
   ggplot(aes(date, cycle, colour = maturity_label)) +
   geom_line(linewidth = 0.4) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   facet_wrap(~ country, ncol = 3, scales = "free_y") +
   scale_colour_manual(values = mat_palette, name = "Maturity") +
-  labs(title = "Cycle component (residual from y ~ π^e)",
-       subtitle = "c_{i,t}^{(n)} = y_{i,t}^{(n)} - α_{i,n} - β_{i,n} π^e_{i,t}",
-       y = "Cycle (pp)", x = NULL) +
+  labs(
+    title = TeX("Cycle component: residual from $y \\sim \\pi^e$"),
+    subtitle = TeX("$c_{i,t}^{(n)} = y_{i,t}^{(n)} - \\alpha_{i,n} - \\beta_{i,n}\\pi^e_{i,t}$"),
+    y = "Cycle (pp)",
+    x = NULL
+  ) +
   theme_thesis
+
 
 # 3b. β_{i,n}: how strongly does each yield load on trend inflation
 plots$beta_loadings <- cycle %>%
