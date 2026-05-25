@@ -365,6 +365,20 @@ cat(sprintf("FXGCF diagnostics: cor(GCF, FXGCF) = %.3f ; cor(FXGCF, FXGCF_bu) = 
             cor(fxgcf_diag$GCF, fxgcf_diag$FXGCF),
             cor(fxgcf_diag$FXGCF, fxgcf_diag$FXGCF_bu)))
 
+# Robustness (leave-own-out, per country): FXGCF_lou excludes country c's own
+# CF_USD from the GDP-weighted average (weights renormalized over j != c). This
+# removes the in-sample own-inclusion bias that inflates rx_USD ~ FXGCF_bu --
+# largest for high-weight countries (US). Stored per country-month on reg_data.
+reg_data <- reg_data %>%
+  group_by(ym) %>%
+  mutate(
+    .num      = sum(w * CF_USD, na.rm = TRUE) - dplyr::coalesce(w * CF_USD, 0),
+    .den      = sum(w,          na.rm = TRUE) - dplyr::coalesce(w, 0),
+    FXGCF_lou = dplyr::if_else(.den > 1e-12, .num / .den, NA_real_)
+  ) %>%
+  ungroup() %>%
+  select(-.num, -.den)
+
 
 # Cleanup ----------------------------------------------------------------
 # Keep objects needed downstream for plotting/analysis (cycle, cycle_avg, gcf,
