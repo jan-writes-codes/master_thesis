@@ -451,20 +451,28 @@ plots$rob_fxgcf_ts <- fxgcf %>%
        y = "Factor value", x = NULL) +
   theme_thesis
 
-# 7b. Robustness: USD-investor R^2 under the two FXGCF constructions
+# 7b. Robustness: USD-investor R^2 under the three FXGCF constructions.
+# Leave-own-out (FXGCF_lou) strips out country c's own full-sample CF_USD from the
+# weighted average, removing the in-sample own-inclusion bias. The gap between
+# bottom-up and leave-own-out IS that bias (largest for high-weight US).
+fxgcf_levels <- c("FXGCF (top-down)", "FXGCF (bottom-up)", "FXGCF (leave-own-out)")
 plots$rob_fxgcf_r2 <- bind_rows(
-  run_by_country(panel, rx_USD_t12 ~ FXGCF)    %>% filter(term == "FXGCF")    %>%
-    transmute(country, model = "FXGCF (top-down)",  r_sq),
-  run_by_country(panel, rx_USD_t12 ~ FXGCF_bu) %>% filter(term == "FXGCF_bu") %>%
-    transmute(country, model = "FXGCF (bottom-up)", r_sq)
+  run_by_country(panel, rx_USD_t12 ~ FXGCF)     %>% filter(term == "FXGCF")     %>%
+    transmute(country, model = "FXGCF (top-down)",      r_sq),
+  run_by_country(panel, rx_USD_t12 ~ FXGCF_bu)  %>% filter(term == "FXGCF_bu")  %>%
+    transmute(country, model = "FXGCF (bottom-up)",     r_sq),
+  run_by_country(panel, rx_USD_t12 ~ FXGCF_lou) %>% filter(term == "FXGCF_lou") %>%
+    transmute(country, model = "FXGCF (leave-own-out)", r_sq)
 ) %>%
+  mutate(model = factor(model, levels = fxgcf_levels)) %>%
   ggplot(aes(country, r_sq, fill = model)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  scale_fill_manual(values = c("FXGCF (top-down)" = "#a50f15",
-                               "FXGCF (bottom-up)" = "#08519c"), name = NULL) +
+  scale_fill_manual(values = c("FXGCF (top-down)"      = "#a50f15",
+                               "FXGCF (bottom-up)"     = "#9aa200",
+                               "FXGCF (leave-own-out)" = "#08519c"), name = NULL) +
   labs(title = TeX("Robustness: USD-investor $R^2$ across FXGCF constructions"),
-       subtitle = "Top-down (baseline) vs bottom-up should be similar",
+       subtitle = "Bottom-up vs leave-own-out gap = in-sample own-inclusion bias (largest for US)",
        x = NULL, y = TeX("$R^2$")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
