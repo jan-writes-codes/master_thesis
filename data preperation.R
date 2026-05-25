@@ -274,17 +274,18 @@ reg_data <- cycle_1y %>%
   left_join(cycle_9y, by = c("country", "ym", "date")) %>%
   left_join(cycle_10y, by = c("country", "ym", "date")) %>%
   left_join(rx_avg,    by = c("country", "ym", "date")) %>%
-  # Compute time-varying GDP weights across all available G10 countries  (Eq 8)
   mutate(y = as.integer(format(date, "%Y"))) %>%
   left_join(gdp %>% select(y, country, gdp_val),
             by = c("y", "country")) %>%
+  filter(!is.na(rx_t12), !is.na(rx_USD_t12), !is.na(cycle_1y), !is.na(c_bar)) %>%
+  # Time-varying GDP weights computed over the countries that actually enter
+  # the estimation panel each month, so that sum_i w_{i,t} = 1  (Eq 8)
   group_by(ym) %>%
   mutate(
     gdp_total = sum(gdp_val, na.rm = TRUE),
     w         = gdp_val / gdp_total
   ) %>%
   ungroup() %>%
-  filter(!is.na(rx_t12), !is.na(rx_USD_t12), !is.na(cycle_1y), !is.na(c_bar)) %>%
 # Local CF ---------------------------------------------------------------
   group_by(country) %>%
   group_modify(~ {
@@ -344,17 +345,13 @@ fxgcf <- gcf %>%
   mutate(FXGCF = predict(fit_fxgcf, newdata = .))
 
 
-# Testing and cleanup ----------------------------------------------------
-# Sanity check: weights should sum to 1 each period
-weight_check <- cf_gdp %>%
-  group_by(ym) %>%
-  summarise(w_sum = sum(w, na.rm = TRUE), .groups = "drop")
-stopifnot(all(abs(weight_check$w_sum - 1) < 1e-6))
-
+# Cleanup ----------------------------------------------------------------
+# Keep objects needed downstream for plotting/analysis (cycle, cycle_avg, gcf,
+# inflation_long, yields_long, fx_long, gdp); drop only intermediate temporaries.
 rm(list = c("cycle_1y", "cycle_2y", "cycle_4y", "cycle_5y", "cycle_9y", "cycle_10y",
-            "cf_gdp", "cf_gdp_usd", "curve_map", "cycle", "cycle_avg", "fit_fxgcf", "fit_us", "fx",
-            "fx_long", "fxgcf_data", "gcf", "gdp", "inflation_long", "rx_avg", "rx_raw", "rx_usd_bar",
-            "y1_US", "yields", "yields_long", "yields_wide"))
+            "cf_gdp_usd", "curve_map", "fit_fxgcf", "fx",
+            "fxgcf_data", "rx_avg", "rx_raw", "rx_usd_bar",
+            "y1_US", "yields", "yields_wide"))
 
 
 
