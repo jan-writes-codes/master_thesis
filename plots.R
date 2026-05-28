@@ -199,7 +199,7 @@ print(hr_results %>%
 # =============================================================
 
 # 1a. Zero-coupon yields by country and maturity
-plots$yield_ts <- yields_long %>%
+plots$s1_yield_ts <- yields_long %>%
   filter(!is.na(yield)) %>%
   mutate(maturity_label = factor(paste0(maturity, "Y"),
                                  levels = c("1Y", "2Y", "4Y", "5Y", "9Y", "10Y"))) %>%
@@ -212,7 +212,7 @@ plots$yield_ts <- yields_long %>%
   theme_thesis
 
 # 1b. Average yield curve per country (full sample)
-plots$yield_curve_avg <- yields_long %>%
+plots$s1_yield_curve_avg <- yields_long %>%
   filter(!is.na(yield)) %>%
   group_by(country, maturity) %>%
   summarise(mean_y = mean(yield), .groups = "drop") %>%
@@ -224,7 +224,7 @@ plots$yield_curve_avg <- yields_long %>%
   theme_thesis
 
 # 1c. Yield-panel coverage (justifies the unbalanced G10 panel)
-plots$coverage <- yields_long %>%
+plots$s1_coverage <- yields_long %>%
   group_by(country, date) %>%
   summarise(p_obs = mean(!is.na(yield)), .groups = "drop") %>%
   ggplot(aes(date, country, fill = p_obs)) +
@@ -239,7 +239,7 @@ plots$coverage <- yields_long %>%
 # =============================================================
 
 # 2a. YoY core CPI vs DMA trend inflation pi^e (eq 3)
-plots$inflation_trend <- inflation_long %>%
+plots$s2_inflation_trend <- inflation_long %>%
   filter(!is.na(yoy_infl)) %>%
   ggplot(aes(date)) +
   geom_line(aes(y = yoy_infl,  colour = "YoY core CPI"),        linewidth = 0.35) +
@@ -255,7 +255,7 @@ plots$inflation_trend <- inflation_long %>%
 
 # 2b. Yield decomposition for representative countries (eq 1-2):
 #     nominal 10Y yield vs the trend part alpha + beta * pi^e; the gap is the cycle.
-plots$yield_decomp <- cycle %>%
+plots$s2_yield_decomp <- cycle %>%
   filter(country %in% c("US", "DE", "GB", "JP"), maturity == 10) %>%
   mutate(trend_part = alpha + beta * trend_inf) %>%
   select(country, date, yield, trend_part) %>%
@@ -273,7 +273,7 @@ plots$yield_decomp <- cycle %>%
   theme_thesis
 
 # 2c. Cycle component by country and maturity (eq 1-2)
-plots$cycles_by_country <- cycle %>%
+plots$s2_cycles_by_country <- cycle %>%
   mutate(maturity_label = factor(paste0(maturity, "Y"),
                                  levels = c("1Y", "2Y", "4Y", "5Y", "9Y", "10Y"))) %>%
   ggplot(aes(date, cycle, colour = maturity_label)) +
@@ -287,7 +287,7 @@ plots$cycles_by_country <- cycle %>%
   theme_thesis
 
 # 2d. beta_{i,n}: yield-on-trend-inflation loadings by maturity
-plots$beta_loadings <- cycle %>%
+plots$s2_beta_loadings <- cycle %>%
   distinct(country, maturity, beta) %>%
   ggplot(aes(maturity, beta, colour = country, group = country)) +
   geom_line(linewidth = 0.5) + geom_point(size = 1.6) +
@@ -305,7 +305,7 @@ plots$beta_loadings <- cycle %>%
 us_rho <- with(us_data, cor(c_bar, CF, use = "complete.obs"))
 
 # 3a. CP-2015 Fig. 2 replication: return-forecasting factor and average cycle (US)
-plots$us_cf_cbar_ts <- us_data %>%
+plots$s3_us_cf_cbar_ts <- us_data %>%
   select(date, CF, c_bar) %>%
   pivot_longer(c(CF, c_bar), names_to = "series", values_to = "value") %>%
   ggplot(aes(date, value, colour = series, linetype = series)) +
@@ -329,7 +329,7 @@ plots$us_cf_cbar_ts <- us_data %>%
   theme_thesis
 
 # 3b. c_bar vs CF for the US (CP-2015 reference correlation ~ 0.61)
-plots$us_cbar_vs_cf <- us_data %>%
+plots$s3_us_cbar_vs_cf <- us_data %>%
   ggplot(aes(c_bar, CF)) +
   geom_point(size = 0.8, alpha = 0.5, colour = "#525252") +
   geom_smooth(method = "lm", se = TRUE, colour = "#08519c") +
@@ -339,7 +339,7 @@ plots$us_cbar_vs_cf <- us_data %>%
   theme_thesis
 
 # 3c. US predictive scatter: rx_{t+12} vs CF
-plots$us_rx_vs_cf <- us_data %>%
+plots$s3_us_rx_vs_cf <- us_data %>%
   ggplot(aes(CF, rx_t12)) +
   geom_point(size = 0.8, alpha = 0.5, colour = "#525252") +
   geom_smooth(method = "lm", se = TRUE, colour = "#08519c") +
@@ -352,7 +352,7 @@ plots$us_rx_vs_cf <- us_data %>%
 # =============================================================
 
 # 4a. Local cycle factor CF_{i,t} by country (eq 6)
-plots$local_cf <- reg_data %>%
+plots$s4_local_cf <- reg_data %>%
   ggplot(aes(date, CF, colour = country)) +
   geom_line(linewidth = 0.4) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
@@ -362,7 +362,7 @@ plots$local_cf <- reg_data %>%
   theme_thesis + theme(legend.position = "none")
 
 # 4b. Predictive scatter rx_{t+12} vs CF by country (eq 18)
-plots$rx_vs_cf_scatter <- panel %>%
+plots$s4_rx_vs_cf_scatter <- panel %>%
   ggplot(aes(CF, rx_t12)) +
   geom_point(size = 0.4, alpha = 0.4, colour = "#525252") +
   geom_smooth(method = "lm", se = TRUE, colour = "#08519c") +
@@ -372,7 +372,7 @@ plots$rx_vs_cf_scatter <- panel %>%
   theme_thesis
 
 # 4c. In-sample R^2 of rx ~ CF per country
-plots$r2_cf_by_country <- tab18 %>%
+plots$s4_r2_cf_by_country <- tab18 %>%
   filter(term == "CF") %>%
   ggplot(aes(reorder(country, r_sq), r_sq)) +
   geom_col(fill = "#08519c") +
@@ -382,7 +382,7 @@ plots$r2_cf_by_country <- tab18 %>%
   theme_thesis + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # 4d. In-sample R^2 by country and maturity: rx^(n) ~ country-specific CF
-plots$r2_cf_by_country_maturity <- bind_rows(
+plots$s4_r2_cf_by_country_maturity <- bind_rows(
   run_by_country(panel, rx_2_t12  ~ CF) %>% filter(term == "CF") %>%
     transmute(country, maturity = "2Y",  r_sq),
   run_by_country(panel, rx_5_t12  ~ CF) %>% filter(term == "CF") %>%
@@ -407,7 +407,7 @@ plots$r2_cf_by_country_maturity <- bind_rows(
 # =============================================================
 
 # 5a. Global cycle factor with the country CFs faded behind (eq 7-8)
-plots$gcf <- ggplot() +
+plots$s5_gcf <- ggplot() +
   geom_line(data = reg_data, aes(date, CF, group = country),
             colour = "grey80", linewidth = 0.3) +
   geom_line(data = gcf, aes(date, GCF), colour = "#08519c", linewidth = 0.8) +
@@ -418,7 +418,7 @@ plots$gcf <- ggplot() +
   theme_thesis
 
 # 5b. GDP weights w_{i,t} (eq 8)
-plots$gdp_weights <- reg_data %>%
+plots$s5_gdp_weights <- reg_data %>%
   filter(!is.na(w)) %>%
   ggplot(aes(date, w, fill = country)) +
   geom_area(position = "fill") +
@@ -435,7 +435,7 @@ cf_corr <- reg_data %>%
   select(-ym) %>%
   cor(use = "pairwise.complete.obs")
 
-plots$cf_corr_heatmap <- cf_corr %>%
+plots$s5_cf_corr_heatmap <- cf_corr %>%
   as.data.frame() %>%
   rownames_to_column("country_a") %>%
   pivot_longer(-country_a, names_to = "country_b", values_to = "rho") %>%
@@ -451,7 +451,7 @@ plots$cf_corr_heatmap <- cf_corr %>%
         axis.text.x = element_text(angle = 45, hjust = 1))
 
 # 5d. KEY: does the global CF subsume the local CF? (eq 19, local investor)
-plots$coef_eq19 <- tab19 %>%
+plots$s5_coef_eq19 <- tab19 %>%
   filter(term %in% c("CF", "GCF")) %>%
   mutate(lo = estimate - 1.96 * std_err,
          hi = estimate + 1.96 * std_err) %>%
@@ -467,7 +467,7 @@ plots$coef_eq19 <- tab19 %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # 5e. R^2 comparison: local CF vs global GCF per country (eq 18 vs eq 20)
-plots$r2_cf_vs_gcf <- bind_rows(
+plots$s5_r2_cf_vs_gcf <- bind_rows(
   tab18 %>% filter(term == "CF")  %>% transmute(country, model = "rx ~ CF",  r_sq),
   tab20 %>% filter(term == "GCF") %>% transmute(country, model = "rx ~ GCF", r_sq)
 ) %>%
@@ -488,7 +488,7 @@ plots$r2_cf_vs_gcf <- bind_rows(
 # 6a. GCF vs FX-adjusted GCF over time
 gcf_fxgcf_rho <- with(fxgcf %>% filter(!is.na(GCF), !is.na(FXGCF)), cor(GCF, FXGCF))
 
-plots$fxgcf_vs_gcf <- fxgcf %>%
+plots$s6_fxgcf_vs_gcf <- fxgcf %>%
   ggplot(aes(date)) +
   geom_line(aes(y = GCF,   colour = "GCF (eq 7)"),    linewidth = 0.5) +
   geom_line(aes(y = FXGCF_bu, colour = "FXGCF (DH)"),    linewidth = 0.5) +
@@ -502,7 +502,7 @@ plots$fxgcf_vs_gcf <- fxgcf %>%
   theme_thesis
 
 # 6b. USD investor: does the global CF subsume the local CF? (eq 21)
-plots$coef_eq21 <- tab21 %>%
+plots$s6_coef_eq21 <- tab21 %>%
   filter(term %in% c("CF", "GCF")) %>%
   mutate(lo = estimate - 1.96 * std_err,
          hi = estimate + 1.96 * std_err) %>%
@@ -519,7 +519,7 @@ plots$coef_eq21 <- tab21 %>%
 
 # 6c. USD investor: the value of the FX adjustment (eq 22 vs eq 23)
 # Now that FXGCF is built per DH (not affine in GCF), these are genuinely different.
-plots$r2_usd_gcf_vs_fxgcf <- bind_rows(
+plots$s6_r2_usd_gcf_vs_fxgcf <- bind_rows(
   run_by_country(panel, rx_USD_t12 ~ GCF)   %>% filter(term == "GCF")   %>%
     transmute(country, model = "rx_USD ~ GCF (eq22)",   r_sq),
   run_by_country(panel, rx_USD_t12 ~ FXGCF) %>% filter(term == "FXGCF") %>%
@@ -551,7 +551,7 @@ fxgcf_bu_rho <- with(fxgcf %>% filter(!is.na(FXGCF), !is.na(FXGCF_bu)),
                      cor(FXGCF, FXGCF_bu))
 
 # 7a. Robustness: FXGCF (top-down) vs FXGCF_bu (bottom-up) over time
-plots$rob_fxgcf_ts <- fxgcf %>%
+plots$s7_rob_fxgcf_ts <- fxgcf %>%
   ggplot(aes(date)) +
   geom_line(aes(y = FXGCF,    colour = "FXGCF (top-down, baseline)"),  linewidth = 0.5) +
   geom_line(aes(y = FXGCF_bu, colour = "FXGCF (bottom-up)"),           linewidth = 0.5) +
@@ -568,7 +568,7 @@ plots$rob_fxgcf_ts <- fxgcf %>%
 # weighted average, removing the in-sample own-inclusion bias. The gap between
 # bottom-up and leave-own-out IS that bias (largest for high-weight US).
 fxgcf_levels <- c("FXGCF (top-down)", "FXGCF (bottom-up)", "FXGCF (leave-own-out)")
-plots$rob_fxgcf_r2 <- bind_rows(
+plots$s7_rob_fxgcf_r2 <- bind_rows(
   run_by_country(panel, rx_USD_t12 ~ FXGCF)     %>% filter(term == "FXGCF")     %>%
     transmute(country, model = "FXGCF (top-down)",      r_sq),
   run_by_country(panel, rx_USD_t12 ~ FXGCF_bu)  %>% filter(term == "FXGCF_bu")  %>%
@@ -603,7 +603,7 @@ cf_compare <- reg_data %>%
             by = c("country", "ym"))
 
 # 8a. CF vs CF_oos by country (time series, faceted)
-plots$cf_oos_vs_is <- cf_compare %>%
+plots$s8_cf_oos_vs_is <- cf_compare %>%
   pivot_longer(c(CF, CF_oos), names_to = "factor", values_to = "value") %>%
   filter(!is.na(value)) %>%
   ggplot(aes(date, value, colour = factor)) +
@@ -618,7 +618,7 @@ plots$cf_oos_vs_is <- cf_compare %>%
   theme_thesis
 
 # 8b. GCF vs GCF_oos (single global time series)
-plots$gcf_oos_vs_is <- gcf %>%
+plots$s8_gcf_oos_vs_is <- gcf %>%
   select(ym, date, GCF) %>%
   left_join(gcf_oos %>% select(ym, GCF_oos), by = "ym") %>%
   pivot_longer(c(GCF, GCF_oos), names_to = "factor", values_to = "value") %>%
@@ -633,7 +633,7 @@ plots$gcf_oos_vs_is <- gcf %>%
   theme_thesis
 
 # 8c. FXGCF vs FXGCF_oos
-plots$fxgcf_oos_vs_is <- fxgcf %>%
+plots$s8_fxgcf_oos_vs_is <- fxgcf %>%
   select(ym, date, FXGCF) %>%
   left_join(fxgcf_oos %>% select(ym, FXGCF_oos), by = "ym") %>%
   pivot_longer(c(FXGCF, FXGCF_oos), names_to = "factor", values_to = "value") %>%
@@ -648,7 +648,7 @@ plots$fxgcf_oos_vs_is <- fxgcf %>%
   theme_thesis
 
 # 8d. cor(CF, CF_oos) per country -- how much look-ahead inflated CF
-plots$oos_is_corr <- cf_compare %>%
+plots$s8_oos_is_corr <- cf_compare %>%
   filter(!is.na(CF), !is.na(CF_oos)) %>%
   group_by(country) %>%
   summarise(cor_CF = cor(CF, CF_oos), n = n(), .groups = "drop") %>%
@@ -663,7 +663,7 @@ plots$oos_is_corr <- cf_compare %>%
   theme_thesis
 
 # 8e. Realized rx_t12 vs CF_oos (out-of-sample predictive scatter, faceted)
-plots$rx_vs_cf_oos <- reg_data_oos %>%
+plots$s8_rx_vs_cf_oos <- reg_data_oos %>%
   filter(!is.na(CF_oos), !is.na(rx_t12)) %>%
   ggplot(aes(CF_oos, rx_t12)) +
   geom_point(alpha = 0.3, size = 0.6) +
@@ -676,7 +676,7 @@ plots$rx_vs_cf_oos <- reg_data_oos %>%
 
 # 8f. Campbell-Thompson R^2_oos: local-return predictability per country
 # Positive bars => recursive factor forecast beats the recursive prevailing mean.
-plots$r2_oos_local <- r2_oos_tab %>%
+plots$s8_r2_oos_local <- r2_oos_tab %>%
   filter(spec %in% c("rx ~ CF_oos", "rx ~ GCF_oos"), !is.na(r2_oos)) %>%
   mutate(spec = factor(spec, levels = c("rx ~ CF_oos", "rx ~ GCF_oos"))) %>%
   ggplot(aes(country, r2_oos, fill = spec)) +
@@ -692,7 +692,7 @@ plots$r2_oos_local <- r2_oos_tab %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # 8g. Campbell-Thompson R^2_oos: USD-investor returns per country
-plots$r2_oos_usd <- r2_oos_tab %>%
+plots$s8_r2_oos_usd <- r2_oos_tab %>%
   filter(spec %in% c("rx_USD ~ GCF_oos", "rx_USD ~ FXGCF_oos"),
          !is.na(r2_oos)) %>%
   mutate(spec = factor(spec,
@@ -710,7 +710,7 @@ plots$r2_oos_usd <- r2_oos_tab %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # 8h. Pooled R^2_oos across countries, per spec (one bar per spec)
-plots$r2_oos_pooled <- r2_oos_pooled %>%
+plots$s8_r2_oos_pooled <- r2_oos_pooled %>%
   filter(!is.na(r2_oos_pooled)) %>%
   ggplot(aes(spec, r2_oos_pooled, fill = spec)) +
   geom_col(width = 0.6, show.legend = FALSE) +
@@ -734,7 +734,7 @@ plots$r2_oos_pooled <- r2_oos_pooled %>%
 # Computed in `hr_results` above.
 
 # 9a. Per-country HAC t-stats: CF_perp vs GCF in the joint regression.
-plots$hr_tstats <- hr_results %>%
+plots$s9_hr_tstats <- hr_results %>%
   select(country, `Local (CF_perp)` = t_local, `Global (GCF)` = t_global) %>%
   pivot_longer(-country, names_to = "factor", values_to = "t_stat") %>%
   mutate(factor = factor(factor, levels = c("Local (CF_perp)", "Global (GCF)"))) %>%
@@ -751,7 +751,7 @@ plots$hr_tstats <- hr_results %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # 9b. R^2 ladder: local-only / global-only / joint per country
-plots$hr_r2 <- hr_results %>%
+plots$s9_hr_r2 <- hr_results %>%
   select(country, `Local only` = r2_local,
                   `Global only` = r2_global,
                   Joint = r2_joint) %>%
@@ -771,7 +771,7 @@ plots$hr_r2 <- hr_results %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # 9c. Joint HAC Wald test: -log10(p) per country (raw and BH-adjusted).
-plots$hr_wald <- hr_results %>%
+plots$s9_hr_wald <- hr_results %>%
   select(country, raw = wald_p, BH = wald_p_bh) %>%
   pivot_longer(-country, names_to = "adj", values_to = "p") %>%
   mutate(neg_log10_p = -log10(pmax(p, 1e-12)),
