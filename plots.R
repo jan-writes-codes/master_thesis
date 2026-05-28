@@ -568,6 +568,58 @@ plots$rx_vs_cf_oos <- reg_data_oos %>%
        x = TeX("$CF_{\\mathrm{oos}}$"), y = TeX("$rx_{t+12}$")) +
   theme_thesis
 
+# 8f. Campbell-Thompson R^2_oos: local-return predictability per country
+# Positive bars => recursive factor forecast beats the recursive prevailing mean.
+plots$r2_oos_local <- r2_oos_tab %>%
+  filter(spec %in% c("rx ~ CF_oos", "rx ~ GCF_oos"), !is.na(r2_oos)) %>%
+  mutate(spec = factor(spec, levels = c("rx ~ CF_oos", "rx ~ GCF_oos"))) %>%
+  ggplot(aes(country, r2_oos, fill = spec)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c("rx ~ CF_oos" = "#08519c",
+                               "rx ~ GCF_oos" = "#a50f15"), name = NULL) +
+  labs(title = TeX("Campbell-Thompson $R^2_{\\mathrm{oos}}$: local-currency returns"),
+       subtitle = "Recursive factor forecast vs recursive-mean benchmark (5y min training, 12m horizon)",
+       x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$")) +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 8g. Campbell-Thompson R^2_oos: USD-investor returns per country
+plots$r2_oos_usd <- r2_oos_tab %>%
+  filter(spec %in% c("rx_USD ~ GCF_oos", "rx_USD ~ FXGCF_oos"),
+         !is.na(r2_oos)) %>%
+  mutate(spec = factor(spec,
+                       levels = c("rx_USD ~ GCF_oos", "rx_USD ~ FXGCF_oos"))) %>%
+  ggplot(aes(country, r2_oos, fill = spec)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c("rx_USD ~ GCF_oos"  = "#08519c",
+                               "rx_USD ~ FXGCF_oos" = "#a50f15"), name = NULL) +
+  labs(title = TeX("Campbell-Thompson $R^2_{\\mathrm{oos}}$: USD-investor returns"),
+       subtitle = "GCF_oos vs FX-adjusted FXGCF_oos (recursive-mean benchmark)",
+       x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$")) +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 8h. Pooled R^2_oos across countries, per spec (one bar per spec)
+plots$r2_oos_pooled <- r2_oos_pooled %>%
+  filter(!is.na(r2_oos_pooled)) %>%
+  ggplot(aes(spec, r2_oos_pooled, fill = spec)) +
+  geom_col(width = 0.6, show.legend = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c("rx ~ CF_oos"        = "#08519c",
+                               "rx ~ GCF_oos"       = "#9aa200",
+                               "rx_USD ~ GCF_oos"   = "#a50f15",
+                               "rx_USD ~ FXGCF_oos" = "#762a83")) +
+  labs(title = TeX("Pooled Campbell-Thompson $R^2_{\\mathrm{oos}}$ across G10"),
+       subtitle = "SS aggregated over countries; each country uses its own recursive-mean benchmark",
+       x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$ (pooled)")) +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
 # =============================================================
 # Convenience: write every plot to disk as a vector PDF
 # =============================================================
