@@ -4,17 +4,19 @@
 # predictability framework (CP 2015 mechanism, DH 2013 global
 # integration, novel FX-adjusted global factor).
 #
-# Run from the project root. This sources `data preperation.R`
-# (note the space in the filename), which leaves the factor objects
-# in the workspace: yields_long, inflation_long, cycle, cycle_avg,
-# reg_data, gcf, fxgcf, gdp, fx_long, us_data.
+# Run from the project root. This sources `oos.R`, which itself sources
+# `data preperation.R` (note the space in the filename). After sourcing,
+# the workspace contains the in-sample factor objects (yields_long,
+# inflation_long, cycle, cycle_avg, reg_data, gcf, fxgcf, gdp, fx_long,
+# us_data) and their fully-recursive OOS counterparts (cycle_oos,
+# reg_data_oos, gcf_oos, fxgcf_oos, panel_oos).
 #
 # Figures are stored in the `plots` list and NOT auto-printed, so
 # sourcing is cheap. Render one with print(plots$<name>); write all
 # to disk with save_all_plots().
 # =============================================================
 
-source("data preperation.R")
+source("oos.R")  # transitively sources data preperation.R
 
 library(ggplot2)
 library(dplyr)
@@ -480,6 +482,91 @@ plots$rob_fxgcf_r2 <- bind_rows(
        x = NULL, y = TeX("$R^2$")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# =============================================================
+# 8. Out-of-sample factors (fully recursive): CF_oos / GCF_oos / FXGCF_oos
+# =============================================================
+# Visual sanity check that the recursive factors track their full-sample
+# counterparts after burn-in but lag/diverge before. Formal predictability
+# tests (CT-R^2, Clark-West, Diebold-Mariano) are deferred to a later push.
+
+# CF and CF_oos joined per country-month for the side-by-side comparisons.
+cf_compare <- reg_data %>%
+  select(country, ym, date, CF) %>%
+  left_join(reg_data_oos %>% select(country, ym, CF_oos),
+            by = c("country", "ym"))
+
+# 8a. CF vs CF_oos by country (time series, faceted)
+plots$cf_oos_vs_is <- cf_compare %>%
+  pivot_longer(c(CF, CF_oos), names_to = "factor", values_to = "value") %>%
+  filter(!is.na(value)) %>%
+  ggplot(aes(date, value, colour = factor)) +
+  geom_line(linewidth = 0.4) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  facet_wrap(~ country, ncol = 3, scales = "free_y") +
+  scale_colour_manual(values = c("CF" = "#08519c", "CF_oos" = "#a50f15"),
+                      name = NULL) +
+  labs(title = "Local cycle factor: full-sample CF vs fully-recursive CF_oos",
+       subtitle = "Convergence after ~10y burn-in is the signature of a stable real-time estimator",
+       x = NULL, y = "Factor value") +
+  theme_thesis
+
+# 8b. GCF vs GCF_oos (single global time series)
+plots$gcf_oos_vs_is <- gcf %>%
+  select(ym, date, GCF) %>%
+  left_join(gcf_oos %>% select(ym, GCF_oos), by = "ym") %>%
+  pivot_longer(c(GCF, GCF_oos), names_to = "factor", values_to = "value") %>%
+  filter(!is.na(value)) %>%
+  ggplot(aes(date, value, colour = factor)) +
+  geom_line(linewidth = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_colour_manual(values = c("GCF" = "#08519c", "GCF_oos" = "#a50f15"),
+                      name = NULL) +
+  labs(title = "Global cycle factor: full-sample GCF vs fully-recursive GCF_oos",
+       x = NULL, y = "Factor value") +
+  theme_thesis
+
+# 8c. FXGCF vs FXGCF_oos
+plots$fxgcf_oos_vs_is <- fxgcf %>%
+  select(ym, date, FXGCF) %>%
+  left_join(fxgcf_oos %>% select(ym, FXGCF_oos), by = "ym") %>%
+  pivot_longer(c(FXGCF, FXGCF_oos), names_to = "factor", values_to = "value") %>%
+  filter(!is.na(value)) %>%
+  ggplot(aes(date, value, colour = factor)) +
+  geom_line(linewidth = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_colour_manual(values = c("FXGCF" = "#08519c", "FXGCF_oos" = "#a50f15"),
+                      name = NULL) +
+  labs(title = "FX-adjusted GCF: full-sample FXGCF vs fully-recursive FXGCF_oos",
+       x = NULL, y = "Factor value") +
+  theme_thesis
+
+# 8d. cor(CF, CF_oos) per country -- how much look-ahead inflated CF
+plots$oos_is_corr <- cf_compare %>%
+  filter(!is.na(CF), !is.na(CF_oos)) %>%
+  group_by(country) %>%
+  summarise(cor_CF = cor(CF, CF_oos), n = n(), .groups = "drop") %>%
+  ggplot(aes(reorder(country, cor_CF), cor_CF)) +
+  geom_col(fill = "#08519c") +
+  geom_hline(yintercept = c(0, 1), linetype = "dashed", colour = "grey50") +
+  coord_flip() +
+  scale_y_continuous(limits = c(-0.2, 1.0)) +
+  labs(title = TeX("$\\mathrm{cor}(CF, CF_{\\mathrm{oos}})$ per country"),
+       subtitle = "Closer to 1 means full-sample look-ahead added little to the local factor",
+       x = NULL, y = "Correlation") +
+  theme_thesis
+
+# 8e. Realized rx_t12 vs CF_oos (out-of-sample predictive scatter, faceted)
+plots$rx_vs_cf_oos <- reg_data_oos %>%
+  filter(!is.na(CF_oos), !is.na(rx_t12)) %>%
+  ggplot(aes(CF_oos, rx_t12)) +
+  geom_point(alpha = 0.3, size = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, colour = "#a50f15", linewidth = 0.5) +
+  facet_wrap(~ country, ncol = 3, scales = "free") +
+  labs(title = TeX("Realized 12m excess return vs $CF_{\\mathrm{oos}}$"),
+       subtitle = "Out-of-sample predictive scatter per country",
+       x = TeX("$CF_{\\mathrm{oos}}$"), y = TeX("$rx_{t+12}$")) +
+  theme_thesis
 
 # =============================================================
 # Convenience: write every plot to disk as a vector PDF
