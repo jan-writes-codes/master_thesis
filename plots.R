@@ -45,6 +45,7 @@ mat_palette <- c("1Y" = "#2166ac", "2Y" = "#4dac26", "4Y" = "#e08214",
 # Country-month panel with all factors side by side.
 panel <- reg_data %>%
   left_join(gcf   %>% select(ym, GCF),              by = "ym") %>%
+  left_join(gcp   %>% select(ym, GCP),              by = "ym") %>%
   left_join(fxgcf %>% select(ym, FXGCF, FXGCF_bu),  by = "ym")
 
 # -------------------------------------------------------------
@@ -783,6 +784,132 @@ plots$s9_hr_wald <- hr_results %>%
   labs(title = TeX("DH horse-race joint Wald test: $-\\log_{10}(p)$ per country"),
        subtitle = TeX("$H_0: \\beta = \\gamma = 0$; dashed line at $p = 0.05$ (BH = Benjamini-Hochberg across G10)"),
        x = NULL, y = TeX("$-\\log_{10}(p)$")) +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# =============================================================
+# 10. CP 2005 / GCP factor comparison (vs CF / GCF)
+# =============================================================
+# Side-by-side view of the cycle-based factor (CF, GCF) and the
+# forward-based CP 2005 / DH 2013 factor (CP, GCP), in-sample and OOS.
+
+# 10a. Local factor over time: CF vs CP per country (in-sample)
+plots$s10_cf_vs_cp_ts <- reg_data %>%
+  select(country, date, CF, CP) %>%
+  pivot_longer(c(CF, CP), names_to = "factor", values_to = "value") %>%
+  filter(!is.na(value)) %>%
+  ggplot(aes(date, value, colour = factor)) +
+  geom_line(linewidth = 0.4) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  facet_wrap(~ country, ncol = 3, scales = "free_y") +
+  scale_colour_manual(values = c("CF" = "#08519c", "CP" = "#a50f15"), name = NULL) +
+  labs(title = "Local factor: cycle-based CF vs forward-based CP (in-sample)",
+       subtitle = "CF = CP 2015 cycle factor; CP = CP 2005 / DH 2013 forward factor",
+       x = NULL, y = "Factor value") +
+  theme_thesis
+
+# 10b. Global factor over time: GCF vs GCP (in-sample)
+plots$s10_gcf_vs_gcp_ts <- gcf %>%
+  select(ym, date, GCF) %>%
+  left_join(gcp %>% select(ym, GCP), by = "ym") %>%
+  pivot_longer(c(GCF, GCP), names_to = "factor", values_to = "value") %>%
+  filter(!is.na(value)) %>%
+  ggplot(aes(date, value, colour = factor)) +
+  geom_line(linewidth = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_colour_manual(values = c("GCF" = "#08519c", "GCP" = "#a50f15"), name = NULL) +
+  labs(title = "Global factor: GCF vs GCP (in-sample)",
+       x = NULL, y = "Factor value") +
+  theme_thesis
+
+# 10c. Per-country correlation: cor(CF, CP) -- how much the two local
+# factors overlap.
+plots$s10_cf_cp_corr <- reg_data %>%
+  filter(!is.na(CF), !is.na(CP)) %>%
+  group_by(country) %>%
+  summarise(cor_CF_CP = cor(CF, CP), n = n(), .groups = "drop") %>%
+  ggplot(aes(reorder(country, cor_CF_CP), cor_CF_CP)) +
+  geom_col(fill = "#08519c") +
+  geom_hline(yintercept = c(0, 1), linetype = "dashed", colour = "grey50") +
+  coord_flip() +
+  scale_y_continuous(limits = c(-0.2, 1.0)) +
+  labs(title = "Local factor overlap: cor(CF, CP) per country (in-sample)",
+       subtitle = "Closer to 1 means the cycle and forward factors carry similar information",
+       x = NULL, y = "Correlation") +
+  theme_thesis
+
+# 10d. In-sample R^2 ladder per country: rx ~ CF / CP / GCF / GCP
+tab_cp  <- run_by_country(panel, rx_t12 ~ CP)
+tab_gcp <- run_by_country(panel, rx_t12 ~ GCP)
+
+plots$s10_r2_is_compare <- bind_rows(
+  tab18   %>% filter(term == "CF")  %>% transmute(country, model = "rx ~ CF",  r_sq),
+  tab_cp  %>% filter(term == "CP")  %>% transmute(country, model = "rx ~ CP",  r_sq),
+  tab20   %>% filter(term == "GCF") %>% transmute(country, model = "rx ~ GCF", r_sq),
+  tab_gcp %>% filter(term == "GCP") %>% transmute(country, model = "rx ~ GCP", r_sq)
+) %>%
+  mutate(model = factor(model, levels = c("rx ~ CF", "rx ~ CP",
+                                          "rx ~ GCF", "rx ~ GCP"))) %>%
+  ggplot(aes(country, r_sq, fill = model)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c("rx ~ CF"  = "#08519c",
+                               "rx ~ CP"  = "#a50f15",
+                               "rx ~ GCF" = "#9aa200",
+                               "rx ~ GCP" = "#762a83"), name = NULL) +
+  labs(title = TeX("In-sample $R^2$: cycle (CF / GCF) vs forward (CP / GCP) factors"),
+       x = NULL, y = TeX("$R^2$")) +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 10e. Local OOS factor over time: CF_oos vs CP_oos per country
+plots$s10_cf_oos_vs_cp_oos_ts <- panel_oos %>%
+  select(country, date, CF_oos, CP_oos) %>%
+  pivot_longer(c(CF_oos, CP_oos), names_to = "factor", values_to = "value") %>%
+  filter(!is.na(value)) %>%
+  ggplot(aes(date, value, colour = factor)) +
+  geom_line(linewidth = 0.4) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  facet_wrap(~ country, ncol = 3, scales = "free_y") +
+  scale_colour_manual(values = c("CF_oos" = "#08519c", "CP_oos" = "#a50f15"),
+                      name = NULL) +
+  labs(title = "OOS local factor: CF_oos vs CP_oos (fully recursive)",
+       x = NULL, y = "Factor value") +
+  theme_thesis
+
+# 10f. Global OOS factor over time: GCF_oos vs GCP_oos
+plots$s10_gcf_oos_vs_gcp_oos_ts <- gcf_oos %>%
+  select(ym, date, GCF_oos) %>%
+  left_join(gcp_oos %>% select(ym, GCP_oos), by = "ym") %>%
+  pivot_longer(c(GCF_oos, GCP_oos), names_to = "factor", values_to = "value") %>%
+  filter(!is.na(value)) %>%
+  ggplot(aes(date, value, colour = factor)) +
+  geom_line(linewidth = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_colour_manual(values = c("GCF_oos" = "#08519c", "GCP_oos" = "#a50f15"),
+                      name = NULL) +
+  labs(title = "OOS global factor: GCF_oos vs GCP_oos (fully recursive)",
+       x = NULL, y = "Factor value") +
+  theme_thesis
+
+# 10g. OOS R^2 comparison per country: cycle vs forward factors
+plots$s10_r2_oos_compare <- r2_oos_tab %>%
+  filter(spec %in% c("rx ~ CF_oos", "rx ~ CP_oos",
+                     "rx ~ GCF_oos", "rx ~ GCP_oos"),
+         !is.na(r2_oos)) %>%
+  mutate(spec = factor(spec, levels = c("rx ~ CF_oos", "rx ~ CP_oos",
+                                        "rx ~ GCF_oos", "rx ~ GCP_oos"))) %>%
+  ggplot(aes(country, r2_oos, fill = spec)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c("rx ~ CF_oos"  = "#08519c",
+                               "rx ~ CP_oos"  = "#a50f15",
+                               "rx ~ GCF_oos" = "#9aa200",
+                               "rx ~ GCP_oos" = "#762a83"), name = NULL) +
+  labs(title = TeX("Campbell-Thompson $R^2_{\\mathrm{oos}}$: cycle vs forward factors"),
+       subtitle = "Recursive factor forecast vs recursive-mean benchmark, 5y min training, 12m horizon",
+       x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
