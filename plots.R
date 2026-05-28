@@ -138,21 +138,27 @@ hr_results <- panel_perp %>%
     if (is.null(joint)) return(NULL)
     ct <- lmtest::coeftest(joint$fit, vcov. = joint$vcov)
     # Joint HAC Wald test: H0: beta_CF_perp = beta_GCF = 0
-    # Build the restricted (intercept-only) fit explicitly on the same `d`
-    # so the saved call resolves -- `update(joint$fit, . ~ 1)` would
-    # re-evaluate the saved call (data = df) outside hac_fit_full's scope
-    # and fail with model.frame.default("'data' must be a data.frame ...").
-    restricted_fit <- tryCatch(
-      lm(rx_t12 ~ 1, data = d, na.action = na.omit),
-      error = function(e) NULL
-    )
-    w <- if (!is.null(restricted_fit)) {
-      tryCatch(lmtest::waldtest(restricted_fit, joint$fit,
-                                vcov = joint$vcov, test = "Chisq"),
-               error = function(e) NULL)
-    } else NULL
-    wald_chisq <- if (!is.null(w)) w$Chisq[2]        else NA_real_
-    wald_p     <- if (!is.null(w)) w$`Pr(>Chisq)`[2] else NA_real_
+    # Computed directly as W = b' V^{-1} b ~ Chi-sq(2). Avoids
+    # lmtest::waldtest, which internally calls update() on the saved
+    # lm call and would fail because hac_fit_full's stored call has
+    # data = df (out of scope here; the local is `d`).
+    test_terms <- c("CF_perp", "GCF")
+    b <- coef(joint$fit)
+    V <- joint$vcov
+    if (all(test_terms %in% names(b)) && all(test_terms %in% rownames(V))) {
+      b_t <- b[test_terms]
+      V_t <- V[test_terms, test_terms]
+      wald_chisq <- tryCatch(
+        as.numeric(t(b_t) %*% solve(V_t) %*% b_t),
+        error = function(e) NA_real_
+      )
+      wald_p <- if (!is.na(wald_chisq))
+                  pchisq(wald_chisq, df = length(b_t), lower.tail = FALSE)
+                else NA_real_
+    } else {
+      wald_chisq <- NA_real_
+      wald_p     <- NA_real_
+    }
     tibble::tibble(
       country    = cn,
       n          = joint$T_obs,
