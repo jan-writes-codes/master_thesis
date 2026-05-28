@@ -88,6 +88,97 @@ tab19 <- run_by_country(panel, rx_t12     ~ CF + GCF)   # local: rx ~ CF + GCF
 tab20 <- run_by_country(panel, rx_t12     ~ GCF)        # local: rx ~ GCF
 tab21 <- run_by_country(panel, rx_USD_t12 ~ CF + GCF)   # USD:   rx_USD ~ CF + GCF
 
+# -------------------------------------------------------------
+# DH-style horse-race test for Eq 19: orthogonalise CF against GCF,
+# then estimate rx ~ CF_perp + GCF per country with HAC SEs.
+#
+# CF_perp_i = residual of lm(CF_i ~ GCF) -- the part of the local
+# factor not spanned by the global factor. The joint regression then
+# asks (a) whether the truly-local component still matters once the
+# global factor is in, (b) whether the global factor matters
+# unconditionally, and (c) joint significance via a HAC Wald test.
+# All three per-country regressions (local-only, global-only, joint)
+# are estimated on the same observation set so the R^2 ladder is
+# comparable.
+# -------------------------------------------------------------
+
+panel_perp <- panel %>%
+  group_by(country) %>%
+  group_modify(~ {
+    d <- .x
+    ok <- !is.na(d$CF) & !is.na(d$GCF)
+    d$CF_perp <- NA_real_
+    if (sum(ok) >= 24) {
+      fit_perp <- lm(CF ~ GCF, data = d[ok, ], na.action = na.exclude)
+      d$CF_perp[ok] <- residuals(fit_perp)
+    }
+    d
+  }) %>%
+  ungroup()
+
+# Like hac_fit but returns the fit + HAC vcov for downstream Wald tests.
+hac_fit_full <- function(df, fml, h = 12, min_obs = 24) {
+  fit <- tryCatch(lm(fml, data = df, na.action = na.omit),
+                  error = function(e) NULL)
+  if (is.null(fit) || stats::nobs(fit) < min_obs) return(NULL)
+  L <- ceiling(max(1.5 * h, 1.3 * sqrt(stats::nobs(fit))))
+  V <- tryCatch(sandwich::NeweyWest(fit, lag = L, prewhite = FALSE, adjust = TRUE),
+                error = function(e) sandwich::vcovHC(fit))
+  list(fit = fit, vcov = V, T_obs = stats::nobs(fit), lag = L)
+}
+
+hr_results <- panel_perp %>%
+  split(.$country) %>%
+  purrr::imap_dfr(function(d, cn) {
+    d <- d %>% filter(!is.na(rx_t12), !is.na(CF), !is.na(CF_perp), !is.na(GCF))
+    if (nrow(d) < 24) return(NULL)
+    loc   <- hac_fit_full(d, rx_t12 ~ CF)
+    glob  <- hac_fit_full(d, rx_t12 ~ GCF)
+    joint <- hac_fit_full(d, rx_t12 ~ CF_perp + GCF)
+    if (is.null(joint)) return(NULL)
+    ct <- lmtest::coeftest(joint$fit, vcov. = joint$vcov)
+    # Joint HAC Wald test: H0: beta_CF_perp = beta_GCF = 0
+    restricted <- stats::update(joint$fit, . ~ 1)
+    w <- tryCatch(lmtest::waldtest(restricted, joint$fit,
+                                   vcov = joint$vcov, test = "Chisq"),
+                  error = function(e) NULL)
+    wald_chisq <- if (!is.null(w)) w$Chisq[2]        else NA_real_
+    wald_p     <- if (!is.null(w)) w$`Pr(>Chisq)`[2] else NA_real_
+    tibble::tibble(
+      country    = cn,
+      n          = joint$T_obs,
+      b_local    = ct["CF_perp", "Estimate"],
+      se_local   = ct["CF_perp", "Std. Error"],
+      t_local    = ct["CF_perp", "t value"],
+      p_local    = ct["CF_perp", "Pr(>|t|)"],
+      b_global   = ct["GCF",     "Estimate"],
+      se_global  = ct["GCF",     "Std. Error"],
+      t_global   = ct["GCF",     "t value"],
+      p_global   = ct["GCF",     "Pr(>|t|)"],
+      r2_local   = if (!is.null(loc))  summary(loc$fit)$r.squared  else NA_real_,
+      r2_global  = if (!is.null(glob)) summary(glob$fit)$r.squared else NA_real_,
+      r2_joint   = summary(joint$fit)$r.squared,
+      wald_chisq = wald_chisq,
+      wald_p     = wald_p
+    )
+  })
+
+# BH-FDR adjustment across the ~10 countries on the three p-value columns.
+hr_results <- hr_results %>%
+  mutate(
+    p_local_bh  = p.adjust(p_local,  method = "BH"),
+    p_global_bh = p.adjust(p_global, method = "BH"),
+    wald_p_bh   = p.adjust(wald_p,   method = "BH")
+  )
+
+cat("\n=== DH horse-race test (Eq 19): rx ~ CF_perp + GCF (HAC) ===\n")
+print(hr_results %>%
+        select(country, n,
+               b_local,  t_local,  p_local,  p_local_bh,
+               b_global, t_global, p_global, p_global_bh,
+               r2_local, r2_global, r2_joint,
+               wald_chisq, wald_p, wald_p_bh))
+
 # =============================================================
 # 1. Data & sample
 # =============================================================
@@ -619,6 +710,66 @@ plots$r2_oos_pooled <- r2_oos_pooled %>%
        x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$ (pooled)")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+# =============================================================
+# 9. DH horse-race test for Eq 19: rx ~ CF_perp + GCF
+# =============================================================
+# Per-country HAC t-stats on the orthogonalised local factor and the
+# global factor, plus an R^2 ladder (local-only / global-only / joint).
+# Computed in `hr_results` above.
+
+# 9a. Per-country HAC t-stats: CF_perp vs GCF in the joint regression.
+plots$hr_tstats <- hr_results %>%
+  select(country, `Local (CF_perp)` = t_local, `Global (GCF)` = t_global) %>%
+  pivot_longer(-country, names_to = "factor", values_to = "t_stat") %>%
+  mutate(factor = factor(factor, levels = c("Local (CF_perp)", "Global (GCF)"))) %>%
+  ggplot(aes(country, t_stat, fill = factor)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  geom_hline(yintercept = c(-1.96, 1.96), linetype = "dashed", colour = "grey50") +
+  geom_hline(yintercept = 0, colour = "grey30") +
+  scale_fill_manual(values = c("Local (CF_perp)" = "#08519c",
+                               "Global (GCF)"    = "#a50f15"), name = NULL) +
+  labs(title = "DH horse-race (Eq 19): per-country HAC t-statistics",
+       subtitle = TeX("$rx_{t+12} = a + \\beta\\, CF^{\\perp} + \\gamma\\, GCF + \\varepsilon$ -- dashed lines at $\\pm 1.96$"),
+       x = NULL, y = "HAC t-statistic") +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 9b. R^2 ladder: local-only / global-only / joint per country
+plots$hr_r2 <- hr_results %>%
+  select(country, `Local only` = r2_local,
+                  `Global only` = r2_global,
+                  Joint = r2_joint) %>%
+  pivot_longer(-country, names_to = "model", values_to = "r_sq") %>%
+  mutate(model = factor(model,
+                        levels = c("Local only", "Global only", "Joint"))) %>%
+  ggplot(aes(country, r_sq, fill = model)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c("Local only"  = "#08519c",
+                               "Global only" = "#a50f15",
+                               "Joint"       = "#762a83"), name = NULL) +
+  labs(title = TeX("DH horse-race: in-sample $R^2$ ladder per country"),
+       subtitle = "Local = rx ~ CF; Global = rx ~ GCF; Joint = rx ~ CF_perp + GCF (same sample)",
+       x = NULL, y = TeX("$R^2$")) +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 9c. Joint HAC Wald test: -log10(p) per country (raw and BH-adjusted).
+plots$hr_wald <- hr_results %>%
+  select(country, raw = wald_p, BH = wald_p_bh) %>%
+  pivot_longer(-country, names_to = "adj", values_to = "p") %>%
+  mutate(neg_log10_p = -log10(pmax(p, 1e-12)),
+         adj = factor(adj, levels = c("raw", "BH"))) %>%
+  ggplot(aes(country, neg_log10_p, fill = adj)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed", colour = "grey50") +
+  scale_fill_manual(values = c("raw" = "#08519c", "BH" = "#a50f15"), name = NULL) +
+  labs(title = TeX("DH horse-race joint Wald test: $-\\log_{10}(p)$ per country"),
+       subtitle = TeX("$H_0: \\beta = \\gamma = 0$; dashed line at $p = 0.05$ (BH = Benjamini-Hochberg across G10)"),
+       x = NULL, y = TeX("$-\\log_{10}(p)$")) +
+  theme_thesis +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # =============================================================
 # Convenience: write every plot to disk as a vector PDF
