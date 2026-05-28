@@ -261,3 +261,94 @@ cat(sprintf(
   sum(!is.na(gcf_oos$GCF_oos)),
   sum(!is.na(fxgcf_oos$FXGCF_oos))
 ))
+
+# -------------------------------------------------------------
+# Campbell-Thompson out-of-sample R^2
+# -------------------------------------------------------------
+# R^2_oos = 1 - sum((y - yhat_factor)^2) / sum((y - yhat_bench)^2)
+# where yhat_factor is the recursive forecast from `y ~ factor` and
+# yhat_bench is the recursive prevailing mean (`y ~ 1`). Both go through
+# `oos_predict` so they share the h-month outcome-lag training cutoff;
+# the factor itself is already OOS, so this is a "doubly-OOS" R^2 (both
+# the factor construction and the predictive regression respect t).
+#
+# Pooled across countries by summing the per-country SS_fcst / SS_bench
+# components (each country contributes its own recursive-mean benchmark).
+# -------------------------------------------------------------
+
+cat("\noos.R: computing Campbell-Thompson OOS R^2 ...\n")
+
+oos_r2_components <- function(df, formula, min_train = 60, h = 12) {
+  df    <- df %>% arrange(ym)
+  yvar  <- all.vars(formula)[1]
+  yhat  <- oos_predict(df, formula,
+                       min_train = min_train, h = h)
+  bench <- oos_predict(df, stats::as.formula(paste(yvar, "~ 1")),
+                       min_train = min_train, h = h)
+  y     <- df[[yvar]]
+  ok    <- !is.na(yhat) & !is.na(bench) & !is.na(y)
+  ss_f  <- sum((y[ok] - yhat[ok])^2)
+  ss_b  <- sum((y[ok] - bench[ok])^2)
+  tibble(
+    n_fcst   = sum(ok),
+    ss_fcst  = ss_f,
+    ss_bench = ss_b,
+    r2_oos   = if (sum(ok) > 0 && ss_b > 0) 1 - ss_f / ss_b else NA_real_
+  )
+}
+
+oos_r2_specs <- list(
+  list(label = "rx ~ CF_oos",        target = "rx_t12",     predictor = "CF_oos"),
+  list(label = "rx ~ GCF_oos",       target = "rx_t12",     predictor = "GCF_oos"),
+  list(label = "rx_USD ~ GCF_oos",   target = "rx_USD_t12", predictor = "GCF_oos"),
+  list(label = "rx_USD ~ FXGCF_oos", target = "rx_USD_t12", predictor = "FXGCF_oos")
+)
+
+r2_oos_min_train <- 60   # 5y of realized returns for the predictive regression
+
+r2_oos_tab <- panel_oos %>%
+  group_by(country) %>%
+  group_split() %>%
+  set_names(map_chr(., ~ unique(.x$country))) %>%
+  imap_dfr(function(df, cn) {
+    map_dfr(oos_r2_specs, function(s) {
+      d <- df %>%
+        filter(!is.na(.data[[s$predictor]]),
+               !is.na(.data[[s$target]]))
+      empty <- tibble(country = cn, spec = s$label,
+                      r2_oos = NA_real_, n_fcst = 0L,
+                      ss_fcst = NA_real_, ss_bench = NA_real_)
+      if (nrow(d) < r2_oos_min_train + 12) return(empty)
+      fml <- stats::as.formula(sprintf("%s ~ %s", s$target, s$predictor))
+      r <- oos_r2_components(d, fml, min_train = r2_oos_min_train, h = 12)
+      tibble(country = cn, spec = s$label,
+             r2_oos = r$r2_oos, n_fcst = r$n_fcst,
+             ss_fcst = r$ss_fcst, ss_bench = r$ss_bench)
+    })
+  })
+
+# Pooled R^2_oos per spec: aggregate SS across countries, then 1 - ratio.
+r2_oos_pooled <- r2_oos_tab %>%
+  group_by(spec) %>%
+  summarise(
+    n_fcst_total = sum(n_fcst,  na.rm = TRUE),
+    ss_fcst_tot  = sum(ss_fcst,  na.rm = TRUE),
+    ss_bench_tot = sum(ss_bench, na.rm = TRUE),
+    r2_oos_pooled = if (sum(ss_bench, na.rm = TRUE) > 0)
+                      1 - sum(ss_fcst,  na.rm = TRUE) /
+                          sum(ss_bench, na.rm = TRUE) else NA_real_,
+    n_countries  = sum(!is.na(r2_oos)),
+    .groups = "drop"
+  ) %>%
+  mutate(spec = factor(spec, levels = sapply(oos_r2_specs, `[[`, "label"))) %>%
+  arrange(spec)
+
+cat("\nCampbell-Thompson R^2_oos (per country, per spec):\n")
+print(r2_oos_tab %>%
+        select(country, spec, r2_oos, n_fcst) %>%
+        pivot_wider(id_cols = country,
+                    names_from = spec, values_from = r2_oos))
+
+cat("\nCampbell-Thompson R^2_oos (pooled across countries):\n")
+print(r2_oos_pooled %>%
+        select(spec, r2_oos_pooled, n_countries, n_fcst_total))
