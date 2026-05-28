@@ -138,10 +138,19 @@ hr_results <- panel_perp %>%
     if (is.null(joint)) return(NULL)
     ct <- lmtest::coeftest(joint$fit, vcov. = joint$vcov)
     # Joint HAC Wald test: H0: beta_CF_perp = beta_GCF = 0
-    restricted <- stats::update(joint$fit, . ~ 1)
-    w <- tryCatch(lmtest::waldtest(restricted, joint$fit,
-                                   vcov = joint$vcov, test = "Chisq"),
-                  error = function(e) NULL)
+    # Build the restricted (intercept-only) fit explicitly on the same `d`
+    # so the saved call resolves -- `update(joint$fit, . ~ 1)` would
+    # re-evaluate the saved call (data = df) outside hac_fit_full's scope
+    # and fail with model.frame.default("'data' must be a data.frame ...").
+    restricted_fit <- tryCatch(
+      lm(rx_t12 ~ 1, data = d, na.action = na.omit),
+      error = function(e) NULL
+    )
+    w <- if (!is.null(restricted_fit)) {
+      tryCatch(lmtest::waldtest(restricted_fit, joint$fit,
+                                vcov = joint$vcov, test = "Chisq"),
+               error = function(e) NULL)
+    } else NULL
     wald_chisq <- if (!is.null(w)) w$Chisq[2]        else NA_real_
     wald_p     <- if (!is.null(w)) w$`Pr(>Chisq)`[2] else NA_real_
     tibble::tibble(
