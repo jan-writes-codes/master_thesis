@@ -118,7 +118,14 @@ cat("oos.R: building reg_data_oos with recursive CF_oos ...\n")
 
 reg_data_oos <- cycle_1y_oos %>%
   left_join(cycle_avg_oos, by = c("country", "ym", "date")) %>%
-  left_join(reg_data %>% select(country, ym, date, rx_t12, rx_USD_t12,
+  # rx_t12 / rx_USD_t12 are NA in the last h=12 months (lead-yield filter
+  # in reg_data drops those rows), but the forwards are contemporaneous
+  # transforms of yields and exist there. Pulling forwards from the
+  # unfiltered `forwards` table avoids inheriting the rx_t12 filter, so
+  # CP_oos and GCP_oos extend to the same sample tail as CF_oos / GCF_oos.
+  left_join(reg_data %>% select(country, ym, date, rx_t12, rx_USD_t12),
+            by = c("country", "ym", "date")) %>%
+  left_join(forwards %>% select(country, ym, date,
                                 y_1, f_2, f_4, f_5, f_9, f_10),
             by = c("country", "ym", "date")) %>%
   mutate(y = as.integer(format(date, "%Y"))) %>%
