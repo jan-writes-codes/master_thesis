@@ -234,6 +234,24 @@ rx_avg <- rx_raw %>%
   select(country, ym, date, rx_t12, rx_2_t12, rx_5_t12, rx_10_t12, rx_USD_t12, rx_2_USD_t12, rx_5_USD_t12, rx_10_USD_t12)
 
 
+# Forwards for the CP 2005 / DH 2013 factor ----------------------------------
+# Maturity menu (1Y, 2Y, 4Y, 5Y, 9Y, 10Y) is non-contiguous, so we use the
+# 1-year forward where adjacent maturities are available and the per-annum
+# average forward between non-adjacent maturities elsewhere:
+#   f^{(n)}   = n*y_n - (n-1)*y_{n-1}                    (1-year forward, end year n)
+#   f^{(m,n)} = (n*y_n - m*y_m) / (n - m)                (per-annum forward, m -> n)
+# Yields are in percent (consistent with the rx_* columns).
+forwards <- yields_wide %>%
+  mutate(
+    f_2  = 2 * y_2 - 1 * y_1,                            # 1y forward year 1 -> 2
+    f_4  = (4 * y_4 - 2 * y_2) / 2,                      # per-annum forward year 2 -> 4
+    f_5  = 5 * y_5 - 4 * y_4,                            # 1y forward year 4 -> 5
+    f_9  = (9 * y_9 - 5 * y_5) / 4,                      # per-annum forward year 5 -> 9
+    f_10 = 10 * y_10 - 9 * y_9                           # 1y forward year 9 -> 10
+  ) %>%
+  select(country, ym, date, y_1, f_2, f_4, f_5, f_9, f_10)
+
+
 # Average Cycle and 1Y Cycle ---------------------------------------------
 cycle_avg <- cycle %>%
   filter(maturity != 1) %>% # 1Y maturity not included in average cycle
@@ -274,6 +292,7 @@ reg_data <- cycle_1y %>%
   left_join(cycle_9y, by = c("country", "ym", "date")) %>%
   left_join(cycle_10y, by = c("country", "ym", "date")) %>%
   left_join(rx_avg,    by = c("country", "ym", "date")) %>%
+  left_join(forwards,  by = c("country", "ym", "date")) %>%
   mutate(y = as.integer(format(date, "%Y"))) %>%
   left_join(gdp %>% select(y, country, gdp_val),
             by = c("y", "country")) %>%
@@ -289,15 +308,22 @@ reg_data <- cycle_1y %>%
 # Local CF ---------------------------------------------------------------
   group_by(country) %>%
   group_modify(~ {
-    fit     <- lm(rx_t12     ~ cycle_1y + c_bar, data = .x, na.action = na.exclude)
-    fit_usd <- lm(rx_USD_t12 ~ cycle_1y + c_bar, data = .x, na.action = na.exclude)
+    fit        <- lm(rx_t12     ~ cycle_1y + c_bar, data = .x, na.action = na.exclude)
+    fit_usd    <- lm(rx_USD_t12 ~ cycle_1y + c_bar, data = .x, na.action = na.exclude)
+    # CP 2005 / DH 2013 single-factor projection on the available forward menu.
+    fit_cp     <- lm(rx_t12     ~ y_1 + f_2 + f_4 + f_5 + f_9 + f_10,
+                     data = .x, na.action = na.exclude)
+    fit_cp_usd <- lm(rx_USD_t12 ~ y_1 + f_2 + f_4 + f_5 + f_9 + f_10,
+                     data = .x, na.action = na.exclude)
     .x %>% mutate(
       gamma_0 = coef(fit)[["(Intercept)"]],
       gamma_1 = coef(fit)[["cycle_1y"]],
       gamma_2 = coef(fit)[["c_bar"]],
       CF_alt = gamma_0 + gamma_1 * cycle_1y + gamma_2 * c_bar,    # eq (6)
       CF = predict(fit, new_data = .),    # eq (6)
-      CF_USD = predict(fit_usd)           # USD analog of eq (6); used for bottom-up FXGCF
+      CF_USD = predict(fit_usd),          # USD analog of eq (6); used for bottom-up FXGCF
+      CP     = predict(fit_cp),           # CP 2005 / DH 2013 local factor
+      CP_USD = predict(fit_cp_usd)        # USD analog of CP
     )
   }) %>%
   ungroup()
@@ -311,6 +337,19 @@ group_by(ym, date) %>%
     GCF         = sum(w * CF, na.rm = TRUE),
     n_countries = sum(!is.na(CF) & !is.na(w)),
     .groups     = "drop"
+  ) %>%
+  arrange(date)
+
+
+# Global CP Factor (DH 2013) -------------------------------------------------
+# GDP-weighted aggregation of the local CP 2005 / DH 2013 factor, mirroring
+# the GCF construction (eq 7-8 with CP in place of CF).
+gcp <- reg_data %>%
+  group_by(ym, date) %>%
+  summarise(
+    GCP             = sum(w * CP, na.rm = TRUE),
+    n_countries_gcp = sum(!is.na(CP) & !is.na(w)),
+    .groups         = "drop"
   ) %>%
   arrange(date)
 

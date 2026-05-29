@@ -118,7 +118,8 @@ cat("oos.R: building reg_data_oos with recursive CF_oos ...\n")
 
 reg_data_oos <- cycle_1y_oos %>%
   left_join(cycle_avg_oos, by = c("country", "ym", "date")) %>%
-  left_join(reg_data %>% select(country, ym, date, rx_t12, rx_USD_t12),
+  left_join(reg_data %>% select(country, ym, date, rx_t12, rx_USD_t12,
+                                y_1, f_2, f_4, f_5, f_9, f_10),
             by = c("country", "ym", "date")) %>%
   mutate(y = as.integer(format(date, "%Y"))) %>%
   left_join(gdp %>% select(y, country, gdp_val), by = c("y", "country")) %>%
@@ -127,6 +128,12 @@ reg_data_oos <- cycle_1y_oos %>%
   arrange(ym, .by_group = TRUE) %>%
   group_modify(~ {
     .x$CF_oos <- oos_predict(.x, rx_t12 ~ cycle_1y_oos + c_bar_oos,
+                             min_train = 120, h = 12)
+    # CP 2005 / DH 2013 local factor, fully recursive. Forwards (y_1,
+    # f_2, f_4, f_5, f_9, f_10) are contemporaneous transforms of yields
+    # and need no separate recursion -- only the predictive regression
+    # respects t.
+    .x$CP_oos <- oos_predict(.x, rx_t12 ~ y_1 + f_2 + f_4 + f_5 + f_9 + f_10,
                              min_train = 120, h = 12)
     .x
   }) %>%
@@ -148,6 +155,26 @@ gcf_oos <- reg_data_oos %>%
   summarise(
     GCF_oos         = sum(w_oos * CF_oos, na.rm = TRUE),
     n_countries_oos = n(),
+    .groups = "drop"
+  ) %>%
+  arrange(ym)
+
+# -------------------------------------------------------------
+# 4b. GCP_oos: GDP-weighted aggregation of CP_oos (DH 2013 analog)
+# -------------------------------------------------------------
+cat("oos.R: building GCP_oos ...\n")
+
+gcp_oos <- reg_data_oos %>%
+  filter(!is.na(CP_oos), !is.na(gdp_val)) %>%
+  group_by(ym) %>%
+  mutate(
+    gdp_total_oos = sum(gdp_val, na.rm = TRUE),
+    w_oos         = gdp_val / gdp_total_oos
+  ) %>%
+  group_by(ym, date) %>%
+  summarise(
+    GCP_oos             = sum(w_oos * CP_oos, na.rm = TRUE),
+    n_countries_oos_gcp = n(),
     .groups = "drop"
   ) %>%
   arrange(ym)
@@ -210,8 +237,9 @@ fxgcf_oos <- fxgcf_oos_data %>%
 # -------------------------------------------------------------
 panel_oos <- reg_data_oos %>%
   select(country, ym, date, rx_t12, rx_USD_t12,
-         cycle_1y_oos, c_bar_oos, CF_oos, gdp_val) %>%
+         cycle_1y_oos, c_bar_oos, CF_oos, CP_oos, gdp_val) %>%
   left_join(gcf_oos   %>% select(ym, GCF_oos),   by = "ym") %>%
+  left_join(gcp_oos   %>% select(ym, GCP_oos),   by = "ym") %>%
   left_join(fxgcf_oos %>% select(ym, FXGCF_oos), by = "ym") %>%
   arrange(country, date)
 
@@ -255,10 +283,36 @@ fxgcf_diag_oos <- fxgcf_oos %>%
 cat("\nFXGCF_oos vs FXGCF:\n")
 print(fxgcf_diag_oos)
 
+cp_diag <- reg_data_oos %>%
+  inner_join(reg_data %>% select(country, ym, CP), by = c("country", "ym")) %>%
+  filter(!is.na(CP_oos), !is.na(CP)) %>%
+  group_by(country) %>%
+  summarise(
+    n_oos          = n(),
+    first_oos_date = min(date),
+    cor_CP_CP_oos  = cor(CP, CP_oos),
+    .groups = "drop"
+  )
+cat("\nCP_oos vs CP (per country):\n")
+print(cp_diag)
+
+gcp_diag_oos <- gcp_oos %>%
+  inner_join(gcp %>% select(ym, GCP), by = "ym") %>%
+  filter(!is.na(GCP_oos), !is.na(GCP)) %>%
+  summarise(
+    n_oos          = n(),
+    first_oos_date = min(date),
+    cor_GCP_oos    = cor(GCP, GCP_oos)
+  )
+cat("\nGCP_oos vs GCP:\n")
+print(gcp_diag_oos)
+
 cat(sprintf(
-  "\noos.R loaded: %d OOS country-month rows (CF_oos non-NA), %d months with GCF_oos, %d with FXGCF_oos.\n",
+  "\noos.R loaded: CF_oos %d rows | CP_oos %d rows | GCF_oos %d months | GCP_oos %d months | FXGCF_oos %d months.\n",
   sum(!is.na(panel_oos$CF_oos)),
+  sum(!is.na(panel_oos$CP_oos)),
   sum(!is.na(gcf_oos$GCF_oos)),
+  sum(!is.na(gcp_oos$GCP_oos)),
   sum(!is.na(fxgcf_oos$FXGCF_oos))
 ))
 
@@ -299,7 +353,9 @@ oos_r2_components <- function(df, formula, min_train = 60, h = 12) {
 
 oos_r2_specs <- list(
   list(label = "rx ~ CF_oos",        target = "rx_t12",     predictor = "CF_oos"),
+  list(label = "rx ~ CP_oos",        target = "rx_t12",     predictor = "CP_oos"),
   list(label = "rx ~ GCF_oos",       target = "rx_t12",     predictor = "GCF_oos"),
+  list(label = "rx ~ GCP_oos",       target = "rx_t12",     predictor = "GCP_oos"),
   list(label = "rx_USD ~ GCF_oos",   target = "rx_USD_t12", predictor = "GCF_oos"),
   list(label = "rx_USD ~ FXGCF_oos", target = "rx_USD_t12", predictor = "FXGCF_oos")
 )
