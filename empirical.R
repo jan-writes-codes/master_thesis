@@ -9,6 +9,7 @@ library(tidyr)
 library(purrr)
 library(broom)
 library(plm)
+library(car)
 
 if (!exists("reg_data")) source("data preperation.R")
 
@@ -137,6 +138,181 @@ us_data <- reg_data %>%
 cat(sprintf("\nFigure 2 check: cor(c_bar, CF) = %.2f   [CP 2015 report ~0.61]\n",
             cor(us_data$c_bar, us_data$CF, use = "pairwise.complete.obs")))
 # Result: cor(c_bar, CF) = 0.70
+
+
+# ============================================================
+# CP 2015  –  Table 2: Predictive regressions
+# US data, sample through 2014-12-31
+# ============================================================
+
+# Build estimation dataset: join yields and trend inflation onto reg_data
+us_yields_w <- cycle %>%
+  filter(country == "US", as.Date(date) <= as.Date("2014-12-31")) %>%
+  select(ym, maturity, yield) %>%
+  pivot_wider(names_from = maturity, values_from = yield, names_prefix = "y_")
+
+us_t2 <- reg_data %>%
+  filter(country == "US", as.Date(date) <= as.Date("2014-12-31")) %>%
+  left_join(us_yields_w, by = "ym") %>%
+  left_join(
+    inflation_long %>% filter(country == "US") %>% select(ym, trend_inf),
+    by = "ym"
+  ) %>%
+  mutate(
+    # Average yield across non-1Y maturities (mirrors c_bar construction)
+    y_bar = rowMeans(cbind(y_2, y_4, y_5, y_9, y_10), na.rm = TRUE)
+  ) %>%
+  filter(!is.na(rx_t12), !is.na(y_1), !is.na(trend_inf),
+         !is.na(y_2), !is.na(y_4), !is.na(y_5), !is.na(y_9), !is.na(y_10))
+
+T_obs <- nrow(us_t2)
+NW_LAGS <- 18
+
+# Helper: run OLS, extract NW coeftest, adj R², Wald chi-sq and p-val
+run_pred_reg <- function(formula, data, lags = NW_LAGS) {
+  fit  <- lm(formula, data = data)
+  vcv  <- NeweyWest(fit, lag = lags, prewhite = FALSE)
+  ct   <- coeftest(fit, vcov = vcv)
+  slope_names <- setdiff(rownames(ct), "(Intercept)")
+  wald <- linearHypothesis(fit, slope_names, vcov. = vcv, test = "Chisq")
+  list(
+    fit      = fit,
+    ct       = ct,
+    R2bar    = summary(fit)$adj.r.squared,
+    wald     = wald$Chisq[2],
+    pval     = wald$`Pr(>Chisq)`[2],
+    sigma2   = sum(residuals(fit)^2) / nobs(fit),
+    n_params = length(coef(fit))
+  )
+}
+
+bic_val <- function(res, T) log(res$sigma2) + log(T) * res$n_params / T
+
+# --- Five model specifications (maturities available: 1,2,4,5,9,10 vs paper's 1,2,5,7,10,20)
+m1 <- run_pred_reg(rx_t12 ~ y_1 + y_2 + y_4 + y_5 + y_9 + y_10,              us_t2)
+m2 <- run_pred_reg(rx_t12 ~ y_1 + y_2 + y_4 + y_5 + y_9 + y_10 + trend_inf,  us_t2)
+m3 <- run_pred_reg(rx_t12 ~ y_1 + y_bar,                                       us_t2)
+m4 <- run_pred_reg(rx_t12 ~ y_1 + y_bar + trend_inf,                           us_t2)
+m5 <- run_pred_reg(rx_t12 ~ cycle_1y + c_bar,                                  us_t2)
+
+models_t2 <- list(m1, m2, m3, m4, m5)
+
+bics      <- sapply(models_t2, bic_val, T = T_obs)
+rel_probs <- round(exp((min(bics) - bics) * T_obs / 2), 2)
+
+# --- Print Panel A ------------------------------------------------------------
+cat("\n===== CP 2015 Table 2 — Panel A: Predictive Regressions =====\n")
+cat("LHS: duration-standardized avg excess bond return (rx_t12)\n")
+cat("Note: paper uses maturities 1,2,5,7,10,20; we use 1,2,4,5,9,10\n")
+cat(sprintf("T = %d months,  NW lags = %d\n\n", T_obs, NW_LAGS))
+
+get_ct <- function(res, rname) {
+  ct <- res$ct
+  if (!rname %in% rownames(ct)) return(c(NA_real_, NA_real_))
+  c(ct[rname, "Estimate"], ct[rname, "t value"])
+}
+
+fmt_coef <- function(x) if (is.na(x)) sprintf("%8s", "—")  else sprintf("%8.2f", x)
+fmt_tstat <- function(x) if (is.na(x)) sprintf("%8s", "")  else sprintf("%8s", sprintf("(%.2f)", x))
+
+# regressor label -> (name in models 1-4, name in model 5)
+reg_spec <- list(
+  "y^(1) or c^(1)"    = c("y_1",      "cycle_1y"),
+  "y^(2) or c^(2)"    = c("y_2",      NA),
+  "y^(4) or c^(4)"    = c("y_4",      NA),
+  "y^(5) or c^(5)"    = c("y_5",      NA),
+  "y^(9) or c^(9)"    = c("y_9",      NA),
+  "y^(10) or c^(10)"  = c("y_10",     NA),
+  "tau^CPI"            = c("trend_inf", NA),
+  "ybar or cbar"       = c("y_bar",    "c_bar")
+)
+
+col_hdr <- sprintf("%-22s  %7s  %7s  %7s  %7s  %7s",
+                   "Regressor", "(1)Yields", "(2)Y+tau", "(3)ybar", "(4)yb+tau", "(5)Cyc")
+sep <- strrep("-", nchar(col_hdr))
+cat(col_hdr, "\n", sep, "\n")
+
+cat("Regression coefficients\n")
+for (label in names(reg_spec)) {
+  alts <- reg_spec[[label]]
+  coef_line  <- sprintf("%-22s", label)
+  tstat_line <- sprintf("%-22s", "")
+  for (j in 1:5) {
+    rname <- if (j == 5 && !is.na(alts[2])) alts[2] else alts[1]
+    vals  <- get_ct(models_t2[[j]], rname)
+    coef_line  <- paste0(coef_line,  "  ", fmt_coef(vals[1]))
+    tstat_line <- paste0(tstat_line, "  ", fmt_tstat(vals[2]))
+  }
+  cat(coef_line,  "\n")
+  cat(tstat_line, "\n")
+}
+
+cat(sep, "\n")
+cat("Regression statistics\n")
+cat(sprintf("%-22s  %s\n", "R2bar",
+            paste(sprintf("%7.2f", sapply(models_t2, `[[`, "R2bar")), collapse = "  ")))
+cat(sprintf("%-22s  %s\n", "Wald (chi-sq)",
+            paste(sprintf("%7.2f", sapply(models_t2, `[[`, "wald")), collapse = "  ")))
+cat(sprintf("%-22s  %s\n", "pval",
+            paste(sprintf("%7.2f", sapply(models_t2, `[[`, "pval")), collapse = "  ")))
+cat(sprintf("%-22s  %s\n", "Rel.prob (BIC)",
+            paste(sprintf("%7.2f", rel_probs), collapse = "  ")))
+
+# Results summary (CP 2015 reported values for comparison):
+# Model (1): R2bar=0.24, Wald=12.34, pval=0.05, Rel.prob=0
+# Model (2): R2bar=0.54, Wald=34.86, pval=0.00, Rel.prob=3e-4
+# Model (3): R2bar=0.18, Wald=6.46,  pval=0.04, Rel.prob=0
+# Model (4): R2bar=0.53, Wald=28.61, pval=0.00, Rel.prob=0.57
+# Model (5): R2bar=0.53, Wald=25.34, pval=0.00, Rel.prob=1.00
+
+
+# --- Panel B: Distribution of predictive R2bar under EH (Monte Carlo) --------
+# Simulate two AR(1) regressors (phi_tau, phi_r) with unconditional st.dev.
+# calibrated to match CP 2015 (sigma_tau=1.90%, sigma_r=1.74%), excess returns
+# as white noise.  T = 470, 10,000 replications.
+
+set.seed(2015)
+N_SIM <- 10000
+T_SIM <- 470
+rx_sd <- sd(us_t2$rx_t12, na.rm = TRUE)
+
+sim_R2_dist <- function(phi_tau, phi_r, sigma_tau = 1.90, sigma_r = 1.74,
+                         T = T_SIM, n_sim = N_SIM) {
+  innov_tau <- sigma_tau * sqrt(max(1 - phi_tau^2, 1e-6))
+  innov_r   <- sigma_r   * sqrt(max(1 - phi_r^2,   1e-6))
+  R2s <- numeric(n_sim)
+  for (s in 1:n_sim) {
+    x_tau <- as.numeric(arima.sim(list(ar = phi_tau), n = T, sd = innov_tau))
+    x_r   <- as.numeric(arima.sim(list(ar = phi_r),   n = T, sd = innov_r))
+    rx_s  <- rnorm(T, sd = rx_sd)
+    R2s[s] <- summary(lm(rx_s ~ x_tau + x_r))$adj.r.squared
+  }
+  quantile(R2s, c(0.05, 0.95))
+}
+
+# Combinations shown in Table 2, Panel B
+panel_b_specs <- list(
+  list(phi_r = 0.75,  phi_tau = 0.8),
+  list(phi_r = 0.75,  phi_tau = 0.975),
+  list(phi_r = 0.75,  phi_tau = 0.999),
+  list(phi_r = 0.6,   phi_tau = 0.975),
+  list(phi_r = 0.75,  phi_tau = 0.975),
+  list(phi_r = 0.9,   phi_tau = 0.975)
+)
+
+cat("\n===== CP 2015 Table 2 — Panel B: R2bar distribution under EH =====\n")
+cat(sprintf("T = %d, 10,000 Monte Carlo replications\n\n", T_SIM))
+cat(sprintf("%-12s  %-12s  %8s  %8s\n", "phi_r", "phi_tau", "P5", "P95"))
+cat(strrep("-", 46), "\n")
+
+for (spec in panel_b_specs) {
+  qs <- sim_R2_dist(spec$phi_tau, spec$phi_r)
+  cat(sprintf("%-12.3f  %-12.3f  %8.2f  %8.2f\n",
+              spec$phi_r, spec$phi_tau, qs[1], qs[2]))
+}
+# CP 2015 Panel B reported values (P5/P95):
+#  phi_r=0.75: phi_tau=0.8  -> 0.00/0.19 | phi_tau=0.975 -> 0.01/0.23 | phi_tau=0.999 -> 0.01/0.20
+#  phi_tau=0.975: phi_r=0.6 -> 0.01/0.22 | phi_r=0.75   -> 0.01/0.22  | phi_r=0.9    -> 0.01/0.23
 
 
 # ============================================================
