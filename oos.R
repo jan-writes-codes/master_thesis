@@ -118,8 +118,10 @@ cat("oos.R: building reg_data_oos with recursive CF_oos ...\n")
 
 reg_data_oos <- cycle_1y_oos %>%
   left_join(cycle_avg_oos, by = c("country", "ym", "date")) %>%
-  left_join(reg_data %>% select(country, ym, date, rx_t12, rx_USD_t12,
+  left_join(forwards %>% select(country, ym, date,
                                 y_1, f_2, f_4, f_5, f_9, f_10),
+            by = c("country", "ym", "date")) %>%
+  left_join(reg_data %>% select(country, ym, date, rx_t12, rx_USD_t12),
             by = c("country", "ym", "date")) %>%
   mutate(y = as.integer(format(date, "%Y"))) %>%
   left_join(gdp %>% select(y, country, gdp_val), by = c("y", "country")) %>%
@@ -128,13 +130,13 @@ reg_data_oos <- cycle_1y_oos %>%
   arrange(ym, .by_group = TRUE) %>%
   group_modify(~ {
     .x$CF_oos <- oos_predict(.x, rx_t12 ~ cycle_1y_oos + c_bar_oos,
-                             min_train = 120, h = 12)
+                             min_train = 60, h = 12)
     # CP 2005 / DH 2013 local factor, fully recursive. Forwards (y_1,
     # f_2, f_4, f_5, f_9, f_10) are contemporaneous transforms of yields
     # and need no separate recursion -- only the predictive regression
     # respects t.
     .x$CP_oos <- oos_predict(.x, rx_t12 ~ y_1 + f_2 + f_4 + f_5 + f_9 + f_10,
-                             min_train = 120, h = 12)
+                             min_train = 60, h = 12)
     .x
   }) %>%
   ungroup()
@@ -408,3 +410,27 @@ print(r2_oos_tab %>%
 cat("\nCampbell-Thompson R^2_oos (pooled across countries):\n")
 print(r2_oos_pooled %>%
         select(spec, r2_oos_pooled, n_countries, n_fcst_total))
+
+
+panel_oos %>%
+  filter(date >= as.Date("2023-01-01")) %>%
+  group_by(country) %>%
+  summarise(
+    last_CF_oos = suppressWarnings(max(date[!is.na(CF_oos)])),
+    last_CP_oos = suppressWarnings(max(date[!is.na(CP_oos)])),
+    gap_months  = as.integer((last_CF_oos - last_CP_oos) / 30)
+  ) %>%
+  arrange(desc(gap_months))
+
+# And to see which forward is the bottleneck:
+reg_data_oos %>%
+  filter(date >= as.Date("2023-01-01")) %>%
+  group_by(country) %>%
+  summarise(
+    last_y_1  = suppressWarnings(max(date[!is.na(y_1) ])),
+    last_f_2  = suppressWarnings(max(date[!is.na(f_2) ])),
+    last_f_4  = suppressWarnings(max(date[!is.na(f_4) ])),
+    last_f_5  = suppressWarnings(max(date[!is.na(f_5) ])),
+    last_f_9  = suppressWarnings(max(date[!is.na(f_9) ])),
+    last_f_10 = suppressWarnings(max(date[!is.na(f_10)]))
+  )
