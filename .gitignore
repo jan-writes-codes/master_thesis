@@ -1,0 +1,8 @@
+# Regenerated exhibits (rebuild with: source("plots.R"); save_all_plots())
+figures/
+
+# R session / build artifacts
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj

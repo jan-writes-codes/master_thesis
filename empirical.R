@@ -233,16 +233,22 @@ cat("\nRegression statistics:\n");                      print(as.data.frame(t2_s
 
 # --- Table 2, Panel B: predictive R2 under the EH null (Monte Carlo) ---------
 # Distribution of the predictive R2 when bonds carry no risk premium, from the
-# Section-1 model (two AR(1) factors, EH yields).  Predictor = six yields, whose
-# R2 responds to both phi_tau and phi_r (see cp_montecarlo.R).
+# Section-1 model: excess returns regressed on trend inflation and the real
+# factor (tau_t, r_t), as in CP 2015.  Paper uses T = 470 (reported first).
 EH_NSIMS <- 5000L                 # paper uses 10,000; adjustable for runtime
 cat("\n===== CP 2015 Table 2 — Panel B: predictive R2 under EH =====\n")
-cat(sprintf("Six-yield predictor; n_sims=%d; P5/P50/P95 of adjusted R2\n", EH_NSIMS))
-eh_ours <- run_eh_grid(T_ = T2,  n_sims = EH_NSIMS, predictor_fn = predictor_sixyields)
+cat(sprintf("Predictor (tau, r); n_sims=%d; P5/P50/P95 of adjusted R2\n", EH_NSIMS))
+eh_470 <- run_eh_grid(T_ = 470L, n_sims = EH_NSIMS)
+cat("\nAt paper's T = 470:\n");                        print(eh_470, digits = 3, row.names = FALSE)
+eh_ours <- run_eh_grid(T_ = T2, n_sims = EH_NSIMS)
 cat(sprintf("\nAt our sample length T = %d:\n", T2)); print(eh_ours, digits = 3, row.names = FALSE)
-eh_470 <- run_eh_grid(T_ = 470L, n_sims = EH_NSIMS, predictor_fn = predictor_sixyields)
-cat("\nAt paper's T = 470:\n");                         print(eh_470, digits = 3, row.names = FALSE)
-# Paper (Table 2B): P5 ~ 0.00-0.01, P95 ~ 0.19-0.23 across the phi grid.
+# Paper (Table 2B): P95 of R-bar^2 ranges ~0.19-0.23 across the phi grid.
+# Ours has the right shape (P95 rises with both persistences) but a lower level
+# (~0.10 at T=470, ~0.19 at T=300). NOT validated to the published level: under
+# the EH (lambda=0) our average-expected-short-rate yields equal the affine
+# model's loadings (Eq 14 with phi*=phi), so the gap is not a model
+# approximation -- it reflects calibration details the paper underspecifies
+# (1.74% is the 1-year-cycle sd; predictor = the latent (tau, r)).
 
 
 # ============================================================
@@ -267,8 +273,12 @@ t4 <- lapply(t4_mats, function(n) {
   cyn <- paste0("cycle_", n, "y")
   d   <- t4_df[stats::complete.cases(t4_df[, c(rxv, cyn, "cycle_1y", "CF",
                                                "trend_inf", yld6)]), ]
-  # Duration-standardized individual excess return (D_n = n), matching the units
-  # of rx_bar / CF -- so the cf loading is comparable across maturities (paper).
+  # Duration-standardized individual excess return (D_n = n for a continuously
+  # compounded zero). CP 2015 state this convention explicitly ("Because the
+  # volatility of returns scales proportionally with bond duration, we duration
+  # standardize returns to avoid overweighting particular maturities"); the flat
+  # Table 4 cf loadings (~0.6-0.7 across maturities) confirm the individual-
+  # maturity regressions use it too. R2/t-stats are unaffected by this scaling.
   d$rx_std <- d[[rxv]] / n
 
   # Panel A: rx^(n) ~ cf_t (cf = CF).  Headline HAC t + block-bootstrap SS band.

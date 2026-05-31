@@ -24,7 +24,14 @@ library(tidyr)
 library(scales)
 library(purrr)
 library(tibble)
-library(latex2exp)
+# latex2exp renders TeX() labels; if it is unavailable (e.g. an offline
+# environment without CRAN access) fall back to a plain-text shim so the
+# figures still render with readable, if unformatted, labels.
+if (requireNamespace("latex2exp", quietly = TRUE)) {
+  library(latex2exp)
+} else {
+  TeX <- function(x, ...) gsub("\\$|\\\\mathrm|[{}]|\\\\", "", x)
+}
 library(sandwich)
 library(lmtest)
 
@@ -126,6 +133,41 @@ hac_fit_full <- function(df, fml, h = 12, min_obs = 24) {
   V <- tryCatch(sandwich::NeweyWest(fit, lag = L, prewhite = FALSE, adjust = TRUE),
                 error = function(e) sandwich::vcovHC(fit))
   list(fit = fit, vcov = V, T_obs = stats::nobs(fit), lag = L)
+}
+
+# -------------------------------------------------------------
+# Table -> PDF-able grob. Renders a data frame as a styled table
+# (title on top, footnote below) using gridExtra::tableGrob, so
+# tables flow through the same `plots` list + save_all_plots() path
+# as the figures. Reused for all DH 2013 summary/correlation tables.
+# -------------------------------------------------------------
+table_to_grob <- function(df, title = NULL, note = NULL,
+                          rownames = FALSE, base_size = 9) {
+  tt <- gridExtra::ttheme_minimal(
+    base_size = base_size,
+    core    = list(fg_params = list(hjust = 1, x = 0.95)),
+    colhead = list(fg_params = list(fontface = "bold")),
+    rowhead = list(fg_params = list(fontface = "bold", hjust = 0, x = 0.05))
+  )
+  tab <- gridExtra::tableGrob(df, rows = if (rownames) rownames(df) else NULL,
+                              theme = tt)
+  # Title (fixed height) on top, table fills the middle, footnote (fixed
+  # height) below. Keep title/footnote bands small so they sit close to the
+  # table; choose a tight canvas height when saving to avoid dead space.
+  parts <- list(tab); heights <- grid::unit(1, "null")
+  if (!is.null(title)) {
+    th <- grid::textGrob(title, gp = grid::gpar(fontface = "bold",
+                         fontsize = base_size + 3), hjust = 0, x = 0.02)
+    parts   <- c(list(th), parts)
+    heights <- grid::unit.c(grid::unit(1.8, "lines"), heights)
+  }
+  if (!is.null(note)) {
+    nt <- grid::textGrob(note, gp = grid::gpar(fontsize = base_size - 1,
+                         col = "grey30"), hjust = 0, x = 0.02)
+    parts   <- c(parts, list(nt))
+    heights <- grid::unit.c(heights, grid::unit(3, "lines"))
+  }
+  gridExtra::arrangeGrob(grobs = parts, ncol = 1, heights = heights)
 }
 
 hr_results <- panel_perp %>%
@@ -914,12 +956,89 @@ plots$s10_r2_oos_compare <- r2_oos_tab %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # =============================================================
+# DH 2013 — Table 1: Summary statistics of zero-coupon yields
+# Full international panel (11 countries, maturities 1/2/4/5/9/10y),
+# yields in percent, full per-country sample. Adapted from DH's
+# 4-country / 1mo-5yr / 1975-2009 original; split into two A4-friendly
+# exhibits (per-country mean & sd; cross-country 10y correlations).
+# =============================================================
+
+# Country code -> full name, ordered EUR bloc first (BE/DE/FR/IT/NL all share
+# the euro and co-move strongly post-1999), then other Europe, then RoW.
+dh_ctry_order <- c("BE", "DE", "FR", "IT", "NL", "CH", "GB", "SE", "CA", "JP", "US")
+dh_ctry_name  <- c(BE = "Belgium", CA = "Canada", CH = "Switzerland",
+                   DE = "Germany", FR = "France", GB = "UK", IT = "Italy",
+                   JP = "Japan", NL = "Netherlands", SE = "Sweden", US = "US")
+dh_mats <- c(1, 2, 4, 5, 9, 10)
+
+# --- Table A: mean & std of yields by country x maturity ---------------------
+dh_stats <- yields_long %>%
+  filter(!is.na(yield), maturity %in% dh_mats) %>%
+  group_by(country, maturity) %>%
+  summarise(Mean = mean(yield), SD = sd(yield), .groups = "drop")
+
+dh_t1a_df <- dh_stats %>%
+  pivot_wider(names_from = maturity, values_from = c(Mean, SD),
+              names_glue = "{maturity}y_{.value}") %>%
+  mutate(Country = dh_ctry_name[country],
+         country = factor(country, levels = dh_ctry_order)) %>%
+  arrange(country) %>%
+  select(Country, paste0(rep(dh_mats, each = 2), "y_",
+                         c("Mean", "SD"))) %>%
+  mutate(across(where(is.numeric), ~ formatC(.x, format = "f", digits = 2)))
+# Tidy two-level-ish headers: "<n>y Mean" / "<n>y SD".
+names(dh_t1a_df) <- sub("^(\\d+)y_(Mean|SD)$", "\\1y \\2", names(dh_t1a_df))
+
+plots$dh_t1_summary <- table_to_grob(
+  dh_t1a_df,
+  title = "Table 1A. Summary statistics of zero-coupon yields (% p.a.)",
+  note  = paste0("Mean and standard deviation of monthly zero-coupon yields, in percent, ",
+                 "by country and maturity (full per-country sample).\n",
+                 "Sample: US from 1989-03 and Japan from 1989-04; all other countries ",
+                 "from 1994-12; all through 2026-04. Yields tend to rise and grow less ",
+                 "volatile with maturity."),
+  base_size = 8)
+
+# --- Table B: cross-country correlation of the 10-year yield -----------------
+dh_y10_wide <- yields_long %>%
+  filter(maturity == 10) %>%
+  select(ym, country, yield) %>%
+  pivot_wider(names_from = country, values_from = yield)
+
+dh_corr10 <- cor(dh_y10_wide[, dh_ctry_order], use = "pairwise.complete.obs")
+
+# Lower-triangular display (blank upper triangle), full names on both axes.
+dh_corr10_disp <- formatC(dh_corr10, format = "f", digits = 2)
+dh_corr10_disp[upper.tri(dh_corr10_disp)] <- ""
+dh_corr10_df <- as.data.frame(dh_corr10_disp, stringsAsFactors = FALSE)
+colnames(dh_corr10_df) <- dh_ctry_order               # codes as columns (compact)
+dh_corr10_df <- cbind(Country = dh_ctry_name[dh_ctry_order], dh_corr10_df)
+rownames(dh_corr10_df) <- NULL
+
+plots$dh_t1_corr10y <- table_to_grob(
+  dh_corr10_df,
+  title = "Table 1B. Cross-country correlation of the 10-year yield",
+  note  = paste0("Pairwise-complete correlations of the monthly 10-year zero-coupon ",
+                 "yield across countries (full per-country sample).\n",
+                 "Column labels are ISO codes for the countries in the first column. ",
+                 "Correlations are high within the euro bloc (BE/DE/FR/IT/NL)."),
+  base_size = 8)
+
+# =============================================================
 # Convenience: write every plot to disk as a vector PDF
 # =============================================================
 save_all_plots <- function(dir = "figures", width = 10, height = 7) {
   dir.create(dir, showWarnings = FALSE)
+  # Per-exhibit size overrides (e.g. wide summary tables).
+  size_override <- list(
+    dh_t1_summary = c(w = 11, h = 3.6),
+    dh_t1_corr10y = c(w =  9, h = 3.8)
+  )
   purrr::iwalk(plots, function(p, nm) {
-    ggsave(file.path(dir, paste0(nm, ".pdf")), p, width = width, height = height)
+    sz <- size_override[[nm]]
+    w  <- if (is.null(sz)) width  else sz[["w"]]
+    h  <- if (is.null(sz)) height else sz[["h"]]
+    ggsave(file.path(dir, paste0(nm, ".pdf")), p, width = w, height = h)
   })
   invisible(file.path(dir, paste0(names(plots), ".pdf")))
 }
