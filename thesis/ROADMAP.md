@@ -84,13 +84,17 @@ then revised.
 ## Build
 
 ```sh
-# Regenerate exhibits (run from repo root)
-Rscript empirical.R                                  # tables/*.pdf
-Rscript -e 'source("plots.R"); save_all_plots()'     # figures/*.pdf
+# Regenerate exhibits (run from repo root; output goes under thesis/)
+Rscript empirical.R                                  # thesis/tables/*.pdf
+Rscript -e 'source("plots.R"); save_all_plots()'     # thesis/figures/*.pdf
 
 # Compile the thesis
 cd thesis && latexmk -pdf main.tex
 ```
+
+> **Note:** exhibits are written directly into `thesis/figures` and
+> `thesis/tables` (real files, no symlinks) so the project imports cleanly into
+> Overleaf, which does not support symbolic links.
 
 ## Definition of done
 
