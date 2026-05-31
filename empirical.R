@@ -1,5 +1,11 @@
 # empirical.R
-# Empirical replication: CP 2015 and DH 2013
+# Empirical replication: CP 2015 and DH 2013.
+#
+# This is the single home for all empirical RESULT TABLES. Each table is both
+# printed to the console (with inline comparisons to the published numbers) and
+# rendered to a PDF exhibit stored in the `tables` list. Write every exhibit to
+# disk with save_all_tables() -> tables/<name>.pdf (mirrors plots.R's
+# `plots` list + save_all_plots()). Figures live in plots.R; tables live here.
 # =============================================================
 
 library(lmtest)
@@ -9,8 +15,46 @@ library(tidyr)
 library(purrr)
 library(broom)
 library(plm)
+library(gridExtra)
+library(grid)
+library(ggplot2)
 
 if (!exists("reg_data")) source("data preperation.R")
+
+# `tables` collects rendered table grobs; save_all_tables() writes them to PDF.
+tables <- list()
+
+# -------------------------------------------------------------
+# Table -> PDF-able grob. Renders a data frame as a styled table (title on top,
+# footnote below) via gridExtra::tableGrob, so result tables flow through the
+# same pattern as plots.R's figures. Reused for every CP/DH result table.
+# -------------------------------------------------------------
+table_to_grob <- function(df, title = NULL, note = NULL,
+                          rownames = FALSE, base_size = 9) {
+  tt <- gridExtra::ttheme_minimal(
+    base_size = base_size,
+    core    = list(fg_params = list(hjust = 1, x = 0.95)),
+    colhead = list(fg_params = list(fontface = "bold")),
+    rowhead = list(fg_params = list(fontface = "bold", hjust = 0, x = 0.05))
+  )
+  tab <- gridExtra::tableGrob(df, rows = if (rownames) rownames(df) else NULL,
+                              theme = tt)
+  # Title (fixed height) on top, table fills the middle, footnote below.
+  parts <- list(tab); heights <- grid::unit(1, "null")
+  if (!is.null(title)) {
+    th <- grid::textGrob(title, gp = grid::gpar(fontface = "bold",
+                         fontsize = base_size + 3), hjust = 0, x = 0.02)
+    parts   <- c(list(th), parts)
+    heights <- grid::unit.c(grid::unit(1.8, "lines"), heights)
+  }
+  if (!is.null(note)) {
+    nt <- grid::textGrob(note, gp = grid::gpar(fontsize = base_size - 1,
+                         col = "grey30"), hjust = 0, x = 0.02)
+    parts   <- c(parts, list(nt))
+    heights <- grid::unit.c(heights, grid::unit(3, "lines"))
+  }
+  gridExtra::arrangeGrob(grobs = parts, ncol = 1, heights = heights)
+}
 
 
 # ============================================================
@@ -139,6 +183,43 @@ cat(sprintf("\nFigure 2 check: cor(c_bar, CF) = %.2f   [CP 2015 report ~0.61]\n"
 # Result: cor(c_bar, CF) = 0.70
 
 
+# --- Rendered exhibits: CP 2015 Table 1 ----------------------------------
+t1a_disp <- t1a %>%
+  transmute(
+    Maturity = paste0(maturity, "y"),
+    `a_n x100` = formatC(a_n_x100, format = "f", digits = 1),
+    `t(a_n)`   = formatC(t_a,      format = "f", digits = 2),
+    `b_n`      = formatC(b_n,      format = "f", digits = 2),
+    `t(b_n)`   = formatC(t_b,      format = "f", digits = 2),
+    `R2_bar`   = formatC(R2_bar,   format = "f", digits = 2))
+
+tables$cp_t1_panelA <- table_to_grob(
+  as.data.frame(t1a_disp),
+  title = "CP 2015 Table 1A. Yields on trend inflation",
+  note  = paste0("y_t^(n) = a_n + b_n tau_t^CPI + e_t, by maturity. US, ",
+                 "1989m3-2014m12. Newey-West t-stats (18 lags).\n",
+                 "a_n in basis points. Sample is shorter than CP 2015 ",
+                 "(1975-2014), so intercept levels differ; slopes and R2 align."),
+  base_size = 9)
+
+t1b_disp <- t1b_stats %>%
+  transmute(
+    Maturity = paste0(maturity, "y"),
+    `Cycle SD`        = formatC(cycle_stdev_pct,   format = "f", digits = 2),
+    `Cycle half-life` = formatC(cycle_halflife_mo, format = "f", digits = 1),
+    `Yield SD`        = formatC(yield_stdev_pct,   format = "f", digits = 2),
+    `Yield half-life` = formatC(yield_halflife_mo, format = "f", digits = 1))
+
+tables$cp_t1_panelB <- table_to_grob(
+  as.data.frame(t1b_disp),
+  title = "CP 2015 Table 1B. Cycle and yield properties",
+  note  = paste0("Standard deviation (in %) and AR(1) half-life (in months) of ",
+                 "the maturity-specific cycle c^(n) and the yield y^(n).\n",
+                 "US, 1989m3-2014m12. Half-life = ln(0.5)/ln(|psi|). Shorter ",
+                 "half-lives than CP reflect the post-1989 sample."),
+  base_size = 9)
+
+
 # ============================================================
 # CP 2015  –  Table 2: Predictive regressions
 # LHS: rx_bar_{t+1} = duration-standardized, maturity-averaged excess return
@@ -251,6 +332,55 @@ cat(sprintf("\nAt our sample length T = %d:\n", T2)); print(eh_ours, digits = 3,
 # (1.74% is the 1-year-cycle sd; predictor = the latent (tau, r)).
 
 
+# --- Rendered exhibits: CP 2015 Table 2 ----------------------------------
+# Panel A: one cell per coefficient as "estimate (t)", plus a stats block.
+fmt2 <- function(x) ifelse(is.na(x), "", formatC(x, format = "f", digits = 2))
+t2a_cells <- matrix("", nrow(est_mat), ncol(est_mat),
+                    dimnames = dimnames(est_mat))
+for (i in seq_len(nrow(est_mat))) for (j in seq_len(ncol(est_mat))) {
+  if (!is.na(est_mat[i, j]))
+    t2a_cells[i, j] <- paste0(fmt2(est_mat[i, j]), " (", fmt2(t_mat[i, j]), ")")
+}
+t2a_body <- cbind(Regressor = rownames(t2a_cells),
+                  as.data.frame(t2a_cells, stringsAsFactors = FALSE))
+stat_block <- data.frame(
+  Regressor = c("R2_bar", "Wald", "Wald p", "Rel.prob.(BIC)"),
+  rbind(fmt2(t2_stats$adjR2), fmt2(t2_stats$Wald),
+        formatC(t2_stats$Wald_p, format = "f", digits = 3),
+        fmt2(t2_stats$relprob)),
+  stringsAsFactors = FALSE)
+colnames(stat_block) <- colnames(t2a_body)
+t2a_disp <- rbind(t2a_body, stat_block)
+rownames(t2a_disp) <- NULL
+
+tables$cp_t2_panelA <- table_to_grob(
+  t2a_disp,
+  title = "CP 2015 Table 2A. Predictive regressions of rx_bar",
+  note  = paste0("LHS: duration-standardized, maturity-averaged excess return ",
+                 "rx_bar_{t+1}. US, ", T2, " obs (1990m1-2014m12).\n",
+                 "Cells: coefficient (Newey-West HAC t-stat, 18 lags). ",
+                 "Rel.prob.(BIC) = exp((BIC_best - BIC_i)/2); best model = 1.00."),
+  base_size = 8)
+
+# Panel B: EH R2 distribution grid (at the paper's T = 470).
+t2b_disp <- as.data.frame(eh_470) %>%
+  transmute(
+    `phi_tau` = formatC(phi_tau, format = "f", digits = 3),
+    `phi_r`   = formatC(phi_r,   format = "f", digits = 2),
+    P5  = formatC(P5,  format = "f", digits = 3),
+    P50 = formatC(P50, format = "f", digits = 3),
+    P95 = formatC(P95, format = "f", digits = 3))
+
+tables$cp_t2_panelB <- table_to_grob(
+  t2b_disp,
+  title = "CP 2015 Table 2B. Predictive R2 under the EH null",
+  note  = paste0("Percentiles of the adjusted R2 from rx_bar ~ (tau, r) under ",
+                 "the EH (lambda=0), ", EH_NSIMS, " sims, T = 470.\n",
+                 "P95 rises with persistence (right shape); level is below CP's ",
+                 "0.19-0.23 due to underspecified calibration (see code note)."),
+  base_size = 9)
+
+
 # ============================================================
 # CP 2015  –  Table 4: Predicting returns with the cycle factor
 # LHS: individual excess returns rx^(n)_{t+1}, n = 2, 5, 10 (data menu).
@@ -330,16 +460,132 @@ print(t4_tab, quote = FALSE)
 #   dR2 ~ .01-.04 ; Panel B1 c(1)<0, c(n)>0 ; Panel B2 c(n)>0 rising R2 with n.
 
 
+# --- Rendered exhibit: CP 2015 Table 4 -----------------------------------
+# Friendly row labels for the t4_tab matrix (rows = stats, cols = rx(n)).
+t4_rowlab <- c(
+  cf = "cf", `(t)` = "  (t-stat)", `SS[5,95]` = "  SS [5%,95%]",
+  R2_A = "  R2_bar", dR2 = "  Delta R2",
+  `c(1)|B1` = "B1: c(1) (t)", `c(n)|B1` = "B1: c(n) (t)", R2_B1 = "  R2_bar",
+  `c(n)|B2` = "B2: c(n) (t)", R2_B2 = "  R2_bar")
+t4_disp <- data.frame(Statistic = t4_rowlab[rownames(t4_tab)],
+                      t4_tab, check.names = FALSE, stringsAsFactors = FALSE)
+rownames(t4_disp) <- NULL
+
+tables$cp_t4 <- table_to_grob(
+  t4_disp,
+  title = "CP 2015 Table 4. Predicting individual returns with the cycle factor",
+  note  = paste0("LHS: duration-standardized individual excess return rx^(n). ",
+                 "US, ", t4[[1]]$nobs, " obs. Panel A regresses on cf; B1 on ",
+                 "c^(1)+c^(n); B2 on c^(n).\n",
+                 "t-stats Newey-West HAC (18 lags). SS = stationary block ",
+                 "bootstrap of the cf t-stat (mean block 12, R=5000)."),
+  base_size = 9)
+
+
 # ============================================================
-# DH 2013 REPLICATION  (to be added)
+# DH 2013  –  Table 1: Summary statistics of zero-coupon yields
+# Full international panel (11 countries, maturities 1/2/4/5/9/10y),
+# yields in percent, full per-country sample. Adapted from DH's
+# 4-country / 1mo-5yr / 1975-2009 original; split into two A4-friendly
+# exhibits (per-country mean & sd; cross-country 10y correlations).
 # ============================================================
 
-# Table 1
+# Country code -> full name, ordered EUR bloc first (BE/DE/FR/IT/NL share the
+# euro and co-move strongly post-1999), then other Europe, then RoW.
+dh_ctry_order <- c("BE", "DE", "FR", "IT", "NL", "CH", "GB", "SE", "CA", "JP", "US")
+dh_ctry_name  <- c(BE = "Belgium", CA = "Canada", CH = "Switzerland",
+                   DE = "Germany", FR = "France", GB = "UK", IT = "Italy",
+                   JP = "Japan", NL = "Netherlands", SE = "Sweden", US = "US")
+dh_mats <- c(1, 2, 4, 5, 9, 10)
 
-# Table 2
+# --- Table 1A: mean & std of yields by country x maturity --------------------
+dh_stats <- yields_long %>%
+  filter(!is.na(yield), maturity %in% dh_mats) %>%
+  group_by(country, maturity) %>%
+  summarise(Mean = mean(yield), SD = sd(yield), .groups = "drop")
 
-# Table 3
+dh_t1a_df <- dh_stats %>%
+  pivot_wider(names_from = maturity, values_from = c(Mean, SD),
+              names_glue = "{maturity}y_{.value}") %>%
+  mutate(Country = dh_ctry_name[country],
+         country = factor(country, levels = dh_ctry_order)) %>%
+  arrange(country) %>%
+  select(Country, paste0(rep(dh_mats, each = 2), "y_", c("Mean", "SD"))) %>%
+  mutate(across(where(is.numeric), ~ formatC(.x, format = "f", digits = 2)))
+names(dh_t1a_df) <- sub("^(\\d+)y_(Mean|SD)$", "\\1y \\2", names(dh_t1a_df))
 
-# Table 6
+cat("\n===== DH 2013 Table 1A — Yield summary statistics =====\n")
+print(as.data.frame(dh_t1a_df), row.names = FALSE)
 
-# Table 7
+tables$dh_t1_summary <- table_to_grob(
+  as.data.frame(dh_t1a_df),
+  title = "DH 2013 Table 1A. Summary statistics of zero-coupon yields (% p.a.)",
+  note  = paste0("Mean and standard deviation of monthly zero-coupon yields, in ",
+                 "percent, by country and maturity (full per-country sample).\n",
+                 "Sample: US from 1989-03 and Japan from 1989-04; all other ",
+                 "countries from 1994-12; all through 2026-04. Yields tend to ",
+                 "rise and grow less volatile with maturity."),
+  base_size = 8)
+
+# --- Table 1B: cross-country correlation of the 10-year yield ----------------
+dh_y10_wide <- yields_long %>%
+  filter(maturity == 10) %>%
+  select(ym, country, yield) %>%
+  pivot_wider(names_from = country, values_from = yield)
+
+dh_corr10 <- cor(dh_y10_wide[, dh_ctry_order], use = "pairwise.complete.obs")
+
+# Lower-triangular display (blank upper triangle).
+dh_corr10_disp <- formatC(dh_corr10, format = "f", digits = 2)
+dh_corr10_disp[upper.tri(dh_corr10_disp)] <- ""
+dh_corr10_df <- cbind(Country = dh_ctry_name[dh_ctry_order],
+                      as.data.frame(dh_corr10_disp, stringsAsFactors = FALSE))
+colnames(dh_corr10_df) <- c("Country", dh_ctry_order)
+rownames(dh_corr10_df) <- NULL
+
+cat("\n===== DH 2013 Table 1B — 10y yield cross-country correlations =====\n")
+print(dh_corr10_df, row.names = FALSE)
+
+tables$dh_t1_corr10y <- table_to_grob(
+  dh_corr10_df,
+  title = "DH 2013 Table 1B. Cross-country correlation of the 10-year yield",
+  note  = paste0("Pairwise-complete correlations of the monthly 10-year ",
+                 "zero-coupon yield across countries (full per-country sample).\n",
+                 "Column labels are ISO codes for the countries in the first ",
+                 "column. Correlations are high within the euro bloc."),
+  base_size = 8)
+
+
+# ============================================================
+# DH 2013 REPLICATION  (further tables to be added)
+# ============================================================
+# Table 2, Table 3, Table 6, Table 7 -- reuse table_to_grob + the `tables` list.
+
+
+# ============================================================
+# Write every rendered result table to disk as a vector PDF.
+# Per-exhibit canvas sizes (wide tables need more width / less height).
+# ============================================================
+save_all_tables <- function(dir = "tables", width = 9, height = 5) {
+  dir.create(dir, showWarnings = FALSE)
+  size_override <- list(
+    cp_t1_panelA  = c(w = 8,  h = 3.2),
+    cp_t1_panelB  = c(w = 8,  h = 3.2),
+    cp_t2_panelA  = c(w = 9,  h = 4.5),
+    cp_t2_panelB  = c(w = 7,  h = 3.6),
+    cp_t4         = c(w = 8,  h = 4.2),
+    dh_t1_summary = c(w = 11, h = 3.8),
+    dh_t1_corr10y = c(w = 10, h = 3.8)
+  )
+  purrr::iwalk(tables, function(g, nm) {
+    sz <- size_override[[nm]]
+    w  <- if (is.null(sz)) width  else sz[["w"]]
+    h  <- if (is.null(sz)) height else sz[["h"]]
+    ggplot2::ggsave(file.path(dir, paste0(nm, ".pdf")), g, width = w, height = h)
+  })
+  invisible(file.path(dir, paste0(names(tables), ".pdf")))
+}
+
+cat(sprintf(
+  "\nempirical.R loaded: %d result tables in `tables`. Render one with grid::grid.draw(tables$<name>); write all with save_all_tables() -> tables/<name>.pdf\n",
+  length(tables)))
