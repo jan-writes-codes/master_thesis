@@ -104,3 +104,47 @@ block_boot_t <- function(rx, cf, L = 12L, R = 5000L, seed = 1L,
   c(lo = unname(quantile(tdist, 0.05)),
     hi = unname(quantile(tdist, 0.95)))
 }
+
+
+# Stationary block bootstrap 90% CI for the adjusted R^2 of a predictive
+# regression (Dahlquist-Hasseltoft 2013 Tables 4/6/7 convention).
+# -----------------------------------------------------------------------------
+# Resamples rows of (y, X) in stationary (Politis-Romano) blocks of mean length
+# L (>= the 12-month return overlap), refits by OLS, and returns the 5th/95th
+# percentiles of the bootstrap adjusted-R^2 distribution. Uses lm.fit on a
+# prepended intercept for speed (hundreds of these are run across the tables).
+#
+# y : numeric response (length m). X : m x k predictor matrix (no intercept).
+block_boot_r2_ci <- function(y, X, L = 18L, R = 1000L, seed = 1L) {
+  X  <- as.matrix(X)
+  ok <- stats::complete.cases(X, y)
+  X  <- X[ok, , drop = FALSE]; y <- y[ok]
+  m  <- length(y); k <- ncol(X)
+  Xc <- cbind(1, X)
+  p_restart <- 1 / L
+
+  adj_r2 <- function(idx) {
+    yi <- y[idx]; Xi <- Xc[idx, , drop = FALSE]
+    fit <- stats::lm.fit(Xi, yi)
+    sse <- sum(fit$residuals^2)
+    sst <- sum((yi - mean(yi))^2)
+    if (sst <= 0) return(NA_real_)
+    1 - (sse / (m - k - 1)) / (sst / (m - 1))
+  }
+
+  set.seed(seed)
+  one <- function() {
+    idx <- integer(0)
+    while (length(idx) < m) {
+      start <- sample.int(m, 1L)
+      len   <- rgeom(1L, prob = p_restart) + 1L
+      idx   <- c(idx, ((start - 1L) + 0:(len - 1L)) %% m + 1L)
+    }
+    adj_r2(idx[seq_len(m)])
+  }
+  r2d <- replicate(R, one())
+  r2d <- r2d[is.finite(r2d)]
+  c(lo = unname(quantile(r2d, 0.05)),
+    hi = unname(quantile(r2d, 0.95)))
+}
+

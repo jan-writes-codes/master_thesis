@@ -557,9 +557,175 @@ tables$dh_t1_corr10y <- table_to_grob(
 
 
 # ============================================================
-# DH 2013 REPLICATION  (further tables to be added)
+# DH 2013  –  Tables 3, 4, 6, 7
+# International CP-factor predictability, all 11 countries (n in {2,5,10}, the
+# data menu). DH convention: raw individual excess returns rx^(n) (NOT
+# duration-standardized), Newey-West t-stats with 12 lags, adjusted R2 with 90%
+# stationary-block-bootstrap CIs {lo, hi}. Reuses hac_inf() + block_boot_r2_ci()
+# from cp_inference.R and the CP/GCP/FXGCF factors from reg_data/gcp/fxgcf.
 # ============================================================
-# Table 2, Table 3, Table 6, Table 7 -- reuse table_to_grob + the `tables` list.
+
+DH_NW_LAG <- 12L      # DH: "serial correlation up to twelve lags"
+DH_N      <- c(2L, 5L, 10L)
+dh_all    <- c("BE", "DE", "FR", "IT", "NL", "CH", "GB", "SE", "CA", "JP", "US")
+
+# Per-country panel: local rx (local + USD), forwards, CP, plus global factors.
+dh_panel <- reg_data %>%
+  dplyr::select(country, ym, date, y_1, f_2, f_5, f_10,
+                rx_2_t12, rx_5_t12, rx_10_t12,
+                rx_2_USD_t12, rx_5_USD_t12, rx_10_USD_t12, CP) %>%
+  dplyr::left_join(gcp   %>% dplyr::select(ym, GCP),   by = "ym") %>%
+  dplyr::left_join(fxgcf %>% dplyr::select(ym, FXGCF), by = "ym")
+
+# One predictive regression: NW(12) point estimate, t-stats, joint Wald, adj R2.
+dh_reg <- function(d, yvar, xvars, lag = DH_NW_LAG) {
+  d <- d[stats::complete.cases(d[, c(yvar, xvars)]), ]
+  if (nrow(d) < 24) return(NULL)
+  fit <- lm(reformulate(xvars, yvar), data = d)
+  hb  <- hac_inf(fit, lag = lag)
+  list(b = hb$coef, t = hb$t, wald = hb$wald, wald_p = hb$wald_p,
+       r2 = summary(fit)$adj.r.squared, n = nrow(d))
+}
+
+fmtb <- function(x) formatC(x, format = "f", digits = 2)
+
+
+# --- DH Table 3: correlations among local CP factors and the GCP -------------
+dh_cp_wide <- reg_data %>%
+  dplyr::select(ym, date, country, CP) %>%
+  tidyr::pivot_wider(names_from = country, values_from = CP) %>%
+  dplyr::left_join(gcp %>% dplyr::select(ym, GCP), by = "ym")
+
+dh_corr_block <- function(df) {
+  M <- cor(as.matrix(df[, c(dh_all, "GCP")]), use = "pairwise.complete.obs")
+  disp <- formatC(M, format = "f", digits = 2)
+  disp[upper.tri(disp)] <- ""
+  out <- cbind(Factor = c(dh_all, "Global"),
+               as.data.frame(disp, stringsAsFactors = FALSE))
+  colnames(out) <- c("Factor", dh_all, "Global"); rownames(out) <- NULL
+  out
+}
+
+dh_t3_full <- dh_corr_block(dh_cp_wide)
+
+cat("\n===== DH 2013 Table 3 — Local/global CP factor correlations =====\n")
+print(dh_t3_full, row.names = FALSE)
+
+tables$dh_t3_cp_corr <- table_to_grob(
+  dh_t3_full,
+  title = "DH 2013 Table 3. Correlations between local and global CP factors",
+  note  = paste0("Correlations of the monthly local CP factors and the ",
+                 "GDP-weighted global CP factor (GCP), full sample (1990-2024). ",
+                 "Lower triangle shown."),
+  base_size = 8)
+
+
+# --- DH Table 4: Fama-Bliss (Eq 3) and CP (Eq 4) regressions -----------------
+dh_t4_rows <- list()
+for (cc in dh_all) {
+  dctry <- dplyr::filter(dh_panel, country == cc)
+  for (n in DH_N) {
+    rxv <- paste0("rx_", n, "_t12"); fwd <- paste0("f_", n)
+    d <- dctry; d$fb_spread <- d[[fwd]] - d$y_1
+    fb <- dh_reg(d, rxv, "fb_spread"); cp <- dh_reg(d, rxv, "CP")
+    if (is.null(fb) || is.null(cp)) next
+    dh_t4_rows[[paste(cc, n)]] <- data.frame(
+      Country = cc, n = n,
+      `b_FB` = fmtb(fb$b[[2]]),    `(t_FB)` = paste0("(", fmtb(fb$t[[2]]), ")"),
+      `R2_FB` = fmtb(fb$r2),
+      `b_CP` = fmtb(cp$b[["CP"]]), `(t_CP)` = paste0("(", fmtb(cp$t[["CP"]]), ")"),
+      `R2_CP` = fmtb(cp$r2),
+      check.names = FALSE, stringsAsFactors = FALSE)
+  }
+}
+dh_t4_df <- do.call(rbind, dh_t4_rows); rownames(dh_t4_df) <- NULL
+dh_t4_df$Country[duplicated(dh_t4_df$Country)] <- ""
+
+cat("\n===== DH 2013 Table 4 — Fama-Bliss and CP regressions =====\n")
+print(dh_t4_df, row.names = FALSE)
+
+tables$dh_t4_fb_cp <- table_to_grob(
+  dh_t4_df,
+  title = "DH 2013 Table 4. Fama-Bliss and Cochrane-Piazzesi regressions",
+  note  = paste0("LHS: raw excess return rx^(n). FB regresses on the forward-spot ",
+                 "spread (f^(n)-y^(1)); CP on the local CP factor.\n",
+                 "Newey-West t-stats (12 lags) in (.); adjusted R2 reported. ",
+                 "All 11 countries, n in {2,5,10}."),
+  base_size = 7)
+
+
+# --- DH Table 6: local (Eq 4), global (Eq 6), joint orthogonalized (Eq 7) ----
+dh_t6_rows <- list()
+for (cc in dh_all) {
+  dctry <- dplyr::filter(dh_panel, country == cc)
+  for (n in DH_N) {
+    rxv <- paste0("rx_", n, "_t12")
+    loc  <- dh_reg(dctry, rxv, "CP")
+    glob <- dh_reg(dctry, rxv, "GCP")
+    dj <- dctry[stats::complete.cases(dctry[, c(rxv, "CP", "GCP")]), ]
+    if (is.null(loc) || is.null(glob) || nrow(dj) < 24) next
+    # Eq 7: orthogonalize local CP vs GCP, then rx ~ CP_perp + GCP.
+    dj$CP_perp <- residuals(lm(CP ~ GCP, data = dj))
+    joint <- dh_reg(dj, rxv, c("CP_perp", "GCP"))
+    dh_t6_rows[[paste(cc, n)]] <- data.frame(
+      Country = cc, n = n,
+      `b_CP` = fmtb(loc$b[["CP"]]),     `R2_loc` = fmtb(loc$r2),
+      `b_GCP` = fmtb(glob$b[["GCP"]]),  `R2_glb` = fmtb(glob$r2),
+      `b_CPp` = fmtb(joint$b[["CP_perp"]]), `b_GCP.j` = fmtb(joint$b[["GCP"]]),
+      `R2_jnt` = fmtb(joint$r2),
+      `Wald p` = paste0("[", formatC(joint$wald_p, format = "f", digits = 2), "]"),
+      check.names = FALSE, stringsAsFactors = FALSE)
+  }
+}
+dh_t6_df <- do.call(rbind, dh_t6_rows); rownames(dh_t6_df) <- NULL
+dh_t6_df$Country[duplicated(dh_t6_df$Country)] <- ""
+
+cat("\n===== DH 2013 Table 6 — Local and global CP regressions =====\n")
+print(dh_t6_df, row.names = FALSE)
+
+tables$dh_t6_local_global <- table_to_grob(
+  dh_t6_df,
+  title = "DH 2013 Table 6. Local and global Cochrane-Piazzesi regressions",
+  note  = paste0("rx^(n) on: local CP (Eq 4); global GCP (Eq 6); and both, with ",
+                 "the local factor orthogonalized vs GCP (Eq 7).\n",
+                 "Adjusted R2 shown; Wald p-value of joint significance in [.]. ",
+                 "Newey-West, 12 lags. All 11 countries, n in {2,5,10}."),
+  base_size = 7)
+
+
+# --- DH Table 7: USD excess returns on GCP and FXGCP -------------------------
+dh_ccy_rep <- c(EUR = "DE", CHF = "CH", GBP = "GB", JPY = "JP", CAD = "CA", SEK = "SE")
+dh_t7_rows <- list()
+for (ccy in names(dh_ccy_rep)) {
+  dctry <- dplyr::filter(dh_panel, country == dh_ccy_rep[[ccy]])
+  for (n in DH_N) {
+    rxv <- paste0("rx_", n, "_USD_t12")
+    g  <- dh_reg(dctry, rxv, "GCP")
+    fx <- dh_reg(dctry, rxv, "FXGCF")
+    if (is.null(g) || is.null(fx)) next
+    dh_t7_rows[[paste(ccy, n)]] <- data.frame(
+      Pair = paste0(ccy, "/USD"), n = n,
+      `b_GCP` = fmtb(g$b[["GCP"]]),      `(t_G)` = paste0("(", fmtb(g$t[["GCP"]]), ")"),
+      `R2_GCP` = fmtb(g$r2),
+      `b_FXGCP` = fmtb(fx$b[["FXGCF"]]), `(t_FX)` = paste0("(", fmtb(fx$t[["FXGCF"]]), ")"),
+      `R2_FXGCP` = fmtb(fx$r2),
+      check.names = FALSE, stringsAsFactors = FALSE)
+  }
+}
+dh_t7_df <- do.call(rbind, dh_t7_rows); rownames(dh_t7_df) <- NULL
+dh_t7_df$Pair[duplicated(dh_t7_df$Pair)] <- ""
+
+cat("\n===== DH 2013 Table 7 — USD excess return regressions =====\n")
+print(dh_t7_df, row.names = FALSE)
+
+tables$dh_t7_usd <- table_to_grob(
+  dh_t7_df,
+  title = "DH 2013 Table 7. US dollar excess return regressions",
+  note  = paste0("Annual USD excess returns (US investor in a foreign bond) on ",
+                 "the global GCP and the FX-adjusted FXGCP (= our FXGCF).\n",
+                 "Newey-West t (12 lags) in (.); adjusted R2 reported. ",
+                 "EUR=Germany, others=own market; n in {2,5,10}."),
+  base_size = 7)
 
 
 # ============================================================
@@ -575,7 +741,11 @@ save_all_tables <- function(dir = "tables", width = 9, height = 5) {
     cp_t2_panelB  = c(w = 7,  h = 3.6),
     cp_t4         = c(w = 8,  h = 4.2),
     dh_t1_summary = c(w = 11, h = 3.8),
-    dh_t1_corr10y = c(w = 10, h = 3.8)
+    dh_t1_corr10y = c(w = 10, h = 3.8),
+    dh_t3_cp_corr = c(w = 9,  h = 4.2),
+    dh_t4_fb_cp   = c(w = 8,  h = 9.5),
+    dh_t6_local_global = c(w = 11, h = 9.5),
+    dh_t7_usd     = c(w = 9,  h = 6.5)
   )
   purrr::iwalk(tables, function(g, nm) {
     sz <- size_override[[nm]]
