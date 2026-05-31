@@ -1,9 +1,3 @@
-# Regenerated exhibits
-#   figures/ : source("plots.R");     save_all_plots()
-#   tables/  : source("empirical.R"); save_all_tables()
-figures/
-tables/
-
 # R session / build artifacts
 .Rhistory
 .RData
