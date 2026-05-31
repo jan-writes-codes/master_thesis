@@ -1,38 +1,247 @@
-% Ch.5 Methodology (~8-10 pp). Draft on Day 3.
+% Ch.5 Methodology (~8-10 pp). Drafted Day 3.
+% Grounded in cp_inference.R, cp_montecarlo.R, and oos.R. The HAC-vs-Wei-Wright
+% caveat (cp_inference.R header) is stated explicitly in sec:meth-inference.
 \chapter{Methodology}
 \label{ch:methodology}
 
+This chapter sets out how the factors of \Cref{ch:framework} are estimated and
+how the predictive regressions are evaluated. It first describes the
+construction pipeline and the predictive-regression design, then the inference
+machinery---HAC standard errors, model comparison, and bootstrap intervals---and
+the expectations-hypothesis Monte Carlo that calibrates what predictive $R^{2}$
+should be expected under the null. It closes with the out-of-sample protocol and
+a transparent statement of where the implementation departs from the original
+studies.
+
+% ===========================================================================
 \section{Factor Construction Pipeline}
 \label{sec:meth-pipeline}
-% Trend-inflation EWMA -> cycle regressions -> local CF -> global GCF (GDP
-% weights) -> FX-adjusted FXGCF. Map each step to the code in
-% data preperation.R; state the maturity menu {1,2,4,5,9,10}.
 
+The empirical objects are built in the layered sequence of \Cref{ch:framework},
+each layer feeding the next. (i) Year-on-year core inflation is smoothed into
+trend inflation $\trendinf_{i,t}$ by the EWMA \eqref{eq:trendinf} ($M=120$,
+$v=0.987$). (ii) For each country--maturity pair, yields are projected on trend
+inflation \eqref{eq:decomp} and the residual taken as the cycle
+$\cyc^{(n)}_{i,t}$; the one-year cycle and the average cycle over
+$\{2,4,5,9,10\}$ years are retained. (iii) The local cycle factor $\CF_{i,t}$ is
+the fitted value of the duration-standardised, maturity-averaged excess return
+on these two cycle predictors \eqref{eq:cf-reg}--\eqref{eq:cf}. (iv) The global
+factor $\GCF_{t}$ is the GDP-weighted average of local factors \eqref{eq:gcf},
+and (v) the FX-adjusted factor $\FXGCF_{t}$ is the fitted value of the
+GDP-weighted average dollar return on the GDP-weighted average cycle predictors
+\eqref{eq:fxgcf-agg}--\eqref{eq:fxgcf}. The cycle factors are deliberately
+\emph{generated regressors}: the same estimation choices that build the factor
+are repeated, recursively, in the out-of-sample exercise of
+\Cref{sec:meth-oos}, so that no future information enters the real-time factor.
+
+% ===========================================================================
 \section{Predictive-Regression Design}
 \label{sec:meth-design}
-% 12-month overlapping returns; duration standardization; the Eq (18)-(23)
-% specifications and what each tests.
 
+All predictive regressions forecast the one-year-ahead excess return from
+time-$t$ predictors,
+\begin{equation}
+  \rxbar_{i,t+12} \;=\; a + b'\,x_{t} + \varepsilon_{i,t+12},
+  \label{eq:meth-pred}
+\end{equation}
+where $x_{t}$ collects the relevant cycle factor(s) and the dependent variable
+is the duration-standardised, maturity-averaged return of \eqref{eq:rxbar} (or
+its dollar counterpart). Because the data are monthly but the forecast horizon
+is twelve months, the regressions use \emph{overlapping} returns: consecutive
+observations share eleven months of the realised return and the residual
+$\varepsilon_{i,t+12}$ is therefore serially correlated by construction as an
+MA(11) process. This overlap is the central econometric complication and the
+reason ordinary least squares standard errors are badly biased; it motivates the
+inference choices of the next section. The specific specifications---local
+\eqref{eq:h-local}, the global-versus-local horse race
+\eqref{eq:h-horse}--\eqref{eq:h-global}, and the dollar-investor regressions
+\eqref{eq:h-usd-local}--\eqref{eq:h-fxgcf}---are estimated by OLS, with the
+slope point estimates reported alongside the robust inference below.
+
+% ===========================================================================
 \section{Statistical Inference}
 \label{sec:meth-inference}
-% Newey-West HAC \citep{neweywest1987} t-stats and the reverse-regression
-% delta method \citep{hodrick1992, weiwright2013}: explain why CP use it and the
-% honest caveat (we report HAC; exact Wei-Wright needs monthly returns + the
-% appendix -- see cp_inference.R header). BIC relative probabilities; joint Wald
-% tests; stationary block bootstrap \citep{politis1994} for small-sample bands
-% and R^2 confidence intervals.
 
+\subsection{HAC standard errors for overlapping returns}
+The headline $t$-statistics use heteroskedasticity- and autocorrelation
+-consistent (HAC) standard errors of the Newey--West form
+\citep{neweywest1987}, with a bandwidth of $18$ lags. The bandwidth comfortably
+exceeds the $11$-month overlap, so it captures the induced serial correlation in
+$\varepsilon_{i,t+12}$; $18$ lags is the convention adopted for the
+twelve-month-horizon regressions throughout. For a fitted regression we report
+the slope estimate $\hat b$, its HAC standard error, and the $t$-ratio
+$\hat b/\mathrm{se}(\hat b)$.
+
+\paragraph{Reverse-regression caveat.} \citet{cieslak2015} report $t$-statistics
+from the reverse-regression delta method of \citet{weiwright2013}, which pairs
+backward-summed regressors with \emph{one-period} (monthly) return innovations.
+That estimator requires the underlying monthly returns; the constructed panel
+stores only the twelve-month overlapping returns, so the genuine
+reverse-regression form is not identified from the available data. We therefore
+report Hansen--Hodrick/Newey--West HAC $t$-statistics---the standard robust
+inference for overlapping returns---and treat them as such. The signs,
+magnitudes, and the $R^{2}$, Wald, and BIC structure are faithful to the
+original; only the exact reverse-regression $t$-values, which would require the
+paper's appendix, differ. This is stated openly because HAC and reverse
+-regression $t$-statistics can diverge for highly persistent regressors, a point
+revisited in \Cref{ch:discussion}.
+
+\subsection{Joint significance: the Wald test}
+For multi-regressor specifications we report a joint Wald test that all slopes
+are zero. With slope vector $\hat b_{s}$ (intercept excluded) and the
+corresponding HAC covariance block $V_{s}$,
+\begin{equation}
+  W \;=\; \hat b_{s}'\,V_{s}^{-1}\,\hat b_{s}
+  \;\sim\; \chi^{2}_{k},
+  \label{eq:meth-wald}
+\end{equation}
+with $k$ the number of slopes, and we report $W$ with its $\chi^{2}$ p-value.
+The same statistic, applied to the orthogonalised local factor in the horse
+race \eqref{eq:h-horse}, measures whether the local factor adds explanatory
+power beyond the global factor.
+
+\subsection{Model comparison: BIC relative probabilities}
+To compare the competing predictor sets we use Bayesian information criteria
+expressed as relative probabilities, following \citet{cieslak2015}. For model
+$i$ estimated on a common sample of length $T$ with $n_{i}$ slope regressors,
+\begin{equation}
+  \mathrm{BIC}_{i} \;=\; \ln\!\big(\hat\sigma^{2}_{i}\big)
+     + \ln(T)\,\frac{n_{i}}{T},
+  \qquad \hat\sigma^{2}_{i} = \mathrm{SSE}_{i}/T,
+  \label{eq:meth-bic}
+\end{equation}
+and the relative probability of model $i$ is
+$\exp\!\big\{(\mathrm{BIC}_{\min}-\mathrm{BIC}_{i})/2\big\}$, normalised so that
+the lowest-BIC model maps to $1.0$ and the others to $(0,1]$. This rewards
+predictive fit while penalising parameter count, and makes the parsimony of the
+two-regressor cycle factor directly comparable to the six-yield specification.
+
+\subsection{Small-sample intervals: the stationary block bootstrap}
+Finite-sample distributions are obtained from the stationary block bootstrap of
+\citet{politis1994}, which resamples contiguous blocks of random
+(geometrically distributed) length with mean $L$, wrapping around the sample
+end. The mean block length is set to at least the twelve-month overlap so that
+the resampled series preserve the serial dependence of the overlapping returns.
+Two quantities are bootstrapped:
+\begin{itemize}[leftmargin=1.4em]
+  \item the predictive $t$-statistic ($L=12$), refitting $\rxbar\sim\CF$ on each
+    pseudo-sample and studentising the slope with the same $18$-lag HAC standard
+    error as the headline estimate, reported as a $[5\%,95\%]$ interval; and
+  \item the adjusted $R^{2}$ ($L=18$), refit by OLS on each pseudo-sample, with
+    its $[5\%,95\%]$ interval, following the
+    \citet{dahlquist2013} convention for the predictability tables.
+\end{itemize}
+Matching the bootstrap HAC bandwidth to the headline bandwidth is essential:
+ignoring the overlap inside the bootstrap would spuriously inflate the
+$t$-statistic.
+
+% ===========================================================================
 \section{Expectations-Hypothesis Monte Carlo}
 \label{sec:meth-ehmc}
-% Section-1 two-factor EH simulation (cp_montecarlo.R): null distribution of the
-% predictive R^2. State the calibration and the documented level gap vs CP.
 
+A predictive $R^{2}$ is only informative relative to what the expectations
+hypothesis would itself produce in a finite sample. Even under the EH---zero
+risk premia---realised twelve-month returns are non-zero because they embed the
+future yield $y_{t+12}$, so the in-sample predictive $R^{2}$ has a
+non-degenerate null distribution. We characterise that distribution by Monte
+Carlo, following \citet{cieslak2015}, Section~1.
+
+The data-generating process has two AR(1) state variables, trend inflation
+$\tau_{t}$ (persistence $\phi_{\tau}$) and a real factor $r_{t}$ (persistence
+$\phi_{r}$), driving the nominal short rate
+$i_{t}=\delta_{0}+\delta_{\tau}\tau_{t}+\delta_{r}r_{t}$ with
+$\delta_{0}=0,\ \delta_{\tau}=1.43,\ \delta_{r}=1$. Under the EH the $n$-year
+yield is the average expected future short rate and hence affine in the states,
+\begin{equation}
+  y^{(n)}_{t} = \delta_{0}
+     + \delta_{\tau}\,\tau_{t}\,\bar{A}(\phi_{\tau},N)
+     + \delta_{r}\,r_{t}\,\bar{A}(\phi_{r},N),
+  \qquad
+  \bar{A}(\phi,N) = \frac{1-\phi^{N}}{(1-\phi)\,N},
+  \label{eq:meth-eh}
+\end{equation}
+with $N=12n$ months. Innovation variances are calibrated so that
+$\mathrm{sd}(\tau)=1.90\%$ and the one-year cycle has $\mathrm{sd}=1.74\%$; the
+latter pins $\sigma_{r}$ through the one-year yield's loading on $r$, since the
+one-year cycle is the part of $y^{(1)}$ orthogonal to $\tau$. Each draw
+simulates the states (with a burn-in), builds EH yields on the maturity menu,
+forms the duration-standardised maturity-averaged return $\rxbar$ exactly as in
+\Cref{ch:framework} ($D^{(n)}=n$, $n\in\{2,5,10\}$), regresses it on trend
+inflation and the real factor, and stores the adjusted $R^{2}$. The null
+distribution is summarised by its $5$th, $50$th, and $95$th percentiles over
+$10{,}000$ draws, evaluated on the grid of persistence pairs tabulated by
+\citet{cieslak2015} ($\phi_{\tau}\in\{0.80,0.975,0.999\}$ at $\phi_{r}=0.75$,
+and $\phi_{r}\in\{0.60,0.75,0.90\}$ at $\phi_{\tau}=0.975$). The predictor map is
+pluggable, so the same engine can evaluate the cycle and six-yield
+specifications for comparison.
+
+\paragraph{Calibration gap.} The simulated null $R^{2}$ band is sensitive to the
+exact affine mapping and to the calibration of the state variances; our
+implementation reproduces the \emph{qualitative} pattern (a null $95$th
+percentile rising with persistence) but does not exactly match the published
+band. The gap is documented rather than closed, and the realised predictive
+$R^{2}$ in \Cref{ch:results} is interpreted against our own simulated band, not
+the paper's.
+
+% ===========================================================================
 \section{Out-of-Sample Evaluation}
 \label{sec:meth-oos}
-% Fully-recursive factors (oos.R) and the Campbell-Thompson \citep{campbellthompson2008}
-% out-of-sample R^2 vs the recursive-mean benchmark.
 
+In-sample predictability can reflect over-fitting of generated regressors, so
+the factors are re-evaluated in real time. The entire chain is rebuilt
+recursively using only data available at each date $t$: the yield-cycle
+decomposition \eqref{eq:decomp} is re-fit on an expanding window, the local
+predictive regression \eqref{eq:cf-reg} is re-estimated, and the global and
+FX-adjusted factors are reconstructed from the recursive local factors. Trend
+inflation is already backward-looking and is reused as is. Two distinct cutoffs
+are respected: the yield-cycle residual is contemporaneous (regressors and
+yields are both observed at $t$), whereas the predictive regression trains only
+on observations whose twelve-month outcome has already been realised by $t$
+(training dates satisfy $\text{date}+12\text{m}\le t$). Because both the factor
+\emph{and} the forecasting regression respect $t$, the resulting forecast is
+``doubly out-of-sample''.
+
+Forecast accuracy is measured by the \citet{campbellthompson2008} out-of-sample
+$R^{2}$ against the recursive prevailing-mean benchmark,
+\begin{equation}
+  R^{2}_{\mathrm{oos}} \;=\; 1 -
+     \frac{\sum_{t}\big(\rxbar_{t+12}-\widehat{\rxbar}^{\,\text{factor}}_{t+12}\big)^{2}}
+          {\sum_{t}\big(\rxbar_{t+12}-\widehat{\rxbar}^{\,\text{mean}}_{t+12}\big)^{2}},
+  \label{eq:meth-ctr2}
+\end{equation}
+where the benchmark forecast is the recursive mean (a regression on a constant)
+passed through the same outcome-lag training cutoff. A positive
+$R^{2}_{\mathrm{oos}}$ means the factor beats the historical average out of
+sample. Country results are pooled by summing the forecast and benchmark sums of
+squares across countries---so each country contributes against its own recursive
+mean---before forming the ratio. The same protocol is applied to the cycle
+factors and to the Cochrane--Piazzesi comparison factors, giving the
+head-to-head out-of-sample evidence reported in \Cref{ch:robustness}.
+
+% ===========================================================================
 \section{Deviations from the Original Studies}
 \label{sec:meth-deviations}
-% Be explicit: maturity menu, sample span, HAC-vs-Wei-Wright, 3-maturity
-% individual returns. These frame the replication chapter's comparisons.
+
+For transparency, the substantive departures from \citet{cieslak2015} and
+\citet{dahlquist2013} are collected here; each is revisited where it bears on
+the results.
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Maturity menu.} Yields are available at $\{1,2,4,5,9,10\}$ years
+    rather than the finer grid of the original papers; individual excess returns
+    are formed for $n\in\{2,5,10\}$, the maturities with an observed adjacent
+    shorter yield.
+  \item \textbf{Sample.} The G10 panel spans 1989/1994--2026
+    (\Cref{sec:data-coverage}), shorter than and not contemporaneous with the
+    original US samples, so replicated levels are expected to differ from the
+    published numbers.
+  \item \textbf{Inference.} HAC ($18$-lag Newey--West) $t$-statistics replace the
+    exact reverse-regression delta method, for the identification reason given in
+    \Cref{sec:meth-inference}.
+  \item \textbf{Duration convention.} Duration-standardisation uses $D^{(n)}=n$
+    (continuous compounding) rather than $n/(1+y^{(n)})$.
+  \item \textbf{FX-adjusted factor.} $\FXGCF_{t}$ is built top-down on the
+    average cycle predictors rather than as a projection on $\GCF_{t}$
+    (\Cref{sec:fw-fxgcf}).
+\end{itemize}
+These choices keep the construction internally consistent and reproducible while
+remaining as close to the source methodology as the data permit.

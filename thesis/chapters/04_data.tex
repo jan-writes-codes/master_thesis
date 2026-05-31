@@ -1,41 +1,190 @@
-% Ch.4 Data (~6-8 pp). Draft on Day 1.
+% Ch.4 Data (~6-8 pp). Drafted Day 1 (full draft Day 2).
+% Sourced directly from data.xlsx (sheets: yields, fx, inflation, gdp,
+% curve_translation, overview) and the construction in data preperation.R.
 \chapter{Data}
 \label{ch:data}
 
+This chapter describes the data used to construct the cycle factors and to run
+the predictive regressions of \Cref{ch:results}. All series are assembled in a
+single workbook (\texttt{data.xlsx}) and processed into a monthly
+country--maturity panel; the construction follows the steps in
+\Cref{ch:framework} and is implemented in \texttt{data preperation.R}. We
+describe the cross-sectional universe, the four raw inputs (yields, inflation,
+GDP, and exchange rates) with their sources and units, the sample coverage, and
+the cleaning and alignment choices, before turning to summary statistics.
+
+% ===========================================================================
 \section{Universe and Sources}
 \label{sec:data-sources}
-% G10 (11 countries: BE CA CH DE FR GB IT JP NL SE US). Bloomberg zero-coupon
-% yields (maturities 1,2,4,5,9,10y); LSEG core CPI and nominal GDP; FX spot vs
-% USD. Monthly frequency.
 
+The cross-section is the G10 government-bond universe, comprising eleven
+countries: Belgium (BE), Canada (CA), Switzerland (CH), Germany (DE), France
+(FR), the United Kingdom (GB), Italy (IT), Japan (JP), the Netherlands (NL),
+Sweden (SE), and the United States (US). Five of these share the euro (BE, DE,
+FR, IT, NL); the remaining currencies are the Canadian dollar (CAD), Swiss franc
+(CHF), pound sterling (GBP), Japanese yen (JPY), Swedish krona (SEK), and US
+dollar (USD), the last serving as the numeraire for the international investor.
+
+Four raw inputs enter the analysis, drawn from two data providers:
+
+\begin{description}[leftmargin=1.5em, style=nextline]
+  \item[Zero-coupon yields (Bloomberg).] End-of-month yields from Bloomberg's
+    fitted zero-coupon government curves (the \texttt{BLC2} family), one curve
+    per country, at maturities of $1,2,4,5,9$ and $10$ years. Each country maps
+    to a Bloomberg curve identifier (e.g.\ \texttt{I25} for the US, \texttt{I22}
+    for the UK, \texttt{I18} for Japan), recorded in the workbook's
+    \texttt{curve\_translation} sheet. Yields are continuously compounded and
+    quoted in percent per annum.
+  \item[Core CPI (LSEG Refinitiv).] Monthly seasonally relevant core consumer
+    price indices, one per country (e.g.\ \texttt{aUSCCORF/C} for the US). The
+    workbook stores the \emph{index level}; year-on-year inflation
+    $\pi_{i,t}=\big(\mathrm{CPI}_{i,t}/\mathrm{CPI}_{i,t-12}-1\big)\times 100$ is
+    computed in-sample, and trend inflation $\trendinf_{i,t}$ then follows from
+    the EWMA in \eqref{eq:trendinf}.
+  \item[Nominal GDP (LSEG Refinitiv).] Annual nominal GDP in local currency
+    (e.g.\ \texttt{aUSWDALB5A}), used to form the time-varying global weights
+    $w_{i,t}$ of \eqref{eq:gcf}. GDP is converted to a common US-dollar basis
+    using year-end exchange rates before weighting.
+  \item[Spot exchange rates (Bloomberg).] End-of-month spot rates quoted as US
+    dollars per unit of foreign currency (\texttt{EURUSD}, \texttt{CADUSD},
+    \texttt{JPYUSD}, \texttt{GBPUSD}, \texttt{SEKUSD}, \texttt{CHFUSD}), with the
+    USD rate fixed at unity. These deliver the log currency return
+    $s_{i,t+12}-s_{i,t}$ in the dollar-investor excess return \eqref{eq:rx-usd}
+    and the FX conversion of GDP.
+\end{description}
+
+% ===========================================================================
 \section{Sample and Coverage}
 \label{sec:data-coverage}
-% US/JP from 1989; remaining countries from 1994-12; all through 2026-04.
-% Note the unequal windows; correlations are pairwise-complete.
 
-% Coverage / yield overview figures (plots.R section s1).
+The panel is monthly, sampled at month-end. Although the raw yield workbook
+extends back to 1980 and the inflation indices to 1955, the usable span is
+governed by the availability of each country's Bloomberg zero-coupon curve. The
+United States and Japan enter first, in March and April 1989 respectively; the
+remaining nine countries begin in December 1994; all series run through April
+2026. This yields $446$ monthly observations for the US, $445$ for Japan, and
+$377$ for each of the other countries. \Cref{tab:data-coverage} summarises the
+effective coverage.
+
+\begin{table}[t]\centering
+  \caption{Effective monthly coverage of the yield panel, by country.}
+  \label{tab:data-coverage}
+  \small
+  \begin{tabular}{llll r}
+    \toprule
+    Country & Code & Currency & Sample & Months\\
+    \midrule
+    United States & US & USD & 1989-03 -- 2026-04 & 446\\
+    Japan         & JP & JPY & 1989-04 -- 2026-04 & 445\\
+    Belgium       & BE & EUR & 1994-12 -- 2026-04 & 377\\
+    Canada        & CA & CAD & 1994-12 -- 2026-04 & 377\\
+    Switzerland   & CH & CHF & 1994-12 -- 2026-04 & 377\\
+    Germany       & DE & EUR & 1994-12 -- 2026-04 & 377\\
+    France        & FR & EUR & 1994-12 -- 2026-04 & 377\\
+    United Kingdom& GB & GBP & 1994-12 -- 2026-04 & 377\\
+    Italy         & IT & EUR & 1994-12 -- 2026-04 & 377\\
+    Netherlands   & NL & EUR & 1994-12 -- 2026-04 & 377\\
+    Sweden        & SE & SEK & 1994-12 -- 2026-04 & 377\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The panel is therefore unbalanced. This is handled throughout by computing
+cross-country objects only over the countries present at each date: the global
+weights $w_{i,t}$ in \eqref{eq:gcf} are renormalised each month to sum to one
+over the available panel, and the summary correlations below are computed on a
+pairwise-complete basis. Spot exchange rates begin in January 1990, so the
+US-dollar excess returns of \eqref{eq:rx-usd} for the early US and Japanese
+observations (1989) are only available once the corresponding currency series
+start; this affects the dollar-investor analysis but not the local-currency
+results. \Cref{fig:coverage} visualises the coverage and \Cref{fig:yield-ts} the
+resulting 10-year yield series.
+
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/s1_coverage.pdf}
-  \caption{Sample coverage by country and maturity.}
+  \caption{Sample coverage by country and maturity. The United States and Japan
+    extend back to 1989; the remaining countries begin in late 1994.}
   \label{fig:coverage}
 \end{figure}
 
+\begin{figure}[t]\centering
+  \includegraphics[width=0.9\linewidth]{figures/s1_yield_ts.pdf}
+  \caption{Ten-year zero-coupon yields across the G10, 1989--2026. The secular
+    decline in nominal yields and the post-2021 reversal are common across
+    countries.}
+  \label{fig:yield-ts}
+\end{figure}
+
+% ===========================================================================
 \section{Cleaning and Variable Construction}
 \label{sec:data-cleaning}
-% YoY core inflation; trend inflation EWMA; raw-yield checks; FX alignment.
 
+The raw inputs are aligned to a common monthly grid keyed on year--month, and
+the panel is reshaped to long form (country $\times$ maturity $\times$ month).
+Four construction steps deserve note, each tied to \Cref{ch:framework}:
+
+\begin{enumerate}[leftmargin=1.6em]
+  \item \textbf{Trend inflation.} Year-on-year core inflation is computed from
+    the CPI index and smoothed by the backward-looking EWMA \eqref{eq:trendinf}
+    with window $M=120$ months and decay $v=0.987$. Because the CPI history
+    predates the yield sample by decades, trend inflation is fully populated
+    from the first yield observation, with no warm-up loss inside the estimation
+    window.
+  \item \textbf{Cycles.} For each country--maturity pair, yields are projected on
+    trend inflation by OLS \eqref{eq:decomp}; the residual is the cycle
+    $\cyc^{(n)}_{i,t}$. The one-year cycle and the average cycle over
+    $\{2,4,5,9,10\}$ years \eqref{eq:cbar} are the inputs to the cycle factor.
+  \item \textbf{Excess returns.} One-year holding-period excess returns
+    \eqref{eq:rx} are formed for $n\in\{2,5,10\}$ (the maturities for which the
+    adjacent shorter yield $y^{(n-1)}$ is observed), duration-standardised by
+    $D^{(n)}=n$, and averaged \eqref{eq:rxbar}. Dollar-investor returns add the
+    realised currency return and net the US short rate \eqref{eq:rx-usd}.
+  \item \textbf{GDP weights.} Annual nominal GDP is converted to US dollars at
+    the year-end exchange rate and divided by the cross-sectional total to give
+    $w_{i,t}$; weights are held constant within a calendar year and renormalised
+    over the available panel.
+\end{enumerate}
+
+Missing values arising from the unbalanced panel and from the twelve-month leads
+and lags in the return construction are propagated as \texttt{NA} and dropped
+pairwise in each regression, rather than imputed.
+
+% ===========================================================================
 \section{Summary Statistics}
 \label{sec:data-summary}
-% DH-style Table 1, split into two A4-friendly exhibits (empirical.R).
+
+\Cref{tab:dh-t1-summary} reports the mean and standard deviation of yields for
+every country--maturity pair, in the style of \citet{dahlquist2013}, Table~1.
+Two features stand out and are consistent across countries: average yield curves
+slope upward in maturity, and short-maturity yields are more volatile than long
+-maturity yields. The average curve shapes are shown in
+\Cref{fig:yield-curve-avg}.
+
 \begin{table}[t]\centering
   \includegraphics[width=\linewidth]{tables/dh_t1_summary.pdf}
-  \caption{Summary statistics of zero-coupon yields by country and maturity.}
+  \caption{Summary statistics of zero-coupon yields by country and maturity
+    (mean and standard deviation, percent per annum), full per-country sample.}
   \label{tab:dh-t1-summary}
 \end{table}
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.8\linewidth]{figures/s1_yield_curve_avg.pdf}
+  \caption{Average zero-coupon yield curve by country over the sample.}
+  \label{fig:yield-curve-avg}
+\end{figure}
+
+\Cref{tab:dh-t1-corr} reports the cross-country correlation matrix of the
+ten-year yield, computed pairwise-complete over the full per-country sample.
+Yields co-move strongly internationally---correlations are uniformly high and
+are tightest within the euro-area bloc (BE, DE, FR, IT, NL)---which is precisely
+the empirical regularity that motivates a \emph{global} cycle factor: if the
+levels of long yields share a common component across countries, so plausibly
+does the predictable component of their returns. This integration hypothesis is
+the subject of \Cref{ch:results}.
+
 \begin{table}[t]\centering
   \includegraphics[width=0.95\linewidth]{tables/dh_t1_corr10y.pdf}
-  \caption{Cross-country correlation of the 10-year yield.}
+  \caption{Cross-country correlation of the ten-year zero-coupon yield,
+    pairwise-complete over the full per-country sample.}
   \label{tab:dh-t1-corr}
 \end{table}
-% Discuss: upward-sloping curves on average; short maturities more volatile;
-% high within-euro-bloc correlations.
