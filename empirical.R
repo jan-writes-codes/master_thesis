@@ -267,8 +267,11 @@ t4 <- lapply(t4_mats, function(n) {
   cyn <- paste0("cycle_", n, "y")
   d   <- t4_df[stats::complete.cases(t4_df[, c(rxv, cyn, "cycle_1y", "CF",
                                                "trend_inf", yld6)]), ]
-  # Duration-standardized individual excess return (D_n = n), matching the units
-  # of rx_bar / CF -- so the cf loading is comparable across maturities (paper).
+  # Duration-standardized individual excess return (D_n = n), putting the LHS in
+  # the same units as rx_bar / CF (Eq 13-14). Inferred, not quoted: the paper's
+  # Table 4 cf loadings are flat across maturities (~0.6-0.7), which is only
+  # possible if the individual returns are duration-standardized -- raw returns
+  # would make the loading scale with maturity. R2 is unaffected by this scaling.
   d$rx_std <- d[[rxv]] / n
 
   # Panel A: rx^(n) ~ cf_t (cf = CF).  Headline HAC t + block-bootstrap SS band.
