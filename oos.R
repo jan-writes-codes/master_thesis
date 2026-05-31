@@ -418,7 +418,7 @@ print(r2_oos_pooled %>%
 
 
 panel_oos %>%
-  filter(date >= as.Date("2023-01-01")) %>%
+  filter(as.Date(date) >= as.Date("2023-01-01")) %>%
   group_by(country) %>%
   summarise(
     last_CF_oos = suppressWarnings(max(date[!is.na(CF_oos)])),
@@ -429,7 +429,7 @@ panel_oos %>%
 
 # And to see which forward is the bottleneck:
 reg_data_oos %>%
-  filter(date >= as.Date("2023-01-01")) %>%
+  filter(as.Date(date) >= as.Date("2023-01-01")) %>%
   group_by(country) %>%
   summarise(
     last_y_1  = suppressWarnings(max(date[!is.na(y_1) ])),
