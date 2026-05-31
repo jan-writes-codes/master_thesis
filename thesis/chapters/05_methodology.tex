@@ -1,0 +1,38 @@
+% Ch.5 Methodology (~8-10 pp). Draft on Day 3.
+\chapter{Methodology}
+\label{ch:methodology}
+
+\section{Factor Construction Pipeline}
+\label{sec:meth-pipeline}
+% Trend-inflation EWMA -> cycle regressions -> local CF -> global GCF (GDP
+% weights) -> FX-adjusted FXGCF. Map each step to the code in
+% data preperation.R; state the maturity menu {1,2,4,5,9,10}.
+
+\section{Predictive-Regression Design}
+\label{sec:meth-design}
+% 12-month overlapping returns; duration standardization; the Eq (18)-(23)
+% specifications and what each tests.
+
+\section{Statistical Inference}
+\label{sec:meth-inference}
+% Newey-West HAC \citep{neweywest1987} t-stats and the reverse-regression
+% delta method \citep{hodrick1992, weiwright2013}: explain why CP use it and the
+% honest caveat (we report HAC; exact Wei-Wright needs monthly returns + the
+% appendix -- see cp_inference.R header). BIC relative probabilities; joint Wald
+% tests; stationary block bootstrap \citep{politis1994} for small-sample bands
+% and R^2 confidence intervals.
+
+\section{Expectations-Hypothesis Monte Carlo}
+\label{sec:meth-ehmc}
+% Section-1 two-factor EH simulation (cp_montecarlo.R): null distribution of the
+% predictive R^2. State the calibration and the documented level gap vs CP.
+
+\section{Out-of-Sample Evaluation}
+\label{sec:meth-oos}
+% Fully-recursive factors (oos.R) and the Campbell-Thompson \citep{campbellthompson2008}
+% out-of-sample R^2 vs the recursive-mean benchmark.
+
+\section{Deviations from the Original Studies}
+\label{sec:meth-deviations}
+% Be explicit: maturity menu, sample span, HAC-vs-Wei-Wright, 3-maturity
+% individual returns. These frame the replication chapter's comparisons.

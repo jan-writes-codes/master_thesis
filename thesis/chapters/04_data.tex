@@ -1,0 +1,41 @@
+% Ch.4 Data (~6-8 pp). Draft on Day 1.
+\chapter{Data}
+\label{ch:data}
+
+\section{Universe and Sources}
+\label{sec:data-sources}
+% G10 (11 countries: BE CA CH DE FR GB IT JP NL SE US). Bloomberg zero-coupon
+% yields (maturities 1,2,4,5,9,10y); LSEG core CPI and nominal GDP; FX spot vs
+% USD. Monthly frequency.
+
+\section{Sample and Coverage}
+\label{sec:data-coverage}
+% US/JP from 1989; remaining countries from 1994-12; all through 2026-04.
+% Note the unequal windows; correlations are pairwise-complete.
+
+% Coverage / yield overview figures (plots.R section s1).
+\begin{figure}[t]\centering
+  \includegraphics[width=0.9\linewidth]{figures/s1_coverage.pdf}
+  \caption{Sample coverage by country and maturity.}
+  \label{fig:coverage}
+\end{figure}
+
+\section{Cleaning and Variable Construction}
+\label{sec:data-cleaning}
+% YoY core inflation; trend inflation EWMA; raw-yield checks; FX alignment.
+
+\section{Summary Statistics}
+\label{sec:data-summary}
+% DH-style Table 1, split into two A4-friendly exhibits (empirical.R).
+\begin{table}[t]\centering
+  \includegraphics[width=\linewidth]{tables/dh_t1_summary.pdf}
+  \caption{Summary statistics of zero-coupon yields by country and maturity.}
+  \label{tab:dh-t1-summary}
+\end{table}
+\begin{table}[t]\centering
+  \includegraphics[width=0.95\linewidth]{tables/dh_t1_corr10y.pdf}
+  \caption{Cross-country correlation of the 10-year yield.}
+  \label{tab:dh-t1-corr}
+\end{table}
+% Discuss: upward-sloping curves on average; short maturities more volatile;
+% high within-euro-bloc correlations.
