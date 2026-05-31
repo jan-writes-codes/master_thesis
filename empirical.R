@@ -243,9 +243,12 @@ cat("\nAt paper's T = 470:\n");                        print(eh_470, digits = 3,
 eh_ours <- run_eh_grid(T_ = T2, n_sims = EH_NSIMS)
 cat(sprintf("\nAt our sample length T = %d:\n", T2)); print(eh_ours, digits = 3, row.names = FALSE)
 # Paper (Table 2B): P95 of R-bar^2 ranges ~0.19-0.23 across the phi grid.
-# Ours rises with persistence to ~0.10-0.13 -- same shape and ~half the level.
-# The gap is the simplified EH yield mapping (yield = avg expected short rate)
-# vs CP's full affine model (Eq 17); both confirm large spurious R2 under EH.
+# Ours has the right shape (P95 rises with both persistences) but a lower level
+# (~0.10 at T=470, ~0.19 at T=300). NOT validated to the published level: under
+# the EH (lambda=0) our average-expected-short-rate yields equal the affine
+# model's loadings (Eq 14 with phi*=phi), so the gap is not a model
+# approximation -- it reflects calibration details the paper underspecifies
+# (1.74% is the 1-year-cycle sd; predictor = the latent (tau, r)).
 
 
 # ============================================================
