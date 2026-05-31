@@ -1,0 +1,57 @@
+% Ch.3 Theoretical Framework (~8-10 pp). Draft on Day 2.
+% Cross-check every equation against data preperation.R so notation matches code.
+\chapter{Theoretical Framework}
+\label{ch:framework}
+
+\section{Yield Decomposition and Interest-Rate Cycles}
+\label{sec:fw-decomp}
+% Eq (1)-(2): y^{(n)}_{i,t} = alpha_{i,n} + beta_{i,n} pi^e_{i,t} + c^{(n)}_{i,t}.
+% Eq (3): trend inflation as an EWMA of YoY inflation (M=120, decay v).
+\begin{equation}
+  y^{(n)}_{i,t} = \alpha_{i,n} + \beta_{i,n}\,\trendinf_{i,t} + \cyc^{(n)}_{i,t},
+  \qquad \cyc^{(n)}_{i,t} = \varepsilon^{(n)}_{i,t}.
+  \label{eq:decomp}
+\end{equation}
+\begin{equation}
+  \trendinf_{i,t} = \frac{1-v}{1-v^{M}}\sum_{j=0}^{M-1} v^{j}\,\pi_{i,t-j},
+  \qquad M = 120.
+  \label{eq:trendinf}
+\end{equation}
+
+\section{Local Cycle Factor}
+\label{sec:fw-localcf}
+% Eq (4)-(6): rx_{i,t+12} ~ c^{(1)}_{i,t} + cbar_{i,t}; CF = fitted value.
+\begin{align}
+  \rxbar_{i,t+12} &= \gamma_{0} + \gamma_{i,1}\,\cyc^{(1)}_{i,t}
+                     + \gamma_{i,2}\,\cycbar_{i,t} + \varepsilon_{i,t+12}, \label{eq:cf-reg}\\
+  \cycbar_{i,t}   &= \tfrac{1}{|N|}\textstyle\sum_{n\in N}\cyc^{(n)}_{i,t}, \label{eq:cbar}\\
+  \CF_{i,t}       &= \hat\gamma_{i,1}\,\cyc^{(1)}_{i,t} + \hat\gamma_{i,2}\,\cycbar_{i,t}. \label{eq:cf}
+\end{align}
+
+\section{Global Cycle Factor and GDP Weights}
+\label{sec:fw-gcf}
+% Eq (7)-(8): GCF as GDP-weighted average of local CF.
+\begin{equation}
+  \GCF_{t} = \sum_{i\in G10} w_{i,t}\,\CF_{i,t},
+  \qquad w_{i,t} = \frac{\mathrm{GDP}_{i,t}}{\sum_{j\in G10}\mathrm{GDP}_{j,t}}.
+  \label{eq:gcf}
+\end{equation}
+
+\section{Excess Returns: Local and USD Investor}
+\label{sec:fw-returns}
+% Eq (9)-(14): local rx; USD-investor rx with FX; duration standardization and
+% maturity averaging (D^{(n)}_{i,t} = n / (1 + y^{(n)}_{i,t})).
+
+\section{FX-Adjusted Global Cycle Factor}
+\label{sec:fw-fxgcf}
+% Eq (15)-(17): GDP-weighted average USD return; project on GCF; FXGCF = fitted.
+\begin{equation}
+  \overline{\rx}^{\,\mathrm{USD}}_{t+12} = \delta_0 + \delta_1\,\GCF_t + \varepsilon_{t+12},
+  \qquad \FXGCF_t = \hat\delta_0 + \hat\delta_1\,\GCF_t.
+  \label{eq:fxgcf}
+\end{equation}
+
+\section{Hypotheses and Predictive Specifications}
+\label{sec:fw-hypotheses}
+% Eq (18)-(23): local predictability; global-vs-local horse race; USD investor;
+% value of the FX adjustment. Tie each to a research (sub)question.

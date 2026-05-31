@@ -1,0 +1,51 @@
+% preamble.tex — shared packages, math operators, and notation macros.
+
+% --- Encoding & fonts -------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+
+% --- Math -------------------------------------------------------------------
+\usepackage{amsmath, amssymb, amsthm, bm}
+\usepackage{mathtools}
+
+% --- Tables & figures -------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{rotating}      % sidewaystable for wide exhibits
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\graphicspath{{figures/}{tables/}}
+
+% --- Layout -----------------------------------------------------------------
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{microtype}
+\usepackage{enumitem}
+
+% --- References -------------------------------------------------------------
+\usepackage[round, authoryear]{natbib}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+\usepackage[capitalise, noabbrev]{cleveref}
+
+% --- Notation macros (keep text consistent with the R implementation) -------
+\newcommand{\E}{\mathbb{E}}                      % expectation
+\newcommand{\rx}{\mathit{rx}}                    % excess return
+\newcommand{\rxbar}{\overline{\mathit{rx}}}      % maturity-averaged excess return
+\newcommand{\cyc}{c}                             % cycle
+\newcommand{\cycbar}{\bar{c}}                    % average cycle
+\newcommand{\trendinf}{\pi^{e}}                  % trend inflation
+\newcommand{\CF}{\mathit{CF}}                    % local cycle factor
+\newcommand{\GCF}{\mathit{GCF}}                  % global cycle factor
+\newcommand{\FXGCF}{\mathit{FXGCF}}              % FX-adjusted global cycle factor
+\newcommand{\CP}{\mathit{CP}}                    % Cochrane-Piazzesi factor
+\newcommand{\GCP}{\mathit{GCP}}                  % global CP factor
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Corr}{Corr}
