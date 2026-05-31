@@ -11,7 +11,3 @@
 *.lot
 *.synctex.gz
 main.pdf
-
-# Symlinks to regenerated exhibit dirs (built by the R scripts)
-figures
-tables
