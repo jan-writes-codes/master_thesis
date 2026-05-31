@@ -732,8 +732,8 @@ tables$dh_t7_usd <- table_to_grob(
 # Write every rendered result table to disk as a vector PDF.
 # Per-exhibit canvas sizes (wide tables need more width / less height).
 # ============================================================
-save_all_tables <- function(dir = "tables", width = 9, height = 5) {
-  dir.create(dir, showWarnings = FALSE)
+save_all_tables <- function(dir = "thesis/tables", width = 9, height = 5) {
+  dir.create(dir, showWarnings = FALSE, recursive = TRUE)
   size_override <- list(
     cp_t1_panelA  = c(w = 8,  h = 3.2),
     cp_t1_panelB  = c(w = 8,  h = 3.2),

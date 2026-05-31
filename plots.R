@@ -923,8 +923,8 @@ plots$s10_r2_oos_compare <- r2_oos_tab %>%
 # =============================================================
 # Convenience: write every plot to disk as a vector PDF
 # =============================================================
-save_all_plots <- function(dir = "figures", width = 10, height = 7) {
-  dir.create(dir, showWarnings = FALSE)
+save_all_plots <- function(dir = "thesis/figures", width = 10, height = 7) {
+  dir.create(dir, showWarnings = FALSE, recursive = TRUE)
   purrr::iwalk(plots, function(p, nm) {
     ggsave(file.path(dir, paste0(nm, ".pdf")), p, width = width, height = height)
   })
