@@ -22,8 +22,8 @@ in \texttt{strategy.R}.
 Three features of the evidence dictate the design. First, the predictability
 that survives out of sample is in \emph{local-currency} returns; the dollar
 signal is far weaker (\Cref{sec:res-phase3}). The strategy is therefore run for a
-\emph{currency-hedged} global investor, with the unhedged dollar case reported as
-a contrast in \Cref{sec:strat-fx}. Second, the global cycle factor is a single
+\emph{currency-hedged} global investor, with the unhedged US-dollar investor
+analysed separately in \Cref{sec:strat-fx}. Second, the global cycle factor is a single
 time series, so it carries no information about which country to favour---it
 times \emph{aggregate} bond exposure. The investable asset is accordingly a
 single GDP-weighted, ten-year global government-bond portfolio, whose one-year
@@ -104,19 +104,88 @@ the advantage.
 \end{figure}
 
 % ===========================================================================
-\section{The Role of Currency Risk}
+\section{The US-Dollar Investor and the FX-Adjusted Factor}
 \label{sec:strat-fx}
 
-For an unhedged US-dollar investor the same strategy is markedly weaker. Running
-the identical rule on the dollar excess return \eqref{eq:rx-usd} of the global
-portfolio roughly halves the out-of-sample $R^{2}$, from $0.125$ to $0.077$, and
-compresses the Sharpe-ratio improvement to $0.25$ from a passive $0.20$. This
-mirrors the in-sample finding of \Cref{sec:res-phase3}: the volatility of the
-currency return dilutes the cyclical signal in the bond. The practical
-implication is direct---the economic value of the global cycle factor is
-available primarily to an investor who hedges the currency exposure of the
-international bond position, and currency risk, not a failure of the signal, is
-what limits the unhedged investor.
+A US-based investor who holds the global bond portfolio unhedged earns the dollar
+excess return \eqref{eq:rx-usd}, which adds the currency return to the local bond
+return. The natural signal for this investor is the FX-adjusted global cycle
+factor $\FXGCF_{t}$, built in \Cref{sec:fw-fxgcf} to target dollar returns
+directly. \Cref{tab:strat-usd} runs the timing rule of \Cref{sec:strat-design}
+on the dollar portfolio, using the recursive $\FXGCF^{\mathrm{oos}}$ signal, with
+the unadjusted $\GCF^{\mathrm{oos}}$ reported alongside to isolate the value of
+the FX adjustment. The sample is shorter (2010--2024) because the FX-adjusted
+factor requires a longer recursive burn-in.
+
+\begin{table}[t]\centering
+  \includegraphics[width=0.9\linewidth]{tables/strat_t2_usd.pdf}
+  \caption{The unhedged US-dollar investor. Timing the dollar excess return
+    \eqref{eq:rx-usd} of the 10Y global bond portfolio with the recursive
+    FX-adjusted factor $\FXGCF^{\mathrm{oos}}$ and, for comparison, the unadjusted
+    $\GCF^{\mathrm{oos}}$. Same mean--variance rule and reporting as
+    \Cref{tab:strat-perf}.}
+  \label{tab:strat-usd}
+\end{table}
+
+Two facts shape the result. First, over this sample the unhedged dollar bond
+premium is essentially zero: the passive portfolio earns a slightly negative
+average excess return and a Sharpe ratio indistinguishable from zero, because the
+strength of the dollar through the 2010s eroded the return on foreign bonds for a
+US investor. There is, in other words, little premium for any strategy to harvest.
+Second, the FX adjustment does what it was designed to do \emph{statistically}:
+the FX-adjusted factor lifts the out-of-sample $R^{2}$ to $0.093$, above the
+$0.066$ of the unadjusted global factor, confirming that it carries genuine
+incremental information about dollar returns (the in-sample message of
+\Cref{sec:res-phase3}, now out of sample).
+
+That statistical edge does not, however, translate into superior risk-adjusted
+performance. The FX-adjusted signal is noisier in dollars than in local currency,
+so the FXGCF-timed strategy carries a higher volatility and earns a Sharpe ratio
+of only $0.03$---below the $0.07$ of the unadjusted GCF-timed strategy and far
+below the $0.39$ of the currency-hedged investor in \Cref{sec:strat-performance}.
+The conclusion is unambiguous and consistent throughout the thesis: currency
+risk, not a failure of the cycle signal, is what caps the dollar investor. The
+FX adjustment improves the forecast, but the economic value of the global cycle
+factor accrues overwhelmingly to the investor who hedges the currency exposure of
+the international bond position.
+
+% ===========================================================================
+\section{A Three-Month Illustration}
+\label{sec:strat-example}
+
+To make the mechanics concrete, \Cref{tab:strat-example} traces the actions of
+the FX-adjusted dollar investor over three consecutive months in mid-2022, an
+episode in which the global cycle turned sharply. Each month the investor
+performs the same three steps: (i) read the latest value of the recursive
+FX-adjusted factor; (ii) update the real-time forecast of the next twelve months'
+dollar excess return and the recursive return volatility; and (iii) set the
+mean--variance target weight \eqref{eq:strat-weight} and rebalance the portfolio
+to it.
+
+\begin{table}[t]\centering
+  \includegraphics[width=\linewidth]{tables/strat_t3_example.pdf}
+  \caption{Worked example: the FX-adjusted dollar investor over three consecutive
+    months. The target weight follows the mean--variance rule
+    \eqref{eq:strat-weight}; the realized twelve-month return is shown only to
+    judge the call ex post and is not used in forming the weight.}
+  \label{tab:strat-example}
+\end{table}
+
+In May 2022 the factor still reads slightly positive ($+0.14$); the real-time
+model forecasts a $2.96\%$ excess return and, against a recursive volatility of
+$5.9\%$, prescribes an overweight position of $1.23$ times the neutral exposure.
+The investor holds bonds above benchmark. One month later the factor has fallen
+to $-0.16$ and the forecast to $2.06\%$; the target weight drops to $0.81$, so the
+investor \emph{sells about a third} of the bond position, moving underweight. By
+July the factor has collapsed to $-0.68$, the forecast is a negligible $0.55\%$,
+and the rule cuts the weight to $0.20$---the investor \emph{sells three quarters}
+of the remaining position and sits almost entirely in cash. The subsequent
+realized twelve-month returns, shown in the final column purely to judge the
+calls, were $-8\%$ to $-10\%$: the deteriorating global cycle led the investor to
+near-cash just before the worst of the 2022 bond drawdown. The episode is also a
+fair illustration of the strategy's limits---these large, correct calls coexist
+with the modest full-sample Sharpe ratio of \Cref{tab:strat-usd}, because such
+decisive turning points are rare.
 
 % ===========================================================================
 \section{Caveats}
