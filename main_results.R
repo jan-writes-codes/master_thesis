@@ -54,7 +54,7 @@ mr_name  <- c(BE = "Belgium", CA = "Canada", CH = "Switzerland", DE = "Germany",
 panel <- reg_data %>%
   dplyr::left_join(gcf   %>% dplyr::select(ym, GCF),             by = "ym") %>%
   dplyr::left_join(gcp   %>% dplyr::select(ym, GCP),             by = "ym") %>%
-  dplyr::left_join(fxgcf %>% dplyr::select(ym, FXGCF, FXGCF_bu), by = "ym")
+  dplyr::left_join(fxgcf %>% dplyr::select(ym, FXGCF),           by = "ym")
 
 # -----------------------------------------------------------------------------
 # Inference helpers.

@@ -25,7 +25,9 @@ subsume the predictive power of the local CF?
 | `data preperation.R` | trend inflation, cycles, local CF, global GCF, FXGCF, GDP weights, CP/GCP |
 | `oos.R` | fully-recursive OOS CF/GCF/FXGCF/CP/GCP + Campbell–Thompson R² |
 | `empirical.R` | 11 rendered result tables (CP 1/2/4, DH 1/3/4/6/7) → `save_all_tables()` → `tables/*.pdf` |
-| `plots.R` | 42 figures (sections s1–s10) → `save_all_plots()` → `figures/*.pdf` |
+| `plots.R` | 40 figures (sections s1–s10) → `save_all_plots()` → `figures/*.pdf` |
+| `main_results.R` | Ch.7 three-phase in-sample tables/figures (`mr_t*/mr_f*`) → `save_main_results()` |
+| `robustness.R` | Ch.8 crisis-subsample IS+OOS tables and Italy focus (`rob_t1/t2/t3`, `rob_f1`) → `save_robustness()` |
 | `cp_inference.R` | `hac_inf`, `bic_relprob`, `block_boot_t`, `block_boot_r2_ci` |
 | `cp_montecarlo.R` | EH Monte-Carlo R² grid |
 
@@ -45,7 +47,7 @@ gap-filling and a dedicated robustness chapter.
 | 5 | Methodology | 8–10 | inference, OOS, EH-MC |
 | 6 | Replication & Validation | 6–8 | CP 1/2/4, DH 3/4/6/7; `s2_*`, `s3_*` |
 | 7 | Main Results (3 phases) | 12–15 | `s4_*`, `s5_*`, `s6_*`, `s9_*` |
-| 8 | Robustness (dedicated) | 8–10 | `s7_*`, `s8_*`, `s10_*`, `r2_oos_tab` |
+| 8 | Robustness (dedicated) | 8–10 | `s8_*`, `s10_*`, `rob_t1/t2/t3`, `rob_f1`, `r2_oos_tab` |
 | 9 | Discussion | 5–7 | — |
 | 10 | Conclusion | 3–4 | — |
 | — | Appendix + front matter | — | full per-country tables, derivations |
@@ -71,7 +73,7 @@ then revised.
 | 5 | 06-04 | **Ch.7 §I** local CF; finalize `s4_*`, per-country R² |
 | 6 | 06-05 | **Ch.7 §II** global subsumption; lock `s5_*`/`s9_*` |
 | 7 | 06-06 | **Ch.7 §III** USD investor & FXGCF; finalize `s6_*`, DH-T7 |
-| 8 | 06-07 | **Robustness analysis**: OOS, subsamples, alt weights, top-down/bottom-up + leave-own-out, EWMA-`v`/maturity sensitivity |
+| 8 | 06-07 | **Robustness analysis**: OOS, crisis subsamples (GFC, euro/Italy), CF-vs-CP head-to-head, EWMA-`v`/maturity sensitivity |
 | 9 | 06-08 | **Ch.8 Robustness** write-up |
 | 10 | 06-09 | **Ch.2 Literature Review** |
 | 11 | 06-10 | **Ch.1 Introduction** + **Ch.9 Discussion** |
