@@ -311,19 +311,34 @@ the fully-recursive protocol of \Cref{sec:meth-oos}: the entire chain (the
 yield-cycle decomposition, the local predictive regression, and the global
 aggregation) is rebuilt at each date from data available only up to that date,
 and every recursive factor forecast is scored by the
-\citet{campbellthompson2008} out-of-sample $R^{2}$ \eqref{eq:meth-ctr2} against
-the recursive prevailing mean. A positive value means the factor beats the
-historical average in real time. \Cref{tab:mr-oos} sets the pooled OOS $R^{2}$
-against the in-sample fit, phase by phase; the per-country detail and the
-forward-factor comparison are developed in \Cref{ch:robustness}.
+\citet{campbellthompson2008} out-of-sample $R^{2}$ \eqref{eq:meth-ctr2}. This
+statistic compares the squared forecast errors of the recursive factor with
+those of a competing real-time forecast---the \emph{recursive prevailing mean},
+i.e.\ the historical average return updated each period using only past data---so
+$R^{2}_{\mathrm{oos}}=1-\mathrm{SSE}_{\text{factor}}/\mathrm{SSE}_{\text{mean}}$.
+A positive value means the factor's real-time forecasts are more accurate than
+simply extrapolating the historical average; zero means a tie; a negative value
+means the factor does worse than the mean. The OOS $R^{2}$ is therefore measured
+against a far more demanding benchmark than the in-sample $R^{2}$, which is
+variance explained around the full-sample mean using full-sample coefficients.
+The two are \emph{not} comparable in level---out of sample, even small positive
+values are economically meaningful and negative values are common---so
+\Cref{tab:mr-oos} should be read down each column for the sign and the
+cross-factor ranking, not across the two columns for a change in magnitude. The
+per-country detail and the forward-factor comparison are developed in
+\Cref{ch:robustness}.
 
 \begin{table}[t]\centering
   \includegraphics[width=0.9\linewidth]{tables/mr_t4_oos.pdf}
   \caption{Out-of-sample summary. In-sample $R^{2}$ is the cross-country mean of
-    the single-factor fits; out-of-sample $R^{2}$ is the pooled
-    \citet{campbellthompson2008} statistic of the fully-recursive factor
-    forecast against the recursive prevailing mean \eqref{eq:meth-ctr2}. Both the
-    factor and the forecasting regression respect time $t$.}
+    the single-factor fits (variance explained around the full-sample mean).
+    Out-of-sample $R^{2}$ is the pooled \citet{campbellthompson2008} statistic,
+    $1-\mathrm{SSE}_{\text{factor}}/\mathrm{SSE}_{\text{mean}}$, of the
+    fully-recursive factor forecast \emph{relative to the recursive
+    prevailing-mean forecast} \eqref{eq:meth-ctr2}; positive means the factor
+    beats the real-time historical average. Pooling sums each country's squared
+    errors against its own recursive mean before forming the ratio. The two
+    columns use different benchmarks and are not comparable in level.}
   \label{tab:mr-oos}
 \end{table}
 
