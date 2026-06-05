@@ -90,10 +90,37 @@ liquid core markets (the Netherlands, the United States, Canada, Belgium,
 Germany) and weakest in Switzerland, whose persistently low and compressed
 yields leave little cyclical variation for the factor to explain.
 
+The predictability holds at each individual maturity, not only for the
+maturity-averaged return. \Cref{tab:mr-phase1-mat} repeats the exercise of
+\citet{cieslak2015}, Table~4, for the G10: the duration-standardised individual
+excess return $\rx^{(n)}_{i,t+12}/n$ is regressed on the local cycle factor for
+$n\in\{2,5,10\}$ years, market by market. The factor loads positively at all
+three maturities in every market and significantly so in ten of the eleven
+(Switzerland again excepted). The loadings are flat-to-rising in maturity---near
+$0.6$--$0.9$ at two years, $1.1$--$1.3$ at five, and $1.0$--$1.2$ at ten, with
+pooled values of $0.79$, $1.16$ and $1.06$ respectively---which is the signature
+of a \emph{single} return-forecasting factor that prices the whole curve rather
+than one maturity segment, exactly as in the United States. The per-maturity
+$R^{2}$ tracks the maturity-averaged figures and is largest at the five- and
+ten-year points, reaching $35\%$ at ten years for the United States and $36\%$ at
+five years for the Netherlands.
+
+\begin{table}[t]\centering
+  \includegraphics[width=\linewidth]{tables/mr_t1b_maturity.pdf}
+  \caption{Phase~I by maturity --- predicting individual excess returns with the
+    cycle factor. Each block regresses the duration-standardised excess return
+    $\rx^{(n)}_{i,t+12}/n$ on the local cycle factor $\CF_{i,t}$ \eqref{eq:h-local}
+    for $n\in\{2,5,10\}$; cells report the loading with its Newey--West HAC
+    $t$-statistic and the in-sample $R^{2}$. The final row pools the panel with
+    country fixed effects. After \citet{cieslak2015}, Table~4, Panel~A.}
+  \label{tab:mr-phase1-mat}
+\end{table}
+
 The answer to the first research question is therefore affirmative. The
 macro-anchored cycle of \citet{cieslak2015} is not a US-specific phenomenon: it
 predicts one-year bond excess returns, with the theoretically predicted sign
-structure and economically large $R^{2}$, throughout the G10.
+structure and economically large $R^{2}$, throughout the G10, and it does so at
+every point of the maturity curve.
 
 % ---------------------------------------------------------------------------
 \section{Does the Global Factor Subsume the Local Factor?}
