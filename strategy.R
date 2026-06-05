@@ -208,18 +208,89 @@ strat_plots$strat_f2_exposure <- bt %>%
   theme_thesis
 
 # -----------------------------------------------------------------------------
-# 4. Unhedged USD contrast (for the chapter's caveat): the same rule on USD
-#    returns, where the OOS signal was negative.
+# 4. The US-dollar investor: timing rx_USD with the FX-adjusted factor.
 # -----------------------------------------------------------------------------
-glob_usd <- build_glob("rx_10_USD_t12")
-glob_usd$mu_fac  <- oos_predict(glob_usd, rx ~ GCF_oos, min_train = 60, h = 12)
-glob_usd$mu_mean <- oos_predict(glob_usd, rx ~ 1,        min_train = 60, h = 12)
+# Same rule, but the asset is the dollar excess return of the global portfolio
+# and the signal is the FX-adjusted global cycle factor FXGCF_oos (the factor
+# built to target dollar returns). The unadjusted GCF_oos on dollar returns is
+# reported alongside to isolate the value of the FX adjustment.
+glob_usd <- build_glob("rx_10_USD_t12") %>%
+  dplyr::left_join(fxgcf_oos %>% dplyr::select(ym, FXGCF_oos), by = "ym") %>%
+  dplyr::filter(!is.na(FXGCF_oos))
+glob_usd$mu_fx   <- oos_predict(glob_usd, rx ~ FXGCF_oos, min_train = 60, h = 12)
+glob_usd$mu_gcf  <- oos_predict(glob_usd, rx ~ GCF_oos,   min_train = 60, h = 12)
+glob_usd$mu_mean <- oos_predict(glob_usd, rx ~ 1,         min_train = 60, h = 12)
 glob_usd$var_rt  <- rec_var(glob_usd)
-btu <- glob_usd %>% dplyr::filter(!is.na(mu_fac), !is.na(mu_mean), !is.na(var_rt), !is.na(rx))
-usd_oos_r2 <- 1 - sum((btu$rx - btu$mu_fac)^2) / sum((btu$rx - btu$mu_mean)^2)
-usd_sr <- sr(eq_exp(mv_raw(btu$mu_fac, btu$var_rt, 5)) * btu$rx)
-cat(sprintf("\nUnhedged USD contrast: asset OOS R2 = %.3f ; GCF-timed Sharpe = %.2f (buy-and-hold %.2f)\n",
-            usd_oos_r2, usd_sr, sr(btu$rx)))
+btu <- glob_usd %>%
+  dplyr::filter(!is.na(mu_fx), !is.na(mu_gcf), !is.na(mu_mean), !is.na(var_rt), !is.na(rx))
+
+oos_r2_usd <- function(mu) 1 - sum((btu$rx - mu)^2) / sum((btu$rx - btu$mu_mean)^2)
+usd_row <- function(w_raw, g, label, r2) {
+  w <- eq_exp(w_raw); r <- w * btu$rx
+  tibble::tibble(Strategy = label, mean = 100 * mean(r), vol = 100 * stats::sd(r),
+                 Sharpe = sr(r), r2 = r2)
+}
+g <- 5
+usd_perf <- dplyr::bind_rows(
+  usd_row(mv_raw(btu$mu_fx,   btu$var_rt, g), g, "FXGCF-timed",           oos_r2_usd(btu$mu_fx)),
+  usd_row(mv_raw(btu$mu_gcf,  btu$var_rt, g), g, "GCF-timed",             oos_r2_usd(btu$mu_gcf)),
+  usd_row(mv_raw(btu$mu_mean, btu$var_rt, g), g, "Recursive-mean timing", NA_real_),
+  usd_row(rep(1, nrow(btu)),                  g, "Buy-and-hold",          NA_real_))
+
+cat(sprintf("\n=== US-dollar investor (unhedged 10Y global), %s..%s, n=%d ===\n",
+            format(min(btu$date), "%Y-%m"), format(max(btu$date), "%Y-%m"), nrow(btu)))
+print(as.data.frame(usd_perf), digits = 3)
+
+fmt2 <- function(x) formatC(x, format = "f", digits = 2)
+usd_disp <- usd_perf %>%
+  dplyr::transmute(Strategy,
+                   `Mean (%)` = fmt2(mean), `Vol (%)` = fmt2(vol), `Sharpe` = fmt2(Sharpe),
+                   `OOS R2` = ifelse(is.na(r2), "--", formatC(r2, format = "f", digits = 3)))
+strat_tables$strat_t2_usd <- table_to_grob(
+  as.data.frame(usd_disp),
+  title = "The US-dollar investor -- timing dollar returns with the FX-adjusted factor",
+  note  = paste0("Unhedged 10Y global bond portfolio in US dollars, ",
+                 format(min(btu$date), "%Y"), "-", format(max(btu$date), "%Y"),
+                 " (n=", nrow(btu), " months). FXGCF-timed and GCF-timed use the\n",
+                 "recursive FX-adjusted and unadjusted global factors; the same ",
+                 "mean-variance rule and equal-average-exposure ",
+                 "reporting as the hedged strategy.\nOOS R2 is the Campbell-Thompson statistic of ",
+                 "the factor forecast. The dollar bond premium is near zero over the ",
+                 "sample, so all strategies are weak in absolute terms."),
+  base_size = 8)
+
+# Worked example: three consecutive months of the FXGCF dollar investor.
+btu$wt_fx <- eq_exp(mv_raw(btu$mu_fx, btu$var_rt, g))
+btu$ym2   <- format(as.Date(btu$date), "%Y-%m")
+ex <- btu %>% dplyr::filter(ym2 %in% c("2022-05", "2022-06", "2022-07")) %>%
+  dplyr::arrange(ym2) %>%
+  dplyr::mutate(dw = wt_fx - dplyr::lag(wt_fx),
+                action = c(
+                  "Hold overweight",
+                  sprintf("Sell ~%.0f%% of bonds -> underweight", -100 * (wt_fx[2] - wt_fx[1]) / wt_fx[1]),
+                  sprintf("Sell ~%.0f%% of bonds -> near-cash",   -100 * (wt_fx[3] - wt_fx[2]) / wt_fx[2])))
+ex_disp <- ex %>% dplyr::transmute(
+  Month = ym2,
+  `FXGCF signal`      = formatC(FXGCF_oos, format = "f", digits = 2),
+  `Forecast E[rx] (%)` = formatC(100 * mu_fx, format = "f", digits = 2),
+  `Recursive vol (%)`  = formatC(100 * sqrt(var_rt), format = "f", digits = 2),
+  `Target weight`      = formatC(wt_fx, format = "f", digits = 2),
+  `Action`             = action,
+  `Realized 12m (%)`   = formatC(100 * rx, format = "f", digits = 1))
+cat("\n-- Worked example (FXGCF dollar investor, 3 consecutive months) --\n")
+print(as.data.frame(ex_disp), row.names = FALSE)
+
+strat_tables$strat_t3_example <- table_to_grob(
+  as.data.frame(ex_disp),
+  title = "Worked example -- the FX-adjusted dollar investor over three months (mid-2022)",
+  note  = paste0("Each month the investor reads the recursive FXGCF signal, updates the ",
+                 "forecast E[rx] and the recursive volatility, and sets the\n",
+                 "mean-variance target weight w = (1/gamma) E[rx]/vol^2; 'Action' is the ",
+                 "implied rebalancing. 'Realized 12m' is the subsequent realized return,\n",
+                 "shown only to assess the call ex post -- it is not used in forming the ",
+                 "weight. The deteriorating signal drove a move to near-cash ahead of a ",
+                 "sharp drawdown."),
+  base_size = 8)
 
 # -----------------------------------------------------------------------------
 # Write exhibits.
@@ -227,8 +298,13 @@ cat(sprintf("\nUnhedged USD contrast: asset OOS R2 = %.3f ; GCF-timed Sharpe = %
 save_strategy <- function(tab_dir = "thesis/tables", fig_dir = "thesis/figures") {
   dir.create(tab_dir, showWarnings = FALSE, recursive = TRUE)
   dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
-  ggplot2::ggsave(file.path(tab_dir, "strat_t1_performance.pdf"),
-                  strat_tables$strat_t1_performance, width = 10, height = 3.4)
+  tab_size <- list(strat_t1_performance = c(w = 10, h = 3.4),
+                   strat_t2_usd         = c(w = 10, h = 3.4),
+                   strat_t3_example     = c(w = 12, h = 3.0))
+  purrr::iwalk(strat_tables, function(g, nm) {
+    sz <- tab_size[[nm]]; w <- if (is.null(sz)) 10 else sz[["w"]]; h <- if (is.null(sz)) 3.4 else sz[["h"]]
+    ggplot2::ggsave(file.path(tab_dir, paste0(nm, ".pdf")), g, width = w, height = h)
+  })
   purrr::iwalk(strat_plots, function(p, nm)
     ggplot2::ggsave(file.path(fig_dir, paste0(nm, ".pdf")), p, width = 9, height = 5))
   invisible(TRUE)
