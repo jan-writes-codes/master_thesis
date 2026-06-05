@@ -193,7 +193,7 @@ t1_disp <- dplyr::bind_rows(phase1, p1_pool) %>%
 
 mr_tables$mr_t1_phase1 <- table_to_grob(
   as.data.frame(t1_disp),
-  title = "Table 7.1. Phase I -- Local cycle-factor predictability across the G10",
+  title = "Phase I -- Local cycle-factor predictability across the G10",
   note  = paste0("LHS: duration-standardized, maturity-averaged one-year excess return ",
                  "rx_bar_{i,t+12}. Each row is rx_bar ~ c^(1) + c-bar by country;\n",
                  "the local cycle factor CF is the fitted value of this regression. ",
@@ -211,6 +211,64 @@ mr_plots$mr_f1_r2_phase1 <- run_by_country(panel, rx_t12 ~ CF) %>%
   ggplot2::labs(title = expression(paste("In-sample ", R^2, " of ", rx %~% CF, " by country (Eq 18)")),
                 x = NULL, y = expression(R^2)) +
   theme_thesis
+
+# --- Phase I, by maturity (Cieslak-Povala 2015, Table 4, Panel A). -----------
+# Predict the duration-standardized INDIVIDUAL excess return rx^(n)/n with the
+# local cycle factor, for n in {2, 5, 10}, market by market. This shows the cycle
+# factor prices the whole curve, not just the maturity-averaged return; loadings
+# are flat-to-rising in maturity and the R^2 mirrors the averaged figures.
+mr_mats <- c(2L, 5L, 10L)
+
+phase1_mat <- purrr::map_dfr(mr_order, function(cc) {
+  d   <- panel %>% dplyr::filter(country == cc)
+  out <- tibble::tibble(country = cc)
+  for (nn in mr_mats) {
+    d$rx_std <- d[[paste0("rx_", nn, "_t12")]] / nn          # duration-standardized
+    o  <- hac_fit(d, rx_std ~ CF)
+    cf <- if (is.null(o)) NULL else dplyr::filter(o, term == "CF")
+    out[[paste0("b", nn)]] <- if (is.null(cf)) NA_real_ else cf$estimate
+    out[[paste0("t", nn)]] <- if (is.null(cf)) NA_real_ else cf$t
+    out[[paste0("r", nn)]] <- if (is.null(cf)) NA_real_ else cf$r_sq
+  }
+  out
+})
+
+# Pooled G10 panel (country fixed effects), per maturity.
+p1m_pool <- tibble::tibble(country = "G10 panel")
+for (nn in mr_mats) {
+  pp <- panel; pp$rx_std <- pp[[paste0("rx_", nn, "_t12")]] / nn
+  fit <- lm(rx_std ~ CF + factor(country), data = pp)
+  Lp  <- ceiling(max(18, 1.3 * sqrt(stats::nobs(fit))))
+  ctp <- lmtest::coeftest(fit, vcov. = sandwich::NeweyWest(fit, lag = Lp, prewhite = FALSE, adjust = TRUE))
+  p1m_pool[[paste0("b", nn)]] <- ctp["CF", 1]
+  p1m_pool[[paste0("t", nn)]] <- ctp["CF", 3]
+  p1m_pool[[paste0("r", nn)]] <- summary(fit)$r.squared
+}
+
+phase1_mat <- phase1_mat %>% dplyr::mutate(country = ord(country)) %>% dplyr::arrange(country)
+
+cat("\n===== Phase I by maturity: rx^(n)/n ~ CF, n in {2,5,10} (CP-2015 Table 4) =====\n")
+print(as.data.frame(dplyr::bind_rows(phase1_mat, p1m_pool) %>%
+        dplyr::mutate(dplyr::across(dplyr::where(is.numeric), ~ round(., 3)))),
+      row.names = FALSE)
+
+t1b_disp <- dplyr::bind_rows(phase1_mat, p1m_pool) %>%
+  dplyr::transmute(
+    Country = dplyr::recode(as.character(country), !!!mr_name, "G10 panel" = "G10 panel"),
+    `cf (2Y)`  = paste0(fmt2(b2),  " (", fmt2(t2),  ")"), `R2 (2Y)`  = fmt3(r2),
+    `cf (5Y)`  = paste0(fmt2(b5),  " (", fmt2(t5),  ")"), `R2 (5Y)`  = fmt3(r5),
+    `cf (10Y)` = paste0(fmt2(b10), " (", fmt2(t10), ")"), `R2 (10Y)` = fmt3(r10))
+
+mr_tables$mr_t1b_maturity <- table_to_grob(
+  as.data.frame(t1b_disp),
+  title = "Phase I -- Predicting individual excess returns with the cycle factor",
+  note  = paste0("LHS: duration-standardized individual excess return rx^(n)/n, ",
+                 "n in {2,5,10} years; regressor: the local cycle factor CF (Eq 18).\n",
+                 "Cells: cf loading (Newey-West HAC t-stat, 12m overlap); R2 is the ",
+                 "in-sample fit. 'G10 panel' adds country fixed effects.\n",
+                 "Mirrors Cieslak-Povala (2015), Table 4, Panel A: a single factor ",
+                 "prices the whole curve, with loadings flat-to-rising in maturity."),
+  base_size = 8)
 
 
 # =============================================================================
@@ -271,7 +329,7 @@ t2_disp <- phase2 %>%
 
 mr_tables$mr_t2_phase2 <- table_to_grob(
   as.data.frame(t2_disp),
-  title = "Table 7.2. Phase II -- Global vs local cycle factor (horse race)",
+  title = "Phase II -- Global vs local cycle factor (horse race)",
   note  = paste0("LHS: local-currency rx_bar_{i,t+12}. 'R2 CF' and 'R2 GCF' are ",
                  "single-factor fits (Eq 18, Eq 20); 'R2 joint' is rx_bar ~ ",
                  "CF_perp + GCF,\nwith CF_perp the part of the local factor ",
@@ -355,7 +413,7 @@ t3_disp <- phase3 %>%
 
 mr_tables$mr_t3_phase3 <- table_to_grob(
   as.data.frame(t3_disp),
-  title = "Table 7.3. Phase III -- US-dollar investor: GCF vs the FX-adjusted FXGCF",
+  title = "Phase III -- US-dollar investor: GCF vs the FX-adjusted FXGCF",
   note  = paste0("LHS: US-dollar excess return rx_USD_{i,t+12} (Eq 11). 'R2 (local CF)' ",
                  "repeats the dollar return on the local factor for reference; the\n",
                  "GCF and FXGCF blocks regress rx_USD on the global (Eq 22) and the ",
@@ -401,9 +459,10 @@ mr_plots$mr_f4_gcf_fxgcf <- fxgcf %>%
 save_main_results <- function(tab_dir = "thesis/tables", fig_dir = "thesis/figures") {
   dir.create(tab_dir, showWarnings = FALSE, recursive = TRUE)
   dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
-  tab_size <- list(mr_t1_phase1 = c(w = 9,  h = 5.0),
-                   mr_t2_phase2 = c(w = 10, h = 5.0),
-                   mr_t3_phase3 = c(w = 11, h = 4.8))
+  tab_size <- list(mr_t1_phase1    = c(w = 9,  h = 5.0),
+                   mr_t1b_maturity = c(w = 11, h = 5.0),
+                   mr_t2_phase2    = c(w = 10, h = 5.0),
+                   mr_t3_phase3    = c(w = 11, h = 4.8))
   purrr::iwalk(mr_tables, function(g, nm) {
     sz <- tab_size[[nm]]; w <- if (is.null(sz)) 9 else sz[["w"]]; h <- if (is.null(sz)) 5 else sz[["h"]]
     ggplot2::ggsave(file.path(tab_dir, paste0(nm, ".pdf")), g, width = w, height = h)
