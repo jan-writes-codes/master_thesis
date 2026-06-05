@@ -321,7 +321,7 @@ reg_data <- cycle_1y %>%
       gamma_2 = coef(fit)[["c_bar"]],
       CF_alt = gamma_0 + gamma_1 * cycle_1y + gamma_2 * c_bar,    # eq (6)
       CF = predict(fit, new_data = .),    # eq (6)
-      CF_USD = predict(fit_usd),          # USD analog of eq (6); used for bottom-up FXGCF
+      CF_USD = predict(fit_usd),          # USD analog of eq (6)
       CP     = predict(fit_cp),           # CP 2005 / DH 2013 local factor
       CP_USD = predict(fit_cp_usd)        # USD analog of CP
     )
@@ -386,44 +386,23 @@ fxgcf_data <- rx_usd_bar %>%
 
 fit_fxgcf <- lm(rx_USD_bar_t12 ~ cyc1_bar + cbar_bar, data = fxgcf_data)
 
-# Robustness (bottom-up, parallel to GCF): GDP-weighted average of per-country CF_USD
-fxgcf_bu <- reg_data %>%
-  group_by(ym, date) %>%
-  summarise(FXGCF_bu = sum(w * CF_USD, na.rm = TRUE), .groups = "drop")
-
 fxgcf <- glob_pred %>%
   mutate(FXGCF = predict(fit_fxgcf, newdata = .)) %>%
   select(ym, date, FXGCF) %>%
   left_join(gcf %>% select(ym, GCF), by = "ym") %>%
-  left_join(fxgcf_bu, by = c("ym", "date")) %>%
-  select(ym, date, GCF, FXGCF, FXGCF_bu)
+  select(ym, date, GCF, FXGCF)
 
 # Sanity: FXGCF must not be collinear with GCF (DH report corr ~ 0.50)
-fxgcf_diag <- fxgcf %>% filter(!is.na(GCF), !is.na(FXGCF), !is.na(FXGCF_bu))
-cat(sprintf("FXGCF diagnostics: cor(GCF, FXGCF) = %.3f ; cor(FXGCF, FXGCF_bu) = %.3f\n",
-            cor(fxgcf_diag$GCF, fxgcf_diag$FXGCF),
-            cor(fxgcf_diag$FXGCF, fxgcf_diag$FXGCF_bu)))
-
-# Robustness (leave-own-out, per country): FXGCF_lou excludes country c's own
-# CF_USD from the GDP-weighted average (weights renormalized over j != c). This
-# removes the in-sample own-inclusion bias that inflates rx_USD ~ FXGCF_bu --
-# largest for high-weight countries (US). Stored per country-month on reg_data.
-reg_data <- reg_data %>%
-  group_by(ym) %>%
-  mutate(
-    .num      = sum(w * CF_USD, na.rm = TRUE) - dplyr::coalesce(w * CF_USD, 0),
-    .den      = sum(w,          na.rm = TRUE) - dplyr::coalesce(w, 0),
-    FXGCF_lou = dplyr::if_else(.den > 1e-12, .num / .den, NA_real_)
-  ) %>%
-  ungroup() %>%
-  select(-.num, -.den)
+fxgcf_diag <- fxgcf %>% filter(!is.na(GCF), !is.na(FXGCF))
+cat(sprintf("FXGCF diagnostics: cor(GCF, FXGCF) = %.3f\n",
+            cor(fxgcf_diag$GCF, fxgcf_diag$FXGCF)))
 
 
 # Cleanup ----------------------------------------------------------------
 # Keep objects needed downstream for plotting/analysis (cycle, cycle_avg, gcf,
 # inflation_long, yields_long, fx_long, gdp); drop only intermediate temporaries.
 rm(list = c("cycle_1y", "cycle_2y", "cycle_4y", "cycle_5y", "cycle_9y", "cycle_10y",
-            "curve_map", "fit_fxgcf", "fx", "fxgcf_data", "glob_pred", "fxgcf_bu",
+            "curve_map", "fit_fxgcf", "fx", "fxgcf_data", "glob_pred",
             "fxgcf_diag", "rx_avg", "rx_raw", "rx_usd_bar",
             "y1_US", "yields", "yields_wide"))
 

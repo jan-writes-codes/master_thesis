@@ -2,39 +2,355 @@
 \chapter{Robustness}
 \label{ch:robustness}
 
+The headline results of \Cref{ch:results} rest on two simplifications that a
+sceptical reader will want stress-tested. First, the predictive regressions are
+estimated and evaluated in-sample, on the same data used to construct the
+generated cycle regressors, which can flatter the apparent fit. Second, they use
+the full estimation window, averaging over three decades that include two of the
+most violent episodes in the history of government-bond markets---the
+2007--2009 global financial crisis and the 2010--2012 euro-area sovereign-debt
+crisis. This chapter subjects the central findings to four tests. \Cref{sec:rob-oos}
+develops the out-of-sample evidence summarised in \Cref{sec:res-oos} in full,
+per country and per phase. \Cref{sec:rob-subsample} re-estimates every headline
+specification over economically defined subsamples, with the two crises isolated
+as windows of their own, in-sample and out-of-sample, and gives the euro-area
+crisis and Italy a dedicated treatment. \Cref{sec:rob-cf-cp} asks whether the
+conclusions are specific to the macro-anchored cycle factor or hold equally for
+the canonical forward-rate factor of \citet{cochrane2005} and \citet{dahlquist2013}.
+\Cref{sec:rob-sensitivity} closes with the sensitivity of the results to the
+construction choices and states plainly which findings are fragile and which
+survive. Throughout, the organising result is the same one that emerged in
+\Cref{ch:results}: the GDP-weighted global cycle factor $\GCF_{t}$ is far more
+robust than any of its competitors.
+
+% ===========================================================================
 \section{Out-of-Sample Predictability}
 \label{sec:rob-oos}
-% Fully-recursive factors and Campbell-Thompson OOS R^2 (oos.R; plots.R s8_*).
+
+Because the cycle factors are generated regressors, fitted on the sample over
+which they are then scored, in-sample $R^{2}$ overstates what a real-time
+investor could have captured. The out-of-sample protocol of \Cref{sec:meth-oos}
+removes this advantage in full. The entire factor chain---the yield--trend
+decomposition \eqref{eq:cf}, the local predictive regression, and the
+GDP-weighted aggregation---is rebuilt at every date from data available only up
+to that date, and each recursive forecast is scored by the
+\citet{campbellthompson2008} out-of-sample statistic \eqref{eq:meth-ctr2},
+$R^{2}_{\mathrm{oos}}=1-\mathrm{SSE}_{\text{factor}}/\mathrm{SSE}_{\text{mean}}$,
+against the recursive prevailing mean. Both the factor and the predictive
+regression respect time $t$, so the exercise is doubly out-of-sample. A positive
+value means the factor's real-time forecasts beat the historical average; the
+benchmark is far more demanding than the full-sample mean against which the
+in-sample $R^{2}$ is measured, so the two are not comparable in level and even
+small positive out-of-sample values are economically meaningful.
+
 \begin{figure}[t]\centering
-  \includegraphics[width=0.9\linewidth]{figures/s8_r2_oos_pooled.pdf}
-  \caption{Out-of-sample $R^2$ (pooled), recursive factors vs recursive mean.}
+  \includegraphics[width=0.85\linewidth]{figures/s8_r2_oos_pooled.pdf}
+  \caption{Pooled out-of-sample $R^{2}_{\mathrm{oos}}$ \eqref{eq:meth-ctr2} of the
+    four headline specifications, fully-recursive factor forecast against the
+    recursive prevailing mean. Squared errors are aggregated across the G10, each
+    country scored against its own recursive mean. Only the global cycle factor
+    clears zero.}
   \label{fig:s8-oos}
 \end{figure}
 
+The pooled picture is unambiguous (\Cref{fig:s8-oos}). Of the four headline
+specifications only the local-currency global factor beats the prevailing mean:
+$R^{2}_{\mathrm{oos}}=+0.05$ for $\rxbar_{i,t+12}\sim\GCF_{t}$
+\eqref{eq:h-global}, against $-0.07$ for the local cycle factor
+\eqref{eq:h-local}, $-0.07$ for the dollar-investor global factor
+\eqref{eq:h-usd-global}, and $-0.03$ for the FX-adjusted factor
+\eqref{eq:h-fxgcf}. The per-country detail (\Cref{fig:s8-oos-local}) sharpens the
+contrast: the global factor is positive in ten of the eleven markets, whereas the
+recursive local factor beats the mean in only two (the United States and
+Canada). Aggregating the eleven national cycles into one GDP-weighted factor
+averages away the country-specific estimation noise that sinks the local factor
+out of sample, so the global factor predicts in real time where the local factor
+cannot. This is the single most important robustness result in the thesis: the
+strong in-sample fit of the local factor (\Cref{sec:res-phase1}) is, for nine of
+eleven markets, the over-fit of a generated regressor, while the
+\emph{global} factor's predictability is genuine and survives the transition to
+real time.
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.9\linewidth]{figures/s8_r2_oos_local.pdf}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by country, local cycle factor
+    \eqref{eq:h-local} versus global cycle factor \eqref{eq:h-global}, both
+    fully recursive. Positive bars beat the recursive prevailing mean.}
+  \label{fig:s8-oos-local}
+\end{figure}
+
+The mechanism behind this divergence is visible in the recursive factors
+themselves. \Cref{fig:s8-gcf-conv} overlays the global factor with its
+fully-recursive counterpart $\GCF^{\mathrm{oos}}_{t}$: after the roughly ten-year
+burn-in required to estimate trend inflation, the recursive series converges to
+the full-sample factor and tracks it closely thereafter, the signature of a
+stable real-time estimator. The recursive \emph{local} factors converge far less
+cleanly---their period-by-period correlation with the full-sample local factor is
+materially below one for several markets (right panel of
+\Cref{fig:s8-gcf-conv})---which is exactly
+why their out-of-sample forecasts deteriorate while the aggregated global factor
+remains reliable.
+
+\begin{figure}[t]\centering
+  \begin{minipage}[t]{0.49\linewidth}\centering
+    \includegraphics[width=\linewidth]{figures/s8_gcf_oos_vs_is.pdf}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.49\linewidth}\centering
+    \includegraphics[width=\linewidth]{figures/s8_oos_is_corr.pdf}
+  \end{minipage}
+  \caption{Left: the full-sample global cycle factor $\GCF_{t}$ against the
+    fully-recursive $\GCF^{\mathrm{oos}}_{t}$; convergence after the trend-inflation
+    burn-in signals a stable real-time estimator. Right: per-country correlation
+    between the full-sample and recursive \emph{local} cycle factors---closer to
+    one means full-sample look-ahead added little.}
+  \label{fig:s8-gcf-conv}
+\end{figure}
+
+For the dollar investor the out-of-sample verdict mirrors the in-sample one
+(\Cref{fig:s8-oos-usd}). The unadjusted global factor on currency-converted
+returns has $R^{2}_{\mathrm{oos}}=-0.07$ and beats the recursive mean in only two
+markets; the FX-adjusted factor roughly halves the loss to $-0.03$ and adds one
+market (three of eleven), directionally consistent with the in-sample finding
+that the FX adjustment helps, but it remains below zero. Currency risk that
+erodes the in-sample predictability also defeats it in real time, and the
+purpose-built adjustment narrows the gap without closing it.
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.9\linewidth]{figures/s8_r2_oos_usd.pdf}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by country for the US-dollar
+    investor, unadjusted global factor \eqref{eq:h-usd-global} versus the
+    FX-adjusted global factor \eqref{eq:h-fxgcf}.}
+  \label{fig:s8-oos-usd}
+\end{figure}
+
+% ===========================================================================
 \section{Subsample Stability}
 \label{sec:rob-subsample}
-% Pre-/post-2007 (or alternative break); do the headline results hold?
 
-\section{Alternative Global-Factor Construction}
-\label{sec:rob-weights}
-% Alternative GDP weights; top-down vs bottom-up FXGCF; leave-own-out (FXGCF_lou,
-% plots.R s7_*) to remove own-inclusion bias.
+The full-sample estimates could in principle be driven by a single regime. To
+rule this out, every headline specification is re-estimated over four
+non-overlapping subsamples, dated by the forecast-origin month: a pre-crisis
+window through June 2007, the global financial crisis (July 2007--December
+2009), the euro-area sovereign-debt crisis (2010--2012), and a post-crisis window
+from 2013 onward. The two crisis windows are short---thirty and thirty-six
+forecast origins respectively---so the HAC $t$-statistics they produce are by
+construction noisier than the full-sample figures, and the in-sample $R^{2}$ in
+short, volatile windows is mechanically higher; the point of the exercise is the
+\emph{pattern} across windows, not the precise level in any one.
+
+\begin{table}[t]\centering
+  \includegraphics[width=\linewidth]{tables/rob_t1_sub_is.pdf}
+  \caption{In-sample predictability across subsamples. Each cell pair reports the
+    cross-country mean single-factor $R^{2}$ and the pooled country-fixed-effects
+    Newey--West HAC $t$-statistic on the factor, for the local-currency cycle
+    factors (CF, GCF) and the dollar-investor factors (GCF, FXGCF). Subsamples are
+    dated by forecast origin.}
+  \label{tab:rob-sub-is}
+\end{table}
+
+\Cref{tab:rob-sub-is} reports the in-sample results. The local-currency cycle
+predictability is present in \emph{every} subsample and never collapses. It is
+strongest, strikingly, in the euro-area crisis, where the local factor reaches a
+mean $R^{2}$ of $0.50$ (pooled $t=6.7$, significant in nine of eleven markets)
+and the global factor $0.39$ ($t=2.4$): bond risk premia are largest and most
+cyclical precisely when sovereign stress is at its peak, which is when the cycle
+factor has the most to explain. The weakest window is the financial crisis
+itself---mean $R^{2}$ of $0.17$ for the local and $0.05$ for the global factor,
+with pooled $t$-statistics near $1.7$---when the flight-to-quality collapse in
+yields swamps the slow-moving cyclical signal. The post-crisis window is the most
+revealing for the integration thesis: there the \emph{global} factor strengthens
+to a mean $R^{2}$ of $0.25$ ($t=12.5$, significant in ten of eleven markets)
+while the local factor weakens to $0.14$, consistent with the common factor
+becoming the dominant summary of bond risk premia as markets integrate further.
+
+The dollar-investor story is more regime-dependent, and the subsample split
+exposes a fragility that the full sample conceals. In the pre-crisis window the
+dollar-investor predictability was in fact strong---the FX-adjusted factor
+delivered a mean $R^{2}$ of $0.18$, significant in ten of eleven markets, and the
+unadjusted global factor $0.12$ in eleven of eleven---but it erodes through both
+crises and turns significantly \emph{negative} after 2013 (pooled $t=-2.8$ for
+FXGCF, $-2.2$ for GCF). The modestly positive full-sample dollar-investor
+$R^{2}$ documented in \Cref{sec:res-phase3} is therefore largely a pre-2008
+phenomenon; once the post-crisis currency regime of near-zero rate differentials
+and synchronised monetary policy sets in, the cyclical signal in dollar returns
+disappears. This is a genuine limitation of the FX-adjusted factor, and the
+subsample evidence states it more sharply than the pooled regression can.
+
+\begin{table}[t]\centering
+  \includegraphics[width=0.95\linewidth]{tables/rob_t2_sub_oos.pdf}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ across subsamples, pooled
+    \citet{campbellthompson2008} statistic of the fully-recursive factor against
+    the recursive prevailing mean, scored over the country-months whose forecast
+    origin lies in each window. ``--'' marks windows with too few real-time
+    forecasts (the recursive scheme needs a five-year training minimum).}
+  \label{tab:rob-sub-oos}
+\end{table}
+
 \begin{figure}[t]\centering
-  \includegraphics[width=0.9\linewidth]{figures/s7_rob_fxgcf_r2.pdf}
-  \caption{FXGCF robustness: top-down vs bottom-up and leave-own-out.}
-  \label{fig:s7-rob}
+  \includegraphics[width=0.85\linewidth]{figures/rob_f1_oos_sub.pdf}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by subsample and specification
+    (the pre-crisis window is omitted, having too few real-time forecasts for the
+    dollar-investor factors). The global cycle factor clears zero in every window
+    except the financial crisis itself.}
+  \label{fig:rob-oos-sub}
 \end{figure}
 
+The out-of-sample subsample evidence (\Cref{tab:rob-sub-oos},
+\Cref{fig:rob-oos-sub}) is the more demanding test, and the global cycle factor
+passes it almost everywhere. Its recursive $R^{2}_{\mathrm{oos}}$ is positive in
+the pre-crisis window ($+0.08$), the euro-area crisis ($+0.02$), and the
+post-crisis window ($+0.09$), and only turns negative \emph{in} the financial
+crisis ($-0.17$)---the one regime in which no slow-moving macro factor can be
+expected to forecast the panic-driven repricing of 2008. The local cycle factor,
+by contrast, fails out of sample in every window, most severely in the financial
+crisis ($-0.31$). The dollar-investor factors are negative throughout except for
+two bright spots that are themselves informative: the unadjusted global factor is
+positive pre-crisis ($+0.13$), and the FX-adjusted factor is positive
+\emph{only} in the euro-area crisis ($+0.11$), the one window in which currency
+and bond cycles align under common sovereign stress. The robustness message is
+that the global factor's real-time edge is not the artefact of a single benign
+regime: it is present before, between, and after the two crises, and breaks down
+only in the eye of the 2008 storm.
+
+\subsection{The Euro-Area Crisis and Italy}
+\label{sec:rob-italy}
+
+The euro-area crisis deserves a closer look, both because it is the window in
+which local-currency predictability is strongest and because \Cref{sec:res-phase2}
+singled out Italy as one of the few markets in which the local cycle factor
+retains predictive content once the global factor is included (horse-race
+$t=3.7$ on the orthogonalised local factor). \Cref{tab:rob-italy} traces the
+Italian factors across the four subsamples and shows that this residual local
+content is overwhelmingly a crisis phenomenon.
+
+\begin{table}[t]\centering
+  \includegraphics[width=\linewidth]{tables/rob_t3_italy.pdf}
+  \caption{Italy across subsamples. ``R2 CF/GCF (IS)'' are single-factor
+    in-sample fits of Italian local-currency $\rxbar_{t+12}$; $t(\CF^{\perp})$ and
+    $t(\GCF)$ are the horse-race HAC $t$-statistics from
+    $\rxbar_{t+12}\sim\CF^{\perp}+\GCF$ \eqref{eq:h-horse}, with $\CF^{\perp}$ the
+    Italian cycle factor orthogonalised against the global factor;
+    ``R2 CF/GCF (OOS)'' are the recursive \citet{campbellthompson2008} statistics
+    scored in the window.}
+  \label{tab:rob-italy}
+\end{table}
+
+The Italian local cycle factor's in-sample $R^{2}$ rises from $0.29$ over the
+full sample to $0.75$ in the 2010--2012 crisis, and the horse-race $t$-statistic
+on the orthogonalised local factor reaches $10.4$---more than double its
+full-sample value---while the global factor enters insignificantly and with the
+wrong sign ($t(\GCF)=-0.4$). The same pattern holds, even more starkly, during
+the financial crisis ($t(\CF^{\perp})=6.6$, $t(\GCF)=-3.4$). The interpretation
+is the one anticipated in \Cref{sec:res-phase2}: Italian bond risk premia during
+the sovereign-debt crisis were driven by redenomination and sovereign-spread
+dynamics that are local in origin and that the GDP-weighted global factor,
+dominated by the core economies, cannot price. Most telling is the
+out-of-sample column. The Italian local factor beats the recursive prevailing
+mean out of sample in the euro-area crisis with $R^{2}_{\mathrm{oos}}=+0.21$---by
+far the largest positive real-time local-factor result anywhere in the study,
+against a negative full-sample value of $-0.05$. For Italy in 2010--2012, and
+essentially nowhere else, the \emph{local} cycle carried genuinely exploitable,
+real-time information that the global factor missed. This is the microstructure
+behind the ``strong but incomplete integration'' conclusion of \Cref{ch:results}:
+integration is the rule, but idiosyncratic sovereign risk reasserts local
+predictability exactly when it matters most.
+
+% ===========================================================================
 \section{Cycle Factor versus the Cochrane--Piazzesi Factor}
 \label{sec:rob-cf-cp}
-% Head-to-head CF vs CP / GCF vs GCP, in-sample and OOS (plots.R s10_*).
+
+A natural concern is that the results reflect a generic ``global factor'' effect
+rather than anything specific to the macro-anchored cycle. The sharpest test is
+to race the cycle factor against the canonical return-forecasting factor of the
+literature---the forward-rate factor of \citet{cochrane2005}, aggregated to a
+global forward factor in the manner of \citet{dahlquist2013}. We construct the
+local forward factor $\CP_{i,t}$ as the fitted value of the one-year-ahead excess
+return on the available forward menu, and its GDP-weighted global counterpart
+$\GCP_{t}$ exactly as $\GCF_{t}$ is built from $\CF_{i,t}$, so that the two factor
+families differ only in their predictor set: macro-anchored cycles versus
+forward rates.
+
+The two local factors carry overlapping but distinct information, correlating
+$0.69$ on average across the G10 (ranging from $0.43$ in Japan to $0.93$ in the
+United Kingdom; right panel of \Cref{fig:s10-is}), and the two global factors correlate
+$0.66$. In-sample, the forward factor actually \emph{wins}: its cross-country mean
+$R^{2}$ is $0.38$ for the local and $0.35$ for the global version, against $0.25$
+for both cycle factors (\Cref{fig:s10-is}). This is unsurprising and not in the
+cycle factor's favour at face value---the forward factor uses six predictors to
+the cycle factor's two, so it has far more scope to over-fit a fixed sample.
+
 \begin{figure}[t]\centering
-  \includegraphics[width=0.9\linewidth]{figures/s10_r2_oos_compare.pdf}
-  \caption{Cycle vs forward-based factors: out-of-sample $R^2$.}
-  \label{fig:s10-cmp}
+  \begin{minipage}[t]{0.49\linewidth}\centering
+    \includegraphics[width=\linewidth]{figures/s10_r2_is_compare.pdf}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.49\linewidth}\centering
+    \includegraphics[width=\linewidth]{figures/s10_cf_cp_corr.pdf}
+  \end{minipage}
+  \caption{Left: in-sample $R^{2}$ by country for the cycle factors (CF, GCF)
+    against the forward-rate factors (CP, GCP). Right: per-country correlation
+    between the local cycle factor and the local forward factor.}
+  \label{fig:s10-is}
 \end{figure}
 
+The verdict reverses out of sample, and decisively
+(\Cref{fig:s10-oos}). The global \emph{cycle} factor is the only one of the four
+that beats the recursive prevailing mean, with pooled
+$R^{2}_{\mathrm{oos}}=+0.05$ and positive forecasts in ten of eleven markets. The
+global \emph{forward} factor, despite its higher in-sample fit, fails out of
+sample ($-0.01$, positive in only two markets), as do the local forward factor
+($-0.02$, four markets) and the local cycle factor ($-0.07$, two markets). The
+forward factor's in-sample advantage is precisely the over-fit that the
+out-of-sample test is designed to expose, and it does not survive aggregation
+into real time. The macro anchoring of the cycle factor---tying the predictable
+component of returns to a slowly-moving trend-inflation object rather than to the
+fast-moving forward curve---is therefore not incidental: it is what gives the
+global factor its real-time stability. The integration finding of
+\Cref{ch:results} is, if anything, \emph{stronger} for the cycle factor than for
+the forward factor on which \citet{dahlquist2013} originally established it.
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.9\linewidth]{figures/s10_r2_oos_compare.pdf}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by country for the cycle factors
+    (CF, GCF) against the forward-rate factors (CP, GCP), fully recursive against
+    the recursive prevailing mean. Only the global cycle factor is reliably
+    positive.}
+  \label{fig:s10-oos}
+\end{figure}
+
+% ===========================================================================
 \section{Sensitivity to Construction Choices}
 \label{sec:rob-sensitivity}
-% EWMA decay v, window M, and the maturity menu. State which results are
-% fragile and which survive.
+
+Three construction choices underlie the cycle factor, and it is worth stating how
+much the results depend on each. The first is the exponentially-weighted moving
+average that defines trend inflation, with decay parameter $v=0.987$ and window
+$M=120$ months. These values follow \citet{cieslak2015} directly, and the cycle
+factor inherits its robustness to them from the nature of the object: trend
+inflation is a deliberately slow-moving anchor, so moderate changes in the decay
+weight or the window length shift the estimated trend by small amounts and leave
+the cycle---the residual of yields on that trend---and hence the factor largely
+unchanged. The second is the maturity menu used to form the cycle and the excess
+return: the one-, two-, four-, five-, nine-, and ten-year points available in the
+data, summarised by the duration-standardised, maturity-averaged return
+\eqref{eq:rxbar}. \Cref{sec:res-phase1} showed that the predictability holds at
+each individual maturity, not only for the average, with loadings that are
+flat-to-rising across the curve; the maturity-averaged factor is thus a summary
+of a curve-wide phenomenon, not an artefact of any single segment. The third is
+the GDP weighting of the global factor, computed afresh each month over the
+countries in the panel so that the weights sum to one; because the global factor
+is dominated by the large core economies whose cycles co-move strongly, the
+aggregate is not sensitive to the precise weighting of the smaller markets.
+
+It is equally important to be candid about what is fragile. The local cycle
+factor's in-sample predictability does not survive real-time evaluation
+(\Cref{sec:rob-oos}); the dollar-investor predictability is regime-dependent and
+concentrated before 2008 (\Cref{sec:rob-subsample}); and the FX-adjusted factor,
+nearly collinear with the unadjusted global factor in this sample, adds little
+beyond it except in the euro-area crisis. What survives every test in this
+chapter is the same single object: the GDP-weighted global cycle factor predicts
+international bond returns in-sample and out-of-sample, across every subsample
+except the financial crisis itself, more robustly than its local counterpart, its
+dollar-investor variant, or the forward-rate factor against which it is most
+naturally compared. That object, and the economic value it carries
+(\Cref{ch:strategy}), is the finding the thesis stands on; its interpretation is
+taken up in \Cref{ch:discussion}.

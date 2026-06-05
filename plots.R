@@ -53,7 +53,7 @@ mat_palette <- c("1Y" = "#2166ac", "2Y" = "#4dac26", "4Y" = "#e08214",
 panel <- reg_data %>%
   left_join(gcf   %>% select(ym, GCF),              by = "ym") %>%
   left_join(gcp   %>% select(ym, GCP),              by = "ym") %>%
-  left_join(fxgcf %>% select(ym, FXGCF, FXGCF_bu),  by = "ym")
+  left_join(fxgcf %>% select(ym, FXGCF),            by = "ym")
 
 # -------------------------------------------------------------
 # HAC (Newey-West) predictive regression helper.
@@ -499,7 +499,7 @@ gcf_fxgcf_rho <- with(fxgcf %>% filter(!is.na(GCF), !is.na(FXGCF)), cor(GCF, FXG
 plots$s6_fxgcf_vs_gcf <- fxgcf %>%
   ggplot(aes(date)) +
   geom_line(aes(y = GCF,   colour = "GCF (eq 7)"),    linewidth = 0.5) +
-  geom_line(aes(y = FXGCF_bu, colour = "FXGCF (DH)"),    linewidth = 0.5) +
+  geom_line(aes(y = FXGCF, colour = "FXGCF (DH)"),    linewidth = 0.5) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   scale_colour_manual(values = c("GCF (eq 7)" = "#08519c",
                                  "FXGCF (DH)" = "#a50f15"),
@@ -531,68 +531,16 @@ plots$s6_r2_usd_gcf_vs_fxgcf <- bind_rows(
   run_by_country(panel, rx_USD_t12 ~ GCF)   %>% filter(term == "GCF")   %>%
     transmute(country, model = "rx_USD ~ GCF (eq22)",   r_sq),
   run_by_country(panel, rx_USD_t12 ~ FXGCF) %>% filter(term == "FXGCF") %>%
-    transmute(country, model = "rx_USD ~ FXGCF (eq23)", r_sq),
-  run_by_country(panel, rx_USD_t12 ~ FXGCF_bu) %>% filter(term == "FXGCF_bu") %>%
-    transmute(country, model = "rx_USD ~ FXGCF_bu (eq23)", r_sq)
+    transmute(country, model = "rx_USD ~ FXGCF (eq23)", r_sq)
 ) %>%
   ggplot(aes(country, r_sq, fill = model)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
   scale_fill_manual(values = c("rx_USD ~ GCF (eq22)" = "#08519c",
-                               "rx_USD ~ FXGCF (eq23)" = "#a50f15",
-                               "rx_USD ~ FXGCF_bu (eq23)" = "#a5af15"),
-                    , name = NULL) +
+                               "rx_USD ~ FXGCF (eq23)" = "#a50f15"),
+                    name = NULL) +
   labs(title = TeX("USD-investor $R^2$: GCF vs FX-adjusted GCF"),
        subtitle = "Value of the FX adjustment for a USD investor",
-       x = NULL, y = TeX("$R^2$")) +
-  theme_thesis +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-# =============================================================
-# 7. Robustness: top-down (baseline) vs bottom-up FXGCF
-# =============================================================
-# Baseline FXGCF is DH-style top-down (fitted of avg USD return on avg cycles).
-# FXGCF_bu is the bottom-up GDP-weighted average of per-country CF_USD. These
-# two constructions should largely agree -- a robustness check, not a main result.
-
-fxgcf_bu_rho <- with(fxgcf %>% filter(!is.na(FXGCF), !is.na(FXGCF_bu)),
-                     cor(FXGCF, FXGCF_bu))
-
-# 7a. Robustness: FXGCF (top-down) vs FXGCF_bu (bottom-up) over time
-plots$s7_rob_fxgcf_ts <- fxgcf %>%
-  ggplot(aes(date)) +
-  geom_line(aes(y = FXGCF,    colour = "FXGCF (top-down, baseline)"),  linewidth = 0.5) +
-  geom_line(aes(y = FXGCF_bu, colour = "FXGCF (bottom-up)"),           linewidth = 0.5) +
-  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  scale_colour_manual(values = c("FXGCF (top-down, baseline)" = "#a50f15",
-                                 "FXGCF (bottom-up)" = "#08519c"), name = NULL) +
-  labs(title = "Robustness: FXGCF construction (top-down vs bottom-up)",
-       subtitle = sprintf("Correlation = %.2f", fxgcf_bu_rho),
-       y = "Factor value", x = NULL) +
-  theme_thesis
-
-# 7b. Robustness: USD-investor R^2 under the three FXGCF constructions.
-# Leave-own-out (FXGCF_lou) strips out country c's own full-sample CF_USD from the
-# weighted average, removing the in-sample own-inclusion bias. The gap between
-# bottom-up and leave-own-out IS that bias (largest for high-weight US).
-fxgcf_levels <- c("FXGCF (top-down)", "FXGCF (bottom-up)", "FXGCF (leave-own-out)")
-plots$s7_rob_fxgcf_r2 <- bind_rows(
-  run_by_country(panel, rx_USD_t12 ~ FXGCF)     %>% filter(term == "FXGCF")     %>%
-    transmute(country, model = "FXGCF (top-down)",      r_sq),
-  run_by_country(panel, rx_USD_t12 ~ FXGCF_bu)  %>% filter(term == "FXGCF_bu")  %>%
-    transmute(country, model = "FXGCF (bottom-up)",     r_sq),
-  run_by_country(panel, rx_USD_t12 ~ FXGCF_lou) %>% filter(term == "FXGCF_lou") %>%
-    transmute(country, model = "FXGCF (leave-own-out)", r_sq)
-) %>%
-  mutate(model = factor(model, levels = fxgcf_levels)) %>%
-  ggplot(aes(country, r_sq, fill = model)) +
-  geom_col(position = position_dodge(width = 0.8), width = 0.75) +
-  scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  scale_fill_manual(values = c("FXGCF (top-down)"      = "#a50f15",
-                               "FXGCF (bottom-up)"     = "#9aa200",
-                               "FXGCF (leave-own-out)" = "#08519c"), name = NULL) +
-  labs(title = TeX("Robustness: USD-investor $R^2$ across FXGCF constructions"),
-       subtitle = "Bottom-up vs leave-own-out gap = in-sample own-inclusion bias (largest for US)",
        x = NULL, y = TeX("$R^2$")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
