@@ -454,6 +454,75 @@ mr_plots$mr_f4_gcf_fxgcf <- fxgcf %>%
 
 
 # =============================================================================
+# OUT-OF-SAMPLE SUMMARY -- fully-recursive Campbell-Thompson R^2 (Eq meth-ctr2).
+# =============================================================================
+# In-sample predictability can reflect over-fitting of generated regressors, so
+# the whole factor chain is rebuilt recursively (oos.R) and each phase is
+# re-evaluated in real time against the recursive prevailing-mean benchmark. This
+# block reuses oos.R's r2_oos_tab / r2_oos_pooled and contrasts the pooled OOS
+# R^2 with the in-sample fit, phase by phase. Detailed per-country / per-spec OOS
+# evidence and the forward-factor comparison are deferred to Ch.8.
+
+source("oos.R")   # recursive factors + Campbell-Thompson R^2 (slow, fully recursive)
+
+oos_pool <- function(lbl) r2_oos_pooled$r2_oos_pooled[as.character(r2_oos_pooled$spec) == lbl]
+oos_npos <- function(lbl) sum(r2_oos_tab$r2_oos[r2_oos_tab$spec == lbl] > 0, na.rm = TRUE)
+oos_n    <- function(lbl) sum(!is.na(r2_oos_tab$r2_oos[r2_oos_tab$spec == lbl]))
+
+oos_summary <- tibble::tibble(
+  phase = c("I -- local", "II -- global", "III -- USD, global", "III -- USD, FX-adj."),
+  spec  = c("rx ~ CF", "rx ~ GCF", "rx_USD ~ GCF", "rx_USD ~ FXGCF"),
+  lbl   = c("rx ~ CF_oos", "rx ~ GCF_oos", "rx_USD ~ GCF_oos", "rx_USD ~ FXGCF_oos"),
+  is_r2 = c(mean(phase1$r2, na.rm = TRUE), mean(phase2$r2_glb, na.rm = TRUE),
+            mean(phase3$r2_g, na.rm = TRUE), mean(phase3$r2_f, na.rm = TRUE))) %>%
+  dplyr::mutate(
+    oos_r2 = vapply(lbl, oos_pool, numeric(1)),
+    npos   = vapply(lbl, oos_npos, integer(1)),
+    ntot   = vapply(lbl, oos_n,    integer(1)))
+
+cat("\n===== Out-of-sample summary: in-sample vs Campbell-Thompson R^2_oos =====\n")
+print(as.data.frame(oos_summary %>%
+        dplyr::transmute(phase, spec, IS_R2 = round(is_r2, 3),
+                         OOS_R2_pooled = round(oos_r2, 3), markets_pos = paste0(npos, "/", ntot))),
+      row.names = FALSE)
+
+t4_disp <- oos_summary %>%
+  dplyr::transmute(
+    Phase = phase, Specification = spec,
+    `In-sample R2 (mean)` = fmt3(is_r2),
+    `OOS R2 (pooled)`     = fmt3(oos_r2),
+    `Markets OOS+`        = paste0(npos, "/", ntot))
+
+mr_tables$mr_t4_oos <- table_to_grob(
+  as.data.frame(t4_disp),
+  title = "Out-of-sample summary -- recursive Campbell-Thompson R^2 by phase",
+  note  = paste0("In-sample R2 is the cross-country mean of the single-factor ",
+                 "fits (Eq 18, 20, 22, 23). OOS R2 is the pooled Campbell-Thompson\n",
+                 "(2008) R2 of the fully-recursive factor forecast against the ",
+                 "recursive prevailing mean (Eq meth-ctr2); 'Markets OOS+' counts ",
+                 "markets\nwith positive OOS R2. The factor and the forecasting ",
+                 "regression both respect time t (doubly out-of-sample). Detail in Ch.8."),
+  base_size = 8)
+
+# Figure: per-country CT R^2_oos, local CF vs global GCF (the IS->OOS contrast).
+mr_plots$mr_f5_oos_r2 <- r2_oos_tab %>%
+  dplyr::filter(spec %in% c("rx ~ CF_oos", "rx ~ GCF_oos"), !is.na(r2_oos)) %>%
+  dplyr::mutate(spec = factor(spec, levels = c("rx ~ CF_oos", "rx ~ GCF_oos")),
+                country = ord(country)) %>%
+  ggplot2::ggplot(ggplot2::aes(country, r2_oos, fill = spec)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
+  ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  ggplot2::scale_fill_manual(values = c("rx ~ CF_oos" = "#08519c", "rx ~ GCF_oos" = "#a50f15"),
+                             name = NULL) +
+  ggplot2::labs(title = expression(paste("Out-of-sample ", R[oos]^2, ": local CF vs global GCF")),
+                subtitle = "Recursive factor forecast vs recursive prevailing mean (positive = beats the mean)",
+                x = NULL, y = expression(R[oos]^2)) +
+  theme_thesis +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+
+# =============================================================================
 # Write every exhibit to disk as a vector PDF.
 # =============================================================================
 save_main_results <- function(tab_dir = "thesis/tables", fig_dir = "thesis/figures") {
@@ -462,7 +531,8 @@ save_main_results <- function(tab_dir = "thesis/tables", fig_dir = "thesis/figur
   tab_size <- list(mr_t1_phase1    = c(w = 9,  h = 5.0),
                    mr_t1b_maturity = c(w = 11, h = 5.0),
                    mr_t2_phase2    = c(w = 10, h = 5.0),
-                   mr_t3_phase3    = c(w = 11, h = 4.8))
+                   mr_t3_phase3    = c(w = 11, h = 4.8),
+                   mr_t4_oos       = c(w = 10, h = 3.6))
   purrr::iwalk(mr_tables, function(g, nm) {
     sz <- tab_size[[nm]]; w <- if (is.null(sz)) 9 else sz[["w"]]; h <- if (is.null(sz)) 5 else sz[["h"]]
     ggplot2::ggsave(file.path(tab_dir, paste0(nm, ".pdf")), g, width = w, height = h)

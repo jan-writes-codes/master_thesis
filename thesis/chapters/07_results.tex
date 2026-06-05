@@ -300,6 +300,83 @@ and across markets---but, because it is nearly collinear with the unadjusted
 factor in this sample, the restoration is partial rather than complete.
 
 % ---------------------------------------------------------------------------
+\section{Out-of-Sample Predictability}
+\label{sec:res-oos}
+
+The evidence so far is in-sample. Because the cycle factors are generated
+regressors---fitted on the same sample over which they are then evaluated---an
+in-sample $R^{2}$ can overstate what a real-time investor could have exploited.
+This section re-evaluates the three phases out of sample, in summary form, using
+the fully-recursive protocol of \Cref{sec:meth-oos}: the entire chain (the
+yield-cycle decomposition, the local predictive regression, and the global
+aggregation) is rebuilt at each date from data available only up to that date,
+and every recursive factor forecast is scored by the
+\citet{campbellthompson2008} out-of-sample $R^{2}$ \eqref{eq:meth-ctr2}. This
+statistic compares the squared forecast errors of the recursive factor with
+those of a competing real-time forecast---the \emph{recursive prevailing mean},
+i.e.\ the historical average return updated each period using only past data---so
+$R^{2}_{\mathrm{oos}}=1-\mathrm{SSE}_{\text{factor}}/\mathrm{SSE}_{\text{mean}}$.
+A positive value means the factor's real-time forecasts are more accurate than
+simply extrapolating the historical average; zero means a tie; a negative value
+means the factor does worse than the mean. The OOS $R^{2}$ is therefore measured
+against a far more demanding benchmark than the in-sample $R^{2}$, which is
+variance explained around the full-sample mean using full-sample coefficients.
+The two are \emph{not} comparable in level---out of sample, even small positive
+values are economically meaningful and negative values are common---so
+\Cref{tab:mr-oos} should be read down each column for the sign and the
+cross-factor ranking, not across the two columns for a change in magnitude. The
+per-country detail and the forward-factor comparison are developed in
+\Cref{ch:robustness}.
+
+\begin{table}[t]\centering
+  \includegraphics[width=0.9\linewidth]{tables/mr_t4_oos.pdf}
+  \caption{Out-of-sample summary. In-sample $R^{2}$ is the cross-country mean of
+    the single-factor fits (variance explained around the full-sample mean).
+    Out-of-sample $R^{2}$ is the pooled \citet{campbellthompson2008} statistic,
+    $1-\mathrm{SSE}_{\text{factor}}/\mathrm{SSE}_{\text{mean}}$, of the
+    fully-recursive factor forecast \emph{relative to the recursive
+    prevailing-mean forecast} \eqref{eq:meth-ctr2}; positive means the factor
+    beats the real-time historical average. Pooling sums each country's squared
+    errors against its own recursive mean before forming the ratio. The two
+    columns use different benchmarks and are not comparable in level.}
+  \label{tab:mr-oos}
+\end{table}
+
+Three messages emerge, one per phase. \emph{First}, the local cycle factor does
+not survive the transition to real time: its pooled $R^{2}_{\mathrm{oos}}$ is
+$-0.07$, and it beats the prevailing mean in only two of the eleven markets (the
+United States and Canada). The strong in-sample fit of \Cref{sec:res-phase1} is,
+for most countries, the in-sample over-fit of a generated regressor.
+\emph{Second}, the global factor is the exception, and a striking one. Its pooled
+$R^{2}_{\mathrm{oos}}$ is $+0.05$ and it is positive in ten of the eleven markets
+(\Cref{fig:mr-oos}). Aggregating the eleven national cycles into one
+GDP-weighted factor averages away the country-specific estimation noise that
+sinks the local factor, so the global factor predicts out of sample where the
+local factor cannot. This is the strongest evidence in the thesis for
+integration: the global cycle factor is not merely the more efficient in-sample
+summary, it is the only cycle factor with genuine real-time predictive content.
+This real-time predictability is, moreover, economically exploitable:
+\Cref{ch:strategy} turns the global factor into a bond-timing strategy for a
+currency-hedged investor and shows that it raises the Sharpe ratio of a global
+bond portfolio and delivers a positive certainty-equivalent gain out of sample.
+\emph{Third}, for the dollar investor the out-of-sample picture mirrors
+Phase~III. The recursive $R^{2}_{\mathrm{oos}}$ is negative for the unadjusted
+global factor ($-0.07$); the FX-adjusted factor roughly halves the loss
+($-0.03$) and turns positive in one additional market, directionally consistent
+with the in-sample finding that the FX adjustment helps---but it remains below
+zero. Currency risk that erodes the in-sample predictability also defeats it in
+real time, and the FX adjustment narrows the gap without closing it.
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.9\linewidth]{figures/mr_f5_oos_r2.pdf}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by country, the local cycle
+    factor versus the global cycle factor. Positive bars beat the recursive
+    prevailing mean; the global factor is positive in ten of eleven markets, the
+    local factor in only two.}
+  \label{fig:mr-oos}
+\end{figure}
+
+% ---------------------------------------------------------------------------
 \section{Summary of Findings}
 \label{sec:res-summary}
 
@@ -320,8 +397,17 @@ risk: dollar conversion erodes roughly two-thirds of the global factor's
 predictive power, and the FX-adjusted factor recovers only part of it, because in
 this sample it is nearly indistinguishable from the unadjusted global factor.
 
-These in-sample results are the basis for the out-of-sample, subsample, and
-alternative-construction tests of \Cref{ch:robustness}, which ask whether the
-predictability survives in real time and whether the FX-adjustment result is an
-artefact of the top-down construction, and for the economic interpretation in
-\Cref{ch:discussion}.
+\emph{Fourth}, these conclusions survive---and in one respect sharpen---out of
+sample. Of the four headline specifications, only the global cycle factor beats
+the recursive prevailing mean (pooled $R^{2}_{\mathrm{oos}}=+0.05$, positive in
+ten of eleven markets); the local factor and both dollar-investor factors do
+not. Real-time predictability is therefore the near-exclusive preserve of the
+global cycle factor, and the FX adjustment narrows but does not close the dollar
+investor's out-of-sample gap. The contrast between the local factor's strong
+in-sample fit and its negative out-of-sample $R^{2}$ is the clearest sign that
+the predictability worth taking seriously is the \emph{global} one.
+
+The summary out-of-sample evidence above is developed in full---per country,
+across subsamples, and against the forward-rate factor---in
+\Cref{ch:robustness}, and the economic interpretation of all four findings is
+taken up in \Cref{ch:discussion}.
