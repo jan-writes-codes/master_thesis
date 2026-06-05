@@ -388,14 +388,210 @@ rob_plots$rob_f1_oos_sub <- oos_res %>%
 
 
 # =============================================================================
+# TABLE 4 / FIGURE 2 -- OOS estimation scheme: expanding vs rolling windows
+#                       and the length of the training minimum.
+# =============================================================================
+# The baseline out-of-sample protocol (oos.R) uses EXPANDING windows with a
+# five-year (60-month) training minimum on the predictive regression. Two design
+# choices are stress-tested here, both by rebuilding the entire recursive factor
+# chain (cycle decomposition -> CF_oos -> GCF_oos / FXGCF_oos) from scratch:
+#   (i)  rolling windows -- the fit at each t uses only the most recent W months
+#        of data instead of the full history (W = 120, 180);
+#   (ii) the training minimum -- 36 vs 60 vs 84 months for the expanding scheme.
+# Each scheme scores its factor against the prevailing mean built under the SAME
+# scheme, so the comparison is internally consistent. The expanding/60-month
+# column reproduces the baseline of oos.R (asserted below as a sanity check).
+#
+# oos.R's recursive_resid() and oos_predict() now take a `train_window` argument
+# (Inf = expanding, the default); we reuse them here to avoid duplicating the
+# error-prone real-time cutoff logic.
+
+# --- (a) Recursive cycle decomposition for a given window (the expensive step;
+#         cached by window so the min_train variations reuse the expanding cycle).
+build_cycle_base <- function(train_window = Inf) {
+  cyc <- yields_long %>%
+    dplyr::left_join(inflation_long, by = c("ym", "country")) %>%
+    dplyr::filter(!is.na(trend_inf), !is.na(yield)) %>%
+    dplyr::group_by(country, maturity) %>%
+    dplyr::group_modify(~ {
+      d <- .x %>% dplyr::arrange(ym)
+      d$cycle_oos <- recursive_resid(d, yield ~ trend_inf,
+                                     min_train = 60, train_window = train_window)
+      d
+    }) %>% dplyr::ungroup() %>% dplyr::select(-date.y) %>% dplyr::rename(date = date.x)
+  c1 <- cyc %>% dplyr::filter(maturity == 1) %>%
+    dplyr::select(country, ym, date, cycle_1y_oos = cycle_oos)
+  cavg <- cyc %>% dplyr::filter(maturity != 1) %>%
+    dplyr::group_by(country, ym, date) %>%
+    dplyr::summarise(c_bar_oos = mean(cycle_oos, na.rm = TRUE), .groups = "drop") %>%
+    dplyr::mutate(c_bar_oos = ifelse(is.nan(c_bar_oos), NA_real_, c_bar_oos))
+  c1 %>%
+    dplyr::left_join(cavg, by = c("country", "ym", "date")) %>%
+    dplyr::left_join(reg_data %>% dplyr::select(country, ym, date, rx_t12, rx_USD_t12),
+                     by = c("country", "ym", "date")) %>%
+    dplyr::mutate(y = as.integer(format(date, "%Y"))) %>%
+    dplyr::left_join(gdp %>% dplyr::select(y, country, gdp_val), by = c("y", "country")) %>%
+    dplyr::filter(!is.na(cycle_1y_oos), !is.na(c_bar_oos))
+}
+
+# --- (b) Add the recursive factors to a cycle base, for a given training
+#         minimum `mt` and window. CF_oos / GCF_oos use mt; FXGCF_oos keeps a
+#         120-month floor (it is a single aggregate series, not a panel).
+add_oos_factors <- function(base, mt = 60, train_window = Inf) {
+  rdo <- base %>% dplyr::group_by(country) %>% dplyr::arrange(ym, .by_group = TRUE) %>%
+    dplyr::group_modify(~ {
+      .x$CF_oos <- oos_predict(.x, rx_t12 ~ cycle_1y_oos + c_bar_oos,
+                               min_train = mt, h = 12, train_window = train_window)
+      .x
+    }) %>% dplyr::ungroup()
+  gcfo <- rdo %>% dplyr::filter(!is.na(CF_oos), !is.na(gdp_val)) %>%
+    dplyr::group_by(ym) %>% dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
+    dplyr::group_by(ym, date) %>%
+    dplyr::summarise(GCF_oos = sum(w * CF_oos, na.rm = TRUE), .groups = "drop")
+  agg <- rdo %>% dplyr::filter(!is.na(gdp_val)) %>%
+    dplyr::group_by(ym) %>% dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
+    dplyr::ungroup()
+  gp <- agg %>% dplyr::group_by(ym, date) %>%
+    dplyr::summarise(cyc1_bar_oos = sum(w * cycle_1y_oos, na.rm = TRUE),
+                     cbar_bar_oos = sum(w * c_bar_oos,    na.rm = TRUE), .groups = "drop") %>%
+    dplyr::arrange(ym)
+  rxb <- agg %>% dplyr::filter(!is.na(rx_USD_t12)) %>%
+    dplyr::group_by(ym) %>% dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
+    dplyr::group_by(ym, date) %>%
+    dplyr::summarise(rx_USD_bar_t12 = sum(w * rx_USD_t12, na.rm = TRUE), .groups = "drop") %>%
+    dplyr::arrange(ym)
+  fx <- gp %>% dplyr::left_join(rxb, by = c("ym", "date")) %>% dplyr::arrange(ym)
+  fx$FXGCF_oos <- oos_predict(fx, rx_USD_bar_t12 ~ cyc1_bar_oos + cbar_bar_oos,
+                              min_train = max(120, mt), h = 12, train_window = train_window)
+  rdo %>% dplyr::select(country, ym, date, rx_t12, rx_USD_t12, CF_oos) %>%
+    dplyr::left_join(gcfo %>% dplyr::select(ym, GCF_oos),   by = "ym") %>%
+    dplyr::left_join(fx   %>% dplyr::select(ym, FXGCF_oos), by = "ym") %>%
+    dplyr::arrange(country, date)
+}
+
+# --- (c) Pooled Campbell-Thompson R^2_oos for one spec under a given scheme.
+scheme_specs <- tibble::tribble(
+  ~spec_lbl,        ~target,        ~predictor,
+  "rx ~ CF",        "rx_t12",       "CF_oos",
+  "rx ~ GCF",       "rx_t12",       "GCF_oos",
+  "rx_USD ~ GCF",   "rx_USD_t12",   "GCF_oos",
+  "rx_USD ~ FXGCF", "rx_USD_t12",   "FXGCF_oos")
+
+pooled_r2_oos <- function(pnl, target, predictor, mt = 60, h = 12, train_window = Inf) {
+  parts <- pnl %>% dplyr::filter(!is.na(.data[[predictor]]), !is.na(.data[[target]])) %>%
+    dplyr::group_by(country) %>% dplyr::group_split()
+  ssf <- 0; ssb <- 0; npos <- 0L; ntot <- 0L
+  fml  <- stats::as.formula(sprintf("%s ~ %s", target, predictor))
+  bfml <- stats::as.formula(paste(target, "~ 1"))
+  for (d in parts) {
+    d <- d %>% dplyr::arrange(ym)
+    if (nrow(d) < mt + h) next
+    yh <- oos_predict(d, fml,  min_train = mt, h = h, train_window = train_window)
+    bn <- oos_predict(d, bfml, min_train = mt, h = h, train_window = train_window)
+    y  <- d[[target]]; ok <- !is.na(yh) & !is.na(bn) & !is.na(y)
+    if (sum(ok) == 0) next
+    f <- sum((y[ok] - yh[ok])^2); b <- sum((y[ok] - bn[ok])^2)
+    ssf <- ssf + f; ssb <- ssb + b; ntot <- ntot + 1L
+    if (b > 0 && (1 - f / b) > 0) npos <- npos + 1L
+  }
+  tibble::tibble(r2 = if (ssb > 0) 1 - ssf / ssb else NA_real_, npos = npos, ntot = ntot)
+}
+
+cat("\noos.R scheme rebuild: cycle decompositions (expanding / rolling 120 / rolling 180) ...\n")
+cyc_exp <- build_cycle_base(Inf)
+cyc_120 <- build_cycle_base(120)
+cyc_180 <- build_cycle_base(180)
+
+schemes <- tibble::tribble(
+  ~key,        ~label,                  ~base,     ~mt, ~tw,
+  "exp60",     "Expanding, 5y min",     "exp",     60L, Inf,
+  "exp36",     "Expanding, 3y min",     "exp",     36L, Inf,
+  "exp84",     "Expanding, 7y min",     "exp",     84L, Inf,
+  "roll120",   "Rolling 10y window",    "120",     60L, 120,
+  "roll180",   "Rolling 15y window",    "180",     60L, 180)
+
+cyc_lookup <- list(exp = cyc_exp, `120` = cyc_120, `180` = cyc_180)
+
+scheme_res <- purrr::pmap_dfr(schemes, function(key, label, base, mt, tw) {
+  pnl <- add_oos_factors(cyc_lookup[[base]], mt = mt, train_window = tw)
+  purrr::pmap_dfr(scheme_specs, function(spec_lbl, target, predictor) {
+    r <- pooled_r2_oos(pnl, target, predictor, mt = mt, train_window = tw)
+    tibble::tibble(scheme = key, scheme_label = label, spec = spec_lbl,
+                   r2_oos = r$r2, npos = r$npos, ntot = r$ntot)
+  })
+})
+
+# Sanity check: the expanding/60-month scheme must match oos.R's baseline pool.
+sanity <- scheme_res %>% dplyr::filter(scheme == "exp60") %>%
+  dplyr::transmute(spec, rebuilt = round(r2_oos, 3)) %>%
+  dplyr::left_join(
+    tibble::tibble(
+      spec = c("rx ~ CF", "rx ~ GCF", "rx_USD ~ GCF", "rx_USD ~ FXGCF"),
+      oos_R = round(c(
+        r2_oos_pooled$r2_oos_pooled[r2_oos_pooled$spec == "rx ~ CF_oos"],
+        r2_oos_pooled$r2_oos_pooled[r2_oos_pooled$spec == "rx ~ GCF_oos"],
+        r2_oos_pooled$r2_oos_pooled[r2_oos_pooled$spec == "rx_USD ~ GCF_oos"],
+        r2_oos_pooled$r2_oos_pooled[r2_oos_pooled$spec == "rx_USD ~ FXGCF_oos"]), 3)),
+    by = "spec")
+cat("\n===== Sanity: rebuilt expanding/5y vs oos.R baseline =====\n")
+print(as.data.frame(sanity), row.names = FALSE)
+
+cat("\n===== Table 4: OOS estimation-scheme robustness (pooled R^2_oos) =====\n")
+print(as.data.frame(scheme_res %>%
+  dplyr::transmute(scheme_label, spec, r2_oos = round(r2_oos, 3),
+                   pos = paste0(npos, "/", ntot))), row.names = FALSE)
+
+t4_disp <- tibble::tibble(Specification = scheme_specs$spec_lbl)
+for (i in seq_len(nrow(schemes))) {
+  s <- schemes$key[i]
+  col <- scheme_res %>% dplyr::filter(scheme == s) %>%
+    dplyr::arrange(factor(spec, levels = scheme_specs$spec_lbl)) %>%
+    dplyr::mutate(cell = ifelse(is.na(r2_oos), "--", fmt3(r2_oos))) %>% dplyr::pull(cell)
+  t4_disp[[schemes$label[i]]] <- col
+}
+
+rob_tables$rob_t4_oos_scheme <- table_to_grob(
+  as.data.frame(t4_disp),
+  title = "Robustness -- Out-of-sample estimation scheme: window shape and training length",
+  note  = paste0("Pooled Campbell-Thompson R2_oos of the fully-recursive factor against the ",
+                 "recursive prevailing mean, with the entire factor chain (cycle\n",
+                 "decomposition, predictive regression, benchmark) rebuilt under each scheme. ",
+                 "'Expanding' uses all history up to t with a 3-/5-/7-year training\n",
+                 "minimum; 'Rolling' uses only the most recent 10/15 years. Each scheme scores ",
+                 "its factor against the mean built under the same scheme, so columns are\n",
+                 "internally consistent. The expanding/5-year column reproduces the oos.R ",
+                 "baseline (Table 8.2). The global cycle factor's edge is invariant to the\n",
+                 "training-minimum length but is specific to the expanding window."),
+  base_size = 8)
+
+rob_plots$rob_f2_oos_scheme <- scheme_res %>%
+  dplyr::mutate(scheme_label = factor(scheme_label, levels = schemes$label),
+                spec = factor(spec, levels = scheme_specs$spec_lbl)) %>%
+  ggplot2::ggplot(ggplot2::aes(scheme_label, r2_oos, fill = spec)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
+  ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  ggplot2::scale_fill_manual(values = c("rx ~ CF" = "#08519c", "rx ~ GCF" = "#a50f15",
+                                        "rx_USD ~ GCF" = "#9aa200", "rx_USD ~ FXGCF" = "#762a83"),
+                             name = NULL) +
+  ggplot2::labs(
+    title = expression(paste("Out-of-sample ", R[oos]^2, " by estimation scheme")),
+    subtitle = "Expanding (3/5/7-year minimum) vs rolling (10/15-year) windows; positive beats the mean",
+    x = NULL, y = expression(R[oos]^2)) +
+  theme_thesis +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 20, hjust = 1))
+
+
+# =============================================================================
 # Write every exhibit to disk as a vector PDF.
 # =============================================================================
 save_robustness <- function(tab_dir = "thesis/tables", fig_dir = "thesis/figures") {
   dir.create(tab_dir, showWarnings = FALSE, recursive = TRUE)
   dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
-  tab_size <- list(rob_t1_sub_is  = c(w = 11, h = 3.3),
-                   rob_t2_sub_oos = c(w = 9,  h = 3.2),
-                   rob_t3_italy   = c(w = 11, h = 3.2))
+  tab_size <- list(rob_t1_sub_is     = c(w = 11, h = 3.3),
+                   rob_t2_sub_oos    = c(w = 9,  h = 3.2),
+                   rob_t3_italy      = c(w = 11, h = 3.2),
+                   rob_t4_oos_scheme = c(w = 11, h = 3.0))
   purrr::iwalk(rob_tables, function(g, nm) {
     sz <- tab_size[[nm]]; w <- if (is.null(sz)) 10 else sz[["w"]]; h <- if (is.null(sz)) 4.5 else sz[["h"]]
     ggplot2::ggsave(file.path(tab_dir, paste0(nm, ".pdf")), g, width = w, height = h)

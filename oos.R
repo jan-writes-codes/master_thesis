@@ -35,14 +35,20 @@ library(purrr)
 # rows 1..t (expanding window) and return the fitted residual AT t.
 # Used for the yield-cycle decomposition where regressors and dependent
 # variable are both known at t (no observation lag).
-recursive_resid <- function(df, fml, min_train = 60) {
+#
+# `train_window` (in rows/months, default Inf) caps the training span: with a
+# finite W the fit at t uses only the most recent W observations (rolling
+# window) instead of the full history (expanding window). Inf reproduces the
+# baseline expanding-window behaviour exactly.
+recursive_resid <- function(df, fml, min_train = 60, train_window = Inf) {
   df  <- df %>% arrange(ym)
   T_o <- nrow(df)
   out <- rep(NA_real_, T_o)
   yvar <- all.vars(fml)[1]
   if (T_o < min_train) return(out)
   for (t in min_train:T_o) {
-    train <- df[1:t, , drop = FALSE]
+    lo    <- if (is.finite(train_window)) max(1L, t - as.integer(train_window) + 1L) else 1L
+    train <- df[lo:t, , drop = FALSE]
     if (sum(!is.na(train[[yvar]])) < min_train) next
     fit <- tryCatch(lm(fml, data = train, na.action = na.exclude),
                     error = function(e) NULL)
@@ -58,7 +64,12 @@ recursive_resid <- function(df, fml, min_train = 60) {
 # lag: yhat[t] uses coefficients estimated only on rows whose outcome is
 # already realized by date[t] (training = rows with date[s] + h months
 # <= date[t]). Requires a `date` column in df.
-oos_predict <- function(df, fml, min_train = 120, h = 12) {
+#
+# `train_window` (in months, default Inf) caps the training span: with a finite
+# W the regression at t uses only training rows whose date falls in the most
+# recent W months of the eligible set (rolling window); Inf uses all eligible
+# history (expanding window) and reproduces the baseline behaviour exactly.
+oos_predict <- function(df, fml, min_train = 120, h = 12, train_window = Inf) {
   df   <- df %>% arrange(ym)
   T_o  <- nrow(df)
   yhat <- rep(NA_real_, T_o)
@@ -67,7 +78,9 @@ oos_predict <- function(df, fml, min_train = 120, h = 12) {
             as.integer(format(df$date, "%m"))
   for (t in seq_len(T_o)) {
     cutoff <- mo_idx[t] - h
-    train_idx <- which(mo_idx <= cutoff)
+    train_idx <- if (is.finite(train_window))
+                   which(mo_idx <= cutoff & mo_idx > cutoff - as.integer(train_window))
+                 else which(mo_idx <= cutoff)
     if (length(train_idx) == 0L) next
     train <- df[train_idx, , drop = FALSE]
     if (sum(!is.na(train[[yvar]])) < min_train) next

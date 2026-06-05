@@ -123,6 +123,78 @@ purpose-built adjustment narrows the gap without closing it.
   \label{fig:s8-oos-usd}
 \end{figure}
 
+\subsection{Expanding versus Rolling Estimation Windows}
+\label{sec:rob-oos-scheme}
+
+The out-of-sample protocol embeds two estimation choices: it uses
+\emph{expanding} windows---the recursive regression at each date $t$ is fitted on
+all history up to $t$---and a five-year (sixty-month) minimum training span before
+the first real-time forecast is produced. Both are conventional, but neither is
+innocuous, and a reader is entitled to ask whether the global factor's edge is an
+artefact of either. To answer this the entire recursive chain---the yield--trend
+decomposition, the predictive regression, and the prevailing-mean
+benchmark---is rebuilt from scratch under five estimation schemes: expanding
+windows with a three-, five-, and seven-year minimum, and rolling windows of ten
+and fifteen years (each scheme scoring its factor against the prevailing mean
+constructed under the \emph{same} scheme, so the comparison is internally
+consistent). \Cref{tab:rob-oos-scheme} and \Cref{fig:rob-oos-scheme} report the
+pooled out-of-sample $R^{2}$; the expanding/five-year column reproduces the
+baseline of \Cref{tab:rob-sub-oos} exactly, a check on the rebuilt machinery.
+
+The length of the training minimum barely matters. The global cycle factor
+delivers essentially the same out-of-sample $R^{2}_{\mathrm{oos}}$ under a
+three-, five-, or seven-year minimum---$+0.05$, $+0.05$, and $+0.05$
+respectively, positive in ten of eleven markets in every case---so the
+sixty-month choice is representative rather than a tuned parameter. A longer
+seven-year minimum, by estimating each coefficient on more data before
+forecasting, even nudges the weaker specifications upward (the local factor to
+approximately zero, the dollar-investor global factor to $-0.01$). The only
+fragility the minimum exposes is at the short end: a three-year minimum
+destabilises the dollar-investor FX-adjusted scoring, whose $R^{2}_{\mathrm{oos}}$
+collapses to $-0.60$ as the recursive regression is asked to forecast from barely
+three years of heavily overlapping annual returns. This is precisely the
+finite-sample instability that a five-year floor is meant to avoid, and it is a
+reason to prefer the conservative default rather than evidence against the
+factor.
+
+The window \emph{shape}, by contrast, matters a great deal, and here the chapter
+must be candid. The global cycle factor's out-of-sample edge does \emph{not}
+survive a switch to rolling windows: its $R^{2}_{\mathrm{oos}}$ falls to $-0.11$
+under a ten-year rolling window and $-0.05$ under a fifteen-year one, positive in
+zero of eleven markets in both cases. The result is economically coherent rather
+than troubling. The cycle factor is anchored to slowly-moving trend inflation and
+its predictive loadings are stable through time (\Cref{sec:rob-subsample}), so
+accumulating the full history sharpens those loadings; a rolling window throws
+away informative old data and re-estimates on a shorter, noisier span, while the
+rolling prevailing mean it is judged against becomes correspondingly more
+adaptive and harder to beat. The global factor's real-time advantage is therefore
+a property of \emph{expanding}-window estimation---it rewards the patient
+accumulation of a long macro history---and is not a generic feature of any
+real-time scheme. The ranking across the four specifications is nonetheless
+unchanged: none of the local factor, the dollar-investor global factor, or the
+FX-adjusted factor is positive under any of the five schemes, so the global cycle
+factor remains the best of the four whatever the window, even where that best is
+itself negative.
+
+\begin{table}[t]\centering
+  \includegraphics[width=\linewidth]{tables/rob_t4_oos_scheme.pdf}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ under alternative estimation
+    schemes, the full recursive chain rebuilt under each. Expanding windows with a
+    three-, five-, and seven-year training minimum; rolling windows of ten and
+    fifteen years. Each scheme scores its factor against the prevailing mean built
+    under the same scheme; the expanding/five-year column reproduces the baseline
+    of \Cref{tab:rob-sub-oos}.}
+  \label{tab:rob-oos-scheme}
+\end{table}
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.85\linewidth]{figures/rob_f2_oos_scheme.pdf}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by estimation scheme and
+    specification. The global cycle factor (red) clears zero under all three
+    expanding-window minimums but not under either rolling window.}
+  \label{fig:rob-oos-scheme}
+\end{figure}
+
 % ===========================================================================
 \section{Subsample Stability}
 \label{sec:rob-subsample}
