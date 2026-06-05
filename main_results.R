@@ -1,0 +1,420 @@
+# main_results.R
+# =============================================================================
+# Chapter 7 (Main Results): the three-phase predictive programme.
+#
+# This is the single home for the MAIN-RESULT exhibits of the thesis. It mirrors
+# the pattern of empirical.R (replication tables) and plots.R (figures): every
+# table is printed to the console AND rendered to a PDF grob in `mr_tables`;
+# every figure is stored in `mr_plots`. Write all exhibits to disk with
+#   save_main_results()  ->  thesis/tables/<name>.pdf , thesis/figures/<name>.pdf
+#
+# Scope: IN-SAMPLE predictive regressions for the local-currency and US-dollar
+# investor (framework Eqs 18-23). The fully-recursive out-of-sample evidence
+# (oos.R) and the alternative factor constructions are the subject of Ch.8
+# (Robustness); they are deliberately NOT re-run here, so this script is light
+# (it sources only the factor pipeline and the inference primitives).
+#
+# Phase I   : does the local cycle factor predict returns in each G10 market?
+#             rx_bar_{i,t+12} = a_i + b_i CF_{i,t} + e         (Eq 18 / h-local)
+#             reported via its underlying forecasting regression on the two
+#             cycle predictors, of which CF is the fitted value (Eq cf-reg).
+# Phase II  : does the global factor subsume the local factor?
+#             horse race rx_bar ~ CF_perp + GCF, CF_perp = CF orthogonal to GCF
+#             (Eq 19-20 / h-horse, h-global).
+# Phase III : does currency risk break the model, and does the FX-adjusted
+#             factor restore it? rx_USD ~ GCF (Eq 22) vs rx_USD ~ FXGCF (Eq 23).
+# =============================================================================
+
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(tidyr)
+  library(purrr)
+  library(tibble)
+  library(ggplot2)
+  library(scales)
+  library(sandwich)
+  library(lmtest)
+  library(gridExtra)
+  library(grid)
+})
+
+if (!exists("reg_data")) source("data preperation.R")
+source("cp_inference.R")
+
+mr_tables <- list()
+mr_plots  <- list()
+
+# Country display order (euro bloc, other Europe, RoW), as in empirical.R.
+mr_order <- c("BE", "DE", "FR", "IT", "NL", "CH", "GB", "SE", "CA", "JP", "US")
+mr_name  <- c(BE = "Belgium", CA = "Canada", CH = "Switzerland", DE = "Germany",
+              FR = "France", GB = "UK", IT = "Italy", JP = "Japan",
+              NL = "Netherlands", SE = "Sweden", US = "US")
+
+# Country-month panel with the local and global factors side by side.
+panel <- reg_data %>%
+  dplyr::left_join(gcf   %>% dplyr::select(ym, GCF),             by = "ym") %>%
+  dplyr::left_join(gcp   %>% dplyr::select(ym, GCP),             by = "ym") %>%
+  dplyr::left_join(fxgcf %>% dplyr::select(ym, FXGCF, FXGCF_bu), by = "ym")
+
+# -----------------------------------------------------------------------------
+# Inference helpers.
+#   hac_fit()        : tidy HAC (Newey-West) fit; bandwidth scaled to the 12m
+#                      overlap, L = ceil(max(1.5h, 1.3*sqrt(T))) (matches plots.R).
+#   run_by_country() : per-country HAC fit, one tidy frame stacked over G10.
+#   hac_fit_full()   : returns the fit + HAC vcov for downstream Wald tests.
+#   wald_p()         : joint HAC Wald p-value for a set of slope terms.
+# -----------------------------------------------------------------------------
+hac_fit <- function(df, fml, h = 12, min_obs = 24) {
+  fit <- tryCatch(lm(fml, data = df, na.action = na.omit), error = function(e) NULL)
+  if (is.null(fit)) return(NULL)
+  Tn <- stats::nobs(fit); if (Tn < min_obs) return(NULL)
+  L <- ceiling(max(1.5 * h, 1.3 * sqrt(Tn)))
+  V <- tryCatch(sandwich::NeweyWest(fit, lag = L, prewhite = FALSE, adjust = TRUE),
+                error = function(e) sandwich::vcovHC(fit))
+  ct <- lmtest::coeftest(fit, vcov. = V)
+  tibble::tibble(term = rownames(ct), estimate = ct[, 1], std_err = ct[, 2],
+                 t = ct[, 3], r_sq = summary(fit)$r.squared, n = Tn)
+}
+
+run_by_country <- function(df, fml) {
+  split(df, df$country) %>%
+    purrr::imap_dfr(function(d, cty) {
+      res <- hac_fit(d, fml); if (is.null(res)) return(NULL)
+      res$country <- cty; res
+    })
+}
+
+hac_fit_full <- function(df, fml, h = 12, min_obs = 24) {
+  fit <- tryCatch(lm(fml, data = df, na.action = na.omit), error = function(e) NULL)
+  if (is.null(fit) || stats::nobs(fit) < min_obs) return(NULL)
+  L <- ceiling(max(1.5 * h, 1.3 * sqrt(stats::nobs(fit))))
+  V <- tryCatch(sandwich::NeweyWest(fit, lag = L, prewhite = FALSE, adjust = TRUE),
+                error = function(e) sandwich::vcovHC(fit))
+  list(fit = fit, vcov = V, T_obs = stats::nobs(fit))
+}
+
+wald_p <- function(fit, V, terms) {
+  b <- coef(fit); if (!all(terms %in% names(b))) return(NA_real_)
+  bt <- b[terms]; Vt <- V[terms, terms, drop = FALSE]
+  W  <- tryCatch(as.numeric(t(bt) %*% solve(Vt) %*% bt), error = function(e) NA_real_)
+  if (is.na(W)) return(NA_real_)
+  stats::pchisq(W, df = length(bt), lower.tail = FALSE)
+}
+
+# -----------------------------------------------------------------------------
+# Table -> PDF-able grob (identical styling to empirical.R, so the result
+# tables of Ch.6 and Ch.7 share one look).
+# -----------------------------------------------------------------------------
+table_to_grob <- function(df, title = NULL, note = NULL, base_size = 9) {
+  tt <- gridExtra::ttheme_minimal(
+    base_size = base_size,
+    core    = list(fg_params = list(hjust = 1, x = 0.95)),
+    colhead = list(fg_params = list(fontface = "bold")))
+  tab <- gridExtra::tableGrob(df, rows = NULL, theme = tt)
+  parts <- list(tab); heights <- grid::unit(1, "null")
+  if (!is.null(title)) {
+    th <- grid::textGrob(title, gp = grid::gpar(fontface = "bold",
+                         fontsize = base_size + 3), hjust = 0, x = 0.02)
+    parts <- c(list(th), parts); heights <- grid::unit.c(grid::unit(1.8, "lines"), heights)
+  }
+  if (!is.null(note)) {
+    nt <- grid::textGrob(note, gp = grid::gpar(fontsize = base_size - 1, col = "grey30"),
+                         hjust = 0, x = 0.02)
+    parts <- c(parts, list(nt)); heights <- grid::unit.c(heights, grid::unit(4, "lines"))
+  }
+  gridExtra::arrangeGrob(grobs = parts, ncol = 1, heights = heights)
+}
+
+theme_thesis <- ggplot2::theme_bw(base_size = 11) +
+  ggplot2::theme(
+    strip.background = ggplot2::element_rect(fill = "grey92", colour = NA),
+    strip.text       = ggplot2::element_text(face = "bold"),
+    legend.position  = "bottom",
+    panel.grid.minor = ggplot2::element_blank(),
+    plot.title       = ggplot2::element_text(face = "bold"))
+
+ord <- function(x) factor(x, levels = mr_order)
+
+
+# =============================================================================
+# PHASE I -- The local cycle factor across the G10 (Eq 18).
+# =============================================================================
+# The local cycle factor CF_{i,t} is the fitted value of the one-year-ahead
+# excess return on the two cycle predictors (c^(1), c-bar), so rx ~ CF has slope
+# exactly one and R^2 equal to the fit of that forecasting regression. We
+# therefore report the underlying forecasting regression itself -- the
+# informative object -- with HAC t-stats on each cycle predictor and the joint
+# Wald test of no predictability (the empirical content of H0: b_i = 0 in Eq 18).
+
+phase1 <- split(reg_data, reg_data$country) %>%
+  purrr::imap_dfr(function(d, cc) {
+    d <- d %>% dplyr::filter(!is.na(rx_t12), !is.na(cycle_1y), !is.na(c_bar))
+    o <- hac_fit_full(d, rx_t12 ~ cycle_1y + c_bar); if (is.null(o)) return(NULL)
+    ct <- lmtest::coeftest(o$fit, vcov. = o$vcov)
+    tibble::tibble(
+      country = cc,
+      g1 = ct["cycle_1y", 1], t1 = ct["cycle_1y", 3],
+      g2 = ct["c_bar", 1],    t2 = ct["c_bar", 3],
+      r2 = summary(o$fit)$r.squared,
+      wp = wald_p(o$fit, o$vcov, c("cycle_1y", "c_bar")),
+      n  = o$T_obs)
+  }) %>%
+  dplyr::mutate(country = ord(country)) %>% dplyr::arrange(country)
+
+# Pooled G10 panel (country fixed effects), HAC on the stacked panel.
+p1_fe  <- lm(rx_t12 ~ cycle_1y + c_bar + factor(country), data = reg_data)
+L_fe   <- ceiling(max(18, 1.3 * sqrt(stats::nobs(p1_fe))))
+V_fe   <- sandwich::NeweyWest(p1_fe, lag = L_fe, prewhite = FALSE, adjust = TRUE)
+ct_fe  <- lmtest::coeftest(p1_fe, vcov. = V_fe)
+p1_pool <- tibble::tibble(
+  country = "G10 panel",
+  g1 = ct_fe["cycle_1y", 1], t1 = ct_fe["cycle_1y", 3],
+  g2 = ct_fe["c_bar", 1],    t2 = ct_fe["c_bar", 3],
+  r2 = summary(p1_fe)$r.squared,
+  wp = wald_p(p1_fe, V_fe, c("cycle_1y", "c_bar")),
+  n  = stats::nobs(p1_fe))
+
+cat("\n===== Phase I: rx_bar ~ c^(1) + c-bar (local cycle factor, Eq 18) =====\n")
+print(as.data.frame(dplyr::bind_rows(phase1, p1_pool) %>%
+        dplyr::transmute(country, g1 = round(g1, 2), t1 = round(t1, 2),
+                         g2 = round(g2, 2), t2 = round(t2, 2),
+                         R2 = round(r2, 3), Wald_p = round(wp, 3), n)),
+      row.names = FALSE)
+
+fmt2 <- function(x) formatC(x, format = "f", digits = 2)
+fmt3 <- function(x) formatC(x, format = "f", digits = 3)
+t1_disp <- dplyr::bind_rows(phase1, p1_pool) %>%
+  dplyr::transmute(
+    Country = dplyr::recode(as.character(country), !!!mr_name, "G10 panel" = "G10 panel"),
+    `c(1)`   = fmt2(g1), `t`  = paste0("(", fmt2(t1), ")"),
+    `c-bar`  = fmt2(g2), `t ` = paste0("(", fmt2(t2), ")"),
+    `R2`     = fmt3(r2),
+    `Wald p` = fmt3(wp), N = n)
+
+mr_tables$mr_t1_phase1 <- table_to_grob(
+  as.data.frame(t1_disp),
+  title = "Table 7.1. Phase I -- Local cycle-factor predictability across the G10",
+  note  = paste0("LHS: duration-standardized, maturity-averaged one-year excess return ",
+                 "rx_bar_{i,t+12}. Each row is rx_bar ~ c^(1) + c-bar by country;\n",
+                 "the local cycle factor CF is the fitted value of this regression. ",
+                 "Newey-West HAC t-stats (12m overlap) in (.); Wald p is the joint\n",
+                 "test that both cycle slopes are zero. 'G10 panel' adds country fixed ",
+                 "effects. In-sample R^2. Sample as in Table 4.1."),
+  base_size = 8)
+
+# Figure: in-sample R^2 of rx ~ CF by country (Eq 18).
+mr_plots$mr_f1_r2_phase1 <- run_by_country(panel, rx_t12 ~ CF) %>%
+  dplyr::filter(term == "CF") %>%
+  ggplot2::ggplot(ggplot2::aes(stats::reorder(country, r_sq), r_sq)) +
+  ggplot2::geom_col(fill = "#08519c") +
+  ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  ggplot2::labs(title = expression(paste("In-sample ", R^2, " of ", rx %~% CF, " by country (Eq 18)")),
+                x = NULL, y = expression(R^2)) +
+  theme_thesis
+
+
+# =============================================================================
+# PHASE II -- Does the global factor subsume the local factor? (Eq 19-20)
+# =============================================================================
+# Horse race in the spirit of Dahlquist-Hasseltoft (2013, Eq 7): the local
+# factor is orthogonalized against the global factor (CF_perp = residual of
+# CF ~ GCF), so its slope measures the *incremental* local content once the
+# global factor is in. We report the R^2 ladder (local-only / global-only /
+# joint), the HAC t-stats on CF_perp and GCF, and the joint HAC Wald test, with
+# a Benjamini-Hochberg FDR adjustment across the eleven markets.
+
+r2_cf  <- run_by_country(panel, rx_t12 ~ CF)  %>% dplyr::filter(term == "CF")  %>%
+  dplyr::transmute(country, r2_loc = r_sq)
+r2_gcf <- run_by_country(panel, rx_t12 ~ GCF) %>% dplyr::filter(term == "GCF") %>%
+  dplyr::transmute(country, r2_glb = r_sq)
+
+panel_perp <- panel %>%
+  dplyr::group_by(country) %>%
+  dplyr::group_modify(~ {
+    d <- .x; ok <- !is.na(d$CF) & !is.na(d$GCF); d$CF_perp <- NA_real_
+    if (sum(ok) >= 24) d$CF_perp[ok] <- residuals(lm(CF ~ GCF, data = d[ok, ], na.action = na.exclude))
+    d
+  }) %>% dplyr::ungroup()
+
+phase2 <- split(panel_perp, panel_perp$country) %>%
+  purrr::imap_dfr(function(d, cc) {
+    d <- d %>% dplyr::filter(!is.na(rx_t12), !is.na(CF_perp), !is.na(GCF))
+    o <- hac_fit_full(d, rx_t12 ~ CF_perp + GCF); if (is.null(o)) return(NULL)
+    ct <- lmtest::coeftest(o$fit, vcov. = o$vcov)
+    tibble::tibble(
+      country = cc, t_loc = ct["CF_perp", 3], t_glb = ct["GCF", 3],
+      r2_jnt = summary(o$fit)$r.squared,
+      wp = wald_p(o$fit, o$vcov, c("CF_perp", "GCF")), n = o$T_obs)
+  }) %>%
+  dplyr::left_join(r2_cf,  by = "country") %>%
+  dplyr::left_join(r2_gcf, by = "country") %>%
+  dplyr::mutate(wp_bh = stats::p.adjust(wp, method = "BH"),
+                country = ord(country)) %>%
+  dplyr::arrange(country)
+
+cat("\n===== Phase II: horse race rx_bar ~ CF_perp + GCF (Eq 19-20) =====\n")
+print(as.data.frame(phase2 %>%
+        dplyr::transmute(country, R2_CF = round(r2_loc, 3), R2_GCF = round(r2_glb, 3),
+                         R2_joint = round(r2_jnt, 3), t_CFperp = round(t_loc, 2),
+                         t_GCF = round(t_glb, 2), Wald_p = round(wp, 3),
+                         Wald_p_BH = round(wp_bh, 3), n)),
+      row.names = FALSE)
+cat(sprintf("CF_perp significant (|t|>1.96): %d/11 ; GCF significant: %d/11\n",
+            sum(abs(phase2$t_loc) > 1.96), sum(abs(phase2$t_glb) > 1.96)))
+
+t2_disp <- phase2 %>%
+  dplyr::transmute(
+    Country = dplyr::recode(as.character(country), !!!mr_name),
+    `R2 CF`    = fmt3(r2_loc), `R2 GCF` = fmt3(r2_glb), `R2 joint` = fmt3(r2_jnt),
+    `t(CF_perp)` = fmt2(t_loc), `t(GCF)` = fmt2(t_glb),
+    `Wald p` = fmt3(wp), `Wald p (BH)` = fmt3(wp_bh))
+
+mr_tables$mr_t2_phase2 <- table_to_grob(
+  as.data.frame(t2_disp),
+  title = "Table 7.2. Phase II -- Global vs local cycle factor (horse race)",
+  note  = paste0("LHS: local-currency rx_bar_{i,t+12}. 'R2 CF' and 'R2 GCF' are ",
+                 "single-factor fits (Eq 18, Eq 20); 'R2 joint' is rx_bar ~ ",
+                 "CF_perp + GCF,\nwith CF_perp the part of the local factor ",
+                 "orthogonal to GCF (Eq 19). HAC t-stats; Wald p tests joint ",
+                 "significance; BH = Benjamini-\nHochberg FDR across the eleven ",
+                 "markets. A significant GCF with an insignificant CF_perp signals ",
+                 "subsumption by the global factor."),
+  base_size = 8)
+
+# Figure: R^2 ladder (local-only / global-only / joint) per country.
+mr_plots$mr_f2_r2_ladder <- phase2 %>%
+  dplyr::select(country, `Local CF` = r2_loc, `Global GCF` = r2_glb, Joint = r2_jnt) %>%
+  tidyr::pivot_longer(-country, names_to = "model", values_to = "r_sq") %>%
+  dplyr::mutate(model = factor(model, levels = c("Local CF", "Global GCF", "Joint"))) %>%
+  ggplot2::ggplot(ggplot2::aes(country, r_sq, fill = model)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
+  ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  ggplot2::scale_fill_manual(values = c("Local CF" = "#08519c", "Global GCF" = "#a50f15",
+                                        "Joint" = "#762a83"), name = NULL) +
+  ggplot2::labs(title = expression(paste("Phase II: in-sample ", R^2, " ladder per country")),
+                x = NULL, y = expression(R^2)) +
+  theme_thesis +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+# Figure: per-country HAC t-stats, CF_perp vs GCF in the joint regression.
+mr_plots$mr_f2_hr_tstats <- phase2 %>%
+  dplyr::select(country, `Local (CF_perp)` = t_loc, `Global (GCF)` = t_glb) %>%
+  tidyr::pivot_longer(-country, names_to = "factor", values_to = "t_stat") %>%
+  dplyr::mutate(factor = factor(factor, levels = c("Local (CF_perp)", "Global (GCF)"))) %>%
+  ggplot2::ggplot(ggplot2::aes(country, t_stat, fill = factor)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
+  ggplot2::geom_hline(yintercept = c(-1.96, 1.96), linetype = "dashed", colour = "grey50") +
+  ggplot2::geom_hline(yintercept = 0, colour = "grey30") +
+  ggplot2::scale_fill_manual(values = c("Local (CF_perp)" = "#08519c",
+                                        "Global (GCF)" = "#a50f15"), name = NULL) +
+  ggplot2::labs(title = "Phase II horse race: per-country HAC t-statistics",
+                subtitle = "Dashed lines at +/- 1.96; CF_perp = local factor orthogonal to GCF",
+                x = NULL, y = "HAC t-statistic") +
+  theme_thesis +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+
+# =============================================================================
+# PHASE III -- The US-dollar investor and the FX-adjusted factor (Eq 21-23).
+# =============================================================================
+# For a USD investor the local-currency return is augmented by the realized
+# currency return (Eq rx-usd). We ask (a) how far currency risk erodes the
+# global-factor predictability that held in local currency, and (b) whether the
+# purpose-built FX-adjusted global factor FXGCF recovers it.
+
+g_usd  <- run_by_country(panel, rx_USD_t12 ~ GCF)   %>% dplyr::filter(term == "GCF")   %>%
+  dplyr::transmute(country, b_g = estimate, t_g = t, r2_g = r_sq, n)
+fx_usd <- run_by_country(panel, rx_USD_t12 ~ FXGCF) %>% dplyr::filter(term == "FXGCF") %>%
+  dplyr::transmute(country, b_f = estimate, t_f = t, r2_f = r_sq)
+loc_usd <- run_by_country(panel, rx_USD_t12 ~ CF)   %>% dplyr::filter(term == "CF")    %>%
+  dplyr::transmute(country, r2_cfusd = r_sq)
+
+phase3 <- g_usd %>%
+  dplyr::left_join(fx_usd, by = "country") %>%
+  dplyr::left_join(loc_usd, by = "country") %>%
+  dplyr::mutate(country = ord(country)) %>% dplyr::arrange(country)
+
+# Correlation between the global and FX-adjusted global factors (key diagnostic).
+gcf_fxgcf_rho <- with(fxgcf %>% dplyr::filter(!is.na(GCF), !is.na(FXGCF)), cor(GCF, FXGCF))
+
+cat("\n===== Phase III: USD-investor returns, GCF (Eq 22) vs FXGCF (Eq 23) =====\n")
+print(as.data.frame(phase3 %>%
+        dplyr::transmute(country, R2_CF_usd = round(r2_cfusd, 3),
+                         b_GCF = round(b_g, 2), t_GCF = round(t_g, 2), R2_GCF = round(r2_g, 3),
+                         b_FXGCF = round(b_f, 2), t_FXGCF = round(t_f, 2), R2_FXGCF = round(r2_f, 3), n)),
+      row.names = FALSE)
+cat(sprintf("FXGCF R2 > GCF R2 in %d/11 markets ; cor(GCF, FXGCF) = %.2f\n",
+            sum(phase3$r2_f > phase3$r2_g, na.rm = TRUE), gcf_fxgcf_rho))
+
+t3_disp <- phase3 %>%
+  dplyr::transmute(
+    Country = dplyr::recode(as.character(country), !!!mr_name),
+    `R2 (local CF)` = fmt3(r2_cfusd),
+    `GCF`   = fmt2(b_g), `t`  = paste0("(", fmt2(t_g), ")"), `R2 GCF`   = fmt3(r2_g),
+    `FXGCF` = fmt2(b_f), `t ` = paste0("(", fmt2(t_f), ")"), `R2 FXGCF` = fmt3(r2_f), N = n)
+
+mr_tables$mr_t3_phase3 <- table_to_grob(
+  as.data.frame(t3_disp),
+  title = "Table 7.3. Phase III -- US-dollar investor: GCF vs the FX-adjusted FXGCF",
+  note  = paste0("LHS: US-dollar excess return rx_USD_{i,t+12} (Eq 11). 'R2 (local CF)' ",
+                 "repeats the dollar return on the local factor for reference; the\n",
+                 "GCF and FXGCF blocks regress rx_USD on the global (Eq 22) and the ",
+                 "FX-adjusted global (Eq 23) factor. HAC t-stats in (.). The US row\n",
+                 "carries no currency leg. cor(GCF, FXGCF) = ",
+                 formatC(gcf_fxgcf_rho, format = "f", digits = 2),
+                 " in this sample, so the two factors are close substitutes."),
+  base_size = 8)
+
+# Figure: USD-investor R^2, GCF vs FXGCF, by country.
+mr_plots$mr_f3_usd_r2 <- phase3 %>%
+  dplyr::select(country, `rx_USD ~ GCF (Eq 22)` = r2_g, `rx_USD ~ FXGCF (Eq 23)` = r2_f) %>%
+  tidyr::pivot_longer(-country, names_to = "model", values_to = "r_sq") %>%
+  ggplot2::ggplot(ggplot2::aes(country, r_sq, fill = model)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
+  ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  ggplot2::scale_fill_manual(values = c("rx_USD ~ GCF (Eq 22)" = "#08519c",
+                                        "rx_USD ~ FXGCF (Eq 23)" = "#a50f15"), name = NULL) +
+  ggplot2::labs(title = expression(paste("Phase III: US-dollar-investor ", R^2, ": GCF vs FX-adjusted FXGCF")),
+                subtitle = "Value of the FX adjustment for a US-dollar investor",
+                x = NULL, y = expression(R^2)) +
+  theme_thesis +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+# Figure: GCF vs FXGCF over time (the close-substitute diagnostic).
+mr_plots$mr_f4_gcf_fxgcf <- fxgcf %>%
+  dplyr::filter(!is.na(GCF), !is.na(FXGCF)) %>%
+  ggplot2::ggplot(ggplot2::aes(date)) +
+  ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  ggplot2::geom_line(ggplot2::aes(y = GCF,   colour = "GCF (Eq 7)"),   linewidth = 0.5) +
+  ggplot2::geom_line(ggplot2::aes(y = FXGCF, colour = "FXGCF (Eq 23)"), linewidth = 0.5) +
+  ggplot2::scale_colour_manual(values = c("GCF (Eq 7)" = "#08519c",
+                                          "FXGCF (Eq 23)" = "#a50f15"), name = NULL) +
+  ggplot2::labs(title = "Global cycle factor vs FX-adjusted global cycle factor",
+                subtitle = sprintf("Correlation = %.2f over the common sample", gcf_fxgcf_rho),
+                x = NULL, y = "Factor value") +
+  theme_thesis
+
+
+# =============================================================================
+# Write every exhibit to disk as a vector PDF.
+# =============================================================================
+save_main_results <- function(tab_dir = "thesis/tables", fig_dir = "thesis/figures") {
+  dir.create(tab_dir, showWarnings = FALSE, recursive = TRUE)
+  dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
+  tab_size <- list(mr_t1_phase1 = c(w = 9,  h = 5.0),
+                   mr_t2_phase2 = c(w = 10, h = 5.0),
+                   mr_t3_phase3 = c(w = 11, h = 4.8))
+  purrr::iwalk(mr_tables, function(g, nm) {
+    sz <- tab_size[[nm]]; w <- if (is.null(sz)) 9 else sz[["w"]]; h <- if (is.null(sz)) 5 else sz[["h"]]
+    ggplot2::ggsave(file.path(tab_dir, paste0(nm, ".pdf")), g, width = w, height = h)
+  })
+  purrr::iwalk(mr_plots, function(p, nm) {
+    ggplot2::ggsave(file.path(fig_dir, paste0(nm, ".pdf")), p, width = 9, height = 5.5)
+  })
+  invisible(c(file.path(tab_dir, paste0(names(mr_tables), ".pdf")),
+              file.path(fig_dir, paste0(names(mr_plots), ".pdf"))))
+}
+
+cat(sprintf(
+  "\nmain_results.R loaded: %d tables in `mr_tables`, %d figures in `mr_plots`. Write all with save_main_results().\n",
+  length(mr_tables), length(mr_plots)))
