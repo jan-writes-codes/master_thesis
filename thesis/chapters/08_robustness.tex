@@ -9,7 +9,7 @@ generated cycle regressors, which can flatter the apparent fit. Second, they use
 the full estimation window, averaging over three decades that include two of the
 most violent episodes in the history of government-bond markets---the
 2007--2009 global financial crisis and the 2010--2012 euro-area sovereign-debt
-crisis. This chapter subjects the central findings to four tests. \Cref{sec:rob-oos}
+crisis. This chapter subjects the central findings to five tests. \Cref{sec:rob-oos}
 develops the out-of-sample evidence summarised in \Cref{sec:res-oos} in full,
 per country and per phase. \Cref{sec:rob-subsample} re-estimates every headline
 specification over economically defined subsamples, with the two crises isolated
@@ -17,7 +17,9 @@ as windows of their own, in-sample and out-of-sample, and gives the euro-area
 crisis and Italy a dedicated treatment. \Cref{sec:rob-cf-cp} asks whether the
 conclusions are specific to the macro-anchored cycle factor or hold equally for
 the canonical forward-rate factor of \citet{cochrane2005} and \citet{dahlquist2013}.
-\Cref{sec:rob-sensitivity} closes with the sensitivity of the results to the
+\Cref{sec:rob-core-headline} rebuilds the entire chain on regular all-items CPI in
+place of the core measure, mirroring the inflation-series robustness of
+\citet{cieslak2015}. \Cref{sec:rob-sensitivity} closes with the sensitivity of the results to the
 construction choices and states plainly which findings are fragile and which
 survive. Throughout, the organising result is the same one that emerged in
 \Cref{ch:results}: the GDP-weighted global cycle factor $\GCF_{t}$ is far more
@@ -405,6 +407,88 @@ the forward factor on which \citet{dahlquist2013} originally established it.
 \end{figure}
 
 % ===========================================================================
+\section{Core versus Headline Inflation}
+\label{sec:rob-core-headline}
+
+The cycle factor is the residual of yields on \emph{trend} inflation, and trend
+inflation is built throughout from \emph{core} CPI (excluding food and energy),
+following \citet{cieslak2015}, who argue that core is the better proxy for the
+persistent component of inflation that bond investors price. That choice is not
+innocuous: \citet{cieslak2015} themselves check the alternative in their Table~10,
+Panel~C4, rebuilding the trend from all-items CPI and reporting that it delivers a
+predictive $R^{2}$ about nine percent lower on average, the divergence dating to
+the energy-price volatility of the 2000s. This section repeats that test for the
+G10. The entire chain---trend inflation, the cycle, and the three factors---is
+rebuilt on \emph{regular} (all-items, headline) CPI and compared with the
+core-CPI baseline on the per-country common sample.\footnote{The headline series
+carries 135 month-country cells with multiple release vintages; we keep the
+most-revised value. The regular series is also shorter in places (Japan ends in
+2021), which the per-country common-sample alignment respects.}
+
+\begin{table}[t]\centering
+  \includegraphics[width=\linewidth]{tables/rob_t5_core_vs_reg.pdf}
+  \caption{Core versus headline CPI, in-sample. Trend inflation and the factors
+    rebuilt from regular all-items CPI, compared on the per-country common sample.
+    ``corr'' columns are core-versus-headline correlations; ``R2 core''/``R2 reg''
+    are in-sample predictive fits of the excess return on the factor; ``dR2'' is
+    their difference (positive = core fits better, as in \citet{cieslak2015},
+    Table~10, Panel~C4). CF rows are per country; GCF and FXGCF are the global
+    factors.}
+  \label{tab:rob-core-headline}
+\end{table}
+
+In sample, the two inflation measures lead to very similar factors. The smoothing
+in the discounted moving average removes most of the food- and energy-price noise,
+so core and headline \emph{trend} inflation correlate $0.90$ on average across the
+G10, and the cycle factors they generate correlate $0.95$ (local) and $0.92$
+(global). Predictability is nonetheless modestly weaker on headline CPI, exactly
+as \citet{cieslak2015} find: the cross-country mean in-sample $R^{2}$ of the local
+factor falls from $0.250$ (core) to $0.234$ (headline), and the global factor from
+$0.252$ to $0.224$---a relative drop of about six to eleven percent, in the
+neighbourhood of their nine---while both remain overwhelmingly significant (the
+global factor's pooled HAC $t$ is $14.2$ on core and $14.4$ on headline).
+\Cref{tab:rob-core-headline} and \Cref{fig:rob-core-headline} show the gap is
+concentrated where the data's energy pass-through is largest: the United States,
+whose local $R^{2}$ falls from $0.33$ to $0.24$, accounts for much of the average,
+whereas a handful of markets (France, Japan, Sweden) fit marginally \emph{better}
+on headline. The FX-adjusted factor tells the same story ($R^{2}$ of $0.096$ on
+core versus $0.072$ on headline).
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.88\linewidth]{figures/rob_f3_core_vs_reg.pdf}
+  \caption{In-sample $R^{2}$ of the local predictive regression
+    $\rxbar_{i,t+12}\sim\CF_{i,t}$ by country, with the cycle factor built on core
+    (ex food and energy) versus regular all-items CPI.}
+  \label{fig:rob-core-headline}
+\end{figure}
+
+\begin{table}[t]\centering
+  \includegraphics[width=0.75\linewidth]{tables/rob_t6_core_vs_reg_oos.pdf}
+  \caption{Core versus headline CPI, out-of-sample. Pooled
+    \citet{campbellthompson2008} $R^{2}_{\mathrm{oos}}$ of the fully-recursive
+    factor against the recursive prevailing mean, with the whole chain rebuilt on
+    each inflation measure. Each column is scored over its own available sample.}
+  \label{tab:rob-core-headline-oos}
+\end{table}
+
+The out-of-sample comparison is where the choice of inflation measure becomes
+decisive, and it vindicates the baseline. In sample the measure barely matters;
+out of sample it is the difference between a result and none. The global cycle
+factor's real-time edge---the central finding of \Cref{sec:rob-oos}---survives on
+core CPI ($R^{2}_{\mathrm{oos}}=+0.05$) but \emph{vanishes} on headline CPI
+($-0.01$); the FX-adjusted factor collapses similarly (from $+0.004$ to $-0.14$),
+and the local factor remains negative under both
+(\Cref{tab:rob-core-headline-oos}). The asymmetry is economically intelligible.
+The recursive estimator re-fits both the trend and the predictive coefficients on
+data available only up to each date, so it is far more exposed to the
+energy-driven noise in headline inflation than the full-sample regression, which
+averages that noise away; \citet{cieslak2015} note that core and all-items
+inflation diverged in the 2000s precisely because energy-price swings, which do
+not pass through to the yield curve, inflate the headline trend. The use of core
+CPI is therefore not merely a convention inherited from \citet{cieslak2015}: it is
+material to the headline real-time result, and the global cycle factor's
+out-of-sample predictability is a property of the macro anchor measured cleanly.
+
 \section{Sensitivity to Construction Choices}
 \label{sec:rob-sensitivity}
 
@@ -436,8 +520,9 @@ nearly collinear with the unadjusted global factor in this sample, adds little
 beyond it except in the euro-area crisis. What survives every test in this
 chapter is the same single object: the GDP-weighted global cycle factor predicts
 international bond returns in-sample and out-of-sample, across every subsample
-except the financial crisis itself, more robustly than its local counterpart, its
-dollar-investor variant, or the forward-rate factor against which it is most
-naturally compared. That object, and the economic value it carries
+except the financial crisis itself and---out of sample---when the macro trend is
+measured cleanly with core inflation (\Cref{sec:rob-core-headline}), more robustly
+than its local counterpart, its dollar-investor variant, or the forward-rate
+factor against which it is most naturally compared. That object, and the economic value it carries
 (\Cref{ch:strategy}), is the finding the thesis stands on; its interpretation is
 taken up in \Cref{ch:discussion}.

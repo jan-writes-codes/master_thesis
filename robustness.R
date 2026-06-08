@@ -408,9 +408,12 @@ rob_plots$rob_f1_oos_sub <- oos_res %>%
 
 # --- (a) Recursive cycle decomposition for a given window (the expensive step;
 #         cached by window so the min_train variations reuse the expanding cycle).
-build_cycle_base <- function(train_window = Inf) {
+#         `infl` defaults to the baseline (core-CPI) inflation_long; pass a
+#         different inflation_long-shaped table (e.g. inflation_long_reg) to
+#         rebuild the chain on an alternative inflation series.
+build_cycle_base <- function(train_window = Inf, infl = inflation_long) {
   cyc <- yields_long %>%
-    dplyr::left_join(inflation_long, by = c("ym", "country")) %>%
+    dplyr::left_join(infl, by = c("ym", "country")) %>%
     dplyr::filter(!is.na(trend_inf), !is.na(yield)) %>%
     dplyr::group_by(country, maturity) %>%
     dplyr::group_modify(~ {
@@ -583,15 +586,262 @@ rob_plots$rob_f2_oos_scheme <- scheme_res %>%
 
 
 # =============================================================================
+# TABLE 5 / TABLE 6 / FIGURE 3 -- Core vs Headline (regular) CPI.
+# =============================================================================
+# Mirrors Cieslak-Povala (2015), Table 10 Panel C4: rebuild trend inflation from
+# REGULAR (all-items / headline) CPI instead of CORE CPI, and compare the
+# resulting factors. CP report the factor correlation, the predictive R^2 (~9%
+# lower on average for all-items), and the loading significance; the divergence
+# is driven by energy-price volatility in the 2000s that does not pass through to
+# yields. The baseline stays core (the `inflation` sheet); this is a comparison.
+
+# --- (0) Baseline value gate: confirm data.xlsx's baseline sheets are unchanged,
+#         so the new file (which only ADDS the inflation_reg sheet) does not move
+#         existing thesis numbers. Compare VALUES, not XLSX bytes.
+.infl_chk <- readxl::read_excel("data.xlsx", sheet = "inflation") %>%
+  dplyr::rename(date = Date) %>%
+  dplyr::mutate(ym = as.integer(format(date, "%Y%m"))) %>%
+  tidyr::pivot_longer(-c(date, ym), names_to = "country", values_to = "cpi_chk")
+.gate <- inflation_long %>% dplyr::select(country, ym, cpi) %>%
+  dplyr::inner_join(.infl_chk %>% dplyr::select(country, ym, cpi_chk), by = c("country", "ym"))
+stopifnot(isTRUE(all.equal(.gate$cpi, .gate$cpi_chk, tolerance = 1e-8)))
+cat(sprintf("core-vs-reg: baseline value gate passed (inflation sheet matches in-memory; %d cells)\n",
+            nrow(.gate)))
+
+# --- (1) Replicated trend-inflation builder (cp_trend is rm()-ed in data prep).
+.v_cp <- 0.987; .M_cp <- 120
+.wn_cp <- ((1 - .v_cp) / (1 - .v_cp^.M_cp)) * .v_cp^(0:(.M_cp - 1))
+cp_trend_reg <- function(pi_vec) {
+  n <- length(pi_vec); tr <- rep(NA_real_, n)
+  for (t in .M_cp:n) {
+    win <- pi_vec[(t - .M_cp + 1):t]
+    if (any(is.na(win))) next
+    tr[t] <- sum(.wn_cp * rev(win))
+  }
+  tr
+}
+.selftest <- inflation_long %>% dplyr::arrange(country, date) %>% dplyr::group_by(country) %>%
+  dplyr::mutate(tr_chk = cp_trend_reg(yoy_infl)) %>% dplyr::ungroup()
+stopifnot(isTRUE(all.equal(.selftest$trend_inf, .selftest$tr_chk, tolerance = 1e-9)))
+cat("core-vs-reg: cp_trend_reg self-test passed (reproduces baseline trend_inf)\n")
+
+# --- (2) Build inflation_long_reg from the inflation_reg sheet (cleaned).
+.core_span <- inflation_long %>% dplyr::filter(!is.na(cpi)) %>%
+  dplyr::group_by(country) %>%
+  dplyr::summarise(d_lo = as.Date(min(date)), d_hi = as.Date(max(date)), .groups = "drop")
+.infl_reg_raw <- readxl::read_excel("data.xlsx", sheet = "inflation_reg") %>%
+  dplyr::rename(date = observation_date) %>%
+  dplyr::mutate(date = as.Date(date), ym = as.integer(format(date, "%Y%m"))) %>%
+  tidyr::pivot_longer(-c(date, ym), names_to = "country", values_to = "cpi") %>%
+  dplyr::filter(!is.na(cpi)) %>%
+  dplyr::inner_join(.core_span, by = "country") %>%
+  dplyr::filter(date >= d_lo, date <= d_hi) %>%       # drop CA 1930-2029 anomaly, future rows
+  dplyr::select(date, ym, country, cpi)
+.dup <- .infl_reg_raw %>% dplyr::group_by(country, ym) %>%
+  dplyr::summarise(nd = dplyr::n(), nv = dplyr::n_distinct(round(cpi, 8)), .groups = "drop") %>%
+  dplyr::summarise(dup = sum(nd > 1), dup_diff = sum(nv > 1))
+cat(sprintf("core-vs-reg: inflation_reg duplicate (country,ym) = %d (differing values = %d); keeping last\n",
+            .dup$dup, .dup$dup_diff))
+inflation_long_reg <- .infl_reg_raw %>% dplyr::arrange(country, date) %>%
+  dplyr::group_by(country, ym) %>% dplyr::slice_tail(n = 1) %>%
+  dplyr::group_by(country) %>% dplyr::arrange(date, .by_group = TRUE) %>%
+  dplyr::mutate(yoy_infl  = (cpi / dplyr::lag(cpi, 12) - 1) * 100,
+                trend_inf = cp_trend_reg(yoy_infl)) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(date, ym, country, cpi, yoy_infl, trend_inf)
+
+# --- (3) In-sample factor chain (CF, GCF, FXGCF), parameterized by inflation table.
+#         Returns are inflation-independent, so rx is pulled from reg_data unchanged.
+build_cf_chain_is <- function(infl) {
+  cyc <- yields_long %>%
+    dplyr::left_join(infl %>% dplyr::select(ym, country, trend_inf), by = c("ym", "country")) %>%
+    dplyr::filter(!is.na(trend_inf), !is.na(yield)) %>%
+    dplyr::group_by(country, maturity) %>%
+    dplyr::group_modify(~ {
+      fit <- lm(yield ~ trend_inf, data = .x, na.action = na.exclude)
+      .x %>% dplyr::mutate(cycle = residuals(fit))
+    }) %>% dplyr::ungroup()
+  c1   <- cyc %>% dplyr::filter(maturity == 1)  %>% dplyr::select(country, ym, cycle_1y = cycle)
+  cavg <- cyc %>% dplyr::filter(maturity != 1) %>% dplyr::group_by(country, ym) %>%
+    dplyr::summarise(c_bar = mean(cycle, na.rm = TRUE), .groups = "drop")
+  base <- c1 %>% dplyr::left_join(cavg, by = c("country", "ym")) %>%
+    dplyr::left_join(infl %>% dplyr::select(country, ym, trend_inf), by = c("country", "ym")) %>%
+    dplyr::left_join(reg_data %>% dplyr::select(country, ym, date, rx_t12, rx_USD_t12, gdp_val),
+                     by = c("country", "ym")) %>%
+    dplyr::filter(!is.na(rx_t12), !is.na(cycle_1y), !is.na(c_bar), !is.na(gdp_val))
+  base <- base %>% dplyr::group_by(country) %>% dplyr::group_modify(~ {
+    .x$CF <- predict(lm(rx_t12 ~ cycle_1y + c_bar, data = .x, na.action = na.exclude)); .x
+  }) %>% dplyr::ungroup()
+  base <- base %>% dplyr::group_by(ym) %>%
+    dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>% dplyr::ungroup()
+  gcf_s <- base %>% dplyr::group_by(ym) %>%
+    dplyr::summarise(GCF = sum(w * CF, na.rm = TRUE), .groups = "drop")
+  glob <- base %>% dplyr::group_by(ym) %>%
+    dplyr::summarise(cyc1_bar   = sum(w * cycle_1y,   na.rm = TRUE),
+                     cbar_bar   = sum(w * c_bar,      na.rm = TRUE),
+                     rx_USD_bar = sum(w * rx_USD_t12, na.rm = TRUE), .groups = "drop")
+  fx_s <- glob %>% dplyr::mutate(FXGCF = predict(lm(rx_USD_bar ~ cyc1_bar + cbar_bar, data = glob),
+                                                 newdata = .)) %>% dplyr::select(ym, FXGCF)
+  base %>%
+    dplyr::left_join(gcf_s, by = "ym") %>%
+    dplyr::left_join(fx_s,  by = "ym") %>%
+    dplyr::select(country, ym, date, trend_inf, rx_t12, rx_USD_t12, CF, GCF, FXGCF)
+}
+
+core_is <- build_cf_chain_is(inflation_long)
+reg_is  <- build_cf_chain_is(inflation_long_reg)
+.scf <- core_is %>% dplyr::inner_join(reg_data %>% dplyr::select(country, ym, CF0 = CF),
+                                      by = c("country", "ym"))
+stopifnot(isTRUE(all.equal(.scf$CF, .scf$CF0, tolerance = 1e-6)))
+cat("core-vs-reg: in-sample chain sanity passed (rebuilt core CF == baseline reg_data$CF)\n")
+
+# --- (4) Comparison on the per-country common (core intersect regular) sample.
+cmp <- core_is %>%
+  dplyr::inner_join(reg_is %>% dplyr::select(country, ym, trend_r = trend_inf,
+                                             CF_r = CF, GCF_r = GCF, FXGCF_r = FXGCF),
+                    by = c("country", "ym"))
+
+r2t <- function(d, target, predictor) {
+  o <- hac_fit(d, stats::as.formula(sprintf("%s ~ %s", target, predictor)))
+  if (is.null(o)) return(c(r2 = NA_real_, t = NA_real_))
+  row <- dplyr::filter(o, term == predictor)
+  if (nrow(row) == 0) return(c(r2 = NA_real_, t = NA_real_))
+  c(r2 = row$r_sq[1], t = row$t[1])
+}
+
+cf_rows <- split(cmp, cmp$country) %>% purrr::imap_dfr(function(d, cc) {
+  a <- r2t(d, "rx_t12", "CF"); b <- r2t(d, "rx_t12", "CF_r")
+  tibble::tibble(country = cc, n = nrow(d),
+                 corr_trend = suppressWarnings(cor(d$trend_inf, d$trend_r, use = "complete.obs")),
+                 corr_f = suppressWarnings(cor(d$CF, d$CF_r, use = "complete.obs")),
+                 r2_core = as.numeric(a["r2"]), r2_reg = as.numeric(b["r2"]),
+                 t_core = as.numeric(a["t"]), t_reg = as.numeric(b["t"]))
+}) %>% dplyr::mutate(country = factor(country, levels = mr_order)) %>% dplyr::arrange(country)
+
+# Global GCF / FXGCF summary rows (cross-country mean R^2; pooled-FE HAC t; factor corr).
+global_row <- function(target, pred_core, pred_reg, lvl_name) {
+  per <- split(cmp, cmp$country) %>% purrr::map_dfr(function(d) {
+    a <- r2t(d, target, pred_core); b <- r2t(d, target, pred_reg)
+    tibble::tibble(r2_core = as.numeric(a["r2"]), r2_reg = as.numeric(b["r2"]))
+  })
+  gg <- cmp %>% dplyr::distinct(ym, .keep_all = TRUE)
+  tibble::tibble(
+    country = lvl_name, n = dplyr::n_distinct(cmp$ym), corr_trend = NA_real_,
+    corr_f  = suppressWarnings(cor(gg[[pred_core]], gg[[pred_reg]], use = "complete.obs")),
+    r2_core = mean(per$r2_core, na.rm = TRUE), r2_reg = mean(per$r2_reg, na.rm = TRUE),
+    t_core  = pooled_fe_t(cmp, target, pred_core, 0L, 999999L),
+    t_reg   = pooled_fe_t(cmp, target, pred_reg,  0L, 999999L))
+}
+
+mean_row <- tibble::tibble(
+  country = "Mean (CF)", n = round(mean(cf_rows$n)),
+  corr_trend = mean(cf_rows$corr_trend, na.rm = TRUE), corr_f = mean(cf_rows$corr_f, na.rm = TRUE),
+  r2_core = mean(cf_rows$r2_core, na.rm = TRUE), r2_reg = mean(cf_rows$r2_reg, na.rm = TRUE),
+  t_core = NA_real_, t_reg = NA_real_)
+
+cvr <- dplyr::bind_rows(
+  cf_rows %>% dplyr::mutate(country = as.character(country)),
+  mean_row,
+  global_row("rx_t12",     "GCF",   "GCF_r",   "GCF"),
+  global_row("rx_USD_t12", "FXGCF", "FXGCF_r", "FXGCF")) %>%
+  dplyr::mutate(dR2 = r2_core - r2_reg)
+
+cat("\n===== Table 5: core vs headline (regular) CPI -- in-sample =====\n")
+print(as.data.frame(cvr %>% dplyr::transmute(
+  country, n, corr_trend = round(corr_trend, 2), corr_f = round(corr_f, 2),
+  r2_core = round(r2_core, 3), r2_reg = round(r2_reg, 3), dR2 = round(dR2, 3),
+  t_core = round(t_core, 2), t_reg = round(t_reg, 2))), row.names = FALSE)
+
+blank_na <- function(x, f) ifelse(is.na(x), "", f(x))
+t5_disp <- cvr %>% dplyr::transmute(
+  Country = dplyr::recode(country, !!!mr_name),
+  N = n,
+  `corr trend`  = blank_na(corr_trend, fmt2),
+  `corr factor` = fmt2(corr_f),
+  `R2 core`     = fmt3(r2_core),
+  `R2 reg`      = fmt3(r2_reg),
+  `dR2`         = fmt3(dR2),
+  `t core`      = blank_na(t_core, fmt2),
+  `t reg`       = blank_na(t_reg, fmt2))
+
+rob_tables$rob_t5_core_vs_reg <- table_to_grob(
+  as.data.frame(t5_disp),
+  title = "Robustness -- Core vs headline (regular) CPI: in-sample",
+  note  = paste0("Trend inflation, the cycle, and the factors rebuilt from REGULAR (all-items) ",
+                 "CPI instead of CORE CPI, compared on the per-country common sample.\n",
+                 "'corr trend'/'corr factor' are core-vs-regular correlations; 'R2 core'/'R2 reg' ",
+                 "are in-sample predictive fits of rx on the factor (HAC t in 't core'/'t reg');\n",
+                 "'dR2' = R2 core - R2 reg (positive = core fits better, as in Cieslak-Povala 2015, ",
+                 "Table 10 Panel C4). CF rows are per country; 'Mean (CF)' averages them; GCF and\n",
+                 "FXGCF are the global factors (cross-country mean R2, pooled fixed-effects HAC t). ",
+                 "rx is local-currency for CF/GCF and US-dollar for FXGCF."),
+  base_size = 8)
+
+# Figure: per-country in-sample R^2, core vs headline CPI (rx ~ CF).
+rob_plots$rob_f3_core_vs_reg <- cf_rows %>%
+  dplyr::transmute(country = factor(country, levels = mr_order),
+                   `Core CPI` = r2_core, `Headline CPI` = r2_reg) %>%
+  tidyr::pivot_longer(-country, names_to = "measure", values_to = "r_sq") %>%
+  dplyr::mutate(measure = factor(measure, levels = c("Core CPI", "Headline CPI"))) %>%
+  ggplot2::ggplot(ggplot2::aes(country, r_sq, fill = measure)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
+  ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  ggplot2::scale_fill_manual(values = c("Core CPI" = "#08519c", "Headline CPI" = "#a50f15"),
+                             name = NULL) +
+  ggplot2::labs(
+    title = expression(paste("In-sample ", R^2, " of ", rx %~% CF, ": core vs headline CPI")),
+    subtitle = "Trend inflation built from core (ex food & energy) vs regular all-items CPI",
+    x = NULL, y = expression(R^2)) +
+  theme_thesis +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+# --- (5) Out-of-sample comparison (reuse the recursive machinery). cyc_exp (core,
+#         expanding) was already built in the scheme block; build the regular cycle.
+cyc_reg <- build_cycle_base(Inf, infl = inflation_long_reg)
+pnl_core_oos <- add_oos_factors(cyc_exp, mt = 60, train_window = Inf)
+pnl_reg_oos  <- add_oos_factors(cyc_reg, mt = 60, train_window = Inf)
+
+oos_cmp_specs <- tibble::tribble(
+  ~lbl,             ~target,        ~predictor,
+  "rx ~ CF",        "rx_t12",       "CF_oos",
+  "rx ~ GCF",       "rx_t12",       "GCF_oos",
+  "rx_USD ~ FXGCF", "rx_USD_t12",   "FXGCF_oos")
+oos_cmp <- purrr::pmap_dfr(oos_cmp_specs, function(lbl, target, predictor) {
+  rc <- pooled_r2_oos(pnl_core_oos, target, predictor, mt = 60)
+  rr <- pooled_r2_oos(pnl_reg_oos,  target, predictor, mt = 60)
+  tibble::tibble(spec = lbl, core = rc$r2, reg = rr$r2, delta = rc$r2 - rr$r2)
+})
+
+cat("\n===== Table 6: core vs headline (regular) CPI -- out-of-sample =====\n")
+print(as.data.frame(oos_cmp %>% dplyr::mutate(dplyr::across(c(core, reg, delta), ~ round(., 3)))),
+      row.names = FALSE)
+
+t6_disp <- oos_cmp %>% dplyr::transmute(
+  Specification = spec, `OOS R2 core` = fmt3(core), `OOS R2 reg` = fmt3(reg),
+  `difference` = fmt3(delta))
+
+rob_tables$rob_t6_core_vs_reg_oos <- table_to_grob(
+  as.data.frame(t6_disp),
+  title = "Robustness -- Core vs headline CPI: out-of-sample R^2_oos",
+  note  = paste0("Pooled Campbell-Thompson R2_oos of the fully-recursive factor against the ",
+                 "recursive prevailing mean, with the entire chain rebuilt on regular CPI.\n",
+                 "Each column is scored over its own available sample (the regular series is ",
+                 "shorter, e.g. Japan ends 2021). 'difference' = core - regular."),
+  base_size = 8)
+
+
+# =============================================================================
 # Write every exhibit to disk as a vector PDF.
 # =============================================================================
 save_robustness <- function(tab_dir = "thesis/tables", fig_dir = "thesis/figures") {
   dir.create(tab_dir, showWarnings = FALSE, recursive = TRUE)
   dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
-  tab_size <- list(rob_t1_sub_is     = c(w = 11, h = 3.3),
-                   rob_t2_sub_oos    = c(w = 9,  h = 3.2),
-                   rob_t3_italy      = c(w = 11, h = 3.2),
-                   rob_t4_oos_scheme = c(w = 11, h = 3.0))
+  tab_size <- list(rob_t1_sub_is        = c(w = 11, h = 3.3),
+                   rob_t2_sub_oos       = c(w = 9,  h = 3.2),
+                   rob_t3_italy         = c(w = 11, h = 3.2),
+                   rob_t4_oos_scheme    = c(w = 11, h = 3.0),
+                   rob_t5_core_vs_reg   = c(w = 11, h = 4.4),
+                   rob_t6_core_vs_reg_oos = c(w = 8, h = 2.6))
   purrr::iwalk(rob_tables, function(g, nm) {
     sz <- tab_size[[nm]]; w <- if (is.null(sz)) 10 else sz[["w"]]; h <- if (is.null(sz)) 4.5 else sz[["h"]]
     ggplot2::ggsave(file.path(tab_dir, paste0(nm, ".pdf")), g, width = w, height = h)
