@@ -359,13 +359,16 @@ This real-time predictability is, moreover, economically exploitable:
 \Cref{ch:strategy} turns the global factor into a bond-timing strategy for a
 currency-hedged investor and shows that it raises the Sharpe ratio of a global
 bond portfolio and delivers a positive certainty-equivalent gain out of sample.
-\emph{Third}, for the dollar investor the out-of-sample picture mirrors
-Phase~III. The recursive $R^{2}_{\mathrm{oos}}$ is negative for the unadjusted
-global factor ($-0.07$); the FX-adjusted factor roughly halves the loss
-($-0.03$) and turns positive in one additional market, directionally consistent
-with the in-sample finding that the FX adjustment helps---but it remains below
-zero. Currency risk that erodes the in-sample predictability also defeats it in
-real time, and the FX adjustment narrows the gap without closing it.
+\emph{Third}, for the dollar investor the out-of-sample picture sharpens the
+in-sample finding of Phase~III. The recursive $R^{2}_{\mathrm{oos}}$ is clearly
+negative for the unadjusted global factor ($-0.07$), beating the recursive mean
+in only two markets; the FX-adjusted factor erases that loss, turning marginally
+positive at the pooled level ($+0.004$) and beating the mean in nine of the
+eleven markets. The pooled margin is thin and, as \Cref{ch:robustness} shows,
+fragile---it is concentrated in the post-crisis period and does not survive a
+rolling estimation window---but the FX adjustment does what it was designed to
+do, converting the unadjusted factor's broad out-of-sample failure into a broad,
+if economically marginal, success for the currency-converted investor.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/mr_f5_oos_r2.pdf}
@@ -398,14 +401,18 @@ predictive power, and the FX-adjusted factor recovers only part of it, because i
 this sample it is nearly indistinguishable from the unadjusted global factor.
 
 \emph{Fourth}, these conclusions survive---and in one respect sharpen---out of
-sample. Of the four headline specifications, only the global cycle factor beats
-the recursive prevailing mean (pooled $R^{2}_{\mathrm{oos}}=+0.05$, positive in
-ten of eleven markets); the local factor and both dollar-investor factors do
-not. Real-time predictability is therefore the near-exclusive preserve of the
-global cycle factor, and the FX adjustment narrows but does not close the dollar
-investor's out-of-sample gap. The contrast between the local factor's strong
-in-sample fit and its negative out-of-sample $R^{2}$ is the clearest sign that
-the predictability worth taking seriously is the \emph{global} one.
+sample. The global cycle factor beats the recursive prevailing mean clearly and
+robustly (pooled $R^{2}_{\mathrm{oos}}=+0.05$, positive in ten of eleven
+markets), while the local cycle factor and the \emph{unadjusted} dollar-investor
+factor do not (both negative, positive in only two markets each). The
+FX-adjusted factor is the marginal case: it turns the unadjusted dollar factor's
+loss into a slim pooled gain ($+0.004$, positive in nine of eleven markets),
+though one that \Cref{ch:robustness} shows to be fragile. Real-time
+predictability is therefore led, decisively, by the global cycle factor, with the
+FX adjustment salvaging a thin and conditional edge for the currency-converted
+investor. The contrast between the local factor's strong in-sample fit and its
+negative out-of-sample $R^{2}$ is the clearest sign that the predictability worth
+taking seriously is the \emph{global} one.
 
 The summary out-of-sample evidence above is developed in full---per country,
 across subsamples, and against the forward-rate factor---in

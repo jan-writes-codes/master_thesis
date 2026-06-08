@@ -285,9 +285,9 @@ rob_tables$rob_t2_sub_oos <- table_to_grob(
                  "mean, scored over country-months whose forecast-origin lies in the ",
                  "window (squared errors aggregated across the G10). Positive = the\n",
                  "factor beats the real-time historical average. Both the factor and ",
-                 "the predictive regression respect time t (doubly out-of-sample);\n",
-                 "'--' marks windows with too few real-time forecasts (the recursive ",
-                 "scheme needs a five-year training minimum). Factors as in Table 8.1."),
+                 "the predictive regression respect time t (doubly out-of-sample).\n",
+                 "All four factors share a five-year training minimum, so every window ",
+                 "carries real-time forecasts. Factors as in Table 8.1."),
   base_size = 8)
 
 
@@ -435,8 +435,8 @@ build_cycle_base <- function(train_window = Inf) {
 }
 
 # --- (b) Add the recursive factors to a cycle base, for a given training
-#         minimum `mt` and window. CF_oos / GCF_oos use mt; FXGCF_oos keeps a
-#         120-month floor (it is a single aggregate series, not a panel).
+#         minimum `mt` and window. CF_oos / GCF_oos and FXGCF_oos all use the
+#         same training minimum `mt` (FXGCF_oos no longer carries a longer floor).
 add_oos_factors <- function(base, mt = 60, train_window = Inf) {
   rdo <- base %>% dplyr::group_by(country) %>% dplyr::arrange(ym, .by_group = TRUE) %>%
     dplyr::group_modify(~ {
@@ -462,7 +462,7 @@ add_oos_factors <- function(base, mt = 60, train_window = Inf) {
     dplyr::arrange(ym)
   fx <- gp %>% dplyr::left_join(rxb, by = c("ym", "date")) %>% dplyr::arrange(ym)
   fx$FXGCF_oos <- oos_predict(fx, rx_USD_bar_t12 ~ cyc1_bar_oos + cbar_bar_oos,
-                              min_train = max(120, mt), h = 12, train_window = train_window)
+                              min_train = mt, h = 12, train_window = train_window)
   rdo %>% dplyr::select(country, ym, date, rx_t12, rx_USD_t12, CF_oos) %>%
     dplyr::left_join(gcfo %>% dplyr::select(ym, GCF_oos),   by = "ym") %>%
     dplyr::left_join(fx   %>% dplyr::select(ym, FXGCF_oos), by = "ym") %>%

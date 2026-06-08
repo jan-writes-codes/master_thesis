@@ -255,8 +255,9 @@ strat_tables$strat_t2_usd <- table_to_grob(
                  "recursive FX-adjusted and unadjusted global factors; the same ",
                  "mean-variance rule and equal-average-exposure ",
                  "reporting as the hedged strategy.\nOOS R2 is the Campbell-Thompson statistic of ",
-                 "the factor forecast. The dollar bond premium is near zero over the ",
-                 "sample, so all strategies are weak in absolute terms."),
+                 "the factor forecast. The unhedged dollar bond premium is modest over the ",
+                 "sample, so the dollar strategies improve on the passive portfolio but stay\n",
+                 "well below the currency-hedged investor."),
   base_size = 8)
 
 # Worked example: three consecutive months of the FXGCF dollar investor.

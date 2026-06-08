@@ -202,6 +202,9 @@ gcp_oos <- reg_data_oos %>%
 # -------------------------------------------------------------
 # 5. FXGCF_oos: recursive DH-style top-down (eq 17 analog)
 #    rx_USD_bar_t12 ~ cyc1_bar_oos + cbar_bar_oos, refit each t
+#    The predictive regression uses the same 60-month (5y) training
+#    minimum as CF_oos / GCF_oos, so FXGCF_oos shares their real-time
+#    burn-in (first forecast ~5y after the recursive cycles begin).
 # -------------------------------------------------------------
 cat("oos.R: building FXGCF_oos (recursive DH top-down) ...\n")
 
@@ -246,7 +249,7 @@ fxgcf_oos_data <- glob_pred_oos %>%
 fxgcf_oos_data$FXGCF_oos <- oos_predict(
   fxgcf_oos_data,
   rx_USD_bar_t12 ~ cyc1_bar_oos + cbar_bar_oos,
-  min_train = 120, h = 12
+  min_train = 60, h = 12
 )
 
 fxgcf_oos <- fxgcf_oos_data %>%
