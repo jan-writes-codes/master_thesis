@@ -645,7 +645,9 @@ cat(sprintf("core-vs-reg: inflation_reg duplicate (country,ym) = %d (differing v
 inflation_long_reg <- .infl_reg_raw %>% dplyr::arrange(country, date) %>%
   dplyr::group_by(country, ym) %>% dplyr::slice_tail(n = 1) %>%
   dplyr::group_by(country) %>% dplyr::arrange(date, .by_group = TRUE) %>%
-  dplyr::mutate(yoy_infl  = (cpi / dplyr::lag(cpi, 12) - 1) * 100,
+  # Same one-month publication lag as the baseline core series (data preperation.R).
+  dplyr::mutate(cpi_rt    = dplyr::lag(cpi, 1),
+                yoy_infl  = (cpi_rt / dplyr::lag(cpi_rt, 12) - 1) * 100,
                 trend_inf = cp_trend_reg(yoy_infl)) %>%
   dplyr::ungroup() %>%
   dplyr::select(date, ym, country, cpi, yoy_infl, trend_inf)
