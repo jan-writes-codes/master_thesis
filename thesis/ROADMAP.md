@@ -47,7 +47,7 @@ gap-filling and a dedicated robustness chapter.
 | 5 | Methodology | 8–10 | inference, OOS, EH-MC |
 | 6 | Replication & Validation | 6–8 | CP 1/2/4, DH 3/4/6/7; `s2_*`, `s3_*` |
 | 7 | Main Results (3 phases) | 12–15 | `s4_*`, `s5_*`, `s6_*`, `s9_*` |
-| 8 | Robustness (dedicated) | 8–10 | `s8_*`, `s10_*`, `rob_t1/t2/t3`, `rob_f1`, `r2_oos_tab` |
+| 8 | Robustness (dedicated) | 8–10 | `s8_*`, `s10_*`, `rob_t1/t2/t3/t4`, `rob_f1/f2`, `r2_oos_tab` |
 | 9 | Discussion | 5–7 | — |
 | 10 | Conclusion | 3–4 | — |
 | — | Appendix + front matter | — | full per-country tables, derivations |

@@ -9,7 +9,7 @@ generated cycle regressors, which can flatter the apparent fit. Second, they use
 the full estimation window, averaging over three decades that include two of the
 most violent episodes in the history of government-bond markets---the
 2007--2009 global financial crisis and the 2010--2012 euro-area sovereign-debt
-crisis. This chapter subjects the central findings to four tests. \Cref{sec:rob-oos}
+crisis. This chapter subjects the central findings to five tests. \Cref{sec:rob-oos}
 develops the out-of-sample evidence summarised in \Cref{sec:res-oos} in full,
 per country and per phase. \Cref{sec:rob-subsample} re-estimates every headline
 specification over economically defined subsamples, with the two crises isolated
@@ -17,7 +17,9 @@ as windows of their own, in-sample and out-of-sample, and gives the euro-area
 crisis and Italy a dedicated treatment. \Cref{sec:rob-cf-cp} asks whether the
 conclusions are specific to the macro-anchored cycle factor or hold equally for
 the canonical forward-rate factor of \citet{cochrane2005} and \citet{dahlquist2013}.
-\Cref{sec:rob-sensitivity} closes with the sensitivity of the results to the
+\Cref{sec:rob-core-headline} rebuilds the entire chain on regular all-items CPI in
+place of the core measure, mirroring the inflation-series robustness of
+\citet{cieslak2015}. \Cref{sec:rob-sensitivity} closes with the sensitivity of the results to the
 construction choices and states plainly which findings are fragile and which
 survive. Throughout, the organising result is the same one that emerged in
 \Cref{ch:results}: the GDP-weighted global cycle factor $\GCF_{t}$ is far more
@@ -53,13 +55,14 @@ small positive out-of-sample values are economically meaningful.
   \label{fig:s8-oos}
 \end{figure}
 
-The pooled picture is unambiguous (\Cref{fig:s8-oos}). Of the four headline
-specifications only the local-currency global factor beats the prevailing mean:
-$R^{2}_{\mathrm{oos}}=+0.05$ for $\rxbar_{i,t+12}\sim\GCF_{t}$
-\eqref{eq:h-global}, against $-0.07$ for the local cycle factor
-\eqref{eq:h-local}, $-0.07$ for the dollar-investor global factor
-\eqref{eq:h-usd-global}, and $-0.03$ for the FX-adjusted factor
-\eqref{eq:h-fxgcf}. The per-country detail (\Cref{fig:s8-oos-local}) sharpens the
+The pooled picture is clear (\Cref{fig:s8-oos}). The local-currency global factor
+beats the prevailing mean decisively, with $R^{2}_{\mathrm{oos}}=+0.05$ for
+$\rxbar_{i,t+12}\sim\GCF_{t}$ \eqref{eq:h-global}, against $-0.07$ for the local
+cycle factor \eqref{eq:h-local} and $-0.07$ for the unadjusted dollar-investor
+global factor \eqref{eq:h-usd-global}. The FX-adjusted factor \eqref{eq:h-fxgcf}
+is the marginal fourth case, edging just above the mean at $+0.004$---a thin
+pooled gain whose robustness is examined in \Cref{sec:rob-oos-scheme} and
+\Cref{sec:rob-subsample}. The per-country detail (\Cref{fig:s8-oos-local}) sharpens the
 contrast: the global factor is positive in ten of the eleven markets, whereas the
 recursive local factor beats the mean in only two (the United States and
 Canada). Aggregating the eleven national cycles into one GDP-weighted factor
@@ -106,14 +109,19 @@ remains reliable.
   \label{fig:s8-gcf-conv}
 \end{figure}
 
-For the dollar investor the out-of-sample verdict mirrors the in-sample one
+For the dollar investor the out-of-sample evidence is more favourable to the FX
+adjustment than the in-sample collapse of Phase~III would suggest
 (\Cref{fig:s8-oos-usd}). The unadjusted global factor on currency-converted
 returns has $R^{2}_{\mathrm{oos}}=-0.07$ and beats the recursive mean in only two
-markets; the FX-adjusted factor roughly halves the loss to $-0.03$ and adds one
-market (three of eleven), directionally consistent with the in-sample finding
-that the FX adjustment helps, but it remains below zero. Currency risk that
-erodes the in-sample predictability also defeats it in real time, and the
-purpose-built adjustment narrows the gap without closing it.
+markets. The FX-adjusted factor reverses this: its pooled
+$R^{2}_{\mathrm{oos}}$ turns marginally positive at $+0.004$ and it beats the mean
+in nine of the eleven markets---a broad, if economically slim, improvement that is
+exactly what the purpose-built factor was designed to deliver. The gain is real
+but fragile, as the next two subsections show: it is concentrated in the
+post-crisis period, the early real-time forecasts are poor, and it does not
+survive a rolling estimation window. Currency risk that erases the unadjusted
+factor's predictability is therefore partly, but only partly and conditionally,
+undone by the FX adjustment.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/s8_r2_oos_usd.pdf}
@@ -121,6 +129,81 @@ purpose-built adjustment narrows the gap without closing it.
     investor, unadjusted global factor \eqref{eq:h-usd-global} versus the
     FX-adjusted global factor \eqref{eq:h-fxgcf}.}
   \label{fig:s8-oos-usd}
+\end{figure}
+
+\subsection{Expanding versus Rolling Estimation Windows}
+\label{sec:rob-oos-scheme}
+
+The out-of-sample protocol embeds two estimation choices: it uses
+\emph{expanding} windows---the recursive regression at each date $t$ is fitted on
+all history up to $t$---and a five-year (sixty-month) minimum training span before
+the first real-time forecast is produced. Both are conventional, but neither is
+innocuous, and a reader is entitled to ask whether the global factor's edge is an
+artefact of either. To answer this the entire recursive chain---the yield--trend
+decomposition, the predictive regression, and the prevailing-mean
+benchmark---is rebuilt from scratch under five estimation schemes: expanding
+windows with a three-, five-, and seven-year minimum, and rolling windows of ten
+and fifteen years (each scheme scoring its factor against the prevailing mean
+constructed under the \emph{same} scheme, so the comparison is internally
+consistent). \Cref{tab:rob-oos-scheme} and \Cref{fig:rob-oos-scheme} report the
+pooled out-of-sample $R^{2}$; the expanding/five-year column reproduces the
+baseline of \Cref{tab:rob-sub-oos} exactly, a check on the rebuilt machinery.
+
+The length of the training minimum matters little for the global cycle factor and
+more for the FX-adjusted one. The global factor delivers essentially the same
+out-of-sample $R^{2}_{\mathrm{oos}}$ under a three-, five-, or seven-year
+minimum---$+0.05$, $+0.05$, and $+0.05$ respectively, positive in ten of eleven
+markets in every case---so for the headline result the sixty-month choice is
+representative rather than a tuned parameter. The weaker specifications, by
+contrast, improve as the minimum lengthens, because more training history
+stabilises each recursive coefficient before it is used: a seven-year minimum
+lifts the local cycle factor to approximately zero ($+0.004$), the unadjusted
+dollar-investor factor from $-0.07$ to $-0.01$, and the FX-adjusted factor from
+$+0.004$ to $+0.05$ (positive in nine of eleven markets). The FX-adjusted factor
+is the most sensitive of the four to this choice---it slips to $-0.02$ under a
+three-year minimum---which is unsurprising, since it is fitted on a single
+GDP-weighted aggregate series whose three-parameter regression has the least data
+to work with and therefore gains the most from a longer training window. This is a
+reason to prefer the conservative five-year (or longer) minimum, not evidence
+against the factor.
+
+The window \emph{shape}, by contrast, matters a great deal, and here the chapter
+must be candid: \emph{every} specification's out-of-sample edge depends on the
+expanding window. The global cycle factor's $R^{2}_{\mathrm{oos}}$ falls from
+$+0.05$ to $-0.11$ under a ten-year rolling window and $-0.05$ under a
+fifteen-year one, positive in zero of eleven markets in both cases; the
+FX-adjusted factor likewise turns negative ($-0.09$ and $-0.01$). The result is
+economically coherent rather than troubling. The cycle factors are anchored to
+slowly-moving trend inflation and their predictive loadings are stable through
+time (\Cref{sec:rob-subsample}), so accumulating the full history sharpens those
+loadings; a rolling window throws away informative old data and re-estimates on a
+shorter, noisier span, while the rolling prevailing mean it is judged against
+becomes correspondingly more adaptive and harder to beat. The factors' real-time
+advantage is therefore a property of \emph{expanding}-window estimation---it
+rewards the patient accumulation of a long macro history---and is not a generic
+feature of any real-time scheme. The ranking across the four specifications is
+preserved under every scheme: the global cycle factor is the most robust, positive
+under all three expanding minimums; the FX-adjusted factor is positive under the
+five- and seven-year expanding minimums but not under the rolling windows; and the
+local and unadjusted dollar-investor factors are negative throughout.
+
+\begin{table}[t]\centering
+  \includegraphics[width=\linewidth]{tables/rob_t4_oos_scheme.pdf}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ under alternative estimation
+    schemes, the full recursive chain rebuilt under each. Expanding windows with a
+    three-, five-, and seven-year training minimum; rolling windows of ten and
+    fifteen years. Each scheme scores its factor against the prevailing mean built
+    under the same scheme; the expanding/five-year column reproduces the baseline
+    of \Cref{tab:rob-sub-oos}.}
+  \label{tab:rob-oos-scheme}
+\end{table}
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.85\linewidth]{figures/rob_f2_oos_scheme.pdf}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by estimation scheme and
+    specification. The global cycle factor (red) clears zero under all three
+    expanding-window minimums but not under either rolling window.}
+  \label{fig:rob-oos-scheme}
 \end{figure}
 
 % ===========================================================================
@@ -181,17 +264,18 @@ subsample evidence states it more sharply than the pooled regression can.
   \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ across subsamples, pooled
     \citet{campbellthompson2008} statistic of the fully-recursive factor against
     the recursive prevailing mean, scored over the country-months whose forecast
-    origin lies in each window. ``--'' marks windows with too few real-time
-    forecasts (the recursive scheme needs a five-year training minimum).}
+    origin lies in each window. All four factors share a five-year training
+    minimum, so every window carries real-time forecasts.}
   \label{tab:rob-sub-oos}
 \end{table}
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.85\linewidth]{figures/rob_f1_oos_sub.pdf}
   \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by subsample and specification
-    (the pre-crisis window is omitted, having too few real-time forecasts for the
-    dollar-investor factors). The global cycle factor clears zero in every window
-    except the financial crisis itself.}
+    (the pre-crisis window is omitted for legibility: its early FX-adjusted
+    forecasts, made on the shortest training histories, are an extreme outlier at
+    $-1.07$). The global cycle factor clears zero in every window except the
+    financial crisis itself.}
   \label{fig:rob-oos-sub}
 \end{figure}
 
@@ -203,14 +287,19 @@ post-crisis window ($+0.09$), and only turns negative \emph{in} the financial
 crisis ($-0.17$)---the one regime in which no slow-moving macro factor can be
 expected to forecast the panic-driven repricing of 2008. The local cycle factor,
 by contrast, fails out of sample in every window, most severely in the financial
-crisis ($-0.31$). The dollar-investor factors are negative throughout except for
-two bright spots that are themselves informative: the unadjusted global factor is
-positive pre-crisis ($+0.13$), and the FX-adjusted factor is positive
-\emph{only} in the euro-area crisis ($+0.11$), the one window in which currency
-and bond cycles align under common sovereign stress. The robustness message is
-that the global factor's real-time edge is not the artefact of a single benign
-regime: it is present before, between, and after the two crises, and breaks down
-only in the eye of the 2008 storm.
+crisis ($-0.31$). The two dollar-investor factors split the sample between them.
+The unadjusted global factor is positive \emph{only} in the pre-crisis window
+($+0.13$) and negative through both crises and after. The FX-adjusted factor is
+its near-mirror image: it beats the recursive mean in the euro-area crisis
+($+0.09$) and across the long post-crisis window ($+0.04$)---the bulk of the
+sample, which is what makes its full-sample pooled $R^{2}_{\mathrm{oos}}$
+marginally positive---but it fails badly in the pre-crisis window ($-1.07$),
+where its forecasts rest on the shortest training histories. The FX adjustment
+thus earns its slim full-sample edge in the recent, post-2009 dollar regime,
+exactly where the unadjusted factor cannot. For the headline factor the message
+is unchanged: the global cycle factor's real-time edge is not the artefact of a
+single benign regime---it is present before, between, and after the two crises,
+and breaks down only in the eye of the 2008 storm.
 
 \subsection{The Euro-Area Crisis and Italy}
 \label{sec:rob-italy}
@@ -318,6 +407,88 @@ the forward factor on which \citet{dahlquist2013} originally established it.
 \end{figure}
 
 % ===========================================================================
+\section{Core versus Headline Inflation}
+\label{sec:rob-core-headline}
+
+The cycle factor is the residual of yields on \emph{trend} inflation, and trend
+inflation is built throughout from \emph{core} CPI (excluding food and energy),
+following \citet{cieslak2015}, who argue that core is the better proxy for the
+persistent component of inflation that bond investors price. That choice is not
+innocuous: \citet{cieslak2015} themselves check the alternative in their Table~10,
+Panel~C4, rebuilding the trend from all-items CPI and reporting that it delivers a
+predictive $R^{2}$ about nine percent lower on average, the divergence dating to
+the energy-price volatility of the 2000s. This section repeats that test for the
+G10. The entire chain---trend inflation, the cycle, and the three factors---is
+rebuilt on \emph{regular} (all-items, headline) CPI and compared with the
+core-CPI baseline on the per-country common sample.\footnote{The headline series
+carries 135 month-country cells with multiple release vintages; we keep the
+most-revised value. The regular series is also shorter in places (Japan ends in
+2021), which the per-country common-sample alignment respects.}
+
+\begin{table}[t]\centering
+  \includegraphics[width=\linewidth]{tables/rob_t5_core_vs_reg.pdf}
+  \caption{Core versus headline CPI, in-sample. Trend inflation and the factors
+    rebuilt from regular all-items CPI, compared on the per-country common sample.
+    ``corr'' columns are core-versus-headline correlations; ``R2 core''/``R2 reg''
+    are in-sample predictive fits of the excess return on the factor; ``dR2'' is
+    their difference (positive = core fits better, as in \citet{cieslak2015},
+    Table~10, Panel~C4). CF rows are per country; GCF and FXGCF are the global
+    factors.}
+  \label{tab:rob-core-headline}
+\end{table}
+
+In sample, the two inflation measures lead to very similar factors. The smoothing
+in the discounted moving average removes most of the food- and energy-price noise,
+so core and headline \emph{trend} inflation correlate $0.90$ on average across the
+G10, and the cycle factors they generate correlate $0.95$ (local) and $0.92$
+(global). Predictability is nonetheless modestly weaker on headline CPI, exactly
+as \citet{cieslak2015} find: the cross-country mean in-sample $R^{2}$ of the local
+factor falls from $0.250$ (core) to $0.234$ (headline), and the global factor from
+$0.252$ to $0.224$---a relative drop of about six to eleven percent, in the
+neighbourhood of their nine---while both remain overwhelmingly significant (the
+global factor's pooled HAC $t$ is $14.2$ on core and $14.4$ on headline).
+\Cref{tab:rob-core-headline} and \Cref{fig:rob-core-headline} show the gap is
+concentrated where the data's energy pass-through is largest: the United States,
+whose local $R^{2}$ falls from $0.33$ to $0.24$, accounts for much of the average,
+whereas a handful of markets (France, Japan, Sweden) fit marginally \emph{better}
+on headline. The FX-adjusted factor tells the same story ($R^{2}$ of $0.096$ on
+core versus $0.072$ on headline).
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.88\linewidth]{figures/rob_f3_core_vs_reg.pdf}
+  \caption{In-sample $R^{2}$ of the local predictive regression
+    $\rxbar_{i,t+12}\sim\CF_{i,t}$ by country, with the cycle factor built on core
+    (ex food and energy) versus regular all-items CPI.}
+  \label{fig:rob-core-headline}
+\end{figure}
+
+\begin{table}[t]\centering
+  \includegraphics[width=0.75\linewidth]{tables/rob_t6_core_vs_reg_oos.pdf}
+  \caption{Core versus headline CPI, out-of-sample. Pooled
+    \citet{campbellthompson2008} $R^{2}_{\mathrm{oos}}$ of the fully-recursive
+    factor against the recursive prevailing mean, with the whole chain rebuilt on
+    each inflation measure. Each column is scored over its own available sample.}
+  \label{tab:rob-core-headline-oos}
+\end{table}
+
+The out-of-sample comparison is where the choice of inflation measure becomes
+decisive, and it vindicates the baseline. In sample the measure barely matters;
+out of sample it is the difference between a result and none. The global cycle
+factor's real-time edge---the central finding of \Cref{sec:rob-oos}---survives on
+core CPI ($R^{2}_{\mathrm{oos}}=+0.05$) but \emph{vanishes} on headline CPI
+($-0.01$); the FX-adjusted factor collapses similarly (from $+0.004$ to $-0.14$),
+and the local factor remains negative under both
+(\Cref{tab:rob-core-headline-oos}). The asymmetry is economically intelligible.
+The recursive estimator re-fits both the trend and the predictive coefficients on
+data available only up to each date, so it is far more exposed to the
+energy-driven noise in headline inflation than the full-sample regression, which
+averages that noise away; \citet{cieslak2015} note that core and all-items
+inflation diverged in the 2000s precisely because energy-price swings, which do
+not pass through to the yield curve, inflate the headline trend. The use of core
+CPI is therefore not merely a convention inherited from \citet{cieslak2015}: it is
+material to the headline real-time result, and the global cycle factor's
+out-of-sample predictability is a property of the macro anchor measured cleanly.
+
 \section{Sensitivity to Construction Choices}
 \label{sec:rob-sensitivity}
 
@@ -349,8 +520,9 @@ nearly collinear with the unadjusted global factor in this sample, adds little
 beyond it except in the euro-area crisis. What survives every test in this
 chapter is the same single object: the GDP-weighted global cycle factor predicts
 international bond returns in-sample and out-of-sample, across every subsample
-except the financial crisis itself, more robustly than its local counterpart, its
-dollar-investor variant, or the forward-rate factor against which it is most
-naturally compared. That object, and the economic value it carries
+except the financial crisis itself and---out of sample---when the macro trend is
+measured cleanly with core inflation (\Cref{sec:rob-core-headline}), more robustly
+than its local counterpart, its dollar-investor variant, or the forward-rate
+factor against which it is most naturally compared. That object, and the economic value it carries
 (\Cref{ch:strategy}), is the finding the thesis stands on; its interpretation is
 taken up in \Cref{ch:discussion}.
