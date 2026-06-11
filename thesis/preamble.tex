@@ -27,7 +27,9 @@
   labelsep=newline, justification=raggedright, singlelinecheck=false,
   skip=0.6em}
 \newcommand{\tabnotes}[1]{\par\vspace{0.6em}%
-  \begingroup\footnotesize\singlespacing\noindent #1\par\endgroup}
+  \begin{minipage}{\linewidth}%
+    \footnotesize\singlespacing\noindent #1\par
+  \end{minipage}}
 \newcommand{\panel}[2]{\multicolumn{#1}{@{}l}{\textit{#2}}}
 
 % --- Layout -----------------------------------------------------------------
