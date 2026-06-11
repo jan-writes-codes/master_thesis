@@ -45,15 +45,11 @@ country-by-country projection of $\rxbar_{i,t+12}$ on the one-year cycle
 $\cyc^{(1)}_{i,t}$ and the average cycle $\cycbar_{i,t}$, of which $\CF$ is the
 fitted combination.
 
-\begin{table}[t]\centering
-  \includegraphics[width=\linewidth]{tables/mr_t1_phase1.pdf}
-  \caption{Phase~I --- local cycle-factor predictability across the G10. Each
-    row is the predictive regression $\rxbar_{i,t+12}=\gamma_{0}
-    +\gamma_{1}\cyc^{(1)}_{i,t}+\gamma_{2}\cycbar_{i,t}+\varepsilon$ underlying
-    the local cycle factor \eqref{eq:cf}, with Newey--West HAC $t$-statistics in
-    parentheses and the joint Wald $p$-value that both slopes are zero. The final
-    row pools the panel with country fixed effects.}
+\begin{table}[t]
+  \caption{Phase~I: local cycle-factor predictability across the G10}
   \label{tab:mr-phase1}
+  \centering
+  \input{tables/mr_t1_phase1}
 \end{table}
 
 \begin{figure}[t]\centering
@@ -105,15 +101,12 @@ $R^{2}$ tracks the maturity-averaged figures and is largest at the five- and
 ten-year points, reaching $35\%$ at ten years for the United States and $36\%$ at
 five years for the Netherlands.
 
-\begin{table}[t]\centering
-  \includegraphics[width=\linewidth]{tables/mr_t1b_maturity.pdf}
-  \caption{Phase~I by maturity --- predicting individual excess returns with the
-    cycle factor. Each block regresses the duration-standardised excess return
-    $\rx^{(n)}_{i,t+12}/n$ on the local cycle factor $\CF_{i,t}$ \eqref{eq:h-local}
-    for $n\in\{2,5,10\}$; cells report the loading with its Newey--West HAC
-    $t$-statistic and the in-sample $R^{2}$. The final row pools the panel with
-    country fixed effects. After \citet{cieslak2015}, Table~4, Panel~A.}
+\begin{table}[t]
+  \caption{Phase~I by maturity: predicting individual excess returns with the
+    cycle factor}
   \label{tab:mr-phase1-mat}
+  \centering
+  \input{tables/mr_t1b_maturity}
 \end{table}
 
 The answer to the first research question is therefore affirmative. The
@@ -151,15 +144,11 @@ the residual of $\CF_{i,t}$ on $\GCF_{t}$, following the construction of
 $\rxbar_{i,t+12}=\alpha_i+\beta_i\,\CF^{\perp}_{i,t}+\gamma_i\,\GCF_{t}
 +\varepsilon$ is estimated per country. \Cref{tab:mr-phase2} reports the result.
 
-\begin{table}[t]\centering
-  \includegraphics[width=\linewidth]{tables/mr_t2_phase2.pdf}
-  \caption{Phase~II --- global versus local cycle factor. ``R2 CF'' and
-    ``R2 GCF'' are the single-factor fits \eqref{eq:h-local} and
-    \eqref{eq:h-global}; ``R2 joint'' is the horse race
-    $\rxbar_{i,t+12}\sim\CF^{\perp}+\GCF$ \eqref{eq:h-horse}. HAC $t$-statistics;
-    the joint Wald $p$-value and its Benjamini--Hochberg FDR adjustment across
-    the eleven markets test no joint predictability.}
+\begin{table}[t]
+  \caption{Phase~II: global versus local cycle factor}
   \label{tab:mr-phase2}
+  \centering
+  \input{tables/mr_t2_phase2}
 \end{table}
 
 \begin{figure}[t]\centering
@@ -230,14 +219,11 @@ factor $\FXGCF_{t}$---built top-down on the GDP-weighted average dollar return
 \Cref{tab:mr-phase3} reports the dollar-investor regressions \eqref{eq:h-usd-global}
 and \eqref{eq:h-fxgcf}.
 
-\begin{table}[t]\centering
-  \includegraphics[width=\linewidth]{tables/mr_t3_phase3.pdf}
-  \caption{Phase~III --- US-dollar investor. The dependent variable is the
-    dollar excess return $\rx^{\mathrm{USD}}_{i,t+12}$ \eqref{eq:rx-usd}. The
-    GCF block regresses it on the global factor \eqref{eq:h-usd-global}; the
-    FXGCF block on the FX-adjusted global factor \eqref{eq:h-fxgcf}. HAC
-    $t$-statistics in parentheses. The US row carries no currency leg.}
+\begin{table}[t]
+  \caption{Phase~III: the US-dollar investor, global versus FX-adjusted factor}
   \label{tab:mr-phase3}
+  \centering
+  \input{tables/mr_t3_phase3}
 \end{table}
 
 \begin{figure}[t]\centering
@@ -328,18 +314,11 @@ cross-factor ranking, not across the two columns for a change in magnitude. The
 per-country detail and the forward-factor comparison are developed in
 \Cref{ch:robustness}.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.9\linewidth]{tables/mr_t4_oos.pdf}
-  \caption{Out-of-sample summary. In-sample $R^{2}$ is the cross-country mean of
-    the single-factor fits (variance explained around the full-sample mean).
-    Out-of-sample $R^{2}$ is the pooled \citet{campbellthompson2008} statistic,
-    $1-\mathrm{SSE}_{\text{factor}}/\mathrm{SSE}_{\text{mean}}$, of the
-    fully-recursive factor forecast \emph{relative to the recursive
-    prevailing-mean forecast} \eqref{eq:meth-ctr2}; positive means the factor
-    beats the real-time historical average. Pooling sums each country's squared
-    errors against its own recursive mean before forming the ratio. The two
-    columns use different benchmarks and are not comparable in level.}
+\begin{table}[t]
+  \caption{Out-of-sample summary: recursive Campbell--Thompson $R^{2}$ by phase}
   \label{tab:mr-oos}
+  \centering
+  \input{tables/mr_t4_oos}
 \end{table}
 
 Three messages emerge, one per phase. \emph{First}, the local cycle factor does

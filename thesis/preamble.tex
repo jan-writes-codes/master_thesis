@@ -21,6 +21,17 @@
 \usepackage{float}
 \graphicspath{{figures/}{tables/}}
 
+% JFE-style table headings: "Table N" and a bold title, each on its own line,
+% set above the table; notes go below via \tabnotes.
+\captionsetup[table]{position=above, labelfont=bf, textfont=bf,
+  labelsep=newline, justification=raggedright, singlelinecheck=false,
+  skip=0.6em}
+\newcommand{\tabnotes}[1]{\par\vspace{0.6em}%
+  \begin{minipage}{\linewidth}%
+    \footnotesize\singlespacing\noindent #1\par
+  \end{minipage}}
+\newcommand{\panel}[2]{\multicolumn{#1}{@{}l}{\textit{#2}}}
+
 % --- Layout -----------------------------------------------------------------
 \usepackage[a4paper, margin=2.5cm]{geometry}
 \usepackage{setspace}

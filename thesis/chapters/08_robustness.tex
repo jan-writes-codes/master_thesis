@@ -187,15 +187,11 @@ under all three expanding minimums; the FX-adjusted factor is positive under the
 five- and seven-year expanding minimums but not under the rolling windows; and the
 local and unadjusted dollar-investor factors are negative throughout.
 
-\begin{table}[t]\centering
-  \includegraphics[width=\linewidth]{tables/rob_t4_oos_scheme.pdf}
-  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ under alternative estimation
-    schemes, the full recursive chain rebuilt under each. Expanding windows with a
-    three-, five-, and seven-year training minimum; rolling windows of ten and
-    fifteen years. Each scheme scores its factor against the prevailing mean built
-    under the same scheme; the expanding/five-year column reproduces the baseline
-    of \Cref{tab:rob-sub-oos}.}
+\begin{table}[t]
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ under alternative estimation schemes}
   \label{tab:rob-oos-scheme}
+  \centering
+  \input{tables/rob_t4_oos_scheme}
 \end{table}
 
 \begin{figure}[t]\centering
@@ -221,14 +217,11 @@ construction noisier than the full-sample figures, and the in-sample $R^{2}$ in
 short, volatile windows is mechanically higher; the point of the exercise is the
 \emph{pattern} across windows, not the precise level in any one.
 
-\begin{table}[t]\centering
-  \includegraphics[width=\linewidth]{tables/rob_t1_sub_is.pdf}
-  \caption{In-sample predictability across subsamples. Each cell pair reports the
-    cross-country mean single-factor $R^{2}$ and the pooled country-fixed-effects
-    Newey--West HAC $t$-statistic on the factor, for the local-currency cycle
-    factors (CF, GCF) and the dollar-investor factors (GCF, FXGCF). Subsamples are
-    dated by forecast origin.}
+\begin{table}[t]
+  \caption{In-sample predictability across subsamples}
   \label{tab:rob-sub-is}
+  \centering
+  \input{tables/rob_t1_sub_is}
 \end{table}
 
 \Cref{tab:rob-sub-is} reports the in-sample results. The local-currency cycle
@@ -259,14 +252,11 @@ and synchronised monetary policy sets in, the cyclical signal in dollar returns
 disappears. This is a genuine limitation of the FX-adjusted factor, and the
 subsample evidence states it more sharply than the pooled regression can.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.95\linewidth]{tables/rob_t2_sub_oos.pdf}
-  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ across subsamples, pooled
-    \citet{campbellthompson2008} statistic of the fully-recursive factor against
-    the recursive prevailing mean, scored over the country-months whose forecast
-    origin lies in each window. All four factors share a five-year training
-    minimum, so every window carries real-time forecasts.}
+\begin{table}[t]
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ across subsamples}
   \label{tab:rob-sub-oos}
+  \centering
+  \input{tables/rob_t2_sub_oos}
 \end{table}
 
 \begin{figure}[t]\centering
@@ -312,16 +302,11 @@ $t=3.7$ on the orthogonalised local factor). \Cref{tab:rob-italy} traces the
 Italian factors across the four subsamples and shows that this residual local
 content is overwhelmingly a crisis phenomenon.
 
-\begin{table}[t]\centering
-  \includegraphics[width=\linewidth]{tables/rob_t3_italy.pdf}
-  \caption{Italy across subsamples. ``R2 CF/GCF (IS)'' are single-factor
-    in-sample fits of Italian local-currency $\rxbar_{t+12}$; $t(\CF^{\perp})$ and
-    $t(\GCF)$ are the horse-race HAC $t$-statistics from
-    $\rxbar_{t+12}\sim\CF^{\perp}+\GCF$ \eqref{eq:h-horse}, with $\CF^{\perp}$ the
-    Italian cycle factor orthogonalised against the global factor;
-    ``R2 CF/GCF (OOS)'' are the recursive \citet{campbellthompson2008} statistics
-    scored in the window.}
+\begin{table}[t]
+  \caption{Italy across subsamples}
   \label{tab:rob-italy}
+  \centering
+  \input{tables/rob_t3_italy}
 \end{table}
 
 The Italian local cycle factor's in-sample $R^{2}$ rises from $0.29$ over the
@@ -425,16 +410,11 @@ carries 135 month-country cells with multiple release vintages; we keep the
 most-revised value. The regular series is also shorter in places (Japan ends in
 2021), which the per-country common-sample alignment respects.}
 
-\begin{table}[t]\centering
-  \includegraphics[width=\linewidth]{tables/rob_t5_core_vs_reg.pdf}
-  \caption{Core versus headline CPI, in-sample. Trend inflation and the factors
-    rebuilt from regular all-items CPI, compared on the per-country common sample.
-    ``corr'' columns are core-versus-headline correlations; ``R2 core''/``R2 reg''
-    are in-sample predictive fits of the excess return on the factor; ``dR2'' is
-    their difference (positive = core fits better, as in \citet{cieslak2015},
-    Table~10, Panel~C4). CF rows are per country; GCF and FXGCF are the global
-    factors.}
+\begin{table}[t]
+  \caption{Core versus headline CPI: in-sample}
   \label{tab:rob-core-headline}
+  \centering
+  \input{tables/rob_t5_core_vs_reg}
 \end{table}
 
 In sample, the two inflation measures lead to very similar factors. The smoothing
@@ -462,13 +442,11 @@ core versus $0.068$ on headline).
   \label{fig:rob-core-headline}
 \end{figure}
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.75\linewidth]{tables/rob_t6_core_vs_reg_oos.pdf}
-  \caption{Core versus headline CPI, out-of-sample. Pooled
-    \citet{campbellthompson2008} $R^{2}_{\mathrm{oos}}$ of the fully-recursive
-    factor against the recursive prevailing mean, with the whole chain rebuilt on
-    each inflation measure. Each column is scored over its own available sample.}
+\begin{table}[t]
+  \caption{Core versus headline CPI: out-of-sample}
   \label{tab:rob-core-headline-oos}
+  \centering
+  \input{tables/rob_t6_core_vs_reg_oos}
 \end{table}
 
 The out-of-sample comparison is where the choice of inflation measure becomes
