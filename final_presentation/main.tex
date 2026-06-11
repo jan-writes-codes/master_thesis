@@ -18,6 +18,14 @@
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
+% Make the deck compile both from inside final_presentation/ (latexmk here)
+% and from the repository root (e.g. an Overleaf project containing the whole
+% repo with this file selected as the main document).
+\graphicspath{{./}{final_presentation/}}
+\IfFileExists{references.bib}
+  {\newcommand{\bibfile}{references}}
+  {\newcommand{\bibfile}{final_presentation/references}}
+
 % Notation (matches the thesis)
 \newcommand{\CF}{\mathrm{CF}}
 \newcommand{\GCF}{\mathrm{GCF}}
@@ -336,7 +344,7 @@
 
 \begin{frame}{Bibliography}
   \small
-  \bibliography{references}
+  \bibliography{\bibfile}
 \end{frame}
 
 % --------------------------------------------------------------------------
