@@ -66,14 +66,11 @@ $\gamma=5$, the certainty-equivalent gain is $0.51\%$ per year over buy-and-hold
 and $0.30\%$ over the mean-timing benchmark; the global cycle factor retains the
 highest certainty equivalent at $\gamma=10$ as well.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.9\linewidth]{tables/strat_t1_performance.pdf}
-  \caption{Out-of-sample performance of the global-cycle-factor bond-timing
-    strategy, 2005--2024. Exposure follows the mean--variance rule
-    \eqref{eq:strat-weight} from the recursive $\GCF^{\mathrm{oos}}$ forecast.
-    The Sharpe ratio is scale-invariant; mean, volatility, and the
-    certainty-equivalent (CER) return are reported at equal average exposure.}
+\begin{table}[t]
+  \caption{Economic value of the global cycle factor: timing a 10Y global bond portfolio}
   \label{tab:strat-perf}
+  \centering
+  \input{tables/strat_t1_performance}
 \end{table}
 
 \Cref{fig:strat-cumret} shows the cumulative wealth of the timed and passive
@@ -119,14 +116,11 @@ of the global factor, so the dollar strategy is evaluated over the same
 out-of-sample window (2005--2024) as the hedged strategy of
 \Cref{sec:strat-performance}.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.9\linewidth]{tables/strat_t2_usd.pdf}
-  \caption{The unhedged US-dollar investor. Timing the dollar excess return
-    \eqref{eq:rx-usd} of the 10Y global bond portfolio with the recursive
-    FX-adjusted factor $\FXGCF^{\mathrm{oos}}$ and, for comparison, the unadjusted
-    $\GCF^{\mathrm{oos}}$. Same mean--variance rule and reporting as
-    \Cref{tab:strat-perf}.}
+\begin{table}[t]
+  \caption{The US-dollar investor: timing dollar returns with the FX-adjusted factor}
   \label{tab:strat-usd}
+  \centering
+  \input{tables/strat_t2_usd}
 \end{table}
 
 Two facts shape the result. First, over this sample the unhedged dollar bond
@@ -166,13 +160,11 @@ dollar excess return and the recursive return volatility; and (iii) set the
 mean--variance target weight \eqref{eq:strat-weight} and rebalance the portfolio
 to it.
 
-\begin{table}[t]\centering
-  \includegraphics[width=\linewidth]{tables/strat_t3_example.pdf}
-  \caption{Worked example: the FX-adjusted dollar investor over three consecutive
-    months. The target weight follows the mean--variance rule
-    \eqref{eq:strat-weight}; the realized twelve-month return is shown only to
-    judge the call ex post and is not used in forming the weight.}
+\begin{table}[t]
+  \caption{Worked example: the FX-adjusted dollar investor over three months in mid-2022}
   \label{tab:strat-example}
+  \centering
+  \input{tables/strat_t3_example}
 \end{table}
 
 In May 2022 the factor still reads slightly positive ($+0.17$); the real-time
