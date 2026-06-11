@@ -23,11 +23,18 @@ Three features of the evidence dictate the design. First, the predictability
 that survives out of sample is in \emph{local-currency} returns; the dollar
 signal is far weaker (\Cref{sec:res-phase3}). The strategy is therefore run for a
 \emph{currency-hedged} global investor, with the unhedged US-dollar investor
-analysed separately in \Cref{sec:strat-fx}. Second, the global cycle factor is a single
+analysed separately in \Cref{sec:strat-fx}; local-currency excess returns, in
+which each bond position is funded in the local money market, are the standard
+representation of an FX-risk-hedged international bond portfolio, equivalent
+to managing the currency exposure with FX forwards \citep{randl2025}. Second,
+the global cycle factor is a single
 time series, so it carries no information about which country to favour---it
 times \emph{aggregate} bond exposure. The investable asset is accordingly a
 single GDP-weighted, ten-year global government-bond portfolio, whose one-year
-excess return is the weighted average of the national returns. Third, the signal
+excess return is the weighted average of the national returns; even this naive
+weighting already captures substantial diversification benefits from
+imperfectly correlated term-structure movements across markets
+\citep{randl2025}. Third, the signal
 must be usable in real time, so both the factor and the forecasting regression
 respect time~$t$.
 
@@ -178,7 +185,11 @@ and the rule cuts the weight to $0.22$---the investor \emph{sells three quarters
 of the remaining position and sits almost entirely in cash. The subsequent
 realized twelve-month returns, shown in the final column purely to judge the
 calls, were $-6\%$ to $-10\%$: the deteriorating global cycle led the investor to
-near-cash just before the worst of the 2022 bond drawdown. The episode is also a
+near-cash just before the worst of the 2022 bond drawdown. The episode reads
+consistently across methodologies: \citet{randl2025} find that the expected
+Sharpe ratio of the mean--variance-efficient hedged bond portfolio peaks in the
+fourth quarter of 2022---the cycle signal exited \emph{before} the inflation-shock
+repricing, and the compensation for re-entering peaked after it. The episode is also a
 fair illustration of the strategy's limits---these large, correct calls coexist
 with the modest full-sample Sharpe ratio of \Cref{tab:strat-usd}, because such
 decisive turning points are rare.
@@ -197,7 +208,16 @@ data, and the strategy is evaluated gross of transaction costs (mitigated, but
 not eliminated, by the low turnover noted above). Third, because the global cycle
 factor is a single series the strategy can only time aggregate exposure; a
 cross-sectional strategy would require a factor with country-specific variation,
-which the out-of-sample evidence does not support for the local factor. With
+which the out-of-sample evidence does not support for the local factor. The
+ceiling for richer constructions is, however, considerably higher:
+\citet{randl2025} show that a full mean--variance-efficient portfolio across
+hedged developed bond markets attains a Sharpe ratio above one, against an
+average of $0.46$ for individual markets, and that the crucial input to such
+constructions is precisely the expected-return forecast rather than the
+covariance estimate. A real-time expected-return signal with the
+out-of-sample stability documented here is therefore a natural candidate
+input to cross-sectionally optimised portfolios, even though the present
+chapter deliberately confines it to the simplest timing use. With
 these caveats, the conclusion stands: the predictability identified in
 \Cref{ch:results} is not merely statistical but carries genuine, if moderate,
 economic value for a currency-hedged global bond investor. The broader
