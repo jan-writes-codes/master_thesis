@@ -1,0 +1,406 @@
+% Master Thesis -- Final (Results) Presentation
+% Style mirrors the proposal presentation (Beamer, Madrid theme, per-section TOC).
+% Build: latexmk -pdf main.tex
+%
+% MTS requirements baked into this deck:
+%   - Slide 1: (preliminary) thesis title + supervisor's name
+%   - Research question stated by slide 3 at the latest
+%   - One slide outlining the research design
+%   - 20 minutes + 10 minutes discussion -> ~16 content slides + appendix
+\documentclass[10pt]{beamer}
+
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{natbib}
+\bibliographystyle{apalike}
+
+% Notation (matches the thesis)
+\newcommand{\CF}{\mathrm{CF}}
+\newcommand{\GCF}{\mathrm{GCF}}
+\newcommand{\FXGCF}{\mathrm{FXGCF}}
+\newcommand{\rxbar}{\overline{rx}}
+
+% Repeat the table of contents at every section start (as in the proposal)
+\AtBeginSection[]{%
+  \begin{frame}{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}}
+
+\title[Expected Returns in Int'l Bond Markets]{Expected Returns in\\
+  International Government Bond Markets}
+\subtitle{Master Thesis -- Final Presentation}
+\author[Jan Heissenberger]{Jan Heissenberger\\
+  Supervised by Giorgia Simion, Ph.D.}
+\date{June 2026} % TODO: set the exact presentation date once the schedule is announced
+
+\begin{document}
+
+% --------------------------------------------------------------------------
+% Slide 1: title, supervisor (MTS requirement)
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Slide 2: TOC
+\begin{frame}{Table of Contents}
+  \tableofcontents
+\end{frame}
+
+% --------------------------------------------------------------------------
+\section{Research Question}
+
+% Slide 3: research question (MTS requirement: by slide 3 at the latest)
+\begin{frame}{Research Question}
+  \begin{block}{Main Question}
+    Does the \citet{cieslak2015} cycle factor (CF) apply to international
+    bonds?\\
+    {\small\color{gray} If their propositions hold, the mechanism found in the
+    US market should be fundamental to bond markets in other developed
+    countries.}
+  \end{block}
+  \textbf{Subquestions}
+  \begin{enumerate}
+    \item What is the role of the local CF in comparison to a GDP-weighted
+      global CF ($\GCF$)?
+    \item Does a global CF subsume the predictive power of a local CF?
+    \item Does currency risk break the predictability for a USD investor, and
+      does an FX-adjusted global factor ($\FXGCF$) restore it?
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Recap: The Cycle-Factor Framework}
+  Yields decompose into slow-moving \emph{trend inflation} and transitory
+  \emph{cycles} \citep{cieslak2015}:
+  \begin{equation*}
+    y^{(n)}_{i,t} \;=\; \alpha_{i,n} \;+\; \beta_{i,n}\,\pi^{e}_{i,t}
+      \;+\; \underbrace{c^{(n)}_{i,t}}_{\text{cycle}}
+  \end{equation*}
+  The cycles forecast one-year-ahead, duration-standardised,
+  maturity-averaged excess returns $\rxbar_{i,t+12}$.
+  \vfill
+  \textbf{Factor hierarchy}
+  \begin{enumerate}
+    \item \textbf{Local} $\CF_{i,t}$: fitted return forecast from
+      $c^{(1)}_{i,t}$ and the average cycle $\bar c_{i,t}$
+    \item \textbf{Global} $\GCF_{t} = \sum_{i} w_{i,t}\,\CF_{i,t}$:
+      GDP-weighted shared risk \citep{dahlquist2013}
+    \item \textbf{FX-adjusted global} $\FXGCF_{t}$: built on the GDP-weighted
+      average \emph{USD} return for an unhedged US investor
+  \end{enumerate}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\section{Research Design \& Data}
+
+% MTS requirement: one slide outlining the research design
+\begin{frame}{Research Design}
+  \textbf{Sample:} G10 markets, monthly zero-coupon yields, core CPI, FX spot
+  rates, nominal GDP; 1994--2026.
+  \vfill
+  \textbf{Three empirical phases} (in-sample, Newey--West HAC inference)
+  \begin{itemize}
+    \item[\textbf{I}] Local predictability:
+      $\rxbar_{i,t+12}=\alpha_i+\beta_i\,\CF_{i,t}+\varepsilon$ per country
+    \item[\textbf{II}] Integration horse race:
+      $\rxbar_{i,t+12}=\alpha_i+\beta_i\,\CF^{\perp}_{i,t}
+        +\gamma_i\,\GCF_{t}+\varepsilon$
+    \item[\textbf{III}] USD investor:
+      $rx^{\mathrm{USD}}_{i,t+12}$ on $\GCF_{t}$ vs.\ $\FXGCF_{t}$
+  \end{itemize}
+  \vfill
+  \textbf{Validation \& stress tests}
+  \begin{itemize}
+    \item Replication of \citet{cieslak2015} and \citet{dahlquist2013} on US /
+      international data before any extension
+    \item $R^{2}$ benchmarked against an expectations-hypothesis Monte Carlo
+    \item Fully-recursive out-of-sample evaluation
+      \citep[Campbell--Thompson $R^{2}_{\mathrm{oos}}$;][]{campbellthompson2008}
+    \item Robustness: crisis subsamples, rolling windows, CF vs.\ CP factor,
+      core vs.\ headline inflation
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Data \& Validation}
+  \begin{itemize}
+    \item \textbf{Universe:} G10 (BE, CA, FR, DE, IT, JP, NL, SE, CH, UK, US)
+    \item \textbf{Yields:} zero-coupon curves, maturities 1, 2, 4, 5, 9, 10
+      years (Bloomberg); \textbf{inflation:} core CPI (LSEG); \textbf{FX} spot
+      vs.\ USD; \textbf{GDP:} nominal (LSEG)
+    \item \textbf{Frequency / span:} monthly, 1994--2026; returns are
+      one-year-ahead, duration-standardised, maturity-averaged
+  \end{itemize}
+  \vfill
+  \begin{block}{Replication as validation}
+    The estimation engine reproduces the published US evidence: the
+    return-forecasting factor correlates $0.69$ with the average cycle
+    (vs.\ $0.61$ reported by \citealp{cieslak2015}) and recovers the published
+    sign pattern, before the framework is taken international.
+  \end{block}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\section{Results}
+
+\begin{frame}{Phase I --- The Local Cycle Factor Works Across the G10}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}
+        \item Sign pattern of \citet{cieslak2015} ($\gamma_{1}<0$ on the
+          1y cycle, $\gamma_{2}>0$ on the average cycle) in \textbf{all 11
+          markets}
+        \item Joint Wald rejects no-predictability at 1\% in 9 countries,
+          at 5\% in 10 (exception: Switzerland, $p=0.20$)
+        \item Pooled panel: $t=-10.7$ and $t=15.5$
+        \item In-sample $R^{2}$: 7\% (CH) to 34\% (NL), \textbf{average
+          25\%}; US 33\% --- matching the original study
+        \item Far above the EH Monte-Carlo 95th percentile; holds at every
+          maturity ($n=2,5,10$)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \includegraphics[width=\linewidth]{figures/mr_f1_r2_phase1.pdf}
+      {\scriptsize In-sample $R^{2}$ of $\rxbar_{i,t+12}\sim\CF_{i,t}$ by
+        country.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Phase II --- One Global Factor Summarises Eleven Local Ones}
+  \centering
+  \includegraphics[width=0.82\linewidth]{figures/s5_gcf.pdf}
+  \begin{itemize}
+    \item $\GCF_{t}$ (GDP-weighted) tracks the centre of mass of the eleven
+      local factors
+    \item On its own it matches the local factors' explanatory power:
+      average $R^{2}$ of \textbf{25\% vs.\ 25\%}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Phase II --- The Global Factor Largely Subsumes the Local}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/mr_f2_hr_tstats.pdf}
+      {\scriptsize HAC $t$-statistics in the horse race
+        $\rxbar\sim\CF^{\perp}+\GCF$; dashed lines $\pm1.96$.}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item $\GCF$ significant in \textbf{every} market
+          ($t$ between 2.1 and 4.5)
+        \item Orthogonalised local factor survives in only
+          \textbf{3 of 11} markets: Italy ($t=3.7$), Netherlands ($t=3.3$),
+          Belgium ($t=2.4$)
+        \item Where subsumed, adding $\CF^{\perp}$ lifts $R^{2}$ only
+          trivially (DE: $28.4\%\to28.4\%$)
+        \item Strong --- but incomplete --- integration of bond risk premia
+          \citep{dahlquist2013}; euro-area exceptions plausibly reflect
+          sovereign-spread dynamics
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Phase III --- Currency Risk Breaks It for the USD Investor}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/mr_f3_usd_r2.pdf}
+      {\scriptsize USD-investor in-sample $R^{2}$: $\GCF$ vs.\ $\FXGCF$.}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item Average $R^{2}$ collapses from \textbf{25\% (local currency) to
+          8\% (USD returns)}
+        \item Significance lost across the euro area, Switzerland, Japan;
+          survives in US (33\%), Canada ($t=2.9$), marginally SE and UK
+        \item One-year FX volatility swamps the cyclical bond signal
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Phase III --- The FX Adjustment Helps, but Modestly}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/mr_f4_gcf_fxgcf.pdf}
+      {\scriptsize $\GCF_{t}$ and $\FXGCF_{t}$: correlation $0.99$.}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item $\FXGCF$ raises the USD-investor $R^{2}$ in \textbf{10 of 11}
+          markets and the $t$-statistic in every foreign market
+        \item Average $R^{2}$: $8\%\to10\%$; direction uniform, magnitude
+          small
+        \item Reason: $\FXGCF$ correlates \textbf{0.99} with $\GCF$ in this
+          sample --- vs.\ $\approx0.50$ in \citet{dahlquist2013} --- a
+          substantive finding in its own right
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Out of Sample --- Only the Global Factor Survives Real Time}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/mr_f5_oos_r2.pdf}
+      {\scriptsize Campbell--Thompson $R^{2}_{\mathrm{oos}}$ vs.\ the
+        recursive prevailing mean, by country.}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      Fully-recursive: decomposition, regressions and aggregation rebuilt at
+      each date from past data only.
+      \begin{itemize}
+        \item \textbf{Local CF:} pooled $R^{2}_{\mathrm{oos}}=-0.08$;
+          beats the mean in only 2 of 11 markets --- the in-sample fit is
+          largely generated-regressor over-fit
+        \item \textbf{Global $\GCF$:} pooled $\mathbf{+0.05}$, positive in
+          \textbf{10 of 11} markets --- the strongest integration evidence in
+          the thesis
+        \item \textbf{USD investor:} $\GCF$ at $-0.07$; $\FXGCF$ turns it
+          marginally positive ($+0.002$, 9 of 11 markets), but the edge is
+          thin and fragile
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Economic Value --- Timing a Global Bond Portfolio}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/strat_f1_cumret.pdf}
+      {\scriptsize Out-of-sample cumulative returns, 2005--2024.}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      Mean--variance timing of a GDP-weighted 10y global bond portfolio on the
+      recursive $\GCF$ forecast (currency-hedged investor):
+      \begin{itemize}
+        \item Portfolio-level $R^{2}_{\mathrm{oos}}=0.125$
+        \item Sharpe ratio: \textbf{0.31 (passive) $\to$ 0.38}; 0.34 for
+          mean-timing
+        \item Certainty-equivalent gain ($\gamma=5$): \textbf{+0.51\%/yr} over
+          buy-and-hold, +0.30\% over mean-timing
+        \item Modest in magnitude, but real-time implementable end to end
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Robustness --- What Survives, What Is Fragile}
+  \textbf{Survives every test}
+  \begin{itemize}
+    \item The GDP-weighted global cycle factor: in-sample and out-of-sample,
+      across subsamples (except the GFC itself), with core inflation, and
+      against the Cochrane--Piazzesi forward-rate factor
+    \item Construction choices (EWMA decay $v$, window $M$, maturity menu, GDP
+      weights) move results little
+  \end{itemize}
+  \vfill
+  \textbf{Fragile}
+  \begin{itemize}
+    \item Local-factor predictability does not survive real-time evaluation
+    \item USD-investor predictability is regime-dependent (concentrated
+      pre-2008)
+    \item The $\FXGCF$ edge is concentrated post-crisis and does not survive a
+      rolling estimation window
+  \end{itemize}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+  \begin{block}{Does the \citet{cieslak2015} cycle factor apply to
+      international bonds? --- Yes.}
+    Correct sign structure in all 11 G10 markets, average in-sample
+    $R^{2}=25\%$, at every maturity.
+  \end{block}
+  \begin{enumerate}
+    \item \textbf{Local vs.\ global:} one GDP-weighted global factor matches
+      eleven national factors (25\% vs.\ 25\%) and is significant everywhere.
+    \item \textbf{Subsumption:} the global factor drives out the local one in
+      8 of 11 markets; predictability is overwhelmingly global --- and only
+      the global factor predicts \emph{out of sample}.
+    \item \textbf{USD investor:} currency risk erodes $\sim$2/3 of the
+      predictive power; the novel $\FXGCF$ restores it in direction but only
+      partially --- it is near-collinear (0.99) with $\GCF$ in this sample.
+  \end{enumerate}
+  \vfill
+  \textbf{Contribution:} a unified global cycle factor for the G10, its
+  FX-adjusted variant, and real-time evidence (incl.\ economic value) that
+  international bond-return predictability is a global, macro-anchored
+  phenomenon.
+\end{frame}
+
+\begin{frame}{Bibliography}
+  \small
+  \bibliography{references}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\appendix
+\section{Appendix}
+
+\begin{frame}{Appendix: Phase I --- Full Country Table}
+  \centering
+  \includegraphics[width=\linewidth]{tables/mr_t1_phase1.pdf}
+\end{frame}
+
+\begin{frame}{Appendix: Phase II --- Horse-Race Table}
+  \centering
+  \includegraphics[width=\linewidth]{tables/mr_t2_phase2.pdf}
+\end{frame}
+
+\begin{frame}{Appendix: Phase II --- $R^{2}$ Ladder}
+  \centering
+  \includegraphics[width=0.85\linewidth]{figures/mr_f2_r2_ladder.pdf}
+\end{frame}
+
+\begin{frame}{Appendix: Phase III --- USD-Investor Table}
+  \centering
+  \includegraphics[width=\linewidth]{tables/mr_t3_phase3.pdf}
+\end{frame}
+
+\begin{frame}{Appendix: Out-of-Sample Summary Table}
+  \centering
+  \includegraphics[width=0.8\linewidth]{tables/mr_t4_oos.pdf}
+\end{frame}
+
+\begin{frame}{Appendix: Strategy Performance}
+  \centering
+  \includegraphics[width=0.9\linewidth]{tables/strat_t1_performance.pdf}
+\end{frame}
+
+\begin{frame}{Appendix: Robustness --- Subsample Stability}
+  \centering
+  \includegraphics[width=0.75\linewidth]{figures/rob_f1_oos_sub.pdf}\\[1ex]
+  \includegraphics[width=0.75\linewidth]{figures/rob_f2_oos_scheme.pdf}
+\end{frame}
+
+\begin{frame}{Appendix: G10 Countries}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item Belgium
+        \item Canada
+        \item France
+        \item Germany
+        \item Italy
+        \item Japan
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item Netherlands
+        \item Sweden
+        \item Switzerland
+        \item United Kingdom
+        \item United States
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\end{document}
