@@ -62,6 +62,22 @@ that survives out of sample (\Cref{sec:rob-oos}). These two readings are
 complements, not rivals: the GDP-weighted average can only de-noise the
 national signals because there is a common signal to recover.
 
+A recent asset-class perspective adds an important qualification to what
+``integration'' can and cannot mean here. \citet{randl2025} document that
+hedged developed-market bond \emph{returns} have a strong factor
+structure---three principal components explain $86\%$ of their
+variance---yet these common sources of variation are largely
+\emph{unpriced}: they account for only about a third of the variation in the
+mean--variance-efficient portfolio that prices the asset class. Common
+variation and common compensation are different objects. The integration
+documented in this thesis concerns the second: a single global factor
+describes the \emph{conditional premium}---the time-variation in expected
+returns---across the G10. That is fully compatible with much of the common
+realised-return variation being unpriced noise; indeed, it is the
+combination of the two findings that gives the global cycle factor its
+practical meaning, as the parsimonious real-time summary of the priced,
+forecastable component rather than of return co-movement at large.
+
 The exceptions are as informative as the rule. The local factor retains
 incremental content in Italy, the Netherlands and Belgium, and the Italian
 case decomposes cleanly in the subsample analysis: Italian local
@@ -74,7 +90,16 @@ When redenomination and sovereign-credit risk reprice a peripheral market,
 the compensation becomes local again, and a GDP-weighted factor dominated by
 the core economies cannot price it. This conditionality refines rather than
 contradicts \citet{dahlquist2013}: global risk compensation is the rule in
-calm integration, and the limit of that rule is sovereign stress.
+calm integration, and the limit of that rule is sovereign stress. The
+timing of the premium also lines up with independent evidence:
+\citet{randl2025} estimate that the market price of risk of the hedged
+international bond asset class peaks in the financial crisis, the
+2010--2012 euro-area crisis, and the 2022 inflation shock, and that it is
+related to trend inflation and, after 2008, to the \emph{dispersion} of
+inflation across markets---the same crisis windows in which the cycle
+factors' explanatory power concentrates here
+(\Cref{sec:rob-subsample}), and a further sign that international bond
+premia are anchored in inflation dynamics.
 
 \paragraph{The role of the FX adjustment.}
 The third finding is a contrast with the forward-rate literature and, we
@@ -153,7 +178,13 @@ policy from 1999, so the eleven markets contribute far fewer than eleven
 independent observations of the ``global'' cycle. The GDP-weighted factor is
 to a significant degree a US--euro-area--Japan factor, and the integration
 finding should be read accordingly; alternative weightings (equal,
-market-capitalisation, principal-component) were not explored.
+market-capitalisation, principal-component) were not explored. An
+alternative design, adopted by \citet{randl2025}, represents the euro area
+by German Bunds alone and includes Australia, New Zealand, and Norway
+instead---a cross-section chosen for currency diversity rather than debt
+size. The two universes are complementary: theirs avoids the euro-bloc
+redundancy, while the one used here is what makes the periphery
+(Italy) result observable at all.
 
 \paragraph{Construction constraints.} The maturity menu
 $\{1,2,4,5,9,10\}$ years is dictated by the available Bloomberg curves, so
@@ -197,7 +228,14 @@ local-currency space; dollar conversion destroys roughly two-thirds of it
 in sample and almost all of it out of sample, and the timing strategy's
 Sharpe ratio falls from $0.38$ hedged to about $0.25$ unhedged
 (\Cref{ch:strategy}). Currency exposure in a G10 bond portfolio is, from
-the standpoint of cycle-based predictability, uncompensated noise. Second,
+the standpoint of cycle-based predictability, uncompensated noise. This
+prescription does not rest on the cycle evidence alone:
+\citet{randl2025} reach it from the pricing side, showing that the
+mean--variance-efficient hedged bond portfolio carries economically
+negligible currency exposure and that the priced risks of international
+bonds are fundamentally distinct from those of currencies---the bond
+premium and the currency premium are separate objects, best harvested
+separately. Second,
 \emph{time the aggregate, not the cross-section}. The factor that survives
 real time is a single global series; it supports varying overall duration
 exposure---which raised the hedged Sharpe ratio from $0.31$ to $0.38$ with
