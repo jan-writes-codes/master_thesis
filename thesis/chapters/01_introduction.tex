@@ -1,31 +1,217 @@
-% Ch.1 Introduction (~6-8 pp). Draft on Day 11, once results are settled.
+% Ch.1 Introduction (~6-8 pp). Drafted Day 11/12, after the results settled.
+% Storyline: EH puzzle -> US predictability (forwards, then macro-anchored
+% cycles) -> internationalisation (global factors, integration) -> the gap
+% (no global *cycle* factor, no FX adjustment, little real-time evidence)
+% -> research questions -> contribution -> preview of findings -> roadmap.
 \chapter{Introduction}
 \label{ch:intro}
 
 % --- Motivation: the EH puzzle --------------------------------------------
 \section{Motivation}
 \label{sec:intro-motivation}
-% The expectations hypothesis (EH) implies bond excess returns are unpredictable:
-%   y^{(n)}_t \approx (1/n) \sum_{i=0}^{n-1} E_t[y^{(1)}_{t+i}].
-% Empirically returns ARE predictable (CP 2005, CP 2015, DH 2013) -> time-varying
-% risk premia. Macro-anchored explanation: trend inflation + cycles.
+
+Why do investors earn more on long-term government bonds than on rolling over
+short-term bills---and why does that compensation vary so predictably over
+time? The classical answer is that it should not. Under the expectations
+hypothesis (EH), the yield on an $n$-year bond is the average of expected
+future short rates plus at most a constant term premium,
+\begin{equation*}
+  y^{(n)}_{t} \;\approx\; \frac{1}{n}\sum_{i=0}^{n-1}
+  \E_{t}\!\left[y^{(1)}_{t+i}\right],
+\end{equation*}
+so excess returns from holding longer maturities should be unforecastable:
+whatever is known today about future short rates is already priced into the
+curve. The EH is the natural null hypothesis of bond pricing, and it fails.
+Four decades of evidence on US Treasuries document that excess returns are
+forecastable with information available at the start of the holding period,
+beginning with the forward--spot spread of \citet{famabliss1987} and the yield
+spread regressions of \citet{campbell1991}, whose slope coefficients carry the
+\emph{wrong} sign relative to the EH benchmark. The modern statement of the
+puzzle is due to \citet{cochrane2005}: a single ``tent-shaped'' linear
+combination of forward rates---the CP factor---predicts one-year excess
+returns across maturities with an $R^{2}$ of $0.35$ to $0.44$. Bond risk
+premia are large, time-varying, and countercyclical.
+
+The CP factor sets a powerful statistical benchmark, but it is silent on
+economics: it is a reduced-form combination of prices that explains
+predictability with other prices. The natural follow-up question is what
+macroeconomic forces drive the premium. \citet{ludvigson2009} show that
+factors extracted from a large macro panel forecast bond returns over and
+above the information in the yield curve, and \citet{cieslak2015} supply the
+sharpest economic mechanism to date. They decompose nominal yields into a
+slow-moving \emph{trend-inflation} component---a discounted moving average of
+past core inflation that anchors the level of interest rates at long
+horizons---and transitory \emph{cycles}, the deviations of yields from that
+anchor. A single \emph{cycle factor} built from these detrended yields
+predicts US Treasury excess returns more strongly than the CP factor and, in
+their sample, subsumes it. The economic content is intuitive: the trend pins
+down where yields will settle, so the distance of today's curve from its
+macro anchor measures the premium investors demand for holding duration. The
+structural counterpart of this view is the ``falling stars'' evidence of
+\citet{bauer2020}, in which accounting for the drifting long-run anchors
+$\pi^{*}$ and $r^{*}$ is precisely what uncovers the predictable component of
+returns.
+
+This macro-anchored evidence, however, is almost exclusively evidence about
+the United States---one market, one monetary history, one disinflation. If
+trend inflation truly anchors yields and cycles truly carry the risk premium,
+the same mechanism should operate in every developed bond market, and its
+failure to do so would cast doubt on the economic interpretation. The
+international literature gives reason for optimism, but it has pursued a
+different predictor. \citet{dahlquist2013} take the \emph{forward-rate}
+factor abroad: they construct local CP factors for four markets, aggregate
+them into a GDP-weighted \emph{global} CP factor, and show that the global
+factor predicts bond returns in every country and largely drives out the
+local factors---direct evidence that government-bond risk premia are
+internationally integrated. They also confront the problem that defines the
+international setting: an unhedged US-dollar investor earns the foreign bond
+return \emph{plus} a volatile currency return, which erodes the
+predictability, and they build an FX-adjusted global factor to recover it.
+On the macro side, \citet{zhang2021} document that the falling-stars trends
+improve return forecasts in four markets outside the United States, and
+related evidence extends to China \citep{zhang2022}.
+
+Placing these strands side by side exposes a clear gap. The cycle factor of
+\citet{cieslak2015}---the predictor with the strongest claim to an economic
+mechanism---has not been taken international: there exists no country-level
+evidence across the G10, no GDP-weighted \emph{global} cycle factor analogous
+to the global CP factor of \citet{dahlquist2013}, and no FX-adjusted version
+of such a factor for the dollar investor. \citet{zhang2021} come closest, but
+they add raw inflation trends to yield-curve regressions in four markets
+rather than constructing the cycle factor itself, and they build no global or
+currency-adjusted aggregate. A second gap is methodological. Generated
+regressors such as the cycle factor are fitted on the very sample over which
+they are evaluated, so in-sample $R^{2}$ can substantially overstate what a
+real-time investor could have exploited; the out-of-sample discipline of
+\citet{campbellthompson2008} is therefore not an optional robustness check
+but part of the question itself. Whether macro-anchored bond return
+predictability is a global phenomenon---and whether it survives in real
+time---is an open question. This thesis answers it.
 
 % --- Research question -----------------------------------------------------
 \section{Research Question}
 \label{sec:intro-rq}
-% Main: does the CP (2015) cycle factor apply to international (G10) bonds?
-% Sub-Q1: local CF vs GDP-weighted global CF.
-% Sub-Q2: does a global CF subsume the local CF's predictive power?
+
+The thesis asks one main question:
+\begin{quote}
+  \emph{Does the \citet{cieslak2015} cycle factor apply to international
+  government bonds?}
+\end{quote}
+If the trend--cycle mechanism is a fundamental property of bond pricing
+rather than a US idiosyncrasy, it should predict excess returns in other
+developed markets with the same sign structure and comparable magnitude. Two
+sub-questions, taken from the research proposal, sharpen the international
+dimension:
+\begin{enumerate}
+  \item \emph{What is the role of the local cycle factor relative to a
+    GDP-weighted global cycle factor?} Integrated bond markets suggest a
+    shared risk factor across countries \citep{dahlquist2013}, of which a
+    GDP-weighted average of the national cycle factors is the natural
+    summary.
+  \item \emph{Does the global cycle factor subsume the predictive power of
+    the local cycle factors?} If markets are integrated, investors are
+    compensated for global rather than local risk, and adding the local
+    cycle to a regression that already contains the global factor should
+    not raise predictive power.
+\end{enumerate}
+The questions are operationalised in three empirical phases
+(\Cref{sec:fw-hypotheses}). Phase~I tests the cycle factor market by market
+across the G10. Phase~II runs the global-versus-local horse race. Phase~III
+adopts the perspective of an unhedged US-dollar investor, for whom currency
+risk intervenes between the foreign bond and the realised dollar return, and
+asks whether a purpose-built FX-adjusted global cycle factor restores the
+predictability that currency conversion destroys. Because the cycle factors
+are generated regressors, every phase is evaluated both in-sample and under a
+fully-recursive out-of-sample protocol in which the entire
+construction---trend, cycles, predictive coefficients, and global
+weights---is rebuilt each month from historically available data only.
 
 % --- Contribution ----------------------------------------------------------
 \section{Contribution}
 \label{sec:intro-contribution}
-% Three-factor hierarchy: local CF -> global GCF -> FX-adjusted FXGCF.
-% Novelty: a unified global *cycle* factor with an FX adjustment for the USD
-% investor (vs DH's forward-based global CP factor).
+
+The thesis contributes a three-factor hierarchy and the evidence to evaluate
+it. At the base sits the \emph{local cycle factor} $\CF_{i,t}$, constructed
+for each of eleven G10 markets exactly as \citet{cieslak2015} construct it
+for the United States, on a monthly panel of zero-coupon yields, core
+inflation, exchange rates, and GDP spanning 1989--2026 (1994--2026 for most
+markets). One level up, the \emph{global cycle factor} $\GCF_{t}$ aggregates
+the national factors with time-varying GDP weights---transplanting the
+integration test of \citet{dahlquist2013} from the forward-rate family to
+the macro-anchored cycle family. At the top, the \emph{FX-adjusted global
+cycle factor} $\FXGCF_{t}$ is, to the best of my knowledge, new: it projects
+the GDP-weighted \emph{dollar} excess return on the global cycle factor,
+isolating the component of global cycles that is informative for a US
+investor's currency-converted returns.
+
+Three features distinguish the evidence from its closest predecessors. First,
+breadth: relative to the four markets of \citet{dahlquist2013} and
+\citet{zhang2021}, the analysis covers the full G10 cross-section of eleven
+markets, including the euro-area periphery, whose sovereign-debt crisis
+provides a natural experiment on the limits of integration. Second, the
+predictive object: where \citet{zhang2021} add inflation and real-rate trends
+to yield-curve regressions, this thesis carries the cycle-factor
+\emph{construction} itself abroad, so that the US benchmark and the
+international evidence are directly comparable factor by factor. Third,
+real-time discipline: all three factors are re-estimated fully recursively
+and scored with the \citet{campbellthompson2008} out-of-sample $R^{2}$
+against a recursive prevailing-mean benchmark, complemented by an
+expectations-hypothesis Monte Carlo that calibrates how much in-sample
+$R^{2}$ overlapping returns can produce under the null, crisis-subsample
+analysis, a horse race against the global forward-rate factor, a
+core-versus-headline-inflation reconstruction, and a market-timing strategy
+that converts the statistical evidence into economic value. The replication
+of the published US and international results (\Cref{ch:replication})
+anchors the entire exercise.
 
 % --- Preview of findings & roadmap -----------------------------------------
 \section{Main Findings and Structure}
 \label{sec:intro-roadmap}
-% One paragraph previewing the headline results (fill after Ch.7), then a
-% roadmap of the remaining chapters.
+
+Four findings emerge. \emph{First}, the cycle mechanism travels. The local
+cycle factor predicts one-year excess returns with the exact sign pattern
+that \citet{cieslak2015} document for the United States in all eleven
+markets, significantly so in ten, with an average in-sample $R^{2}$ of
+$25\%$ (US: $33\%$, closely matching the original study) and uniform
+loadings across the maturity curve. \emph{Second}, the predictability is
+overwhelmingly global. The GDP-weighted global cycle factor is significant
+in every market and matches the explanatory power of the eleven separately
+estimated local factors; once it is included, genuinely local content
+survives in only three markets (Italy, the Netherlands, Belgium). The
+Italian exception is informative: its local predictability concentrates in
+the 2010--2012 sovereign-debt crisis, when redenomination risk priced
+locally what no global factor could capture---integration is the rule, but
+it bends exactly when sovereign stress is at its height. \emph{Third},
+currency risk is the binding constraint for the dollar investor. Dollar
+conversion erodes roughly two-thirds of the global factor's predictive
+power, and the FX-adjusted factor recovers only part of it---because, in
+this sample, it is nearly collinear with the unadjusted factor (correlation
+$0.99$, against roughly $0.50$ for the forward-rate analogue in
+\citet{dahlquist2013}). The FX adjustment that transforms the global
+\emph{forward} factor adds little to the global \emph{cycle} factor, a
+contrast that is itself a finding. \emph{Fourth}, and most consequentially,
+only the global factor survives in real time. Out of sample, the local
+factors lose to the recursive historical mean almost everywhere, while the
+global cycle factor beats it in ten of eleven markets; that real-time edge
+holds across crisis subsamples, beats the global forward-rate factor,
+depends materially on measuring the trend with \emph{core} rather than
+headline inflation, and is economically exploitable---a timing strategy
+based on it raises the Sharpe ratio of a hedged global bond portfolio from
+$0.31$ to $0.38$ with a positive certainty-equivalent gain.
+
+The remainder of the thesis is organised as follows. \Cref{ch:literature}
+reviews the three literatures the thesis draws together---US bond return
+predictability, macro-anchored yield decompositions, and international bond
+risk premia---and locates the gap. \Cref{ch:framework} develops the formal
+apparatus: the yield decomposition, the three-factor hierarchy, the excess
+return definitions for the local and the dollar investor, and the predictive
+specifications. \Cref{ch:data} describes the G10 panel and its construction;
+\Cref{ch:methodology} sets out the inference for overlapping returns, the
+expectations-hypothesis Monte Carlo, and the recursive out-of-sample
+protocol. \Cref{ch:replication} validates the empirical engine against the
+published results of \citet{cieslak2015} and \citet{dahlquist2013}.
+\Cref{ch:results} presents the three-phase main results,
+\Cref{ch:robustness} stress-tests them, and \Cref{ch:strategy} converts the
+surviving predictability into a real-time trading strategy.
+\Cref{ch:discussion} interprets the findings and states their limitations,
+and \Cref{ch:conclusion} concludes.
