@@ -40,14 +40,11 @@ cyclical, return-relevant information. \Cref{fig:s2-yield-decomp} illustrates th
 split for the United States, with the fitted trend tracking the low-frequency
 movement of the ten-year yield and the cycle oscillating around it.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.8\linewidth]{tables/cp_t1_panelA.pdf}\\[1em]
-  \includegraphics[width=0.8\linewidth]{tables/cp_t1_panelB.pdf}
-  \caption{Replication of Cieslak--Povala (2015) Table~1. Panel~A regresses each
-    US yield on trend inflation $\tau^{\mathrm{CPI}}_{t}$; Panel~B reports the
-    cross-maturity correlations, standard deviations, and half-lives of the
-    resulting cycles.}
+\begin{table}[t]
+  \caption{Replication of Cieslak--Povala (2015) Table~1: yields and trend inflation}
   \label{tab:cp-t1}
+  \centering
+  \input{tables/cp_t1}
 \end{table}
 
 \begin{figure}[t]\centering
@@ -103,12 +100,11 @@ essentially all the weight on the yields-plus-trend specification, confirming th
 the gain from conditioning on trend inflation is not an artefact of adding free
 parameters.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.95\linewidth]{tables/cp_t2_panelA.pdf}
-  \caption{Replication of Cieslak--Povala (2015) Table~2, Panel~A: maturity-averaged
-    one-year excess returns on five predictor sets, with Newey--West HAC
-    $t$-statistics and the BIC relative posterior probability.}
+\begin{table}[t]
+  \caption{Replication of Cieslak--Povala (2015) Table~2, Panel~A: predictive regressions}
   \label{tab:cp-t2a}
+  \centering
+  \input{tables/cp_t2_panelA}
 \end{table}
 
 Because these regressions use overlapping returns and generated regressors, the
@@ -129,12 +125,11 @@ behaviour of the null but is not calibrated to match the exact percentiles
 far beyond what the expectations hypothesis can generate---is robust to this gap,
 which is documented rather than closed.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.7\linewidth]{tables/cp_t2_panelB.pdf}
-  \caption{Predictive $R^{2}$ under the expectations-hypothesis null (Table~2,
-    Panel~B): $5$th, $50$th, and $95$th percentiles of the simulated adjusted
-    $R^{2}$, at the original sample length and at ours.}
+\begin{table}[t]
+  \caption{Predictive $R^{2}$ under the expectations-hypothesis null (CP Table~2, Panel~B)}
   \label{tab:cp-t2b}
+  \centering
+  \input{tables/cp_t2_panelB}
 \end{table}
 
 Finally, \Cref{tab:cp-t4} reproduces Table~4, which predicts the individual
@@ -152,12 +147,11 @@ at ten years). The engine thus reproduces the United States evidence of
 structure of the cycles, the incremental predictive content of trend inflation,
 and the cycle factor that prices the curve.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.8\linewidth]{tables/cp_t4.pdf}
-  \caption{Replication of Cieslak--Povala (2015) Table~4: individual one-year
-    excess returns on the cycle factor, with the block-bootstrap range of the HAC
-    $t$-statistic and the underlying cycle decomposition.}
+\begin{table}[t]
+  \caption{Replication of Cieslak--Povala (2015) Table~4: individual returns on the cycle factor}
   \label{tab:cp-t4}
+  \centering
+  \input{tables/cp_t4}
 \end{table}
 
 % ===========================================================================
@@ -185,11 +179,11 @@ the Netherlands at $0.92$, the United States at $0.97$) and lowest for Japan
 single global forward factor thus summarises the common movement in expected bond
 returns, exactly as in the original.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.9\linewidth]{tables/dh_t3_cp_corr.pdf}
-  \caption{Correlations between local and global Cochrane--Piazzesi factors
-    (DH Table~3).}
+\begin{table}[t]
+  \caption{Correlations between local and global Cochrane--Piazzesi factors (DH Table~3)}
   \label{tab:dh-t3}
+  \centering
+  \input{tables/dh_t3_cp_corr}
 \end{table}
 
 \Cref{tab:dh-t4} reproduces Table~4, which contrasts the single-forward
@@ -202,10 +196,11 @@ significant throughout, with the strikingly high fit in Japan ($R^{2}$ up to
 $69\%$) that they also note. The full forward curve, not just the spread, carries
 the predictable component of returns.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.8\linewidth]{tables/dh_t4_fb_cp.pdf}
-  \caption{Fama--Bliss and Cochrane--Piazzesi regressions by country (DH Table~4).}
+\begin{table}[t]
+  \caption{Fama--Bliss and Cochrane--Piazzesi regressions by country (DH Table~4)}
   \label{tab:dh-t4}
+  \centering
+  \input{tables/dh_t4_fb_cp}
 \end{table}
 
 The integration result itself is in Table~6, reproduced in \Cref{tab:dh-t6}, which
@@ -220,12 +215,12 @@ overwhelmingly driven by a common global factor, with limited idiosyncratic loca
 content---the very pattern that \Cref{ch:results} re-establishes for the cycle
 factor.
 
-\begin{sidewaystable}\centering
-  \includegraphics[width=\linewidth]{tables/dh_t6_local_global.pdf}
-  \caption{Local and global Cochrane--Piazzesi regressions, with the
-    orthogonalised horse race (DH Table~6).}
+\begin{table}[t]
+  \caption{Local and global Cochrane--Piazzesi regressions (DH Table~6)}
   \label{tab:dh-t6}
-\end{sidewaystable}
+  \centering
+  \input{tables/dh_t6_local_global}
+\end{table}
 
 Table~7 takes the perspective of a United States investor who holds the foreign
 bonds unhedged and earns the dollar excess return \eqref{eq:rx-usd}, and it is the
@@ -246,11 +241,11 @@ FX-adjusted factor that is nearly collinear with the unadjusted global cycle
 factor in the G10 sample, so the FX adjustment that helps the forward factor here
 adds little to the cycle factor---a difference taken up in \Cref{ch:discussion}.
 
-\begin{table}[t]\centering
-  \includegraphics[width=0.85\linewidth]{tables/dh_t7_usd.pdf}
-  \caption{US-dollar excess return regressions on the global and FX-adjusted
-    global Cochrane--Piazzesi factors (DH Table~7).}
+\begin{table}[t]
+  \caption{US-dollar excess returns on the global and FX-adjusted factors (DH Table~7)}
   \label{tab:dh-t7}
+  \centering
+  \input{tables/dh_t7_usd}
 \end{table}
 
 Taken together, the two replications establish that the engine reproduces both
