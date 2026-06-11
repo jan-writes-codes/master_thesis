@@ -57,10 +57,10 @@ small positive out-of-sample values are economically meaningful.
 
 The pooled picture is clear (\Cref{fig:s8-oos}). The local-currency global factor
 beats the prevailing mean decisively, with $R^{2}_{\mathrm{oos}}=+0.05$ for
-$\rxbar_{i,t+12}\sim\GCF_{t}$ \eqref{eq:h-global}, against $-0.07$ for the local
+$\rxbar_{i,t+12}\sim\GCF_{t}$ \eqref{eq:h-global}, against $-0.08$ for the local
 cycle factor \eqref{eq:h-local} and $-0.07$ for the unadjusted dollar-investor
 global factor \eqref{eq:h-usd-global}. The FX-adjusted factor \eqref{eq:h-fxgcf}
-is the marginal fourth case, edging just above the mean at $+0.004$---a thin
+is the marginal fourth case, edging just above the mean at $+0.002$---a thin
 pooled gain whose robustness is examined in \Cref{sec:rob-oos-scheme} and
 \Cref{sec:rob-subsample}. The per-country detail (\Cref{fig:s8-oos-local}) sharpens the
 contrast: the global factor is positive in ten of the eleven markets, whereas the
@@ -114,7 +114,7 @@ adjustment than the in-sample collapse of Phase~III would suggest
 (\Cref{fig:s8-oos-usd}). The unadjusted global factor on currency-converted
 returns has $R^{2}_{\mathrm{oos}}=-0.07$ and beats the recursive mean in only two
 markets. The FX-adjusted factor reverses this: its pooled
-$R^{2}_{\mathrm{oos}}$ turns marginally positive at $+0.004$ and it beats the mean
+$R^{2}_{\mathrm{oos}}$ turns marginally positive at $+0.002$ and it beats the mean
 in nine of the eleven markets---a broad, if economically slim, improvement that is
 exactly what the purpose-built factor was designed to deliver. The gain is real
 but fragile, as the next two subsections show: it is concentrated in the
@@ -157,9 +157,9 @@ markets in every case---so for the headline result the sixty-month choice is
 representative rather than a tuned parameter. The weaker specifications, by
 contrast, improve as the minimum lengthens, because more training history
 stabilises each recursive coefficient before it is used: a seven-year minimum
-lifts the local cycle factor to approximately zero ($+0.004$), the unadjusted
+lifts the local cycle factor to approximately zero ($-0.003$), the unadjusted
 dollar-investor factor from $-0.07$ to $-0.01$, and the FX-adjusted factor from
-$+0.004$ to $+0.05$ (positive in nine of eleven markets). The FX-adjusted factor
+$+0.002$ to $+0.05$ (positive in nine of eleven markets). The FX-adjusted factor
 is the most sensitive of the four to this choice---it slips to $-0.02$ under a
 three-year minimum---which is unsurprising, since it is fitted on a single
 GDP-weighted aggregate series whose three-parameter regression has the least data
@@ -170,7 +170,7 @@ against the factor.
 The window \emph{shape}, by contrast, matters a great deal, and here the chapter
 must be candid: \emph{every} specification's out-of-sample edge depends on the
 expanding window. The global cycle factor's $R^{2}_{\mathrm{oos}}$ falls from
-$+0.05$ to $-0.11$ under a ten-year rolling window and $-0.05$ under a
+$+0.05$ to $-0.12$ under a ten-year rolling window and $-0.04$ under a
 fifteen-year one, positive in zero of eleven markets in both cases; the
 FX-adjusted factor likewise turns negative ($-0.09$ and $-0.01$). The result is
 economically coherent rather than troubling. The cycle factors are anchored to
@@ -242,8 +242,8 @@ itself---mean $R^{2}$ of $0.17$ for the local and $0.05$ for the global factor,
 with pooled $t$-statistics near $1.7$---when the flight-to-quality collapse in
 yields swamps the slow-moving cyclical signal. The post-crisis window is the most
 revealing for the integration thesis: there the \emph{global} factor strengthens
-to a mean $R^{2}$ of $0.25$ ($t=12.5$, significant in ten of eleven markets)
-while the local factor weakens to $0.14$, consistent with the common factor
+to a mean $R^{2}$ of $0.23$ ($t=12.0$, significant in ten of eleven markets)
+while the local factor weakens to $0.13$, consistent with the common factor
 becoming the dominant summary of bond risk premia as markets integrate further.
 
 The dollar-investor story is more regime-dependent, and the subsample split
@@ -251,8 +251,8 @@ exposes a fragility that the full sample conceals. In the pre-crisis window the
 dollar-investor predictability was in fact strong---the FX-adjusted factor
 delivered a mean $R^{2}$ of $0.18$, significant in ten of eleven markets, and the
 unadjusted global factor $0.12$ in eleven of eleven---but it erodes through both
-crises and turns significantly \emph{negative} after 2013 (pooled $t=-2.8$ for
-FXGCF, $-2.2$ for GCF). The modestly positive full-sample dollar-investor
+crises and turns significantly \emph{negative} after 2013 (pooled $t=-3.1$ for
+FXGCF, $-2.5$ for GCF). The modestly positive full-sample dollar-investor
 $R^{2}$ documented in \Cref{sec:res-phase3} is therefore largely a pre-2008
 phenomenon; once the post-crisis currency regime of near-zero rate differentials
 and synchronised monetary policy sets in, the cyclical signal in dollar returns
@@ -274,7 +274,7 @@ subsample evidence states it more sharply than the pooled regression can.
   \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by subsample and specification
     (the pre-crisis window is omitted for legibility: its early FX-adjusted
     forecasts, made on the shortest training histories, are an extreme outlier at
-    $-1.07$). The global cycle factor clears zero in every window except the
+    $-1.11$). The global cycle factor clears zero in every window except the
     financial crisis itself.}
   \label{fig:rob-oos-sub}
 \end{figure}
@@ -282,18 +282,18 @@ subsample evidence states it more sharply than the pooled regression can.
 The out-of-sample subsample evidence (\Cref{tab:rob-sub-oos},
 \Cref{fig:rob-oos-sub}) is the more demanding test, and the global cycle factor
 passes it almost everywhere. Its recursive $R^{2}_{\mathrm{oos}}$ is positive in
-the pre-crisis window ($+0.08$), the euro-area crisis ($+0.02$), and the
+the pre-crisis window ($+0.09$), the euro-area crisis ($+0.01$), and the
 post-crisis window ($+0.09$), and only turns negative \emph{in} the financial
-crisis ($-0.17$)---the one regime in which no slow-moving macro factor can be
+crisis ($-0.19$)---the one regime in which no slow-moving macro factor can be
 expected to forecast the panic-driven repricing of 2008. The local cycle factor,
 by contrast, fails out of sample in every window, most severely in the financial
-crisis ($-0.31$). The two dollar-investor factors split the sample between them.
+crisis ($-0.40$). The two dollar-investor factors split the sample between them.
 The unadjusted global factor is positive \emph{only} in the pre-crisis window
 ($+0.13$) and negative through both crises and after. The FX-adjusted factor is
 its near-mirror image: it beats the recursive mean in the euro-area crisis
 ($+0.09$) and across the long post-crisis window ($+0.04$)---the bulk of the
 sample, which is what makes its full-sample pooled $R^{2}_{\mathrm{oos}}$
-marginally positive---but it fails badly in the pre-crisis window ($-1.07$),
+marginally positive---but it fails badly in the pre-crisis window ($-1.11$),
 where its forecasts rest on the shortest training histories. The FX adjustment
 thus earns its slim full-sample edge in the recent, post-2009 dollar regime,
 exactly where the unadjusted factor cannot. For the headline factor the message
@@ -326,10 +326,10 @@ content is overwhelmingly a crisis phenomenon.
 
 The Italian local cycle factor's in-sample $R^{2}$ rises from $0.29$ over the
 full sample to $0.75$ in the 2010--2012 crisis, and the horse-race $t$-statistic
-on the orthogonalised local factor reaches $10.4$---more than double its
+on the orthogonalised local factor reaches $10.3$---more than double its
 full-sample value---while the global factor enters insignificantly and with the
 wrong sign ($t(\GCF)=-0.4$). The same pattern holds, even more starkly, during
-the financial crisis ($t(\CF^{\perp})=6.6$, $t(\GCF)=-3.4$). The interpretation
+the financial crisis ($t(\CF^{\perp})=6.6$, $t(\GCF)=-3.1$). The interpretation
 is the one anticipated in \Cref{sec:res-phase2}: Italian bond risk premia during
 the sovereign-debt crisis were driven by redenomination and sovereign-spread
 dynamics that are local in origin and that the GDP-weighted global factor,
@@ -360,9 +360,9 @@ families differ only in their predictor set: macro-anchored cycles versus
 forward rates.
 
 The two local factors carry overlapping but distinct information, correlating
-$0.69$ on average across the G10 (ranging from $0.43$ in Japan to $0.93$ in the
+$0.69$ on average across the G10 (ranging from $0.43$ in Japan to $0.92$ in the
 United Kingdom; right panel of \Cref{fig:s10-is}), and the two global factors correlate
-$0.66$. In-sample, the forward factor actually \emph{wins}: its cross-country mean
+$0.65$. In-sample, the forward factor actually \emph{wins}: its cross-country mean
 $R^{2}$ is $0.38$ for the local and $0.35$ for the global version, against $0.25$
 for both cycle factors (\Cref{fig:s10-is}). This is unsurprising and not in the
 cycle factor's favour at face value---the forward factor uses six predictors to
@@ -387,7 +387,7 @@ that beats the recursive prevailing mean, with pooled
 $R^{2}_{\mathrm{oos}}=+0.05$ and positive forecasts in ten of eleven markets. The
 global \emph{forward} factor, despite its higher in-sample fit, fails out of
 sample ($-0.01$, positive in only two markets), as do the local forward factor
-($-0.02$, four markets) and the local cycle factor ($-0.07$, two markets). The
+($-0.02$, four markets) and the local cycle factor ($-0.08$, two markets). The
 forward factor's in-sample advantage is precisely the over-fit that the
 out-of-sample test is designed to expose, and it does not survive aggregation
 into real time. The macro anchoring of the cycle factor---tying the predictable
@@ -443,16 +443,16 @@ so core and headline \emph{trend} inflation correlate $0.90$ on average across t
 G10, and the cycle factors they generate correlate $0.95$ (local) and $0.92$
 (global). Predictability is nonetheless modestly weaker on headline CPI, exactly
 as \citet{cieslak2015} find: the cross-country mean in-sample $R^{2}$ of the local
-factor falls from $0.250$ (core) to $0.234$ (headline), and the global factor from
-$0.252$ to $0.224$---a relative drop of about six to eleven percent, in the
+factor falls from $0.247$ (core) to $0.228$ (headline), and the global factor from
+$0.247$ to $0.214$---a relative drop of about eight to thirteen percent, in the
 neighbourhood of their nine---while both remain overwhelmingly significant (the
-global factor's pooled HAC $t$ is $14.2$ on core and $14.4$ on headline).
+global factor's pooled HAC $t$ is $14.3$ on core and $14.5$ on headline).
 \Cref{tab:rob-core-headline} and \Cref{fig:rob-core-headline} show the gap is
 concentrated where the data's energy pass-through is largest: the United States,
-whose local $R^{2}$ falls from $0.33$ to $0.24$, accounts for much of the average,
-whereas a handful of markets (France, Japan, Sweden) fit marginally \emph{better}
-on headline. The FX-adjusted factor tells the same story ($R^{2}$ of $0.096$ on
-core versus $0.072$ on headline).
+whose local $R^{2}$ falls from $0.33$ to $0.23$, accounts for much of the average,
+whereas a handful of markets (Belgium, France, Japan, Sweden) fit marginally \emph{better}
+on headline. The FX-adjusted factor tells the same story ($R^{2}$ of $0.095$ on
+core versus $0.068$ on headline).
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.88\linewidth]{figures/rob_f3_core_vs_reg.pdf}
@@ -476,7 +476,7 @@ decisive, and it vindicates the baseline. In sample the measure barely matters;
 out of sample it is the difference between a result and none. The global cycle
 factor's real-time edge---the central finding of \Cref{sec:rob-oos}---survives on
 core CPI ($R^{2}_{\mathrm{oos}}=+0.05$) but \emph{vanishes} on headline CPI
-($-0.01$); the FX-adjusted factor collapses similarly (from $+0.004$ to $-0.14$),
+($-0.02$); the FX-adjusted factor collapses similarly (from $+0.002$ to $-0.16$),
 and the local factor remains negative under both
 (\Cref{tab:rob-core-headline-oos}). The asymmetry is economically intelligible.
 The recursive estimator re-fits both the trend and the predictive coefficients on

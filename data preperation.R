@@ -110,7 +110,11 @@ inflation_long <- inflation %>%
   dplyr::arrange(country, date) %>%
   dplyr::group_by(country) %>%
   dplyr::mutate(
-    yoy_infl  = (cpi / dplyr::lag(cpi, 12) - 1) * 100, # YoY inflation publicly at that month
+    # Publication lag: at month-end t the most recent CPI print is for month t-1
+    # (e.g. February CPI, released in March, is the latest known at end-March).
+    # We therefore use the one-month-lagged "real-time" CPI everywhere downstream.
+    cpi_rt    = dplyr::lag(cpi, 1),
+    yoy_infl  = (cpi_rt / dplyr::lag(cpi_rt, 12) - 1) * 100, # YoY of the last known print
     trend_inf = cp_trend(yoy_infl)
   ) %>%
   dplyr::ungroup()
