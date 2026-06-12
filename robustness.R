@@ -834,6 +834,162 @@ rob_tables$rob_t6_core_vs_reg_oos <- table_to_grob(
 
 
 # =============================================================================
+# TABLE 7 / FIGURE 4 -- DMA trend-inflation parameters: sensitivity to (v, M).
+# =============================================================================
+# Section 8.5: the baseline trend inflation is the discounted moving average of
+# core YoY inflation with decay v = 0.987 and window M = 120 months (CP 2015).
+# Stress-test the full 3x3 grid v in {0.900, 0.987, 0.995} x M in {60, 120, 180}
+# (baseline + 8 variants, so each baseline parameter is also crossed with the
+# alternatives): rebuild trend inflation from the SAME core CPI under each pair,
+# push it through the in-sample factor chain (cycle -> CF -> GCF) and the fully
+# recursive OOS chain, and compare against the baseline.
+
+make_cp_trend <- function(v, M) {
+  wn <- ((1 - v) / (1 - v^M)) * v^(0:(M - 1))
+  function(pi_vec) {
+    n <- length(pi_vec); tr <- rep(NA_real_, n)
+    for (t in M:n) {
+      win <- pi_vec[(t - M + 1):t]
+      if (any(is.na(win))) next
+      tr[t] <- sum(wn * rev(win))
+    }
+    tr
+  }
+}
+
+# Self-test: (v, M) = (0.987, 120) must reproduce the baseline trend_inf.
+.dma_chk <- inflation_long %>% dplyr::arrange(country, date) %>%
+  dplyr::group_by(country) %>%
+  dplyr::mutate(tr_chk = make_cp_trend(0.987, 120)(yoy_infl)) %>% dplyr::ungroup()
+stopifnot(isTRUE(all.equal(.dma_chk$trend_inf, .dma_chk$tr_chk, tolerance = 1e-9)))
+cat("dma-sens: make_cp_trend self-test passed (reproduces baseline trend_inf)\n")
+
+build_infl_dma <- function(v, M) {
+  inflation_long %>% dplyr::select(date, ym, country, yoy_infl) %>%
+    dplyr::arrange(country, date) %>% dplyr::group_by(country) %>%
+    dplyr::mutate(trend_inf = make_cp_trend(v, M)(yoy_infl)) %>%
+    dplyr::ungroup()
+}
+
+dma_grid <- tidyr::crossing(v = c(0.900, 0.987, 0.995), M = c(60L, 120L, 180L)) %>%
+  dplyr::mutate(
+    key   = sprintf("v%d_M%d", round(1000 * v), M),
+    label = sprintf("v = %.3f, M = %d%s", v, M,
+                    ifelse(v == 0.987 & M == 120, " (baseline)", "")))
+
+# In-sample comparison of one variant against the baseline chain (core_is),
+# on the per-country common sample: factor correlations with the baseline,
+# cross-country mean predictive R^2, and the pooled fixed-effects HAC t.
+dma_is_stats <- function(var_is) {
+  cmpv <- core_is %>%
+    dplyr::select(country, ym, rx_t12, trend_b = trend_inf, CF_b = CF, GCF_b = GCF) %>%
+    dplyr::inner_join(var_is %>% dplyr::select(country, ym, trend_inf, CF, GCF),
+                      by = c("country", "ym"))
+  per <- split(cmpv, cmpv$country) %>% purrr::map_dfr(function(d) {
+    tibble::tibble(
+      corr_trend = suppressWarnings(cor(d$trend_b, d$trend_inf, use = "complete.obs")),
+      corr_cf    = suppressWarnings(cor(d$CF_b, d$CF, use = "complete.obs")),
+      r2_cf      = as.numeric(r2t(d, "rx_t12", "CF")["r2"]),
+      r2_gcf     = as.numeric(r2t(d, "rx_t12", "GCF")["r2"]))
+  })
+  gg <- cmpv %>% dplyr::distinct(ym, .keep_all = TRUE)
+  tibble::tibble(
+    n_months   = dplyr::n_distinct(cmpv$ym),
+    corr_trend = mean(per$corr_trend, na.rm = TRUE),
+    corr_cf    = mean(per$corr_cf,    na.rm = TRUE),
+    corr_gcf   = suppressWarnings(cor(gg$GCF_b, gg$GCF, use = "complete.obs")),
+    r2_cf      = mean(per$r2_cf,  na.rm = TRUE),
+    r2_gcf     = mean(per$r2_gcf, na.rm = TRUE),
+    t_gcf      = pooled_fe_t(cmpv, "rx_t12", "GCF", 0L, 999999L))
+}
+
+dma_res <- purrr::pmap_dfr(dma_grid, function(v, M, key, label) {
+  infl_v <- build_infl_dma(v, M)
+  var_is <- build_cf_chain_is(infl_v)
+  st     <- dma_is_stats(var_is)
+  # The baseline cell reuses the expanding-window cycle base already built for
+  # Table 4 (same inflation table), so only the 8 variants pay the rebuild.
+  cyc_v <- if (key == "v987_M120") cyc_exp else build_cycle_base(Inf, infl = infl_v)
+  pnl_v <- add_oos_factors(cyc_v, mt = 60, train_window = Inf)
+  cat(sprintf("dma-sens: %s done\n", label))
+  tibble::tibble(key = key, label = label, v = v, M = M) %>%
+    dplyr::bind_cols(st) %>%
+    dplyr::mutate(
+      oos_cf  = pooled_r2_oos(pnl_v, "rx_t12", "CF_oos",  mt = 60)$r2,
+      oos_gcf = pooled_r2_oos(pnl_v, "rx_t12", "GCF_oos", mt = 60)$r2)
+})
+
+# Sanity: the baseline cell must reproduce itself exactly (correlations = 1)
+# and its pooled OOS R^2 must match the Table 4 expanding/5y scheme.
+.dma_base <- dma_res %>% dplyr::filter(key == "v987_M120")
+stopifnot(abs(.dma_base$corr_gcf - 1) < 1e-8, abs(.dma_base$corr_cf - 1) < 1e-8)
+stopifnot(isTRUE(all.equal(
+  .dma_base$oos_gcf,
+  scheme_res$r2_oos[scheme_res$scheme == "exp60" & scheme_res$spec == "rx ~ GCF"],
+  tolerance = 1e-8)))
+cat("dma-sens: baseline cell sanity passed (corr = 1; OOS matches Table 4 exp/5y)\n")
+
+cat("\n===== Table 7: DMA trend-parameter sensitivity (v, M) =====\n")
+print(as.data.frame(dma_res %>% dplyr::transmute(
+  label, n = n_months,
+  corr_trend = round(corr_trend, 3), corr_cf = round(corr_cf, 3),
+  corr_gcf = round(corr_gcf, 3),
+  r2_cf = round(r2_cf, 3), r2_gcf = round(r2_gcf, 3), t_gcf = round(t_gcf, 2),
+  oos_cf = round(oos_cf, 3), oos_gcf = round(oos_gcf, 3))), row.names = FALSE)
+
+t7_disp <- dma_res %>% dplyr::arrange(v, M) %>% dplyr::transmute(
+  Variant       = label,
+  N             = n_months,
+  `corr trend`  = fmt2(corr_trend),
+  `corr CF`     = fmt2(corr_cf),
+  `corr GCF`    = fmt2(corr_gcf),
+  `R2 CF`       = fmt3(r2_cf),
+  `R2 GCF`      = fmt3(r2_gcf),
+  `t GCF`       = fmt2(t_gcf),
+  `OOS R2 CF`   = fmt3(oos_cf),
+  `OOS R2 GCF`  = fmt3(oos_gcf))
+
+rob_tables$rob_t7_dma_sens <- table_to_grob(
+  as.data.frame(t7_disp),
+  title = "Robustness -- Trend-inflation parameters: sensitivity to (v, M)",
+  note  = paste0("Trend inflation rebuilt from the same core CPI under every combination of ",
+                 "decay v in {0.900, 0.987, 0.995} and window M in {60, 120, 180} months\n",
+                 "(baseline v = 0.987, M = 120), then pushed through the full factor chain. ",
+                 "'corr trend'/'corr CF' are mean per-country correlations with the baseline\n",
+                 "on the common sample; 'corr GCF' is the global-factor correlation. 'R2 CF'/",
+                 "'R2 GCF' are cross-country mean in-sample fits of rx on the variant factor,\n",
+                 "'t GCF' the pooled fixed-effects HAC t. 'OOS R2' is the pooled Campbell-",
+                 "Thompson R2 of the fully-recursive variant chain (expanding, 5y minimum).\n",
+                 "M = 180 variants start ~5 years later (the DMA needs a longer history), ",
+                 "hence the smaller N."),
+  base_size = 8)
+
+rob_plots$rob_f4_dma_sens <- dma_res %>%
+  dplyr::select(v, M, `In-sample R2 (CF)` = r2_cf, `In-sample R2 (GCF)` = r2_gcf,
+                `Out-of-sample R2 (CF)` = oos_cf, `Out-of-sample R2 (GCF)` = oos_gcf) %>%
+  tidyr::pivot_longer(-c(v, M), names_to = "metric", values_to = "r2") %>%
+  dplyr::mutate(
+    metric = factor(metric, levels = c("In-sample R2 (CF)", "In-sample R2 (GCF)",
+                                       "Out-of-sample R2 (CF)", "Out-of-sample R2 (GCF)")),
+    v_lbl = factor(sprintf("v = %.3f", v),
+                   levels = sprintf("v = %.3f", c(0.900, 0.987, 0.995))),
+    M_lbl = factor(paste0("M = ", M), levels = paste0("M = ", c(60, 120, 180)))) %>%
+  ggplot2::ggplot(ggplot2::aes(M_lbl, v_lbl, fill = r2)) +
+  ggplot2::geom_tile(colour = "white") +
+  ggplot2::geom_text(ggplot2::aes(label = sprintf("%.1f%%", 100 * r2)), size = 3) +
+  ggplot2::facet_wrap(~ metric, ncol = 2) +
+  ggplot2::scale_fill_gradient2(low = col_sec, mid = "white", high = col_pri,
+                                midpoint = 0, labels = scales::percent_format(accuracy = 1),
+                                name = expression(R^2)) +
+  ggplot2::labs(
+    title = "Sensitivity of predictability to the trend-inflation parameters",
+    subtitle = "Baseline v = 0.987, M = 120 (centre cell). In-sample = cross-country mean; OOS = pooled Campbell-Thompson",
+    x = NULL, y = NULL) +
+  theme_thesis +
+  ggplot2::theme(panel.grid = ggplot2::element_blank())
+
+
+# =============================================================================
 # Write every exhibit to disk as a vector PDF.
 # =============================================================================
 save_robustness <- function(tab_dir = "thesis/tables", fig_dir = "thesis/figures") {
@@ -844,7 +1000,8 @@ save_robustness <- function(tab_dir = "thesis/tables", fig_dir = "thesis/figures
                    rob_t3_italy         = c(w = 11, h = 3.2),
                    rob_t4_oos_scheme    = c(w = 11, h = 3.0),
                    rob_t5_core_vs_reg   = c(w = 11, h = 4.4),
-                   rob_t6_core_vs_reg_oos = c(w = 8, h = 2.6))
+                   rob_t6_core_vs_reg_oos = c(w = 8, h = 2.6),
+                   rob_t7_dma_sens      = c(w = 10.5, h = 4.2))
   purrr::iwalk(rob_tables, function(g, nm) {
     sz <- tab_size[[nm]]; w <- if (is.null(sz)) 10 else sz[["w"]]; h <- if (is.null(sz)) 4.5 else sz[["h"]]
     ggplot2::ggsave(file.path(tab_dir, paste0(nm, ".pdf")), g, width = w, height = h)

@@ -14,7 +14,7 @@ symlinks, so the folder imports cleanly into Overleaf). If the R pipeline is
 re-run, refresh them:
 
 ```sh
-cp thesis/figures/{mr_f1_r2_phase1,mr_f2_hr_tstats,mr_f2_r2_ladder,mr_f3_usd_r2,mr_f4_gcf_fxgcf,mr_f5_oos_r2,s5_gcf,strat_f1_cumret,rob_f1_oos_sub,rob_f2_oos_scheme}.pdf final_presentation/figures/
+cp thesis/figures/{mr_f1_r2_phase1,mr_f2_hr_tstats,mr_f2_r2_ladder,mr_f3_usd_r2,mr_f4_gcf_fxgcf,mr_f5_oos_r2,s5_gcf,strat_f1_cumret,rob_f1_oos_sub,rob_f2_oos_scheme,rob_f4_dma_sens}.pdf final_presentation/figures/
 cp thesis/tables/{mr_t1_phase1,mr_t2_phase2,mr_t3_phase3,mr_t4_oos,strat_t1_performance,rob_t1_sub_is}.pdf final_presentation/tables/
 ```
 
