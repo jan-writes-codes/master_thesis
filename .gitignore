@@ -3,3 +3,17 @@
 .RData
 .Rproj.user/
 *.Rproj
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.nav
+*.out
+*.snm
+*.toc
+final_presentation/main.log
+final_presentation/main.pdf
+thesis/main.pdf

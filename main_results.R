@@ -40,6 +40,7 @@ suppressPackageStartupMessages({
 
 if (!exists("reg_data")) source("data preperation.R")
 source("cp_inference.R")
+source("thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
 
 mr_tables <- list()
 mr_plots  <- list()
@@ -206,7 +207,7 @@ mr_tables$mr_t1_phase1 <- table_to_grob(
 mr_plots$mr_f1_r2_phase1 <- run_by_country(panel, rx_t12 ~ CF) %>%
   dplyr::filter(term == "CF") %>%
   ggplot2::ggplot(ggplot2::aes(stats::reorder(country, r_sq), r_sq)) +
-  ggplot2::geom_col(fill = "#08519c") +
+  ggplot2::geom_col(fill = col_pri) +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   ggplot2::labs(title = expression(paste("In-sample ", R^2, " of ", rx %~% CF, " by country (Eq 18)")),
                 x = NULL, y = expression(R^2)) +
@@ -347,8 +348,8 @@ mr_plots$mr_f2_r2_ladder <- phase2 %>%
   ggplot2::ggplot(ggplot2::aes(country, r_sq, fill = model)) +
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  ggplot2::scale_fill_manual(values = c("Local CF" = "#08519c", "Global GCF" = "#a50f15",
-                                        "Joint" = "#762a83"), name = NULL) +
+  ggplot2::scale_fill_manual(values = c("Local CF" = col_pri, "Global GCF" = col_sec,
+                                        "Joint" = col_ter), name = NULL) +
   ggplot2::labs(title = expression(paste("Phase II: in-sample ", R^2, " ladder per country")),
                 x = NULL, y = expression(R^2)) +
   theme_thesis +
@@ -363,8 +364,8 @@ mr_plots$mr_f2_hr_tstats <- phase2 %>%
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
   ggplot2::geom_hline(yintercept = c(-1.96, 1.96), linetype = "dashed", colour = "grey50") +
   ggplot2::geom_hline(yintercept = 0, colour = "grey30") +
-  ggplot2::scale_fill_manual(values = c("Local (CF_perp)" = "#08519c",
-                                        "Global (GCF)" = "#a50f15"), name = NULL) +
+  ggplot2::scale_fill_manual(values = c("Local (CF_perp)" = col_pri,
+                                        "Global (GCF)" = col_sec), name = NULL) +
   ggplot2::labs(title = "Phase II horse race: per-country HAC t-statistics",
                 subtitle = "Dashed lines at +/- 1.96; CF_perp = local factor orthogonal to GCF",
                 x = NULL, y = "HAC t-statistic") +
@@ -430,8 +431,8 @@ mr_plots$mr_f3_usd_r2 <- phase3 %>%
   ggplot2::ggplot(ggplot2::aes(country, r_sq, fill = model)) +
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  ggplot2::scale_fill_manual(values = c("rx_USD ~ GCF (Eq 22)" = "#08519c",
-                                        "rx_USD ~ FXGCF (Eq 23)" = "#a50f15"), name = NULL) +
+  ggplot2::scale_fill_manual(values = c("rx_USD ~ GCF (Eq 22)" = col_pri,
+                                        "rx_USD ~ FXGCF (Eq 23)" = col_sec), name = NULL) +
   ggplot2::labs(title = expression(paste("Phase III: US-dollar-investor ", R^2, ": GCF vs FX-adjusted FXGCF")),
                 subtitle = "Value of the FX adjustment for a US-dollar investor",
                 x = NULL, y = expression(R^2)) +
@@ -445,8 +446,8 @@ mr_plots$mr_f4_gcf_fxgcf <- fxgcf %>%
   ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   ggplot2::geom_line(ggplot2::aes(y = GCF,   colour = "GCF (Eq 7)"),   linewidth = 0.5) +
   ggplot2::geom_line(ggplot2::aes(y = FXGCF, colour = "FXGCF (Eq 23)"), linewidth = 0.5) +
-  ggplot2::scale_colour_manual(values = c("GCF (Eq 7)" = "#08519c",
-                                          "FXGCF (Eq 23)" = "#a50f15"), name = NULL) +
+  ggplot2::scale_colour_manual(values = c("GCF (Eq 7)" = col_pri,
+                                          "FXGCF (Eq 23)" = col_sec), name = NULL) +
   ggplot2::labs(title = "Global cycle factor vs FX-adjusted global cycle factor",
                 subtitle = sprintf("Correlation = %.2f over the common sample", gcf_fxgcf_rho),
                 x = NULL, y = "Factor value") +
@@ -513,7 +514,7 @@ mr_plots$mr_f5_oos_r2 <- r2_oos_tab %>%
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
   ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  ggplot2::scale_fill_manual(values = c("rx ~ CF_oos" = "#08519c", "rx ~ GCF_oos" = "#a50f15"),
+  ggplot2::scale_fill_manual(values = c("rx ~ CF_oos" = col_pri, "rx ~ GCF_oos" = col_sec),
                              name = NULL) +
   ggplot2::labs(title = expression(paste("Out-of-sample ", R[oos]^2, ": local CF vs global GCF")),
                 subtitle = "Recursive factor forecast vs recursive prevailing mean (positive = beats the mean)",

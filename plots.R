@@ -46,8 +46,9 @@ theme_thesis <- theme_bw(base_size = 11) +
     plot.title       = element_text(face = "bold")
   )
 
-mat_palette <- c("1Y" = "#2166ac", "2Y" = "#4dac26", "4Y" = "#e08214",
-                 "5Y" = "#d6604d", "9Y" = "#c51b7d", "10Y" = "#762a83")
+# Shared colour scheme (col_pri/col_sec/col_ter/col_qua, mat_palette,
+# country_palette) -- see thesis_palette.R for the role of each colour.
+source("thesis_palette.R")
 
 # Country-month panel with all factors side by side.
 panel <- reg_data %>%
@@ -227,6 +228,7 @@ plots$s1_yield_curve_avg <- yields_long %>%
   ggplot(aes(maturity, mean_y, colour = country)) +
   geom_line(linewidth = 0.5) + geom_point(size = 1.6) +
   scale_x_continuous(breaks = c(1, 2, 4, 5, 9, 10)) +
+  scale_colour_manual(values = country_palette) +
   labs(title = "Average yield curve, full sample",
        x = "Maturity (years)", y = "Mean yield (%)", colour = "Country") +
   theme_thesis
@@ -237,7 +239,7 @@ plots$s1_coverage <- yields_long %>%
   summarise(p_obs = mean(!is.na(yield)), .groups = "drop") %>%
   ggplot(aes(date, country, fill = p_obs)) +
   geom_tile() +
-  scale_fill_gradient(low = "white", high = "#08519c",
+  scale_fill_gradient(low = "white", high = col_pri,
                       name = "Share of\nmaturities\nobserved") +
   labs(title = "Yield panel coverage", x = NULL, y = NULL) +
   theme_thesis + theme(panel.grid = element_blank())
@@ -255,7 +257,7 @@ plots$s2_inflation_trend <- inflation_long %>%
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   facet_wrap(~ country, ncol = 3, scales = "free_y") +
   scale_colour_manual(values = c("YoY core CPI" = "grey60",
-                                 "Trend inflation pi^e" = "#b2182b"),
+                                 "Trend inflation pi^e" = col_pri),
                       name = NULL) +
   labs(title = "YoY core CPI and DMA trend inflation (v = 0.987, M = 120)",
        y = "%", x = NULL) +
@@ -271,7 +273,7 @@ plots$s2_yield_decomp <- cycle %>%
   ggplot(aes(date, value, colour = component)) +
   geom_line(linewidth = 0.5) +
   facet_wrap(~ country, ncol = 2, scales = "free_y") +
-  scale_colour_manual(values = c(yield = "#08519c", trend_part = "#b2182b"),
+  scale_colour_manual(values = c(yield = col_pri, trend_part = col_sec),
                       labels = c(yield = "Nominal yield (10Y)",
                                  trend_part = "Trend: alpha + beta * pi^e"),
                       name = NULL) +
@@ -301,6 +303,7 @@ plots$s2_beta_loadings <- cycle %>%
   geom_line(linewidth = 0.5) + geom_point(size = 1.6) +
   geom_hline(yintercept = 1, linetype = "dashed", colour = "grey50") +
   scale_x_continuous(breaks = c(1, 2, 4, 5, 9, 10)) +
+  scale_colour_manual(values = country_palette) +
   labs(title = TeX("Yield-on-trend-inflation loadings $\\beta_{i,n}$"),
        subtitle = "Dashed line at 1 = one-for-one passthrough",
        x = "Maturity (years)", y = TeX("$\\beta$"), colour = "Country") +
@@ -324,7 +327,7 @@ plots$s3_us_cf_cbar_ts <- us_data %>%
            y = min(c(us_data$CF, us_data$c_bar), na.rm = TRUE),
            hjust = 1, vjust = 0,
            label = sprintf("Correlation = %.2f", us_rho)) +
-  scale_colour_manual(values = c(CF = "#08519c", c_bar = "grey40"),
+  scale_colour_manual(values = c(CF = col_pri, c_bar = "grey40"),
                       labels = c(CF = TeX("$\\widehat{cf}_t$ (CF)"),
                                  c_bar = TeX("$\\bar{c}_t$")),
                       name = NULL) +
@@ -340,7 +343,7 @@ plots$s3_us_cf_cbar_ts <- us_data %>%
 plots$s3_us_cbar_vs_cf <- us_data %>%
   ggplot(aes(c_bar, CF)) +
   geom_point(size = 0.8, alpha = 0.5, colour = "#525252") +
-  geom_smooth(method = "lm", se = TRUE, colour = "#08519c") +
+  geom_smooth(method = "lm", se = TRUE, colour = col_pri) +
   labs(title = "US: average cycle vs local cycle factor",
        subtitle = sprintf("Correlation rho = %.2f (CP-2015 target ~ 0.61)", us_rho),
        x = TeX("$\\bar{c}_{US,t}$"), y = TeX("$CF_{US,t}$")) +
@@ -350,7 +353,7 @@ plots$s3_us_cbar_vs_cf <- us_data %>%
 plots$s3_us_rx_vs_cf <- us_data %>%
   ggplot(aes(CF, rx_t12)) +
   geom_point(size = 0.8, alpha = 0.5, colour = "#525252") +
-  geom_smooth(method = "lm", se = TRUE, colour = "#08519c") +
+  geom_smooth(method = "lm", se = TRUE, colour = col_pri) +
   labs(title = "US: excess return vs cycle factor (CP-2015 predictability)",
        x = TeX("$CF_{US,t}$"), y = TeX("$rx_{US,t+12}$ (pp)")) +
   theme_thesis
@@ -373,7 +376,7 @@ plots$s4_local_cf <- reg_data %>%
 plots$s4_rx_vs_cf_scatter <- panel %>%
   ggplot(aes(CF, rx_t12)) +
   geom_point(size = 0.4, alpha = 0.4, colour = "#525252") +
-  geom_smooth(method = "lm", se = TRUE, colour = "#08519c") +
+  geom_smooth(method = "lm", se = TRUE, colour = col_pri) +
   facet_wrap(~ country, ncol = 3, scales = "free") +
   labs(title = TeX("Eq (18): $rx_{i,t+12}$ vs $CF_{i,t}$"),
        x = TeX("$CF_{i,t}$"), y = TeX("$rx_{i,t+12}$ (pp)")) +
@@ -383,7 +386,7 @@ plots$s4_rx_vs_cf_scatter <- panel %>%
 plots$s4_r2_cf_by_country <- tab18 %>%
   filter(term == "CF") %>%
   ggplot(aes(reorder(country, r_sq), r_sq)) +
-  geom_col(fill = "#08519c") +
+  geom_col(fill = col_pri) +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
   labs(title = TeX("In-sample $R^2$ of $rx \\sim CF$ by country"),
        x = NULL, y = TeX("$R^2$")) +
@@ -402,7 +405,7 @@ plots$s4_r2_cf_by_country_maturity <- bind_rows(
   ggplot(aes(country, maturity, fill = r_sq)) +
   geom_tile(colour = "white") +
   geom_text(aes(label = sprintf("%.0f%%", 100 * r_sq)), size = 2.6) +
-  scale_fill_gradient(low = "white", high = "#08519c",
+  scale_fill_gradient(low = "white", high = col_pri,
                       labels = percent_format(accuracy = 1), name = TeX("$R^2$")) +
   labs(title = TeX("In-sample $R^2$ of $rx^{(n)} \\sim CF$ by country and maturity"),
        x = NULL, y = "Maturity") +
@@ -418,10 +421,10 @@ plots$s4_r2_cf_by_country_maturity <- bind_rows(
 plots$s5_gcf <- ggplot() +
   geom_line(data = reg_data, aes(date, CF, group = country),
             colour = "grey80", linewidth = 0.3) +
-  geom_line(data = gcf, aes(date, GCF), colour = "#08519c", linewidth = 0.8) +
+  geom_line(data = gcf, aes(date, GCF), colour = col_pri, linewidth = 0.8) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   labs(title = "Global cycle factor (GDP-weighted, eq 7-8)",
-       subtitle = "Blue: GCF_t. Grey: country-level local CFs.",
+       subtitle = "Indigo: GCF_t. Grey: country-level local CFs.",
        y = "Factor value", x = NULL) +
   theme_thesis
 
@@ -431,6 +434,7 @@ plots$s5_gdp_weights <- reg_data %>%
   ggplot(aes(date, w, fill = country)) +
   geom_area(position = "fill") +
   scale_y_continuous(labels = percent_format()) +
+  scale_fill_manual(values = country_palette) +
   labs(title = TeX("GDP weights $w_{i,t}$ across the panel (eq 8)"),
        y = "Weight", x = NULL, fill = NULL) +
   theme_thesis
@@ -450,7 +454,7 @@ plots$s5_cf_corr_heatmap <- cf_corr %>%
   ggplot(aes(country_a, country_b, fill = rho)) +
   geom_tile() +
   geom_text(aes(label = sprintf("%.2f", rho)), size = 2.4) +
-  scale_fill_gradient2(low = "#b2182b", mid = "white", high = "#2166ac",
+  scale_fill_gradient2(low = col_sec, mid = "white", high = col_pri,
                        midpoint = 0, limits = c(-1, 1)) +
   labs(title = "Pairwise correlation of local cycle factors",
        x = NULL, y = NULL, fill = "rho") +
@@ -467,7 +471,7 @@ plots$s5_coef_eq19 <- tab19 %>%
   geom_pointrange(aes(ymin = lo, ymax = hi),
                   position = position_dodge(width = 0.5)) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  scale_colour_manual(values = c(CF = "#08519c", GCF = "#a50f15"), name = NULL) +
+  scale_colour_manual(values = c(CF = col_pri, GCF = col_sec), name = NULL) +
   labs(title = "Eq (19): rx ~ CF + GCF coefficients (HAC +/-1.96 SE)",
        subtitle = "Does the global CF subsume the local CF? (local-currency investor)",
        x = NULL, y = "Coefficient") +
@@ -482,7 +486,7 @@ plots$s5_r2_cf_vs_gcf <- bind_rows(
   ggplot(aes(country, r_sq, fill = model)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  scale_fill_manual(values = c("rx ~ CF" = "#08519c", "rx ~ GCF" = "#a50f15"),
+  scale_fill_manual(values = c("rx ~ CF" = col_pri, "rx ~ GCF" = col_sec),
                     name = NULL) +
   labs(title = TeX("In-sample $R^2$: local CF vs global GCF"),
        x = NULL, y = TeX("$R^2$")) +
@@ -501,8 +505,8 @@ plots$s6_fxgcf_vs_gcf <- fxgcf %>%
   geom_line(aes(y = GCF,   colour = "GCF (eq 7)"),    linewidth = 0.5) +
   geom_line(aes(y = FXGCF, colour = "FXGCF (DH)"),    linewidth = 0.5) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  scale_colour_manual(values = c("GCF (eq 7)" = "#08519c",
-                                 "FXGCF (DH)" = "#a50f15"),
+  scale_colour_manual(values = c("GCF (eq 7)" = col_pri,
+                                 "FXGCF (DH)" = col_sec),
                       name = NULL) +
   labs(title = "Global cycle factor vs FX-adjusted global cycle factor",
        subtitle = sprintf("Correlation = %.2f (DH-2013 report ~0.50)", gcf_fxgcf_rho),
@@ -518,7 +522,7 @@ plots$s6_coef_eq21 <- tab21 %>%
   geom_pointrange(aes(ymin = lo, ymax = hi),
                   position = position_dodge(width = 0.5)) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  scale_colour_manual(values = c(CF = "#08519c", GCF = "#a50f15"), name = NULL) +
+  scale_colour_manual(values = c(CF = col_pri, GCF = col_sec), name = NULL) +
   labs(title = "Eq (21): rx_USD ~ CF + GCF coefficients (HAC +/-1.96 SE)",
        subtitle = "Does the global CF subsume the local CF? (USD investor)",
        x = NULL, y = "Coefficient") +
@@ -536,8 +540,8 @@ plots$s6_r2_usd_gcf_vs_fxgcf <- bind_rows(
   ggplot(aes(country, r_sq, fill = model)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  scale_fill_manual(values = c("rx_USD ~ GCF (eq22)" = "#08519c",
-                               "rx_USD ~ FXGCF (eq23)" = "#a50f15"),
+  scale_fill_manual(values = c("rx_USD ~ GCF (eq22)" = col_pri,
+                               "rx_USD ~ FXGCF (eq23)" = col_sec),
                     name = NULL) +
   labs(title = TeX("USD-investor $R^2$: GCF vs FX-adjusted GCF"),
        subtitle = "Value of the FX adjustment for a USD investor",
@@ -566,7 +570,7 @@ plots$s8_cf_oos_vs_is <- cf_compare %>%
   geom_line(linewidth = 0.4) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   facet_wrap(~ country, ncol = 3, scales = "free_y") +
-  scale_colour_manual(values = c("CF" = "#08519c", "CF_oos" = "#a50f15"),
+  scale_colour_manual(values = c("CF" = col_pri, "CF_oos" = col_sec),
                       name = NULL) +
   labs(title = "Local cycle factor: full-sample CF vs fully-recursive CF_oos",
        subtitle = "Convergence after ~10y burn-in is the signature of a stable real-time estimator",
@@ -582,7 +586,7 @@ plots$s8_gcf_oos_vs_is <- gcf %>%
   ggplot(aes(date, value, colour = factor)) +
   geom_line(linewidth = 0.5) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  scale_colour_manual(values = c("GCF" = "#08519c", "GCF_oos" = "#a50f15"),
+  scale_colour_manual(values = c("GCF" = col_pri, "GCF_oos" = col_sec),
                       name = NULL) +
   labs(title = "Global cycle factor: full-sample GCF vs fully-recursive GCF_oos",
        x = NULL, y = "Factor value") +
@@ -597,7 +601,7 @@ plots$s8_fxgcf_oos_vs_is <- fxgcf %>%
   ggplot(aes(date, value, colour = factor)) +
   geom_line(linewidth = 0.5) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  scale_colour_manual(values = c("FXGCF" = "#08519c", "FXGCF_oos" = "#a50f15"),
+  scale_colour_manual(values = c("FXGCF" = col_pri, "FXGCF_oos" = col_sec),
                       name = NULL) +
   labs(title = "FX-adjusted GCF: full-sample FXGCF vs fully-recursive FXGCF_oos",
        x = NULL, y = "Factor value") +
@@ -609,7 +613,7 @@ plots$s8_oos_is_corr <- cf_compare %>%
   group_by(country) %>%
   summarise(cor_CF = cor(CF, CF_oos), n = n(), .groups = "drop") %>%
   ggplot(aes(reorder(country, cor_CF), cor_CF)) +
-  geom_col(fill = "#08519c") +
+  geom_col(fill = col_pri) +
   geom_hline(yintercept = c(0, 1), linetype = "dashed", colour = "grey50") +
   coord_flip() +
   scale_y_continuous(limits = c(-0.2, 1.0)) +
@@ -623,7 +627,7 @@ plots$s8_rx_vs_cf_oos <- reg_data_oos %>%
   filter(!is.na(CF_oos), !is.na(rx_t12)) %>%
   ggplot(aes(CF_oos, rx_t12)) +
   geom_point(alpha = 0.3, size = 0.6) +
-  geom_smooth(method = "lm", se = FALSE, colour = "#a50f15", linewidth = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, colour = col_sec, linewidth = 0.5) +
   facet_wrap(~ country, ncol = 3, scales = "free") +
   labs(title = TeX("Realized 12m excess return vs $CF_{\\mathrm{oos}}$"),
        subtitle = "Out-of-sample predictive scatter per country",
@@ -639,8 +643,8 @@ plots$s8_r2_oos_local <- r2_oos_tab %>%
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  scale_fill_manual(values = c("rx ~ CF_oos" = "#08519c",
-                               "rx ~ GCF_oos" = "#a50f15"), name = NULL) +
+  scale_fill_manual(values = c("rx ~ CF_oos" = col_pri,
+                               "rx ~ GCF_oos" = col_sec), name = NULL) +
   labs(title = TeX("Campbell-Thompson $R^2_{\\mathrm{oos}}$: local-currency returns"),
        subtitle = "Recursive factor forecast vs recursive-mean benchmark (5y min training, 12m horizon)",
        x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$")) +
@@ -657,8 +661,8 @@ plots$s8_r2_oos_usd <- r2_oos_tab %>%
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  scale_fill_manual(values = c("rx_USD ~ GCF_oos"  = "#08519c",
-                               "rx_USD ~ FXGCF_oos" = "#a50f15"), name = NULL) +
+  scale_fill_manual(values = c("rx_USD ~ GCF_oos"  = col_pri,
+                               "rx_USD ~ FXGCF_oos" = col_sec), name = NULL) +
   labs(title = TeX("Campbell-Thompson $R^2_{\\mathrm{oos}}$: USD-investor returns"),
        subtitle = "GCF_oos vs FX-adjusted FXGCF_oos (recursive-mean benchmark)",
        x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$")) +
@@ -672,10 +676,10 @@ plots$s8_r2_oos_pooled <- r2_oos_pooled %>%
   geom_col(width = 0.6, show.legend = FALSE) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  scale_fill_manual(values = c("rx ~ CF_oos"        = "#08519c",
-                               "rx ~ GCF_oos"       = "#9aa200",
-                               "rx_USD ~ GCF_oos"   = "#a50f15",
-                               "rx_USD ~ FXGCF_oos" = "#762a83")) +
+  scale_fill_manual(values = c("rx ~ CF_oos"        = col_pri,
+                               "rx ~ GCF_oos"       = col_qua,
+                               "rx_USD ~ GCF_oos"   = col_sec,
+                               "rx_USD ~ FXGCF_oos" = col_ter)) +
   labs(title = TeX("Pooled Campbell-Thompson $R^2_{\\mathrm{oos}}$ across G10"),
        subtitle = "SS aggregated over countries; each country uses its own recursive-mean benchmark",
        x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$ (pooled)")) +
@@ -698,8 +702,8 @@ plots$s9_hr_tstats <- hr_results %>%
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   geom_hline(yintercept = c(-1.96, 1.96), linetype = "dashed", colour = "grey50") +
   geom_hline(yintercept = 0, colour = "grey30") +
-  scale_fill_manual(values = c("Local (CF_perp)" = "#08519c",
-                               "Global (GCF)"    = "#a50f15"), name = NULL) +
+  scale_fill_manual(values = c("Local (CF_perp)" = col_pri,
+                               "Global (GCF)"    = col_sec), name = NULL) +
   labs(title = "DH horse-race (Eq 19): per-country HAC t-statistics",
        subtitle = TeX("$rx_{t+12} = a + \\beta\\, CF^{\\perp} + \\gamma\\, GCF + \\varepsilon$ -- dashed lines at $\\pm 1.96$"),
        x = NULL, y = "HAC t-statistic") +
@@ -717,9 +721,9 @@ plots$s9_hr_r2 <- hr_results %>%
   ggplot(aes(country, r_sq, fill = model)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  scale_fill_manual(values = c("Local only"  = "#08519c",
-                               "Global only" = "#a50f15",
-                               "Joint"       = "#762a83"), name = NULL) +
+  scale_fill_manual(values = c("Local only"  = col_pri,
+                               "Global only" = col_sec,
+                               "Joint"       = col_ter), name = NULL) +
   labs(title = TeX("DH horse-race: in-sample $R^2$ ladder per country"),
        subtitle = "Local = rx ~ CF; Global = rx ~ GCF; Joint = rx ~ CF_perp + GCF (same sample)",
        x = NULL, y = TeX("$R^2$")) +
@@ -735,7 +739,7 @@ plots$s9_hr_wald <- hr_results %>%
   ggplot(aes(country, neg_log10_p, fill = adj)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   geom_hline(yintercept = -log10(0.05), linetype = "dashed", colour = "grey50") +
-  scale_fill_manual(values = c("raw" = "#08519c", "BH" = "#a50f15"), name = NULL) +
+  scale_fill_manual(values = c("raw" = col_pri, "BH" = col_sec), name = NULL) +
   labs(title = TeX("DH horse-race joint Wald test: $-\\log_{10}(p)$ per country"),
        subtitle = TeX("$H_0: \\beta = \\gamma = 0$; dashed line at $p = 0.05$ (BH = Benjamini-Hochberg across G10)"),
        x = NULL, y = TeX("$-\\log_{10}(p)$")) +
@@ -757,7 +761,7 @@ plots$s10_cf_vs_cp_ts <- reg_data %>%
   geom_line(linewidth = 0.4) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   facet_wrap(~ country, ncol = 3, scales = "free_y") +
-  scale_colour_manual(values = c("CF" = "#08519c", "CP" = "#a50f15"), name = NULL) +
+  scale_colour_manual(values = c("CF" = col_pri, "CP" = col_sec), name = NULL) +
   labs(title = "Local factor: cycle-based CF vs forward-based CP (in-sample)",
        subtitle = "CF = CP 2015 cycle factor; CP = CP 2005 / DH 2013 forward factor",
        x = NULL, y = "Factor value") +
@@ -772,7 +776,7 @@ plots$s10_gcf_vs_gcp_ts <- gcf %>%
   ggplot(aes(date, value, colour = factor)) +
   geom_line(linewidth = 0.5) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  scale_colour_manual(values = c("GCF" = "#08519c", "GCP" = "#a50f15"), name = NULL) +
+  scale_colour_manual(values = c("GCF" = col_pri, "GCP" = col_sec), name = NULL) +
   labs(title = "Global factor: GCF vs GCP (in-sample)",
        x = NULL, y = "Factor value") +
   theme_thesis
@@ -784,7 +788,7 @@ plots$s10_cf_cp_corr <- reg_data %>%
   group_by(country) %>%
   summarise(cor_CF_CP = cor(CF, CP), n = n(), .groups = "drop") %>%
   ggplot(aes(reorder(country, cor_CF_CP), cor_CF_CP)) +
-  geom_col(fill = "#08519c") +
+  geom_col(fill = col_pri) +
   geom_hline(yintercept = c(0, 1), linetype = "dashed", colour = "grey50") +
   coord_flip() +
   scale_y_continuous(limits = c(-0.2, 1.0)) +
@@ -808,10 +812,10 @@ plots$s10_r2_is_compare <- bind_rows(
   ggplot(aes(country, r_sq, fill = model)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  scale_fill_manual(values = c("rx ~ CF"  = "#08519c",
-                               "rx ~ CP"  = "#a50f15",
-                               "rx ~ GCF" = "#9aa200",
-                               "rx ~ GCP" = "#762a83"), name = NULL) +
+  scale_fill_manual(values = c("rx ~ CF"  = col_pri,
+                               "rx ~ CP"  = col_sec,
+                               "rx ~ GCF" = col_qua,
+                               "rx ~ GCP" = col_ter), name = NULL) +
   labs(title = TeX("In-sample $R^2$: cycle (CF / GCF) vs forward (CP / GCP) factors"),
        x = NULL, y = TeX("$R^2$")) +
   theme_thesis +
@@ -826,7 +830,7 @@ plots$s10_cf_oos_vs_cp_oos_ts <- panel_oos %>%
   geom_line(linewidth = 0.4) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   facet_wrap(~ country, ncol = 3, scales = "free_y") +
-  scale_colour_manual(values = c("CF_oos" = "#08519c", "CP_oos" = "#a50f15"),
+  scale_colour_manual(values = c("CF_oos" = col_pri, "CP_oos" = col_sec),
                       name = NULL) +
   labs(title = "OOS local factor: CF_oos vs CP_oos (fully recursive)",
        x = NULL, y = "Factor value") +
@@ -841,7 +845,7 @@ plots$s10_gcf_oos_vs_gcp_oos_ts <- gcf_oos %>%
   ggplot(aes(date, value, colour = factor)) +
   geom_line(linewidth = 0.5) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  scale_colour_manual(values = c("GCF_oos" = "#08519c", "GCP_oos" = "#a50f15"),
+  scale_colour_manual(values = c("GCF_oos" = col_pri, "GCP_oos" = col_sec),
                       name = NULL) +
   labs(title = "OOS global factor: GCF_oos vs GCP_oos (fully recursive)",
        x = NULL, y = "Factor value") +
@@ -858,10 +862,10 @@ plots$s10_r2_oos_compare <- r2_oos_tab %>%
   geom_col(position = position_dodge(width = 0.8), width = 0.75) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  scale_fill_manual(values = c("rx ~ CF_oos"  = "#08519c",
-                               "rx ~ CP_oos"  = "#a50f15",
-                               "rx ~ GCF_oos" = "#9aa200",
-                               "rx ~ GCP_oos" = "#762a83"), name = NULL) +
+  scale_fill_manual(values = c("rx ~ CF_oos"  = col_pri,
+                               "rx ~ CP_oos"  = col_sec,
+                               "rx ~ GCF_oos" = col_qua,
+                               "rx ~ GCP_oos" = col_ter), name = NULL) +
   labs(title = TeX("Campbell-Thompson $R^2_{\\mathrm{oos}}$: cycle vs forward factors"),
        subtitle = "Recursive factor forecast vs recursive-mean benchmark, 5y min training, 12m horizon",
        x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$")) +
