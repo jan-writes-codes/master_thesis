@@ -471,14 +471,62 @@ out-of-sample predictability is a property of the macro anchor measured cleanly.
 \label{sec:rob-sensitivity}
 
 Three construction choices underlie the cycle factor, and it is worth stating how
-much the results depend on each. The first is the exponentially-weighted moving
-average that defines trend inflation, with decay parameter $v=0.987$ and window
-$M=120$ months. These values follow \citet{cieslak2015} directly, and the cycle
-factor inherits its robustness to them from the nature of the object: trend
-inflation is a deliberately slow-moving anchor, so moderate changes in the decay
-weight or the window length shift the estimated trend by small amounts and leave
-the cycle---the residual of yields on that trend---and hence the factor largely
-unchanged. The second is the maturity menu used to form the cycle and the excess
+much the results depend on each. The first---and the only one involving free
+parameters---is the discounted moving average that defines trend inflation
+\eqref{eq:trendinf}, with decay $v=0.987$ and window $M=120$ months, both taken
+from \citet{cieslak2015}. Rather than assert that a slow-moving anchor must be
+insensitive to them, \Cref{tab:rob-dma-sens} tests it. Trend inflation is rebuilt
+from the same core-CPI series under every combination of
+$v\in\{0.900,0.987,0.995\}$ and $M\in\{60,120,180\}$---the baseline and eight
+variants, so that each baseline parameter is also crossed with both
+alternatives---and every variant is pushed through the entire chain: the
+yield--trend decomposition \eqref{eq:cf}, the local factors, the GDP-weighted
+global factor, and the fully-recursive out-of-sample protocol of
+\Cref{sec:rob-oos}.
+
+\begin{table}[t]
+  \caption{Sensitivity to the trend-inflation parameters $(v, M)$}
+  \label{tab:rob-dma-sens}
+  \centering
+  \input{tables/rob_t7_dma_sens}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.85\linewidth]{figures/rob_f4_dma_sens.pdf}
+  \caption{Sensitivity of predictability to the trend-inflation parameters.
+    In-sample (cross-country mean $R^{2}$, top row) and out-of-sample (pooled
+    Campbell--Thompson $R^{2}_{\mathrm{oos}}$, bottom row) predictability of the
+    local ($\CF$) and global ($\GCF$) cycle factors, with trend inflation
+    rebuilt under each $(v, M)$ combination; the baseline $v=0.987$, $M=120$ is
+    the centre cell.}
+  \label{fig:rob-dma-sens}
+\end{figure}
+
+The parameters move the trend, and barely move the result. The decay governs the
+effective memory of the average: at $v=0.900$ the weights halve every seven
+months, so the trend forgets all but the most recent two to three years and the
+window length becomes irrelevant---the three $v=0.900$ rows of
+\Cref{tab:rob-dma-sens} are identical to three decimals. At $v=0.995$ the
+half-life is eleven years and the window binds instead. Across the grid the
+variant trends correlate with the baseline trend at between $0.59$ (the
+fast-decay corner) and $0.98$, yet the factors built on them correlate at
+$0.80$--$1.00$ (local) and $0.87$--$1.00$ (global): the yield-on-trend
+regression \eqref{eq:cf} rescales whatever anchor it is handed, absorbing level
+and scale differences so that only the component relevant for the cycle
+survives. Predictability is correspondingly flat. The cross-country mean
+in-sample $R^{2}$ of the global factor lies between $0.24$ and $0.30$ in every
+cell (baseline $0.25$), with pooled HAC $t$-statistics between $12.9$ and
+$16.2$; if anything, the short-memory trend fits slightly \emph{better} in
+sample ($R^{2}=0.30$). The real-time finding is equally stable: the pooled
+$R^{2}_{\mathrm{oos}}$ of the recursive global factor is positive in all nine
+cells, between $+0.03$ and $+0.06$ around the baseline's $+0.05$
+(\Cref{fig:rob-dma-sens}). And the cautionary result is parameter-robust too:
+the local factor's out-of-sample $R^{2}$ is negative in every cell ($-0.02$ to
+$-0.09$). Neither the headline finding nor its caveat is an artefact of the
+\citet{cieslak2015} parameter pair.
+
+The second is the maturity menu used to form the cycle and the excess
 return: the one-, two-, four-, five-, nine-, and ten-year points available in the
 data, summarised by the duration-standardised, maturity-averaged return
 \eqref{eq:rxbar}. \Cref{sec:res-phase1} showed that the predictability holds at
@@ -498,8 +546,10 @@ nearly collinear with the unadjusted global factor in this sample, adds little
 beyond it except in the euro-area crisis. What survives every test in this
 chapter is the same single object: the GDP-weighted global cycle factor predicts
 international bond returns in-sample and out-of-sample, across every subsample
-except the financial crisis itself and---out of sample---when the macro trend is
-measured cleanly with core inflation (\Cref{sec:rob-core-headline}), more robustly
+except the financial crisis itself, under every combination of the
+trend-inflation parameters (\Cref{tab:rob-dma-sens}), and---out of
+sample---when the macro trend is measured cleanly with core inflation
+(\Cref{sec:rob-core-headline}), more robustly
 than its local counterpart, its dollar-investor variant, or the forward-rate
 factor against which it is most naturally compared. That object, and the economic value it carries
 (\Cref{ch:strategy}), is the finding the thesis stands on; its interpretation is

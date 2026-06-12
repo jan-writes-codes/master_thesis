@@ -960,8 +960,8 @@ rob_tables$rob_t7_dma_sens <- table_to_grob(
                  "'R2 GCF' are cross-country mean in-sample fits of rx on the variant factor,\n",
                  "'t GCF' the pooled fixed-effects HAC t. 'OOS R2' is the pooled Campbell-",
                  "Thompson R2 of the fully-recursive variant chain (expanding, 5y minimum).\n",
-                 "M = 180 variants start ~5 years later (the DMA needs a longer history), ",
-                 "hence the smaller N."),
+                 "The core-CPI history begins early enough that every variant's trend predates ",
+                 "the yield sample, so all cells share the same forecast-origin months."),
   base_size = 8)
 
 rob_plots$rob_f4_dma_sens <- dma_res %>%
