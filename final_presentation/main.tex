@@ -10,6 +10,14 @@
 \documentclass[10pt]{beamer}
 
 \usetheme{Madrid}
+
+% Thesis colour scheme (see thesis_palette.R): indigo structure, teal alerts,
+% so the deck matches the figures.
+\definecolor{thesisindigo}{HTML}{3333AB}
+\definecolor{thesisteal}{HTML}{008493}
+\usecolortheme[named=thesisindigo]{structure}
+\setbeamercolor{alerted text}{fg=thesisteal}
+
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}

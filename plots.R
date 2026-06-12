@@ -424,7 +424,7 @@ plots$s5_gcf <- ggplot() +
   geom_line(data = gcf, aes(date, GCF), colour = col_pri, linewidth = 0.8) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   labs(title = "Global cycle factor (GDP-weighted, eq 7-8)",
-       subtitle = "Teal: GCF_t. Grey: country-level local CFs.",
+       subtitle = "Indigo: GCF_t. Grey: country-level local CFs.",
        y = "Factor value", x = NULL) +
   theme_thesis
 

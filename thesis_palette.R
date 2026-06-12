@@ -4,37 +4,39 @@
 # main_results.R, robustness.R and strategy.R so every figure draws from the
 # same palette.
 #
-# Scheme: a muted teal/amber pairing, extended by plum and olive for 3- and
-# 4-way comparisons. Roles, applied consistently across all figures:
-#   col_pri -- deep teal   : the headline series of a figure (local factor,
-#              fitted lines, the strategy under test)
-#   col_sec -- burnt amber : the contrasting series (global factor, benchmark,
-#              alternative construction)
-#   col_ter -- muted plum  : third series in 3+-way comparisons
-#   col_qua -- olive       : fourth series
+# Scheme: two fixed brand palettes, used together.
+#   "Friend" palette   #3333AB #AE97FF #4D9F8B #005242 -> series roles
+#   "Neighbor" palette #3333AB #79B5BF #008493 #324B4F -> ordered ramps
+#
+# Roles, applied consistently across all figures:
+#   col_pri -- indigo   #3333AB : the headline series of a figure (local
+#              factor, fitted lines, the strategy under test)
+#   col_sec -- sage     #4D9F8B : the contrasting series (global factor,
+#              benchmark, alternative construction)
+#   col_ter -- lavender #AE97FF : third series in 3+-way comparisons
+#   col_qua -- forest   #005242 : fourth series
 # Diverging gradients (signed quantities such as correlations) run
-# amber <- white -> teal, i.e. col_sec <- "white" -> col_pri; sequential
+# sage <- white -> indigo, i.e. col_sec <- "white" -> col_pri; sequential
 # gradients run "white" -> col_pri.
 # =============================================================================
 
-col_pri <- "#0F766E"  # deep teal
-col_sec <- "#B45309"  # burnt amber
-col_ter <- "#6A4C93"  # muted plum
-col_qua <- "#4D7C0F"  # olive
+col_pri <- "#3333AB"  # indigo
+col_sec <- "#4D9F8B"  # sage
+col_ter <- "#AE97FF"  # lavender
+col_qua <- "#005242"  # forest
 
-# Bond maturities on an ordered dark-teal -> amber ramp, so the maturity
-# ordering reads off the hue while staying inside the scheme.
+# Bond maturities on the ordered light-steel -> teal -> dark-slate ramp of the
+# neighbor palette, so maturity ordering reads off the luminance.
 mat_palette <- setNames(
-  grDevices::colorRampPalette(
-    c("#083F3B", "#0F766E", "#58A38F", "#C9A227", "#8C4A0F")
-  )(6),
+  grDevices::colorRampPalette(c("#79B5BF", "#008493", "#324B4F"))(6),
   c("1Y", "2Y", "4Y", "5Y", "9Y", "10Y")
 )
 
-# Qualitative palette for the G10+ country panel: muted tones anchored on the
-# four scheme colours, with the US in near-black slate as the reference market.
+# Qualitative palette for the G10+ country panel: the seven distinct brand
+# colours plus four in-family variants, with the US in indigo as the
+# reference market.
 country_palette <- c(
-  US = "#37474F", DE = "#0F766E", GB = "#B45309", FR = "#6A4C93",
-  JP = "#4D7C0F", IT = "#94434E", CA = "#8A5A3B", CH = "#4A7BA6",
-  SE = "#C9A227", NL = "#B07AA1", BE = "#7FA074"
+  US = "#3333AB", DE = "#008493", GB = "#005242", FR = "#AE97FF",
+  JP = "#4D9F8B", IT = "#324B4F", CA = "#79B5BF", CH = "#8893D6",
+  SE = "#1F2566", NL = "#63B0A0", BE = "#54668E"
 )
