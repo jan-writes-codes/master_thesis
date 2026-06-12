@@ -36,6 +36,7 @@ suppressPackageStartupMessages({
 })
 
 source("oos.R")   # recursive factors: reg_data, gcf_oos, oos_predict(); slow
+source("thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
 
 strat_tables <- list()
 strat_plots  <- list()
@@ -182,7 +183,7 @@ strat_plots$strat_f1_cumret <- ann_curve %>%
   ggplot2::ggplot(ggplot2::aes(date, wealth, colour = strategy)) +
   ggplot2::geom_hline(yintercept = 1, linetype = "dashed", colour = "grey60") +
   ggplot2::geom_line(linewidth = 0.7) +
-  ggplot2::scale_colour_manual(values = c("GCF-timed" = "#a50f15", "Buy-and-hold" = "#08519c"),
+  ggplot2::scale_colour_manual(values = c("GCF-timed" = col_pri, "Buy-and-hold" = col_sec),
                                name = NULL) +
   ggplot2::labs(title = "Growth of $1: GCF-timed global bond portfolio vs buy-and-hold",
                 subtitle = sprintf("Non-overlapping annual rebalancing, equal average exposure. Annual Sharpe %.2f vs %.2f",
@@ -200,7 +201,7 @@ strat_plots$strat_f2_exposure <- bt %>%
   ggplot2::ggplot(ggplot2::aes(date, w, colour = strategy)) +
   ggplot2::geom_hline(yintercept = 1, linetype = "dashed", colour = "grey60") +
   ggplot2::geom_line(linewidth = 0.5) +
-  ggplot2::scale_colour_manual(values = c("GCF-timed" = "#a50f15", "Mean timing" = "#08519c"),
+  ggplot2::scale_colour_manual(values = c("GCF-timed" = col_pri, "Mean timing" = col_sec),
                                name = NULL) +
   ggplot2::labs(title = "Real-time portfolio exposure (average = 1)",
                 subtitle = "The GCF investor cuts bond exposure when the global cycle signals a low risk premium",

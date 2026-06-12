@@ -37,6 +37,7 @@ suppressPackageStartupMessages({
 # gcf, fxgcf) and the fully-recursive OOS objects (panel_oos, oos_predict) in
 # the workspace. Guard against a double source.
 if (!exists("panel_oos")) source("oos.R")
+source("thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
 
 rob_tables <- list()
 rob_plots  <- list()
@@ -376,8 +377,8 @@ rob_plots$rob_f1_oos_sub <- oos_res %>%
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
   ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  ggplot2::scale_fill_manual(values = c("rx ~ CF" = "#08519c", "rx ~ GCF" = "#a50f15",
-                                        "rx_USD ~ GCF" = "#9aa200", "rx_USD ~ FXGCF" = "#762a83"),
+  ggplot2::scale_fill_manual(values = c("rx ~ CF" = col_pri, "rx ~ GCF" = col_sec,
+                                        "rx_USD ~ GCF" = col_qua, "rx_USD ~ FXGCF" = col_ter),
                              name = NULL) +
   ggplot2::labs(
     title = expression(paste("Out-of-sample ", R[oos]^2, " by subsample")),
@@ -574,8 +575,8 @@ rob_plots$rob_f2_oos_scheme <- scheme_res %>%
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
   ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  ggplot2::scale_fill_manual(values = c("rx ~ CF" = "#08519c", "rx ~ GCF" = "#a50f15",
-                                        "rx_USD ~ GCF" = "#9aa200", "rx_USD ~ FXGCF" = "#762a83"),
+  ggplot2::scale_fill_manual(values = c("rx ~ CF" = col_pri, "rx ~ GCF" = col_sec,
+                                        "rx_USD ~ GCF" = col_qua, "rx_USD ~ FXGCF" = col_ter),
                              name = NULL) +
   ggplot2::labs(
     title = expression(paste("Out-of-sample ", R[oos]^2, " by estimation scheme")),
@@ -788,7 +789,7 @@ rob_plots$rob_f3_core_vs_reg <- cf_rows %>%
   ggplot2::ggplot(ggplot2::aes(country, r_sq, fill = measure)) +
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  ggplot2::scale_fill_manual(values = c("Core CPI" = "#08519c", "Headline CPI" = "#a50f15"),
+  ggplot2::scale_fill_manual(values = c("Core CPI" = col_pri, "Headline CPI" = col_sec),
                              name = NULL) +
   ggplot2::labs(
     title = expression(paste("In-sample ", R^2, " of ", rx %~% CF, ": core vs headline CPI")),
