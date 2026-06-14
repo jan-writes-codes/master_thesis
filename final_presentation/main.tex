@@ -30,7 +30,12 @@
 \newcommand{\CF}{\mathrm{CF}}
 \newcommand{\GCF}{\mathrm{GCF}}
 \newcommand{\FXGCF}{\mathrm{FXGCF}}
+\newcommand{\rx}{\mathit{rx}}
 \newcommand{\rxbar}{\overline{rx}}
+\newcommand{\cyc}{c}                 % cycle
+\newcommand{\cycbar}{\bar{c}}        % average cycle
+\newcommand{\E}{\mathbb{E}}          % expectation
+\DeclareMathOperator{\Corr}{Corr}
 
 % Repeat the table of contents at every section start (as in the proposal)
 \AtBeginSection[]{%
@@ -353,12 +358,12 @@
 
 \begin{frame}{Appendix: Phase I --- Full Country Table}
   \centering
-  \includegraphics[width=\linewidth]{tables/mr_t1_phase1.pdf}
+  \input{tables/mr_t1_phase1}
 \end{frame}
 
 \begin{frame}{Appendix: Phase II --- Horse-Race Table}
   \centering
-  \includegraphics[width=\linewidth]{tables/mr_t2_phase2.pdf}
+  \input{tables/mr_t2_phase2}
 \end{frame}
 
 \begin{frame}{Appendix: Phase II --- $R^{2}$ Ladder}
@@ -368,17 +373,17 @@
 
 \begin{frame}{Appendix: Phase III --- USD-Investor Table}
   \centering
-  \includegraphics[width=\linewidth]{tables/mr_t3_phase3.pdf}
+  \input{tables/mr_t3_phase3}
 \end{frame}
 
 \begin{frame}{Appendix: Out-of-Sample Summary Table}
   \centering
-  \includegraphics[width=0.8\linewidth]{tables/mr_t4_oos.pdf}
+  \input{tables/mr_t4_oos}
 \end{frame}
 
 \begin{frame}{Appendix: Strategy Performance}
   \centering
-  \includegraphics[width=0.9\linewidth]{tables/strat_t1_performance.pdf}
+  \input{tables/strat_t1_performance}
 \end{frame}
 
 \begin{frame}{Appendix: Robustness --- Subsample Stability}
