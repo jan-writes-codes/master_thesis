@@ -112,7 +112,7 @@
   \end{enumerate}
 \end{frame}
 
-\begin{frame}{Recap: The Cycle-Factor Framework}
+\begin{frame}{Recap: The Cycle factor framework}
   Yields decompose into slow-moving \emph{trend inflation} and transitory
   \emph{cycles} \citep{cieslak2015}:
   \begin{equation*}
@@ -253,7 +253,6 @@
           8\% (USD returns)}
         \item Significance lost across the euro area, Switzerland, and Japan, but
           survives in US (33\%), Canada ($t=2.9$), and marginally SE and UK
-        \item One-year FX volatility swamps the cyclical bond signal
       \end{itemize}
     \end{column}
   \end{columns}
@@ -271,8 +270,8 @@
           markets and the $t$-statistic in every foreign market
         \item Average $R^{2}$: $8\%\to10\%$, uniform in direction but small in
           magnitude
-        \item Why? $\FXGCF$ and $\GCF$ correlate \textbf{0.99} here, far above
-          the $\approx0.50$ in \citet{dahlquist2013}
+        \item $\FXGCF$ and $\GCF$ correlate \textbf{0.99} here (far above
+          the $\approx0.50$ in \citet{dahlquist2013})
       \end{itemize}
     \end{column}
   \end{columns}
@@ -288,10 +287,9 @@
     \begin{column}{0.48\textwidth}
       \begin{itemize}
         \item \textbf{Local CF:} pooled $R^{2}_{\mathrm{oos}}=-0.08$ and
-          beats the mean in only 2 of 11 markets, so the in-sample fit is
-          largely generated-regressor over-fit
+          beats the mean in only 2 of 11 markets
         \item \textbf{Global $\GCF$:} pooled $\mathbf{+0.05}$, positive in
-          \textbf{10 of 11} markets, our clearest evidence of integration
+          \textbf{10 of 11} markets, clearest evidence of integration
         \item \textbf{USD investor:} $\GCF$ at $-0.07$, while $\FXGCF$ turns it
           marginally positive ($+0.002$, 9 of 11 markets)
       \end{itemize}
@@ -329,11 +327,11 @@
   \textbf{$\GCF$ survives tests}
   \begin{itemize}
     \item The GDP-weighted global cycle factor: in-sample and out-of-sample,
-      across subsamples (except the GFC itself), with core inflation, and
+      across subsamples, with core inflation, and
       against the Cochrane--Piazzesi forward-rate factor
   \end{itemize}
   \vfill
-  \textbf{Fragile}
+  \textbf{Fragile findings}
   \begin{itemize}
     \item Local-factor predictability does not survive real-time evaluation
     \item USD-investor predictability is far weaker (in-sample $R^{2}$ falls
@@ -380,7 +378,7 @@
 
 % --------------------------------------------------------------------------
 % Data and factor-construction figures (from plots.R, copied into figures/).
-\begin{frame}{Appendix: Zero-Coupon Yield Data}
+\begin{frame}{Appendix: Zero coupon yield data}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
       \includegraphics[width=\linewidth]{figures/s1_yield_ts.pdf}\\
@@ -393,7 +391,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Appendix: Trend Inflation, the Macro Anchor}
+\begin{frame}{Appendix: Trend Inflation}
   \centering
   \includegraphics[width=0.78\linewidth]{figures/s2_inflation_trend.pdf}\\[0.5ex]
   {\scriptsize Year-on-year core CPI and the discounted moving-average trend
@@ -415,7 +413,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Appendix: The Local Cycle Factors}
+\begin{frame}{Appendix: The Local Cycle factors}
   \centering
   \includegraphics[width=0.78\linewidth]{figures/s4_local_cf.pdf}\\[0.5ex]
   {\scriptsize Local cycle factor $\CF_{i,t}$ by country, the fitted return
@@ -447,12 +445,12 @@
   \input{tables/mr_t4_oos}
 \end{frame}
 
-\begin{frame}{Appendix: Strategy Performance}
+\begin{frame}{Appendix: Strategy performance}
   \centering
   \input{tables/strat_t1_performance}
 \end{frame}
 
-\begin{frame}{Appendix: Robustness Subsample Stability}
+\begin{frame}{Appendix: Robustness subsample stability}
   \centering
   \includegraphics[height=0.40\textheight]{figures/rob_f1_oos_sub.pdf}\\[0.5ex]
   \includegraphics[height=0.40\textheight]{figures/rob_f2_oos_scheme.pdf}
