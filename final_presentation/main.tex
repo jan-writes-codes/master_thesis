@@ -284,18 +284,23 @@
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
       \includegraphics[width=\linewidth]{figures/strat_f1_cumret.pdf}
-      {\scriptsize Out-of-sample cumulative returns, 2005--2024.}
+      {\scriptsize Out-of-sample cumulative returns, currency-hedged $\GCF$
+        investor, 2005--2024.}
     \end{column}
     \begin{column}{0.48\textwidth}
-      Mean--variance timing of a GDP-weighted 10y global bond portfolio on the
-      recursive $\GCF$ forecast (currency-hedged investor):
+      \textbf{Investable product:} one GDP-weighted, 10y G10 government-bond
+      basket, timed by a mean--variance rule on the recursive factor.
+      \vfill
+      \textbf{$\GCF$ --- currency-hedged}\\
+      {\scriptsize (local-currency returns; FX hedged with forwards)}
       \begin{itemize}
-        \item Portfolio-level $R^{2}_{\mathrm{oos}}=0.125$
-        \item Sharpe ratio: \textbf{0.31 (passive) $\to$ 0.38}; 0.34 for
-          mean-timing
-        \item Certainty-equivalent gain ($\gamma=5$): \textbf{+0.51\%/yr} over
-          buy-and-hold, +0.30\% over mean-timing
-        \item Modest in magnitude, but real-time implementable end to end
+        \item $R^{2}_{\mathrm{oos}}=0.125$; Sharpe \textbf{0.31$\to$0.38}
+        \item CER ($\gamma=5$): \textbf{+0.51\%/yr} vs.\ buy-and-hold
+      \end{itemize}
+      \textbf{$\FXGCF$ --- same basket, unhedged in USD}
+      \begin{itemize}
+        \item $R^{2}_{\mathrm{oos}}=0.120$; Sharpe \textbf{0.20$\to$0.24}
+        \item One-year FX risk caps the Sharpe far below the hedged investor
       \end{itemize}
     \end{column}
   \end{columns}
