@@ -18,6 +18,7 @@ table numbers from `thesis/tables/*.tex`:
 
 ```sh
 cp thesis/figures/{mr_f1_r2_phase1,mr_f2_hr_tstats,mr_f2_r2_ladder,mr_f3_usd_r2,mr_f4_gcf_fxgcf,mr_f5_oos_r2,s5_gcf,strat_f1_cumret,rob_f1_oos_sub,rob_f2_oos_scheme}.pdf final_presentation/figures/
+cp thesis/figures/{s1_yield_ts,s1_yield_curve_avg,s2_inflation_trend,s2_yield_decomp,s2_cycles_by_country,s4_local_cf}.pdf final_presentation/figures/  # appendix data slides
 # tables: keep tables/{mr_t1_phase1,mr_t2_phase2,mr_t3_phase3,mr_t4_oos,strat_t1_performance}.tex
 #         in sync with the corresponding thesis/tables/*.tex
 ```
