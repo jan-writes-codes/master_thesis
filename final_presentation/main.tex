@@ -4,7 +4,8 @@
 %
 % MTS requirements baked into this deck:
 %   - Slide 1: (preliminary) thesis title + supervisor's name
-%   - Research question stated by slide 3 at the latest
+%   - One motivation slide opens the deck (as in the proposal); the research
+%     question follows immediately on slide 5
 %   - One slide outlining the research design
 %   - 20 minutes + 10 minutes discussion -> ~16 content slides + appendix
 \documentclass[10pt]{beamer}
@@ -64,9 +65,35 @@
 \end{frame}
 
 % --------------------------------------------------------------------------
-\section{Research Question}
+\section{Motivation \& Research Question}
 
-% Slide 3: research question (MTS requirement: by slide 3 at the latest)
+% Motivation slide (mirrors the proposal's opener): build from the EH baseline
+% and the predictability literature to the international gap that the RQ fills.
+\begin{frame}{Motivation}
+  \textbf{The expectation hypothesis (EH):} a long yield is just the average
+  expected future short rate, so bond \emph{excess} returns should be
+  unpredictable.
+  \begin{equation*}
+    y^{(n)}_{t} \;\approx\; \frac{1}{n}\sum_{i=0}^{n-1}
+      \E_{t}\!\left[y^{(1)}_{t+i}\right]
+  \end{equation*}
+  \alert{Yet bond returns \emph{are} predictable} --- risk premia vary over time:
+  \begin{enumerate}
+    \item \citet{cochrane2005}: a tent-shaped forward-rate factor (CP) strongly
+      predicts US Treasury returns --- but offers no economic mechanism.
+    \item \citet{cieslak2015}: splitting yields into \emph{trend inflation} and
+      \emph{cycles}, the cycle factor predicts returns --- a macro-anchored
+      mechanism.
+    \item \citet{dahlquist2013}: a \emph{global} CP factor predicts international
+      returns better than local factors alone --- bond markets are integrated.
+  \end{enumerate}
+  \vfill
+  \textbf{The gap:} the macro-anchored cycle factor is established for the US;
+  whether it extends across countries and aggregates into a \emph{unified global
+  cycle factor} is open \citep[cf.][]{bauer2020,zhang2021}.
+\end{frame}
+
+% Research question (stated immediately after the one motivation slide)
 \begin{frame}{Research Question}
   \begin{block}{Main Question}
     Does the \citet{cieslak2015} cycle factor (CF) apply to international

@@ -30,7 +30,8 @@ the supervisor.
 
 - [x] Slide 1: (preliminary) thesis title — *often forgotten!*
 - [x] Slide 1: supervisor's name (Giorgia Simion, Ph.D.)
-- [x] Research question stated clearly, **by slide 3 at the latest**
+- [x] Motivation slide opens the deck (mirrors the proposal), leading into the
+      research question — **stated clearly on slide 5**
 - [x] One slide outlining the research design
 - [ ] Set the exact presentation date on the title slide once the schedule is
       announced (`\date{...}` in `main.tex`)
@@ -41,7 +42,7 @@ the supervisor.
 
 | Criterion | Where covered |
 |---|---|
-| Research question: defined, motivated, in literature | Slide 3 + framework recap |
+| Research question: defined, motivated, in literature | Motivation slide + RQ slide + framework recap |
 | Research design: defined, adequate, state-of-the-art, data | Research Design + Data slides |
 | Results: sufficient, contribution clear, interpretation clear | Phase I/II/III, OOS, economic value, robustness, conclusion |
 | Presentation: stringent logic, terminology, timing | three-phase narrative; rehearse |
