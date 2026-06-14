@@ -36,6 +36,7 @@
 \newcommand{\cyc}{c}                 % cycle
 \newcommand{\cycbar}{\bar{c}}        % average cycle
 \newcommand{\E}{\mathbb{E}}          % expectation
+\newcommand{\panel}[2]{\multicolumn{#1}{@{}l}{\textit{#2}}} % table sub-panel label
 \DeclareMathOperator{\Corr}{Corr}
 
 % Repeat the table of contents at every section start (as in the proposal)
@@ -428,6 +429,11 @@
   \includegraphics[width=0.78\linewidth]{figures/s4_local_cf.pdf}\\[0.5ex]
   {\scriptsize Local cycle factor $\CF_{i,t}$ by country, the fitted return
     forecast from the 1-year cycle and the average cycle.}
+\end{frame}
+
+\begin{frame}{Appendix: Cycle Factor by Maturity}
+  \centering
+  \input{tables/cp_t4}
 \end{frame}
 
 \begin{frame}{Appendix: Phase I Country Table}
