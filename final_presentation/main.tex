@@ -44,7 +44,7 @@
     \tableofcontents[currentsection]
   \end{frame}}
 
-\title[Expected Returns in Int'l Bond Markets]{Expected Returns in\\
+\title[Exp. Returns in International Bond Markets]{Expected Returns in\\
   International Government Bond Markets}
 \subtitle{Master Thesis -- Final Presentation}
 \author[Jan Heissenberger]{Jan Heissenberger\\
@@ -156,11 +156,10 @@
   \begin{itemize}
     \item Replication of \citet{cieslak2015} and \citet{dahlquist2013} on US /
       international data before any extension
-    \item $R^{2}$ benchmarked against an expectations-hypothesis Monte Carlo
     \item Fully-recursive out-of-sample evaluation
       \citep[Campbell--Thompson $R^{2}_{\mathrm{oos}}$,][]{campbellthompson2008}
-    \item Robustness: crisis subsamples, rolling windows, CF vs.\ CP factor,
-      core vs.\ headline inflation
+    \item Robustness: crisis subsamples, rolling windows, CF vs. CP factor,
+      core vs. headline inflation
   \end{itemize}
 \end{frame}
 
@@ -168,8 +167,11 @@
   \begin{itemize}
     \item \textbf{Universe:} G10 (BE, CA, FR, DE, IT, JP, NL, SE, CH, UK, US)
     \item \textbf{Yields:} zero-coupon curves, maturities 1, 2, 4, 5, 9, 10
-      years (Bloomberg). \textbf{Inflation:} core CPI (FRED). \textbf{FX:}
-      spot vs.\ USD (Bloomberg). \textbf{GDP:} nominal (LSEG)
+      years (Bloomberg)
+    \item \textbf{Inflation:} core CPI (FRED)
+    \item \textbf{FX:}
+      spot against USD (Bloomberg)
+    \item \textbf{GDP:} nominal (LSEG)
     \item \textbf{Frequency / span:} monthly, 1994--2026. Returns are
       one-year-ahead, duration-standardised, and maturity-averaged
   \end{itemize}
@@ -196,8 +198,6 @@
         \item Pooled panel: $t=-10.7$ and $t=15.5$
         \item In-sample $R^{2}$: 7\% (CH) to 34\% (NL), \textbf{average
           25\%}, with the US at 33\%, matching the original study
-        \item Far above the EH Monte-Carlo 95th percentile, and holds at every
-          maturity ($n=2,5,10$)
       \end{itemize}
     \end{column}
     \begin{column}{0.46\textwidth}
