@@ -21,7 +21,7 @@ cd "$ROOT" || exit 1
 mkdir -p "$1"; OUT="$(cd "$1" && pwd)"
 
 # Path to each analysis script (update the prefix here if scripts move to R/).
-SDIR="."
+SDIR="R"
 
 run() {  # 1=name 2=script 3=save-call template (TAB/FIG placeholders)
   local name="$1" script="$2" tmpl="$3"

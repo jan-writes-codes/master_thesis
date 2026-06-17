@@ -19,7 +19,7 @@ library(gridExtra)
 library(grid)
 library(ggplot2)
 
-if (!exists("reg_data")) source("data_preparation.R")
+if (!exists("reg_data")) source("R/data_preparation.R")
 
 # `tables` collects rendered table grobs; save_all_tables() writes them to PDF.
 tables <- list()
@@ -230,8 +230,8 @@ tables$cp_t1_panelB <- table_to_grob(
 # Maturities adapted to the data menu {1,2,4,5,9,10} (paper: 1/2/5/7/10/20).
 # ============================================================
 
-source("cp_inference.R")
-source("cp_montecarlo.R")
+source("R/cp_inference.R")
+source("R/cp_montecarlo.R")
 
 # Trend inflation (one value per US month) and the six raw US yields (wide).
 us_tau <- inflation_long %>%

@@ -16,7 +16,7 @@
 # to disk with save_all_plots().
 # =============================================================
 
-source("oos.R")  # transitively sources data_preparation.R
+source("R/oos.R")  # transitively sources data_preparation.R
 
 library(ggplot2)
 library(dplyr)
@@ -48,7 +48,7 @@ theme_thesis <- theme_bw(base_size = 11) +
 
 # Shared colour scheme (col_pri/col_sec/col_ter/col_qua, mat_palette,
 # country_palette) -- see thesis_palette.R for the role of each colour.
-source("thesis_palette.R")
+source("R/thesis_palette.R")
 
 # Country-month panel with all factors side by side.
 panel <- reg_data %>%

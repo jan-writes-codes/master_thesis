@@ -21,7 +21,7 @@
 # in the workspace).
 # =============================================================
 
-source("data_preparation.R")
+source("R/data_preparation.R")
 
 library(dplyr)
 library(tidyr)

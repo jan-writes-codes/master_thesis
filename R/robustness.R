@@ -36,8 +36,8 @@ suppressPackageStartupMessages({
 # oos.R sources data_preparation.R and leaves the in-sample objects (reg_data,
 # gcf, fxgcf) and the fully-recursive OOS objects (panel_oos, oos_predict) in
 # the workspace. Guard against a double source.
-if (!exists("panel_oos")) source("oos.R")
-source("thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
+if (!exists("panel_oos")) source("R/oos.R")
+source("R/thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
 
 rob_tables <- list()
 rob_plots  <- list()

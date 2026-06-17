@@ -35,8 +35,8 @@ suppressPackageStartupMessages({
   library(ggplot2); library(scales); library(grid); library(gridExtra)
 })
 
-source("oos.R")   # recursive factors: reg_data, gcf_oos, oos_predict(); slow
-source("thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
+source("R/oos.R")   # recursive factors: reg_data, gcf_oos, oos_predict(); slow
+source("R/thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
 
 strat_tables <- list()
 strat_plots  <- list()

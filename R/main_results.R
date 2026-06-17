@@ -38,9 +38,9 @@ suppressPackageStartupMessages({
   library(grid)
 })
 
-if (!exists("reg_data")) source("data_preparation.R")
-source("cp_inference.R")
-source("thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
+if (!exists("reg_data")) source("R/data_preparation.R")
+source("R/cp_inference.R")
+source("R/thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
 
 mr_tables <- list()
 mr_plots  <- list()
@@ -464,7 +464,7 @@ mr_plots$mr_f4_gcf_fxgcf <- fxgcf %>%
 # R^2 with the in-sample fit, phase by phase. Detailed per-country / per-spec OOS
 # evidence and the forward-factor comparison are deferred to Ch.8.
 
-source("oos.R")   # recursive factors + Campbell-Thompson R^2 (slow, fully recursive)
+source("R/oos.R")   # recursive factors + Campbell-Thompson R^2 (slow, fully recursive)
 
 oos_pool <- function(lbl) r2_oos_pooled$r2_oos_pooled[as.character(r2_oos_pooled$spec) == lbl]
 oos_npos <- function(lbl) sum(r2_oos_tab$r2_oos[r2_oos_tab$spec == lbl] > 0, na.rm = TRUE)

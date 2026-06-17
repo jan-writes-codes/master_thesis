@@ -22,14 +22,14 @@ subsume the predictive power of the local CF?
 
 | File | Provides |
 |------|----------|
-| `data_preparation.R` | trend inflation, cycles, local CF, global GCF, FXGCF, GDP weights, CP/GCP |
-| `oos.R` | fully-recursive OOS CF/GCF/FXGCF/CP/GCP + Campbell–Thompson R² |
-| `empirical.R` | 11 rendered result tables (CP 1/2/4, DH 1/3/4/6/7) → `save_all_tables()` → `tables/*.pdf` |
-| `plots.R` | 40 figures (sections s1–s10) → `save_all_plots()` → `figures/*.pdf` |
-| `main_results.R` | Ch.7 three-phase in-sample tables/figures (`mr_t*/mr_f*`) → `save_main_results()` |
-| `robustness.R` | Ch.8 crisis-subsample IS+OOS tables and Italy focus (`rob_t1/t2/t3`, `rob_f1`) → `save_robustness()` |
-| `cp_inference.R` | `hac_inf`, `bic_relprob`, `block_boot_t`, `block_boot_r2_ci` |
-| `cp_montecarlo.R` | EH Monte-Carlo R² grid |
+| `R/data_preparation.R` | trend inflation, cycles, local CF, global GCF, FXGCF, GDP weights, CP/GCP |
+| `R/oos.R` | fully-recursive OOS CF/GCF/FXGCF/CP/GCP + Campbell–Thompson R² |
+| `R/empirical.R` | 11 rendered result tables (CP 1/2/4, DH 1/3/4/6/7) → `save_all_tables()` → `tables/*.pdf` |
+| `R/plots.R` | 40 figures (sections s1–s10) → `save_all_plots()` → `figures/*.pdf` |
+| `R/main_results.R` | Ch.7 three-phase in-sample tables/figures (`mr_t*/mr_f*`) → `save_main_results()` |
+| `R/robustness.R` | Ch.8 crisis-subsample IS+OOS tables and Italy focus (`rob_t1/t2/t3`, `rob_f1`) → `save_robustness()` |
+| `R/cp_inference.R` | `hac_inf`, `bic_relprob`, `block_boot_t`, `block_boot_r2_ci` |
+| `R/cp_montecarlo.R` | EH Monte-Carlo R² grid |
 
 Remaining work is **writing** (LaTeX, ~70–90 pp) plus targeted analysis
 gap-filling and a dedicated robustness chapter.
@@ -69,7 +69,7 @@ then revised.
 | 1 | 05-31 | Scaffold `thesis/` LaTeX skeleton; lock sample window; **Ch.4 Data** |
 | 2 | 06-01 | **Ch.3 Theoretical Framework** (Eq 1–23, cross-checked vs code) |
 | 3 | 06-02 | **Ch.5 Methodology** + inference caveats; finalize EH-MC presentation |
-| 4 | 06-03 | **Ch.6 Replication**; freeze a results snapshot (clean `empirical.R`+`plots.R` pass) |
+| 4 | 06-03 | **Ch.6 Replication**; freeze a results snapshot (clean `R/empirical.R`+`R/plots.R` pass) |
 | 5 | 06-04 | **Ch.7 §I** local CF; finalize `s4_*`, per-country R² |
 | 6 | 06-05 | **Ch.7 §II** global subsumption; lock `s5_*`/`s9_*` |
 | 7 | 06-06 | **Ch.7 §III** USD investor & FXGCF; finalize `s6_*`, DH-T7 |
@@ -87,8 +87,8 @@ then revised.
 
 ```sh
 # Regenerate exhibits (run from repo root; output goes under thesis/)
-Rscript empirical.R                                  # thesis/tables/*.pdf
-Rscript -e 'source("plots.R"); save_all_plots()'     # thesis/figures/*.pdf
+Rscript R/empirical.R                                  # thesis/tables/*.pdf
+Rscript -e 'source("R/plots.R"); save_all_plots()'     # thesis/figures/*.pdf
 
 # Compile the thesis
 cd thesis && latexmk -pdf main.tex
