@@ -162,26 +162,6 @@ for (s in is_specs$spec_lbl) {
   t1_disp[[paste0(s, " : t")]]  <- b$t
 }
 
-table_to_grob <- function(df, title = NULL, note = NULL, base_size = 8) {
-  tt <- gridExtra::ttheme_minimal(
-    base_size = base_size,
-    core    = list(fg_params = list(hjust = 1, x = 0.95)),
-    colhead = list(fg_params = list(fontface = "bold")))
-  tab <- gridExtra::tableGrob(df, rows = NULL, theme = tt)
-  parts <- list(tab); heights <- grid::unit(1, "null")
-  if (!is.null(title)) {
-    th <- grid::textGrob(title, gp = grid::gpar(fontface = "bold",
-                         fontsize = base_size + 3), hjust = 0, x = 0.02)
-    parts <- c(list(th), parts); heights <- grid::unit.c(grid::unit(1.8, "lines"), heights)
-  }
-  if (!is.null(note)) {
-    nt <- grid::textGrob(note, gp = grid::gpar(fontsize = base_size - 1, col = "grey30"),
-                         hjust = 0, x = 0.02)
-    parts <- c(parts, list(nt)); heights <- grid::unit.c(heights, grid::unit(4.5, "lines"))
-  }
-  gridExtra::arrangeGrob(grobs = parts, ncol = 1, heights = heights)
-}
-
 rob_tables$rob_t1_sub_is <- table_to_grob(
   as.data.frame(t1_disp),
   title = "Robustness -- In-sample predictability across subsamples",
@@ -193,7 +173,7 @@ rob_tables$rob_t1_sub_is <- table_to_grob(
                  "FX-adjusted global factor. 'Months' is the number of forecast origins\n",
                  "in the window. Crisis windows are short, so HAC t-stats there are ",
                  "necessarily noisier than in the full sample."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 
 # =============================================================================
@@ -274,7 +254,7 @@ rob_tables$rob_t2_sub_oos <- table_to_grob(
                  "the predictive regression respect time t (doubly out-of-sample).\n",
                  "All four factors share a five-year training minimum, so every window ",
                  "carries real-time forecasts. Factors as in Table 8.1."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 
 # =============================================================================
@@ -339,7 +319,7 @@ rob_tables$rob_t3_italy <- table_to_grob(
                  "recursive Campbell-Thompson R2 scored in the window. The surviving\n",
                  "local Italian content of Phase II is concentrated in the 2010-2012 ",
                  "sovereign-debt crisis."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 
 # =============================================================================
@@ -543,7 +523,7 @@ rob_tables$rob_t4_oos_scheme <- table_to_grob(
                  "internally consistent. The expanding/5-year column reproduces the oos.R ",
                  "baseline (Table 8.2). The global cycle factor's edge is invariant to the\n",
                  "training-minimum length but is specific to the expanding window."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 rob_plots$rob_f2_oos_scheme <- scheme_res %>%
   dplyr::mutate(scheme_label = factor(scheme_label, levels = schemes$label),
@@ -755,7 +735,7 @@ rob_tables$rob_t5_core_vs_reg <- table_to_grob(
                  "Table 10 Panel C4). CF rows are per country; 'Mean (CF)' averages them; GCF and\n",
                  "FXGCF are the global factors (cross-country mean R2, pooled fixed-effects HAC t). ",
                  "rx is local-currency for CF/GCF and US-dollar for FXGCF."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 # Figure: per-country in-sample R^2, core vs headline CPI (rx ~ CF).
 rob_plots$rob_f3_core_vs_reg <- cf_rows %>%
@@ -807,7 +787,7 @@ rob_tables$rob_t6_core_vs_reg_oos <- table_to_grob(
                  "recursive prevailing mean, with the entire chain rebuilt on regular CPI.\n",
                  "Each column is scored over its own available sample (the regular series is ",
                  "shorter, e.g. Japan ends 2021). 'difference' = core - regular."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 
 # =============================================================================

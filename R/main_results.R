@@ -58,30 +58,6 @@ panel <- reg_data %>%
   dplyr::left_join(gcp   %>% dplyr::select(ym, GCP),             by = "ym") %>%
   dplyr::left_join(fxgcf %>% dplyr::select(ym, FXGCF),           by = "ym")
 
-# -----------------------------------------------------------------------------
-# Table -> PDF-able grob (identical styling to empirical.R, so the result
-# tables of Ch.6 and Ch.7 share one look).
-# -----------------------------------------------------------------------------
-table_to_grob <- function(df, title = NULL, note = NULL, base_size = 9) {
-  tt <- gridExtra::ttheme_minimal(
-    base_size = base_size,
-    core    = list(fg_params = list(hjust = 1, x = 0.95)),
-    colhead = list(fg_params = list(fontface = "bold")))
-  tab <- gridExtra::tableGrob(df, rows = NULL, theme = tt)
-  parts <- list(tab); heights <- grid::unit(1, "null")
-  if (!is.null(title)) {
-    th <- grid::textGrob(title, gp = grid::gpar(fontface = "bold",
-                         fontsize = base_size + 3), hjust = 0, x = 0.02)
-    parts <- c(list(th), parts); heights <- grid::unit.c(grid::unit(1.8, "lines"), heights)
-  }
-  if (!is.null(note)) {
-    nt <- grid::textGrob(note, gp = grid::gpar(fontsize = base_size - 1, col = "grey30"),
-                         hjust = 0, x = 0.02)
-    parts <- c(parts, list(nt)); heights <- grid::unit.c(heights, grid::unit(4, "lines"))
-  }
-  gridExtra::arrangeGrob(grobs = parts, ncol = 1, heights = heights)
-}
-
 ord <- function(x) factor(x, levels = mr_order)
 
 

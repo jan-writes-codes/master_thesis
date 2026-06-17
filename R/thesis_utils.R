@@ -77,3 +77,31 @@ theme_thesis <- ggplot2::theme_bw(base_size = 11) +
     panel.grid.minor = ggplot2::element_blank(),
     plot.title       = ggplot2::element_text(face = "bold")
   )
+
+# Render a data frame as a styled, PDF-able table grob: an optional bold title
+# on top, the table in the middle, an optional grey footnote below. base_size
+# is passed by every caller; note_lines sets the vertical space reserved for
+# the footnote (the CP/DH replication tables use 3, the robustness subsample
+# tables 4.5, everything else 4).
+table_to_grob <- function(df, title = NULL, note = NULL, base_size = 9,
+                          note_lines = 4) {
+  tt <- gridExtra::ttheme_minimal(
+    base_size = base_size,
+    core    = list(fg_params = list(hjust = 1, x = 0.95)),
+    colhead = list(fg_params = list(fontface = "bold")))
+  tab   <- gridExtra::tableGrob(df, rows = NULL, theme = tt)
+  parts <- list(tab); heights <- grid::unit(1, "null")
+  if (!is.null(title)) {
+    th <- grid::textGrob(title, gp = grid::gpar(fontface = "bold",
+                         fontsize = base_size + 3), hjust = 0, x = 0.02)
+    parts   <- c(list(th), parts)
+    heights <- grid::unit.c(grid::unit(1.8, "lines"), heights)
+  }
+  if (!is.null(note)) {
+    nt <- grid::textGrob(note, gp = grid::gpar(fontsize = base_size - 1, col = "grey30"),
+                         hjust = 0, x = 0.02)
+    parts   <- c(parts, list(nt))
+    heights <- grid::unit.c(heights, grid::unit(note_lines, "lines"))
+  }
+  gridExtra::arrangeGrob(grobs = parts, ncol = 1, heights = heights)
+}

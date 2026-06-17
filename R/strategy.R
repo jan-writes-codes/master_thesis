@@ -42,26 +42,6 @@ source("R/thesis_utils.R")    # shared analysis helpers (theme_thesis, ...)
 strat_tables <- list()
 strat_plots  <- list()
 
-table_to_grob <- function(df, title = NULL, note = NULL, base_size = 9) {
-  tt <- gridExtra::ttheme_minimal(
-    base_size = base_size,
-    core    = list(fg_params = list(hjust = 1, x = 0.95)),
-    colhead = list(fg_params = list(fontface = "bold")))
-  tab <- gridExtra::tableGrob(df, rows = NULL, theme = tt)
-  parts <- list(tab); heights <- grid::unit(1, "null")
-  if (!is.null(title)) {
-    th <- grid::textGrob(title, gp = grid::gpar(fontface = "bold", fontsize = base_size + 3),
-                         hjust = 0, x = 0.02)
-    parts <- c(list(th), parts); heights <- grid::unit.c(grid::unit(1.8, "lines"), heights)
-  }
-  if (!is.null(note)) {
-    nt <- grid::textGrob(note, gp = grid::gpar(fontsize = base_size - 1, col = "grey30"),
-                         hjust = 0, x = 0.02)
-    parts <- c(parts, list(nt)); heights <- grid::unit.c(heights, grid::unit(4, "lines"))
-  }
-  gridExtra::arrangeGrob(grobs = parts, ncol = 1, heights = heights)
-}
-
 # -----------------------------------------------------------------------------
 # 1. The investable asset and the real-time signal.
 # -----------------------------------------------------------------------------
