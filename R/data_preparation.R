@@ -262,39 +262,25 @@ cycle_avg <- cycle %>%
   group_by(country, ym, date) %>%
   summarise(c_bar = mean(cycle, na.rm = TRUE), .groups = "drop")
 
-cycle_1y <- cycle %>%
-  filter(maturity == 1) %>%
-  select(country, ym, date, cycle_1y = cycle)
-
-cycle_2y <- cycle %>%
-  filter(maturity == 2) %>%
-  select(country, ym, date, cycle_2y = cycle)
-
-cycle_4y <- cycle %>%
-  filter(maturity == 4) %>%
-  select(country, ym, date, cycle_4y = cycle)
-
-cycle_5y <- cycle %>%
-  filter(maturity == 5) %>%
-  select(country, ym, date, cycle_5y = cycle)
-
-cycle_9y <- cycle %>%
-  filter(maturity == 9) %>%
-  select(country, ym, date, cycle_9y = cycle)
-
-cycle_10y <- cycle %>%
-  filter(maturity == 10) %>%
-  select(country, ym, date, cycle_10y = cycle)
+# Per-maturity cycle columns: one wide column per maturity (cycle_1y, cycle_2y,
+# ... cycle_10y), built in a loop instead of six copy-pasted filter/rename blocks.
+cycle_mats <- c(1, 2, 4, 5, 9, 10)
+cycle_wide <- purrr::map(cycle_mats, function(m) {
+  cyc_m <- cycle %>%
+    filter(maturity == m) %>%
+    select(country, ym, date, cycle)
+  names(cyc_m)[names(cyc_m) == "cycle"] <- paste0("cycle_", m, "y")
+  cyc_m
+})
 
 
 
-reg_data <- cycle_1y %>%
+# Assemble the regression panel: the six per-maturity cycles (joined in turn),
+# the average cycle, and the maturity-averaged / forward returns. Every
+# downstream step selects columns by name, so the join order is not load-bearing.
+reg_data <- cycle_wide %>%
+  purrr::reduce(left_join, by = c("country", "ym", "date")) %>%
   left_join(cycle_avg, by = c("country", "ym", "date")) %>%
-  left_join(cycle_2y, by = c("country", "ym", "date")) %>%
-  left_join(cycle_4y, by = c("country", "ym", "date")) %>%
-  left_join(cycle_5y, by = c("country", "ym", "date")) %>%
-  left_join(cycle_9y, by = c("country", "ym", "date")) %>%
-  left_join(cycle_10y, by = c("country", "ym", "date")) %>%
   left_join(rx_avg,    by = c("country", "ym", "date")) %>%
   left_join(forwards,  by = c("country", "ym", "date")) %>%
   mutate(y = as.integer(format(date, "%Y"))) %>%
@@ -405,7 +391,7 @@ cat(sprintf("FXGCF diagnostics: cor(GCF, FXGCF) = %.3f\n",
 # Cleanup ----------------------------------------------------------------
 # Keep objects needed downstream for plotting/analysis (cycle, cycle_avg, gcf,
 # inflation_long, yields_long, fx_long, gdp); drop only intermediate temporaries.
-rm(list = c("cycle_1y", "cycle_2y", "cycle_4y", "cycle_5y", "cycle_9y", "cycle_10y",
+rm(list = c("cycle_wide", "cycle_mats",
             "curve_map", "fit_fxgcf", "fx", "fxgcf_data", "glob_pred",
             "fxgcf_diag", "rx_avg", "rx_raw", "rx_usd_bar",
             "y1_US", "yields", "yields_wide"))
