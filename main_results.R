@@ -38,7 +38,7 @@ suppressPackageStartupMessages({
   library(grid)
 })
 
-if (!exists("reg_data")) source("data preperation.R")
+if (!exists("reg_data")) source("data_preparation.R")
 source("cp_inference.R")
 source("thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
 

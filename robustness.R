@@ -33,7 +33,7 @@ suppressPackageStartupMessages({
   library(grid)
 })
 
-# oos.R sources data preperation.R and leaves the in-sample objects (reg_data,
+# oos.R sources data_preparation.R and leaves the in-sample objects (reg_data,
 # gcf, fxgcf) and the fully-recursive OOS objects (panel_oos, oos_predict) in
 # the workspace. Guard against a double source.
 if (!exists("panel_oos")) source("oos.R")
@@ -646,7 +646,7 @@ cat(sprintf("core-vs-reg: inflation_reg duplicate (country,ym) = %d (differing v
 inflation_long_reg <- .infl_reg_raw %>% dplyr::arrange(country, date) %>%
   dplyr::group_by(country, ym) %>% dplyr::slice_tail(n = 1) %>%
   dplyr::group_by(country) %>% dplyr::arrange(date, .by_group = TRUE) %>%
-  # Same one-month publication lag as the baseline core series (data preperation.R).
+  # Same one-month publication lag as the baseline core series (data_preparation.R).
   dplyr::mutate(cpi_rt    = dplyr::lag(cpi, 1),
                 yoy_infl  = (cpi_rt / dplyr::lag(cpi_rt, 12) - 1) * 100,
                 trend_inf = cp_trend_reg(yoy_infl)) %>%

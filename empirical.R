@@ -19,7 +19,7 @@ library(gridExtra)
 library(grid)
 library(ggplot2)
 
-if (!exists("reg_data")) source("data preperation.R")
+if (!exists("reg_data")) source("data_preparation.R")
 
 # `tables` collects rendered table grobs; save_all_tables() writes them to PDF.
 tables <- list()

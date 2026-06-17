@@ -22,7 +22,7 @@ subsume the predictive power of the local CF?
 
 | File | Provides |
 |------|----------|
-| `data preperation.R` | trend inflation, cycles, local CF, global GCF, FXGCF, GDP weights, CP/GCP |
+| `data_preparation.R` | trend inflation, cycles, local CF, global GCF, FXGCF, GDP weights, CP/GCP |
 | `oos.R` | fully-recursive OOS CF/GCF/FXGCF/CP/GCP + Campbell–Thompson R² |
 | `empirical.R` | 11 rendered result tables (CP 1/2/4, DH 1/3/4/6/7) → `save_all_tables()` → `tables/*.pdf` |
 | `plots.R` | 40 figures (sections s1–s10) → `save_all_plots()` → `figures/*.pdf` |

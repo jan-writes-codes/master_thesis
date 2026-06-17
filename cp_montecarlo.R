@@ -49,7 +49,7 @@ predictor_factors <- function(Y, tau, r) cbind(tau = tau, r = r)
 
 # Cycle predictors (CP Table 2, column 5): cycle_n = residual of y^(n) ~ tau,
 # then (cycle_1y, c_bar) with c_bar averaged over maturities != 1 -- the
-# construction in data preperation.R. Under the stylized EH model every cycle is
+# construction in data_preparation.R. Under the stylized EH model every cycle is
 # a scalar multiple of the same tau-orthogonal real factor, so this collapses to
 # one effective regressor in r (responds to phi_r only). Provided for comparison.
 predictor_cycle <- function(Y, tau, r) {
@@ -65,7 +65,7 @@ predictor_sixyields <- function(Y, tau, r) Y
 # --- One Monte Carlo draw ----------------------------------------------------
 # Simulates T_ + 12 usable months (plus burn-in), forms EH yields on the
 # maturity menu {1,2,4,5,9,10}, the duration-standardized maturity-averaged
-# excess return rx_bar over n in {2,5,10} (D_n = n; matches data preperation.R),
+# excess return rx_bar over n in {2,5,10} (D_n = n; matches data_preparation.R),
 # and the chosen predictor, then returns the adjusted R^2 of rx_bar ~ predictor.
 simulate_eh_once <- function(phi_tau, phi_r, T_ = 470L,
                              sd_tau = 1.90, sd_c1 = 1.74,

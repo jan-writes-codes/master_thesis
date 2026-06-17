@@ -5,7 +5,7 @@
 # integration, novel FX-adjusted global factor).
 #
 # Run from the project root. This sources `oos.R`, which itself sources
-# `data preperation.R` (note the space in the filename). After sourcing,
+# `data_preparation.R`. After sourcing,
 # the workspace contains the in-sample factor objects (yields_long,
 # inflation_long, cycle, cycle_avg, reg_data, gcf, fxgcf, gdp, fx_long,
 # us_data) and their fully-recursive OOS counterparts (cycle_oos,
@@ -16,7 +16,7 @@
 # to disk with save_all_plots().
 # =============================================================
 
-source("oos.R")  # transitively sources data preperation.R
+source("oos.R")  # transitively sources data_preparation.R
 
 library(ggplot2)
 library(dplyr)

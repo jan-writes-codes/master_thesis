@@ -16,12 +16,12 @@
 # backward-looking (cp_trend uses a trailing 120m DMA), so it is
 # reused as-is.
 #
-# Run from project root; sources `data preperation.R` (which leaves
+# Run from project root; sources `data_preparation.R` (which leaves
 # `yields_long`, `inflation_long`, `reg_data`, `gcf`, `fxgcf`, `gdp`
 # in the workspace).
 # =============================================================
 
-source("data preperation.R")
+source("data_preparation.R")
 
 library(dplyr)
 library(tidyr)
