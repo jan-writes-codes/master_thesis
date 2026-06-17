@@ -33,11 +33,12 @@ suppressPackageStartupMessages({
   library(grid)
 })
 
-# oos.R sources data preperation.R and leaves the in-sample objects (reg_data,
+# oos.R sources data_preparation.R and leaves the in-sample objects (reg_data,
 # gcf, fxgcf) and the fully-recursive OOS objects (panel_oos, oos_predict) in
 # the workspace. Guard against a double source.
-if (!exists("panel_oos")) source("oos.R")
-source("thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
+if (!exists("panel_oos")) source("R/oos.R")
+source("R/thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
+source("R/thesis_utils.R")    # shared analysis helpers (hac_fit, theme_thesis, ...)
 
 rob_tables <- list()
 rob_plots  <- list()
@@ -71,22 +72,6 @@ subsamples <- tibble::tribble(
   "post",      "Post-crisis (2013-)",          201301L, 999999L)
 
 in_window <- function(ym, lo, hi) ym >= lo & ym <= hi
-
-# -----------------------------------------------------------------------------
-# Inference helpers (identical conventions to main_results.R / plots.R):
-#   HAC bandwidth L = ceil(max(1.5*h, 1.3*sqrt(T))) for 12m overlap.
-# -----------------------------------------------------------------------------
-hac_fit <- function(df, fml, h = 12, min_obs = 24) {
-  fit <- tryCatch(lm(fml, data = df, na.action = na.omit), error = function(e) NULL)
-  if (is.null(fit)) return(NULL)
-  Tn <- stats::nobs(fit); if (Tn < min_obs) return(NULL)
-  L <- ceiling(max(1.5 * h, 1.3 * sqrt(Tn)))
-  V <- tryCatch(sandwich::NeweyWest(fit, lag = L, prewhite = FALSE, adjust = TRUE),
-                error = function(e) sandwich::vcovHC(fit))
-  ct <- lmtest::coeftest(fit, vcov. = V)
-  tibble::tibble(term = rownames(ct), estimate = ct[, 1], t = ct[, 3],
-                 r_sq = summary(fit)$r.squared, n = Tn)
-}
 
 # Per-country single-factor fit over a window: mean R^2, #markets |t|>1.96, n.
 by_country_window <- function(df, target, predictor, lo, hi, min_obs = 24) {
@@ -177,26 +162,6 @@ for (s in is_specs$spec_lbl) {
   t1_disp[[paste0(s, " : t")]]  <- b$t
 }
 
-table_to_grob <- function(df, title = NULL, note = NULL, base_size = 8) {
-  tt <- gridExtra::ttheme_minimal(
-    base_size = base_size,
-    core    = list(fg_params = list(hjust = 1, x = 0.95)),
-    colhead = list(fg_params = list(fontface = "bold")))
-  tab <- gridExtra::tableGrob(df, rows = NULL, theme = tt)
-  parts <- list(tab); heights <- grid::unit(1, "null")
-  if (!is.null(title)) {
-    th <- grid::textGrob(title, gp = grid::gpar(fontface = "bold",
-                         fontsize = base_size + 3), hjust = 0, x = 0.02)
-    parts <- c(list(th), parts); heights <- grid::unit.c(grid::unit(1.8, "lines"), heights)
-  }
-  if (!is.null(note)) {
-    nt <- grid::textGrob(note, gp = grid::gpar(fontsize = base_size - 1, col = "grey30"),
-                         hjust = 0, x = 0.02)
-    parts <- c(parts, list(nt)); heights <- grid::unit.c(heights, grid::unit(4.5, "lines"))
-  }
-  gridExtra::arrangeGrob(grobs = parts, ncol = 1, heights = heights)
-}
-
 rob_tables$rob_t1_sub_is <- table_to_grob(
   as.data.frame(t1_disp),
   title = "Robustness -- In-sample predictability across subsamples",
@@ -208,7 +173,7 @@ rob_tables$rob_t1_sub_is <- table_to_grob(
                  "FX-adjusted global factor. 'Months' is the number of forecast origins\n",
                  "in the window. Crisis windows are short, so HAC t-stats there are ",
                  "necessarily noisier than in the full sample."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 
 # =============================================================================
@@ -289,7 +254,7 @@ rob_tables$rob_t2_sub_oos <- table_to_grob(
                  "the predictive regression respect time t (doubly out-of-sample).\n",
                  "All four factors share a five-year training minimum, so every window ",
                  "carries real-time forecasts. Factors as in Table 8.1."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 
 # =============================================================================
@@ -354,20 +319,12 @@ rob_tables$rob_t3_italy <- table_to_grob(
                  "recursive Campbell-Thompson R2 scored in the window. The surviving\n",
                  "local Italian content of Phase II is concentrated in the 2010-2012 ",
                  "sovereign-debt crisis."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 
 # =============================================================================
 # FIGURE 1 -- Pooled OOS R^2_oos by subsample and specification.
 # =============================================================================
-theme_thesis <- ggplot2::theme_bw(base_size = 11) +
-  ggplot2::theme(
-    strip.background = ggplot2::element_rect(fill = "grey92", colour = NA),
-    strip.text       = ggplot2::element_text(face = "bold"),
-    legend.position  = "bottom",
-    panel.grid.minor = ggplot2::element_blank(),
-    plot.title       = ggplot2::element_text(face = "bold"))
-
 rob_plots$rob_f1_oos_sub <- oos_res %>%
   dplyr::filter(sub != "pre", !is.na(r2_oos)) %>%
   dplyr::mutate(
@@ -566,7 +523,7 @@ rob_tables$rob_t4_oos_scheme <- table_to_grob(
                  "internally consistent. The expanding/5-year column reproduces the oos.R ",
                  "baseline (Table 8.2). The global cycle factor's edge is invariant to the\n",
                  "training-minimum length but is specific to the expanding window."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 rob_plots$rob_f2_oos_scheme <- scheme_res %>%
   dplyr::mutate(scheme_label = factor(scheme_label, levels = schemes$label),
@@ -646,7 +603,7 @@ cat(sprintf("core-vs-reg: inflation_reg duplicate (country,ym) = %d (differing v
 inflation_long_reg <- .infl_reg_raw %>% dplyr::arrange(country, date) %>%
   dplyr::group_by(country, ym) %>% dplyr::slice_tail(n = 1) %>%
   dplyr::group_by(country) %>% dplyr::arrange(date, .by_group = TRUE) %>%
-  # Same one-month publication lag as the baseline core series (data preperation.R).
+  # Same one-month publication lag as the baseline core series (data_preparation.R).
   dplyr::mutate(cpi_rt    = dplyr::lag(cpi, 1),
                 yoy_infl  = (cpi_rt / dplyr::lag(cpi_rt, 12) - 1) * 100,
                 trend_inf = cp_trend_reg(yoy_infl)) %>%
@@ -778,7 +735,7 @@ rob_tables$rob_t5_core_vs_reg <- table_to_grob(
                  "Table 10 Panel C4). CF rows are per country; 'Mean (CF)' averages them; GCF and\n",
                  "FXGCF are the global factors (cross-country mean R2, pooled fixed-effects HAC t). ",
                  "rx is local-currency for CF/GCF and US-dollar for FXGCF."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 # Figure: per-country in-sample R^2, core vs headline CPI (rx ~ CF).
 rob_plots$rob_f3_core_vs_reg <- cf_rows %>%
@@ -830,7 +787,7 @@ rob_tables$rob_t6_core_vs_reg_oos <- table_to_grob(
                  "recursive prevailing mean, with the entire chain rebuilt on regular CPI.\n",
                  "Each column is scored over its own available sample (the regular series is ",
                  "shorter, e.g. Japan ends 2021). 'difference' = core - regular."),
-  base_size = 8)
+  base_size = 8, note_lines = 4.5)
 
 
 # =============================================================================

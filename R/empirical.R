@@ -19,42 +19,15 @@ library(gridExtra)
 library(grid)
 library(ggplot2)
 
-if (!exists("reg_data")) source("data preperation.R")
+if (!exists("reg_data")) source("R/data_preparation.R")
 
 # `tables` collects rendered table grobs; save_all_tables() writes them to PDF.
 tables <- list()
 
-# -------------------------------------------------------------
-# Table -> PDF-able grob. Renders a data frame as a styled table (title on top,
-# footnote below) via gridExtra::tableGrob, so result tables flow through the
-# same pattern as plots.R's figures. Reused for every CP/DH result table.
-# -------------------------------------------------------------
-table_to_grob <- function(df, title = NULL, note = NULL,
-                          rownames = FALSE, base_size = 9) {
-  tt <- gridExtra::ttheme_minimal(
-    base_size = base_size,
-    core    = list(fg_params = list(hjust = 1, x = 0.95)),
-    colhead = list(fg_params = list(fontface = "bold")),
-    rowhead = list(fg_params = list(fontface = "bold", hjust = 0, x = 0.05))
-  )
-  tab <- gridExtra::tableGrob(df, rows = if (rownames) rownames(df) else NULL,
-                              theme = tt)
-  # Title (fixed height) on top, table fills the middle, footnote below.
-  parts <- list(tab); heights <- grid::unit(1, "null")
-  if (!is.null(title)) {
-    th <- grid::textGrob(title, gp = grid::gpar(fontface = "bold",
-                         fontsize = base_size + 3), hjust = 0, x = 0.02)
-    parts   <- c(list(th), parts)
-    heights <- grid::unit.c(grid::unit(1.8, "lines"), heights)
-  }
-  if (!is.null(note)) {
-    nt <- grid::textGrob(note, gp = grid::gpar(fontsize = base_size - 1,
-                         col = "grey30"), hjust = 0, x = 0.02)
-    parts   <- c(parts, list(nt))
-    heights <- grid::unit.c(heights, grid::unit(3, "lines"))
-  }
-  gridExtra::arrangeGrob(grobs = parts, ncol = 1, heights = heights)
-}
+# The shared table renderer (table_to_grob) and figure theme live in
+# thesis_utils.R; empirical's CP/DH tables reserve a 3-line footnote block
+# (passed as note_lines = 3 at each call below).
+source("R/thesis_utils.R")
 
 
 # ============================================================
@@ -200,7 +173,7 @@ tables$cp_t1_panelA <- table_to_grob(
                  "1989m3-2014m12. Newey-West t-stats (18 lags).\n",
                  "a_n in basis points. Sample is shorter than CP 2015 ",
                  "(1975-2014), so intercept levels differ; slopes and R2 align."),
-  base_size = 9)
+  base_size = 9, note_lines = 3)
 
 t1b_disp <- t1b_stats %>%
   transmute(
@@ -217,7 +190,7 @@ tables$cp_t1_panelB <- table_to_grob(
                  "the maturity-specific cycle c^(n) and the yield y^(n).\n",
                  "US, 1989m3-2014m12. Half-life = ln(0.5)/ln(|psi|). Shorter ",
                  "half-lives than CP reflect the post-1989 sample."),
-  base_size = 9)
+  base_size = 9, note_lines = 3)
 
 
 # ============================================================
@@ -230,8 +203,8 @@ tables$cp_t1_panelB <- table_to_grob(
 # Maturities adapted to the data menu {1,2,4,5,9,10} (paper: 1/2/5/7/10/20).
 # ============================================================
 
-source("cp_inference.R")
-source("cp_montecarlo.R")
+source("R/cp_inference.R")
+source("R/cp_montecarlo.R")
 
 # Trend inflation (one value per US month) and the six raw US yields (wide).
 us_tau <- inflation_long %>%
@@ -360,7 +333,7 @@ tables$cp_t2_panelA <- table_to_grob(
                  "rx_bar_{t+1}. US, ", T2, " obs (1990m1-2014m12).\n",
                  "Cells: coefficient (Newey-West HAC t-stat, 18 lags). ",
                  "Rel.prob.(BIC) = exp((BIC_best - BIC_i)/2); best model = 1.00."),
-  base_size = 8)
+  base_size = 8, note_lines = 3)
 
 # Panel B: EH R2 distribution grid (at the paper's T = 470).
 t2b_disp <- as.data.frame(eh_470) %>%
@@ -378,7 +351,7 @@ tables$cp_t2_panelB <- table_to_grob(
                  "the EH (lambda=0), ", EH_NSIMS, " sims, T = 470.\n",
                  "P95 rises with persistence (right shape); level is below CP's ",
                  "0.19-0.23 due to underspecified calibration (see code note)."),
-  base_size = 9)
+  base_size = 9, note_lines = 3)
 
 
 # ============================================================
@@ -479,7 +452,7 @@ tables$cp_t4 <- table_to_grob(
                  "c^(1)+c^(n); B2 on c^(n).\n",
                  "t-stats Newey-West HAC (18 lags). SS = stationary block ",
                  "bootstrap of the cf t-stat (mean block 12, R=5000)."),
-  base_size = 9)
+  base_size = 9, note_lines = 3)
 
 
 # ============================================================
@@ -525,7 +498,7 @@ tables$dh_t1_summary <- table_to_grob(
                  "Sample: US from 1989-03 and Japan from 1989-04; all other ",
                  "countries from 1994-12; all through 2026-04. Yields tend to ",
                  "rise and grow less volatile with maturity."),
-  base_size = 8)
+  base_size = 8, note_lines = 3)
 
 # --- Table 1B: cross-country correlation of the 10-year yield ----------------
 dh_y10_wide <- yields_long %>%
@@ -553,7 +526,7 @@ tables$dh_t1_corr10y <- table_to_grob(
                  "zero-coupon yield across countries (full per-country sample).\n",
                  "Column labels are ISO codes for the countries in the first ",
                  "column. Correlations are high within the euro bloc."),
-  base_size = 8)
+  base_size = 8, note_lines = 3)
 
 
 # ============================================================
@@ -617,7 +590,7 @@ tables$dh_t3_cp_corr <- table_to_grob(
   note  = paste0("Correlations of the monthly local CP factors and the ",
                  "GDP-weighted global CP factor (GCP), full sample (1990-2024). ",
                  "Lower triangle shown."),
-  base_size = 8)
+  base_size = 8, note_lines = 3)
 
 
 # --- DH Table 4: Fama-Bliss (Eq 3) and CP (Eq 4) regressions -----------------
@@ -651,7 +624,7 @@ tables$dh_t4_fb_cp <- table_to_grob(
                  "spread (f^(n)-y^(1)); CP on the local CP factor.\n",
                  "Newey-West t-stats (12 lags) in (.); adjusted R2 reported. ",
                  "All 11 countries, n in {2,5,10}."),
-  base_size = 7)
+  base_size = 7, note_lines = 3)
 
 
 # --- DH Table 6: local (Eq 4), global (Eq 6), joint orthogonalized (Eq 7) ----
@@ -690,7 +663,7 @@ tables$dh_t6_local_global <- table_to_grob(
                  "the local factor orthogonalized vs GCP (Eq 7).\n",
                  "Adjusted R2 shown; Wald p-value of joint significance in [.]. ",
                  "Newey-West, 12 lags. All 11 countries, n in {2,5,10}."),
-  base_size = 7)
+  base_size = 7, note_lines = 3)
 
 
 # --- DH Table 7: USD excess returns on GCP and FXGCP -------------------------
@@ -725,7 +698,7 @@ tables$dh_t7_usd <- table_to_grob(
                  "the global GCP and the FX-adjusted FXGCP (= our FXGCF).\n",
                  "Newey-West t (12 lags) in (.); adjusted R2 reported. ",
                  "EUR=Germany, others=own market; n in {2,5,10}."),
-  base_size = 7)
+  base_size = 7, note_lines = 3)
 
 
 # ============================================================

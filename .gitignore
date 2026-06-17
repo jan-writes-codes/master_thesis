@@ -4,6 +4,9 @@
 .Rproj.user/
 *.Rproj
 
+# Refactor verification artifacts (regenerate with tools/make_snapshot.sh)
+snapshots/
+
 # LaTeX build artifacts
 *.aux
 *.bbl
