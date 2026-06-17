@@ -38,6 +38,7 @@ suppressPackageStartupMessages({
 # the workspace. Guard against a double source.
 if (!exists("panel_oos")) source("R/oos.R")
 source("R/thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
+source("R/thesis_utils.R")    # shared analysis helpers (hac_fit, theme_thesis, ...)
 
 rob_tables <- list()
 rob_plots  <- list()
@@ -71,22 +72,6 @@ subsamples <- tibble::tribble(
   "post",      "Post-crisis (2013-)",          201301L, 999999L)
 
 in_window <- function(ym, lo, hi) ym >= lo & ym <= hi
-
-# -----------------------------------------------------------------------------
-# Inference helpers (identical conventions to main_results.R / plots.R):
-#   HAC bandwidth L = ceil(max(1.5*h, 1.3*sqrt(T))) for 12m overlap.
-# -----------------------------------------------------------------------------
-hac_fit <- function(df, fml, h = 12, min_obs = 24) {
-  fit <- tryCatch(lm(fml, data = df, na.action = na.omit), error = function(e) NULL)
-  if (is.null(fit)) return(NULL)
-  Tn <- stats::nobs(fit); if (Tn < min_obs) return(NULL)
-  L <- ceiling(max(1.5 * h, 1.3 * sqrt(Tn)))
-  V <- tryCatch(sandwich::NeweyWest(fit, lag = L, prewhite = FALSE, adjust = TRUE),
-                error = function(e) sandwich::vcovHC(fit))
-  ct <- lmtest::coeftest(fit, vcov. = V)
-  tibble::tibble(term = rownames(ct), estimate = ct[, 1], t = ct[, 3],
-                 r_sq = summary(fit)$r.squared, n = Tn)
-}
 
 # Per-country single-factor fit over a window: mean R^2, #markets |t|>1.96, n.
 by_country_window <- function(df, target, predictor, lo, hi, min_obs = 24) {
@@ -360,14 +345,6 @@ rob_tables$rob_t3_italy <- table_to_grob(
 # =============================================================================
 # FIGURE 1 -- Pooled OOS R^2_oos by subsample and specification.
 # =============================================================================
-theme_thesis <- ggplot2::theme_bw(base_size = 11) +
-  ggplot2::theme(
-    strip.background = ggplot2::element_rect(fill = "grey92", colour = NA),
-    strip.text       = ggplot2::element_text(face = "bold"),
-    legend.position  = "bottom",
-    panel.grid.minor = ggplot2::element_blank(),
-    plot.title       = ggplot2::element_text(face = "bold"))
-
 rob_plots$rob_f1_oos_sub <- oos_res %>%
   dplyr::filter(sub != "pre", !is.na(r2_oos)) %>%
   dplyr::mutate(

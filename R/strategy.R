@@ -37,15 +37,10 @@ suppressPackageStartupMessages({
 
 source("R/oos.R")   # recursive factors: reg_data, gcf_oos, oos_predict(); slow
 source("R/thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
+source("R/thesis_utils.R")    # shared analysis helpers (theme_thesis, ...)
 
 strat_tables <- list()
 strat_plots  <- list()
-
-theme_thesis <- ggplot2::theme_bw(base_size = 11) +
-  ggplot2::theme(
-    legend.position  = "bottom",
-    panel.grid.minor = ggplot2::element_blank(),
-    plot.title       = ggplot2::element_text(face = "bold"))
 
 table_to_grob <- function(df, title = NULL, note = NULL, base_size = 9) {
   tt <- gridExtra::ttheme_minimal(

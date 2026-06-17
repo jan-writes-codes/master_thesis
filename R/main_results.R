@@ -41,6 +41,7 @@ suppressPackageStartupMessages({
 if (!exists("reg_data")) source("R/data_preparation.R")
 source("R/cp_inference.R")
 source("R/thesis_palette.R")  # shared colour scheme (col_pri/col_sec/col_ter/col_qua)
+source("R/thesis_utils.R")    # shared analysis helpers (hac_fit, run_by_country, wald_p, theme_thesis)
 
 mr_tables <- list()
 mr_plots  <- list()
@@ -56,51 +57,6 @@ panel <- reg_data %>%
   dplyr::left_join(gcf   %>% dplyr::select(ym, GCF),             by = "ym") %>%
   dplyr::left_join(gcp   %>% dplyr::select(ym, GCP),             by = "ym") %>%
   dplyr::left_join(fxgcf %>% dplyr::select(ym, FXGCF),           by = "ym")
-
-# -----------------------------------------------------------------------------
-# Inference helpers.
-#   hac_fit()        : tidy HAC (Newey-West) fit; bandwidth scaled to the 12m
-#                      overlap, L = ceil(max(1.5h, 1.3*sqrt(T))) (matches plots.R).
-#   run_by_country() : per-country HAC fit, one tidy frame stacked over G10.
-#   hac_fit_full()   : returns the fit + HAC vcov for downstream Wald tests.
-#   wald_p()         : joint HAC Wald p-value for a set of slope terms.
-# -----------------------------------------------------------------------------
-hac_fit <- function(df, fml, h = 12, min_obs = 24) {
-  fit <- tryCatch(lm(fml, data = df, na.action = na.omit), error = function(e) NULL)
-  if (is.null(fit)) return(NULL)
-  Tn <- stats::nobs(fit); if (Tn < min_obs) return(NULL)
-  L <- ceiling(max(1.5 * h, 1.3 * sqrt(Tn)))
-  V <- tryCatch(sandwich::NeweyWest(fit, lag = L, prewhite = FALSE, adjust = TRUE),
-                error = function(e) sandwich::vcovHC(fit))
-  ct <- lmtest::coeftest(fit, vcov. = V)
-  tibble::tibble(term = rownames(ct), estimate = ct[, 1], std_err = ct[, 2],
-                 t = ct[, 3], r_sq = summary(fit)$r.squared, n = Tn)
-}
-
-run_by_country <- function(df, fml) {
-  split(df, df$country) %>%
-    purrr::imap_dfr(function(d, cty) {
-      res <- hac_fit(d, fml); if (is.null(res)) return(NULL)
-      res$country <- cty; res
-    })
-}
-
-hac_fit_full <- function(df, fml, h = 12, min_obs = 24) {
-  fit <- tryCatch(lm(fml, data = df, na.action = na.omit), error = function(e) NULL)
-  if (is.null(fit) || stats::nobs(fit) < min_obs) return(NULL)
-  L <- ceiling(max(1.5 * h, 1.3 * sqrt(stats::nobs(fit))))
-  V <- tryCatch(sandwich::NeweyWest(fit, lag = L, prewhite = FALSE, adjust = TRUE),
-                error = function(e) sandwich::vcovHC(fit))
-  list(fit = fit, vcov = V, T_obs = stats::nobs(fit))
-}
-
-wald_p <- function(fit, V, terms) {
-  b <- coef(fit); if (!all(terms %in% names(b))) return(NA_real_)
-  bt <- b[terms]; Vt <- V[terms, terms, drop = FALSE]
-  W  <- tryCatch(as.numeric(t(bt) %*% solve(Vt) %*% bt), error = function(e) NA_real_)
-  if (is.na(W)) return(NA_real_)
-  stats::pchisq(W, df = length(bt), lower.tail = FALSE)
-}
 
 # -----------------------------------------------------------------------------
 # Table -> PDF-able grob (identical styling to empirical.R, so the result
@@ -125,14 +81,6 @@ table_to_grob <- function(df, title = NULL, note = NULL, base_size = 9) {
   }
   gridExtra::arrangeGrob(grobs = parts, ncol = 1, heights = heights)
 }
-
-theme_thesis <- ggplot2::theme_bw(base_size = 11) +
-  ggplot2::theme(
-    strip.background = ggplot2::element_rect(fill = "grey92", colour = NA),
-    strip.text       = ggplot2::element_text(face = "bold"),
-    legend.position  = "bottom",
-    panel.grid.minor = ggplot2::element_blank(),
-    plot.title       = ggplot2::element_text(face = "bold"))
 
 ord <- function(x) factor(x, levels = mr_order)
 
