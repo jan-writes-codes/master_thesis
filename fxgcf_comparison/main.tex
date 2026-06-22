@@ -45,7 +45,6 @@
 
 \title[FXGCF construction comparison]{Comparing Constructions of the\\
   FX-adjusted Global Cycle Factor (FXGCF)}
-\subtitle{Supervisor follow-up: is the FXGCF just a re-labelled GCF?}
 \author[Jan Heissenberger]{Jan Heissenberger\\
   Supervised by Giorgia Simion, Ph.D.}
 \date{June 2026}
@@ -63,40 +62,38 @@
 % ==========================================================================
 \section{The Problem}
 
-\begin{frame}{The concern: the FXGCF is (almost) the GCF}
-  \textbf{Feedback.} In the current thesis the FX-adjusted global cycle factor
+\begin{frame}{The issue: FXGCF $\approx$ GCF}
+  In the current thesis the FX-adjusted global cycle factor
   ($\FXGCF$) and the global cycle factor ($\GCF$) correlate
   \alert{$0.99$} in our sample.
   \begin{itemize}
     \item \citet{dahlquist2013}, our template, report
-      $\Corr(\FXGCF,\GCF)\approx \mathbf{0.50}$ --- the FX factor is supposed to
-      carry \emph{distinct}, currency-driven information.
-    \item At $0.99$ the FX adjustment looks cosmetic: the ``novel'' factor is a
-      near-affine re-scaling of $\GCF$ and adds little economic content.
+      $\Corr(\FXGCF,\GCF)\approx \mathbf{0.50}$. The FX factor is supposed to
+      carry distinct, currency-driven information.
+    \item At $0.99$ correlation the FX adjustment adds little economic content.
   \end{itemize}
   \vfill
   \begin{block}{What this deck does}
     Build the FXGCF \alert{three different ways}, and ask, for each:
     \begin{enumerate}
       \item how correlated is it with the $\GCF$ (and with the others)?
-      \item how does its \emph{predictive power} change --- in sample and,
-        crucially, out of sample?
+      \item how does its predictive power change (IS and OOS)
     \end{enumerate}
     Then recommend a construction.
   \end{block}
 \end{frame}
 
-\begin{frame}{Where the $0.99$ comes from: an asymmetry}
-  The local-currency $\GCF$ is built \alert{bottom-up}; the current $\FXGCF$ is
-  built \alert{top-down}. They are not symmetric.
+\begin{frame}{$\GCF$ vs $\FXGCF$ (current)}
+  The local-currency $\GCF$ is built \alert{bottom-up}, the current $\FXGCF$ is
+  built \alert{top-down}.
   \vfill
-  \textbf{$\GCF$ --- bottom-up (aggregate of local factors)}
+  \textbf{$\GCF$ -- bottom-up (aggregate of local factors)}
   \begin{equation*}
     \CF_{i,t}=\widehat{\rxbar}_{i,t+12}\bigl(\cyc^{(1)}_{i,t},\cycbar_{i,t}\bigr),
     \qquad
     \GCF_{t}=\sum_{i} w_{i,t}\,\CF_{i,t}
   \end{equation*}
-  \textbf{$\FXGCF$ --- top-down (one regression on global aggregates)}
+  \textbf{$\FXGCF$ -- top-down (one regression on global aggregates)}
   \begin{equation*}
     \FXGCF_{t}=\widehat{\rxbar}^{\,\mathrm{USD}}_{t+12}
       \Bigl(\underbrace{\textstyle\sum_i w_{i,t}\cyc^{(1)}_{i,t}}_{\bar c^{(1)}_t},\;
@@ -104,7 +101,7 @@
   \end{equation*}
   \vfill
   The top-down FXGCF is a fitted value on \emph{the very same} GDP-weighted
-  cycle aggregates that drive $\GCF$ --- so it is collinear with $\GCF$ almost by
+  cycle aggregates that drive $\GCF$. Therefore, it is collinear with $\GCF$ almost by
   construction.
 \end{frame}
 
@@ -122,45 +119,74 @@
     \item[\textbf{M2}] \textbf{Top-down, $1/n$}: same regression, but
       equal-weight countries into the aggregates.
     \item[\textbf{M3}] \textbf{Bottom-up, GDP}: build a \emph{local} FX cycle
-      factor $\FXCF_{i}$ per country, then GDP-weight ---
+      factor $\FXCF_{i}$ per country, then GDP-weight --
       \emph{exactly the $\GCF$ recipe, with the USD return on the left}.
-  \end{enumerate}
   \[
     \FXCF_{i,t}=\widehat{\rxbar}^{\,\mathrm{USD}}_{i,t+12}
       \bigl(\cyc^{(1)}_{i,t},\cycbar_{i,t}\bigr),
     \qquad
     \FXGCF^{\mathrm{BU}}_{t}=\sum_i w_{i,t}\,\FXCF_{i,t}
   \]
+    \item[\alert{M4}] \textbf{Bottom-up, $1/n$}: control method for completeness. To tell whether decoupling comes from weighting or TD/BU choice
+  \end{enumerate}
+
   \vspace{-0.5ex}
-  \begin{block}{Control: M4 = Bottom-up, $1/n$}
-    Completes the $2\times2$ (construction $\times$ weighting), so we can tell
-    whether any decoupling comes from the \emph{weighting} or the
-    \emph{top-down/bottom-up} choice.
-  \end{block}
 \end{frame}
 
-\begin{frame}{Why the current factor is a $\GCF$ clone (intuition)}
-  Write each local factor with its own loadings,
-  $\CF_{i}=g_{0i}+g_{1i}\cyc^{(1)}_{i}+g_{2i}\cycbar_{i}$. Because the loadings
-  are similar across the G10 (the \citet{cieslak2015} sign pattern holds
-  everywhere),
-  \begin{align*}
-    \GCF_t &\approx \bar g_0+\bar g_1\,\bar c^{(1)}_t+\bar g_2\,\bar{\cycbar}_t,\\
-    \FXGCF^{\mathrm{TD}}_t &= h_0+h_1\,\bar c^{(1)}_t+h_2\,\bar{\cycbar}_t.
-  \end{align*}
-  Both are affine in the \alert{same two global cycle series}
-  $(\bar c^{(1)}_t,\bar{\cycbar}_t)$.
-  \vfill
-  \begin{itemize}
-    \item The FX leg only changes the slopes $(h_1,h_2)$ vs.\ $(\bar g_1,\bar g_2)$.
-    \item The realized currency return is largely \emph{unpredictable} by bond
-      cycles, so the \emph{fitted} component barely rotates $\Rightarrow$
-      $\rho\approx0.99$.
-    \item \textbf{Bottom-up breaks this}: it aggregates country-specific fitted
-      values whose FX-adjusted loadings differ market by market, so the result is
-      no longer a simple affine map of the two global aggregates.
-  \end{itemize}
+\begin{frame}{Definition}
+      Let $w_{i,t}$ be GDP weights ($\sum_i w_{i,t}=1$) and $n_t$ the number of
+  countries at $t$. Cycle predictors $\cyc^{(1)}_{i,t}$ (1y) and
+  $\cycbar_{i,t}$ (average of the non-1y cycles).
+  \begin{description}
+    \item[M1 TD-GDP] $\FXGCF=\widehat{\rxbar}^{\,\mathrm{USD}}\!\left(\sum_i w_i\cyc^{(1)}_i,\ \sum_i w_i\cycbar_i\right)$, LHS $\sum_i w_i\rxbar^{\,\mathrm{USD}}_i$.
+    \item[M2 TD-$1/n$] as M1 with $w_i\!\to\!1/n_t$ in all three aggregates.
+    \item[M3 BU-GDP] $\FXCF_i=\widehat{\rxbar}^{\,\mathrm{USD}}_i(\cyc^{(1)}_i,\cycbar_i)$; $\FXGCF=\sum_i w_i\FXCF_i$.
+    \item[M4 BU-$1/n$] $\FXGCF=\frac{1}{n_t}\sum_i\FXCF_i$.
+  \end{description}
 \end{frame}
+
+\section{Results}
+\begin{frame}{Results}
+  \centering
+  \input{tables/fx_t1_summary}
+\end{frame}
+
+\begin{frame}{Correlation matrix}
+  \centering
+  \input{tables/fx_t2_corr}\\[1ex]
+  {\scriptsize The bottom-up pair (M3, M4) correlate $0.96$ with each other but
+   only $0.73$--$0.78$ with $\GCF$; the top-down pair (M1, M2) sit at
+   $0.94$--$0.99$ with $\GCF$.}
+\end{frame}
+
+\begin{frame}{In-sample $R^2$ by country}
+  \centering
+  \input{tables/fx_t3_is_r2}
+\end{frame}
+
+\begin{frame}{Out-of-sample $R^2_{\mathrm{oos}}$ by country}
+  \centering
+  \input{tables/fx_t4_oos_r2}
+\end{frame}
+
+\begin{frame}{Conclusion}
+  \begin{enumerate}
+    \item The $0.99$ correlation is an \alert{artefact of the top-down
+      construction}, not evidence that FX information is absent: the current
+      FXGCF is a fitted value on the same global cycle aggregates as $\GCF$.
+    \item Rebuilding it \alert{bottom-up} (M3) cuts $\Corr(\cdot,\GCF)$ to $0.78$, lifts in-sample $R^2$ to
+      $14.3\%$ (10/11 markets), and stays positive out of sample.
+  \end{enumerate}
+  \vfill
+  \raggedright \textbf{Proposed change to the thesis:} replace the top-down FXGCF
+  with the bottom-up GDP-weighted FXGCF (\textbf{M3}). Put top-down approach (\textbf{M2}) in the robustness section.
+\end{frame}
+
+\begin{frame}{References}
+  \small
+  \bibliography{references}
+\end{frame}
+\end{document}
 
 % ==========================================================================
 \section{Results: Correlation}
@@ -181,7 +207,7 @@
       \vfill
       \textbf{Read of the $2\times2$:} the \emph{top-down vs bottom-up} choice
       moves $\rho$ far more than the weighting scheme. None reach DH's $0.50$
-      (same predictors throughout) --- see caveats.
+      (same predictors throughout) -- see caveats.
     \end{column}
   \end{columns}
 \end{frame}
@@ -229,7 +255,7 @@
       Pooled Campbell--Thompson $R^2_{\mathrm{oos}}$, fully recursive (the factor
       \emph{and} the forecast respect time $t$).
       \begin{itemize}
-        \item Unadjusted $\GCF$ on USD returns: \alert{$-0.071$} --- worse than
+        \item Unadjusted $\GCF$ on USD returns: \alert{$-0.071$} -- worse than
           the prevailing mean.
         \item \textbf{Every} FX construction turns it positive.
         \item Current TD-GDP is the \emph{weakest} ($+0.002$); TD-$1/n$
@@ -257,7 +283,7 @@
   \begin{block}{Why M3 (bottom-up, GDP-weighted)}
     \begin{enumerate}
       \item \textbf{Symmetric \& defensible:} identical recipe to the $\GCF$,
-        just the US-dollar return on the left --- one sentence to describe.
+        just the US-dollar return on the left -- one sentence to describe.
       \item \textbf{Decouples from $\GCF$:} $\rho$ falls $0.99\to0.78$, so the
         factor carries genuinely different information.
       \item \textbf{Strongest in sample:} mean $R^2=14.3\%$, significant in
@@ -268,7 +294,7 @@
   \end{block}
   \footnotesize
   \textbf{If the priority is purely OOS accuracy}, TD-$1/n$ edges it
-  ($+0.027$) but stays $0.94$-correlated with $\GCF$ --- it does not fix the
+  ($+0.027$) but stays $0.94$-correlated with $\GCF$ -- it does not fix the
   original concern. M3 is the better all-round answer.
 \end{frame}
 
@@ -278,7 +304,7 @@
       \emph{same bond-cycle predictors} $(\cyc^{(1)},\cycbar)$; they can only
       re-weight that common signal, so a floor on $\rho$ with $\GCF$ remains.
     \item \textbf{To truly decouple} the FX factor one likely needs a
-      \alert{currency-specific predictor} in the menu --- e.g.\ the short-rate
+      \alert{currency-specific predictor} in the menu -- e.g.\ the short-rate
       differential / carry $\bigl(y^{(1)}_{i}-y^{(1)}_{\mathrm{US}}\bigr)$,
       which drives the predictable part of the currency return. This is the
       natural next step and matches \emph{why} DH's factor is distinct.
@@ -288,7 +314,7 @@
   \vfill
   \begin{block}{Bottom line}
     Switching the FXGCF from top-down to bottom-up makes it a genuinely distinct,
-    and more powerful, factor --- without adding a single new input.
+    and more powerful, factor -- without adding a single new input.
   \end{block}
 \end{frame}
 
@@ -297,8 +323,8 @@
     \item The $0.99$ correlation is an \alert{artefact of the top-down
       construction}, not evidence that FX information is absent: the current
       FXGCF is a fitted value on the same global cycle aggregates as $\GCF$.
-    \item Rebuilding it \alert{bottom-up} (M3) --- the $\GCF$ recipe on USD
-      returns --- cuts $\Corr(\cdot,\GCF)$ to $0.78$, lifts in-sample $R^2$ to
+    \item Rebuilding it \alert{bottom-up} (M3) -- the $\GCF$ recipe on USD
+      returns -- cuts $\Corr(\cdot,\GCF)$ to $0.78$, lifts in-sample $R^2$ to
       $14.3\%$ (10/11 markets), and stays positive out of sample.
     \item Reaching DH's $\approx 0.50$ would require adding a currency-specific
       predictor; that is the recommended extension.
@@ -308,10 +334,7 @@
   with the bottom-up GDP-weighted FXGCF.}
 \end{frame}
 
-\begin{frame}{References}
-  \small
-  \bibliography{references}
-\end{frame}
+
 
 % ==========================================================================
 \appendix
