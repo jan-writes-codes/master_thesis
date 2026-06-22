@@ -2,9 +2,147 @@
 \chapter{Conclusion}
 \label{ch:conclusion}
 
-% Restate the research question and answer each sub-question explicitly:
-%   (1) does the CF work locally across G10?
-%   (2) does the global GCF subsume the local CF?
-%   (3) does the FX-adjusted FXGCF help the USD investor?
-% Summarize the contribution (unified global cycle factor + FX adjustment) and
-% outline future work (more maturities, longer samples, no-arbitrage embedding).
+This thesis asked one question: does the macro-anchored cycle factor of
+\citet{cieslak2015}---the predictor of US bond returns with the strongest claim
+to an economic mechanism---apply to international government bonds? To answer it,
+the analysis built a three-factor hierarchy on a monthly panel of eleven G10
+markets spanning 1989/1994--2026: the \emph{local} cycle factor $\CF_{i,t}$,
+constructed for each market exactly as in the original study; the GDP-weighted
+\emph{global} cycle factor $\GCF_{t}$; and a novel \emph{FX-adjusted} global
+cycle factor $\FXGCF_{t}$ for an unhedged US-dollar investor. After validating
+the estimation engine against the published US and international results
+(\Cref{ch:replication}), the three factors were tested in three phases, in
+sample and under a fully-recursive out-of-sample protocol
+(\Cref{ch:results,ch:robustness,ch:strategy}). The answer is affirmative, but
+with an important refinement: the cycle mechanism is a property of the
+international asset class, yet the form of it that an investor can actually use
+is the \emph{global} factor, not the local one.
+
+\section{Answers to the Research Questions}
+\label{sec:concl-answers}
+
+\paragraph{The main question.} The \citet{cieslak2015} cycle factor does apply
+to international government bonds. The local cycle factor predicts one-year
+excess returns with exactly the US sign structure---a negative loading on the
+one-year cycle, a positive loading on the average cycle---in all eleven markets,
+significantly so in ten, with an average in-sample $R^{2}$ of $25\%$ (reaching
+$33\%$ for the United States, closely matching the original) and loadings that
+are flat-to-rising across the maturity curve. These magnitudes sit far above the
+$95$th percentile of the predictive $R^{2}$ that the expectations hypothesis can
+generate in a sample of this length (\Cref{sec:meth-ehmc}). The trend--cycle
+mechanism is therefore not a US idiosyncrasy: in every G10 market, the deviation
+of yields from their slow-moving inflation anchor measures the compensation
+demanded for holding duration.
+
+\paragraph{Sub-question (1): local versus a GDP-weighted global factor.} The
+predictable component of international bond returns is overwhelmingly global. The
+GDP-weighted global cycle factor $\GCF_{t}$ is statistically significant in
+\emph{every} market and, on its own, explains as much return variation as the
+eleven separately estimated local factors (a cross-country average $R^{2}$ of
+$25\%$ for each). A single international factor thus reproduces the
+predictability of eleven national ones---the integration result of
+\citet{dahlquist2013}, here re-established for the macro-anchored cycle family
+rather than the forward-rate family on which it was first documented.
+
+\paragraph{Sub-question (2): does the global factor subsume the local factor?}
+Largely, but not completely. Once the global factor is included, the
+orthogonalised local factor retains significant incremental content in only
+three of the eleven markets---Italy, the Netherlands, and Belgium---and is
+indistinguishable from zero in the other eight. The exceptions are informative
+rather than awkward. The Italian case decomposes cleanly: its local
+predictability is overwhelmingly a 2010--2012 sovereign-debt-crisis phenomenon,
+with a horse-race $t$-statistic above ten and the single largest positive
+real-time local result in the study ($R^{2}_{\mathrm{oos}}=+0.21$), while the
+global factor enters with the wrong sign (\Cref{sec:rob-italy}). Integration is
+the rule; it bends exactly when redenomination and sovereign-credit risk reprice
+a peripheral market that a core-dominated global factor cannot capture.
+
+\paragraph{The dollar investor and the FX adjustment.} Currency risk is the
+binding constraint for an unhedged US investor. Dollar conversion erodes roughly
+two-thirds of the global factor's in-sample predictive power, and the
+FX-adjusted factor restores only part of it: reliably in direction and across
+markets, but modestly in magnitude, because in this G10 sample $\FXGCF_{t}$ is
+nearly collinear with the unadjusted global factor (correlation $0.99$, against
+about $0.50$ for the forward-rate analogue of \citet{dahlquist2013}). That the
+FX adjustment which transforms the global \emph{forward} factor adds little to
+the global \emph{cycle} factor is itself a finding: the detrending that gives the
+cycle factor its real-time stability in bonds strips out precisely the
+rate-level information that an FX adjustment needs to forecast currencies.
+
+\paragraph{The decisive test: real time.} The conclusion that matters for
+practice is the out-of-sample one. Of the four candidate factors, only the
+global cycle factor beats the recursive prevailing mean: its pooled
+$R^{2}_{\mathrm{oos}}$ is $+0.05$, positive in ten of eleven markets, while the
+local factor ($-0.08$) and the unadjusted dollar-investor factor ($-0.07$) lose
+to the historical mean almost everywhere. This real-time edge survives in every
+subsample except the 2008 panic, beats the global forward-rate factor that fits
+\emph{better} in sample, and depends materially on measuring the inflation
+anchor with \emph{core} rather than headline CPI. It is also economically
+exploitable: a currency-hedged timing strategy built on the global factor raises
+the annual Sharpe ratio of a G10 bond portfolio from $0.31$ to $0.38$, with a
+certainty-equivalent gain of about half a percent a year, earned chiefly by
+sidestepping drawdowns such as 2022 (\Cref{ch:strategy}). The gap between the
+local factor's strong in-sample fit and its negative out-of-sample $R^{2}$ is
+the clearest sign that the predictability worth taking seriously is the global
+one.
+
+\section{Contribution}
+\label{sec:concl-contribution}
+
+The thesis contributes a three-factor hierarchy and the evidence to evaluate it.
+It is, to the best of my knowledge, the first study to carry the
+\citet{cieslak2015} cycle-factor \emph{construction}---rather than raw inflation
+trends added to yield-curve regressions, as in \citet{zhang2021}---across the
+full G10 cross-section, including the euro-area periphery whose sovereign crisis
+provides a natural experiment on the limits of integration. It transplants the
+integration test of \citet{dahlquist2013} from the forward-rate factor to the
+macro-anchored cycle, and finds the integration result \emph{stronger} for the
+cycle factor in real time. And it introduces the FX-adjusted global cycle factor,
+documenting the substantive contrast with its forward-rate predecessor. Threaded
+through all three phases is a methodological point: because the cycle factors are
+generated regressors, the entire construction---trend, cycles, predictive
+coefficients, and global weights---was re-estimated fully recursively and scored
+with the \citet{campbellthompson2008} out-of-sample $R^{2}$. Applying that
+discipline to the whole generated-regressor chain, not only to the final
+regression, is what reverses the in-sample verdict and isolates the one robust
+object the thesis stands on.
+
+The honest one-line summary is therefore not ``the cycle factor works
+everywhere'' but something more specific and more useful: international bond risk
+premia contain a common, macro-anchored, slowly-moving component that is large
+enough and stable enough to estimate in real time---provided one aggregates
+across markets, measures the inflation anchor cleanly with core CPI, and does not
+ask it to forecast exchange rates.
+
+\section{Limitations and Future Work}
+\label{sec:concl-future}
+
+The conclusions are bounded by the limitations set out in \Cref{sec:disc-limitations}
+and should be read with them in view: HAC inference can over-reject for
+persistent regressors under overlapping returns; the sample spans one secular
+disinflation and effectively far fewer than eleven independent ``global''
+observations, given the shared euro-area monetary policy; the maturity menu and
+the top-down FX construction are dictated by the data; the expectations-hypothesis
+Monte Carlo reproduces the shape but not the exact level of the published null
+band; and the global factor's real-time edge is a property of expanding-window,
+core-inflation estimation that does not survive a rolling window or the 2008
+crisis.
+
+Several of these limitations point directly to future work. The most natural
+extension is to embed the global cycle in a no-arbitrage term-structure model
+with a shared international trend, closing the gap between the reduced-form
+evidence assembled here and the structural ``falling-stars'' framework of
+\citet{bauer2020}. A richer maturity grid and a longer, more balanced
+cross-section---representing the euro area by a single benchmark and adding
+currency-diverse markets such as Australia, New Zealand, and Norway, as in
+\citet{randl2025}---would sharpen both the integration test and the FX
+adjustment, and would let alternative weighting schemes (equal,
+market-capitalisation, principal-component) be compared against the GDP weights
+used here. Finally, the real-time global cycle factor is a candidate input to
+cross-sectionally optimised, rather than purely timing, portfolios: the
+out-of-sample evidence does not support country selection on the local factors,
+but a forecast with the demonstrated stability of the global factor is exactly
+the expected-return input that mean--variance-efficient international bond
+portfolios are most sensitive to. Pursuing these directions would test how far
+the single robust object identified here---a common, macro-anchored, real-time
+global bond cycle---can be pushed.

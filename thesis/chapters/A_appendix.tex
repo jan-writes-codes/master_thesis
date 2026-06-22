@@ -2,21 +2,280 @@
 \chapter{Appendix}
 \label{ch:appendix}
 
-\section{Full Per-Country Predictability Tables}
-\label{app:per-country}
-% Detailed per-country / per-maturity regression output behind the Ch.7 figures.
+This appendix collects supporting material referenced in the main text. The full
+per-country and per-maturity regression output stands in the body of the
+thesis---the Phase~I--III tables of \Cref{ch:results}
+(\Cref{tab:mr-phase1,tab:mr-phase1-mat,tab:mr-phase2,tab:mr-phase3}), the
+subsample and scheme tables of \Cref{ch:robustness}, and the replication tables
+of \Cref{ch:replication}---so this appendix gathers instead the precise variable
+definitions and construction parameters (\Cref{app:data}), the inference and
+Monte-Carlo details (\Cref{app:inference}), and the supplementary construction
+and diagnostic figures that underlie the headline exhibits
+(\Cref{app:figures-construction,app:figures-global}).
 
-\section{Additional Figures}
-\label{app:figures}
-% Supporting exhibits not in the main text (e.g. s2_* decomposition, s3_* US
-% replication, factor time series).
-
+% ===========================================================================
 \section{Data Definitions and Construction}
 \label{app:data}
-% Precise variable definitions, the EWMA trend-inflation parameters, GDP-weight
-% construction, FX conventions.
 
-\section{Inference Details}
+\Cref{tab:app-variables} lists every variable used in the analysis with its
+definition, source, and the equation in which it is introduced. All series are
+assembled in \texttt{data.xlsx} and processed by \texttt{data\_preparation.R}
+(\Cref{ch:data}).
+
+\begin{table}[ht]
+  \caption{Variable definitions and sources}
+  \label{tab:app-variables}
+  \centering
+  \small
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}l p{8.2cm} l@{}}
+    \toprule
+    Symbol & Definition & Source / Eq.\ \\
+    \midrule
+    $y^{(n)}_{i,t}$ & Continuously compounded $n$-year zero-coupon yield, \%\,p.a.\ &
+      Bloomberg \texttt{BLC2} \\
+    $\pi_{i,t}$ & Year-on-year core CPI inflation,
+      $(\mathrm{CPI}_{i,t}/\mathrm{CPI}_{i,t-12}-1)\times100$ &
+      LSEG Refinitiv \\
+    $\trendinf_{i,t}$ & Trend inflation: backward EWMA of $\pi_{i,t}$ &
+      \eqref{eq:trendinf} \\
+    $\cyc^{(n)}_{i,t}$ & Interest-rate cycle: OLS residual of $y^{(n)}_{i,t}$ on
+      $\trendinf_{i,t}$ & \eqref{eq:decomp} \\
+    $\cycbar_{i,t}$ & Average cycle over $n\in\{2,4,5,9,10\}$ years &
+      \eqref{eq:cbar} \\
+    $\rx^{(n)}_{i,t+12}$ & One-year holding-period excess return, $n$-year bond &
+      \eqref{eq:rx} \\
+    $\rxbar_{i,t+12}$ & Duration-standardised, maturity-averaged excess return
+      ($n\in\{2,5,10\}$, $D^{(n)}=n$) & \eqref{eq:rxbar} \\
+    $\rxbar^{\,\mathrm{USD}}_{i,t+12}$ & US-dollar-investor counterpart of
+      $\rxbar_{i,t+12}$ & \eqref{eq:rx-usd} \\
+    $s_{i,t}$ & Log spot exchange rate, USD per unit of currency $i$ &
+      Bloomberg \\
+    $\mathrm{GDP}_{i,t}$ & Annual nominal GDP, local currency &
+      LSEG Refinitiv \\
+    $w_{i,t}$ & Time-varying GDP weight (USD-converted, renormalised) &
+      \eqref{eq:gcf} \\
+    $\CF_{i,t}$ & Local cycle factor: fitted $\rxbar_{i,t+12}$ on
+      $(\cyc^{(1)}_{i,t},\cycbar_{i,t})$ & \eqref{eq:cf} \\
+    $\GCF_{t}$ & GDP-weighted global cycle factor & \eqref{eq:gcf} \\
+    $\FXGCF_{t}$ & FX-adjusted global cycle factor (top-down on dollar returns) &
+      \eqref{eq:fxgcf} \\
+    $\CP_{i,t},\ \GCP_{t}$ & Local / global Cochrane--Piazzesi forward-rate factor &
+      \Cref{sec:rob-cf-cp} \\
+    \bottomrule
+  \end{tabular}
+  \tabnotes{The G10 cross-section comprises Belgium, Canada, Switzerland,
+    Germany, France, the United Kingdom, Italy, Japan, the Netherlands, Sweden,
+    and the United States. Five markets (BE, DE, FR, IT, NL) share the euro from
+    1999.}
+\end{table}
+
+\paragraph{Construction parameters.} The following choices are fixed throughout
+and are repeated, recursively, in the out-of-sample exercise of
+\Cref{sec:meth-oos}.
+\begin{itemize}[leftmargin=1.5em]
+  \item \emph{Trend inflation.} Exponentially-weighted moving average of
+    year-on-year core inflation with window $M=120$ months and geometric decay
+    $v=0.987$, normalised by $(1-v)/(1-v^{M})$ so the weights sum to one
+    \eqref{eq:trendinf}. The CPI history predates the yield sample, so the trend
+    is fully populated from the first yield observation.
+  \item \emph{Cycles.} Estimated by OLS country-by-country and
+    maturity-by-maturity \eqref{eq:decomp}; the average cycle excludes the
+    one-year point \eqref{eq:cbar}.
+  \item \emph{Excess returns.} Individual returns formed for $n\in\{2,5,10\}$
+    (the maturities with an observed adjacent shorter yield), duration-standardised
+    by the continuous-compounding Macaulay duration $D^{(n)}=n$, and averaged
+    \eqref{eq:rxbar}. Dollar returns add the realised log currency return and net
+    the US short rate \eqref{eq:rx-usd}.
+  \item \emph{GDP weights.} Annual nominal GDP converted to US dollars at the
+    year-end exchange rate, divided by the cross-sectional total, held constant
+    within a calendar year, and renormalised each month over the countries
+    present in the panel \eqref{eq:gcf}.
+  \item \emph{Maturity menu and sample.} Yields at $\{1,2,4,5,9,10\}$ years,
+    month-end. The United States enters in March 1989, Japan in April 1989, the
+    remaining nine markets in December 1994, all running to April 2026
+    ($446$, $445$, and $377$ monthly observations respectively;
+    \Cref{tab:data-coverage}).
+\end{itemize}
+
+% ===========================================================================
+\section{Inference and Monte-Carlo Details}
 \label{app:inference}
-% Newey-West lag choice, the reverse-regression / Hodrick-1B note, BIC formula,
-% the stationary block bootstrap, and the EH Monte-Carlo calibration.
+
+This section consolidates the inference machinery of \Cref{sec:meth-inference}
+and \Cref{sec:meth-ehmc}; it adds the precise parameter values in one place
+rather than re-deriving the formulae.
+
+\paragraph{HAC standard errors and the reverse-regression caveat.} All headline
+$t$-statistics use Newey--West HAC standard errors \citep{neweywest1987} with a
+bandwidth of $18$ lags, comfortably exceeding the eleven-month overlap induced by
+the twelve-month forecast horizon (the residual is MA(11) by construction).
+\citet{cieslak2015} instead report $t$-statistics from the reverse-regression
+delta method of \citet{weiwright2013}, which pairs backward-summed regressors with
+\emph{one-period} return innovations and therefore requires the underlying monthly
+returns; the constructed panel stores only the twelve-month overlapping returns,
+so that estimator is not identified here. HAC and reverse-regression
+$t$-statistics can diverge for highly persistent regressors, which is one reason
+the thesis leans its conclusions on the out-of-sample evidence
+(\Cref{sec:disc-limitations}).
+
+\paragraph{Joint significance and model comparison.} Multi-regressor
+specifications report the joint Wald statistic $W=\hat b_{s}'V_{s}^{-1}\hat b_{s}
+\sim\chi^{2}_{k}$ \eqref{eq:meth-wald}, with $V_{s}$ the HAC covariance block of
+the $k$ slopes. Competing predictor sets are compared by Bayesian information
+criteria expressed as relative probabilities \eqref{eq:meth-bic},
+$\exp\{(\mathrm{BIC}_{\min}-\mathrm{BIC}_{i})/2\}$, normalised so the lowest-BIC
+model maps to $1.0$; this rewards fit while penalising the parameter count, making
+the two-regressor cycle factor directly comparable to the six-yield specification.
+Where multiple tests are aggregated across the panel, the Benjamini--Hochberg
+correction is applied (\Cref{sec:res-phase2}).
+
+\paragraph{Stationary block bootstrap.} Finite-sample intervals use the
+stationary block bootstrap of \citet{politis1994}, which resamples contiguous
+blocks of random (geometrically distributed) length with mean $L$, wrapping at the
+sample end. Two quantities are bootstrapped to a $[5\%,95\%]$ interval: the
+predictive $t$-statistic (mean block length $L=12$, refitting $\rxbar\sim\CF$ on
+each pseudo-sample and studentising with the same $18$-lag HAC standard error as
+the headline estimate) and the adjusted $R^{2}$ ($L=18$, refit by OLS). Matching
+the bootstrap HAC bandwidth to the headline bandwidth is essential: ignoring the
+overlap inside the bootstrap would spuriously inflate the $t$-statistic.
+
+\paragraph{Expectations-hypothesis Monte Carlo.} The null distribution of the
+predictive $R^{2}$ is simulated from a calibrated expectations-hypothesis economy
+(\Cref{sec:meth-ehmc}) with two AR(1) state variables---trend inflation $\tau_{t}$
+and a real factor $r_{t}$---driving the nominal short rate
+$i_{t}=\delta_{0}+\delta_{\tau}\tau_{t}+\delta_{r}r_{t}$; under the EH the
+$n$-year yield is affine in the states \eqref{eq:meth-eh}. \Cref{tab:app-ehmc}
+collects the calibration. Each of $10{,}000$ draws simulates the states (after a
+burn-in), builds EH yields on the maturity menu, forms $\rxbar$ exactly as in the
+data ($D^{(n)}=n$, $n\in\{2,5,10\}$), and stores the adjusted $R^{2}$; the null is
+summarised by its $5$th, $50$th, and $95$th percentiles over the persistence grid.
+As stated in \Cref{sec:meth-ehmc}, the implementation reproduces the qualitative
+pattern of \citet{cieslak2015}---a null band that widens with persistence---but
+not the exact published band, so the observed in-sample $R^{2}$ are judged against
+this calibration rather than the paper's. The margin is wide, which is why the
+conclusion is regarded as safe.
+
+\begin{table}[ht]
+  \caption{Expectations-hypothesis Monte-Carlo calibration}
+  \label{tab:app-ehmc}
+  \centering
+  \small
+  \begin{tabular}{@{}l l@{}}
+    \toprule
+    Parameter & Value \\
+    \midrule
+    Short-rate intercept $\delta_{0}$ & $0$ \\
+    Loading on trend inflation $\delta_{\tau}$ & $1.43$ \\
+    Loading on real factor $\delta_{r}$ & $1$ \\
+    Std.\ of trend inflation $\mathrm{sd}(\tau)$ & $1.90\%$ \\
+    Std.\ of one-year cycle & $1.74\%$ (pins $\sigma_{r}$) \\
+    Trend persistence grid $\phi_{\tau}$ & $\{0.80,\,0.975,\,0.999\}$ at $\phi_{r}=0.75$ \\
+    Real-factor persistence grid $\phi_{r}$ & $\{0.60,\,0.75,\,0.90\}$ at $\phi_{\tau}=0.975$ \\
+    Maturity menu / return set & $\{1,2,4,5,9,10\}$ / $\{2,5,10\}$ years \\
+    Draws & $10{,}000$ \\
+    \bottomrule
+  \end{tabular}
+  \tabnotes{Calibration of the data-generating process of \Cref{sec:meth-ehmc},
+    following \citet{cieslak2015}, Section~1. The predictor map is pluggable, so
+    the same engine evaluates the cycle and six-yield specifications.}
+\end{table}
+
+\paragraph{Out-of-sample protocol.} The recursive forecast is scored by the
+\citet{campbellthompson2008} statistic \eqref{eq:meth-ctr2} against the recursive
+prevailing mean. The entire factor chain is rebuilt at each date from data
+available only up to that date; both the factor and the predictive regression
+respect time $t$ (training dates satisfy $\text{date}+12\text{m}\le t$), so the
+forecast is doubly out-of-sample. The baseline uses expanding windows with a
+five-year minimum training span; \Cref{sec:rob-oos-scheme} reports the
+sensitivity to three- and seven-year minimums and to ten- and fifteen-year
+rolling windows.
+
+% ===========================================================================
+\section{Supplementary Figures: Trend, Cycle, and Factor Construction}
+\label{app:figures-construction}
+
+The figures below document the construction of the cycle factor behind the
+replication and main-results exhibits. \Cref{fig:app-inflation-trend} shows the
+trend-inflation anchor \eqref{eq:trendinf}; \Cref{fig:app-beta-loadings} the
+loadings of yields on that anchor \eqref{eq:decomp};
+\Cref{fig:app-cycles-country} the resulting cycles; and
+\Cref{fig:app-local-cf} the fitted local cycle factors \eqref{eq:cf}.
+
+\begin{figure}[ht]\centering
+  \includegraphics[width=0.95\linewidth]{figures/s2_inflation_trend.pdf}
+  \caption{Year-on-year core CPI inflation $\pi_{i,t}$ and the backward-looking
+    EWMA trend inflation $\trendinf_{i,t}$ \eqref{eq:trendinf}, by country. The
+    trend smooths the high-frequency variation in realised inflation while never
+    looking forward.}
+  \label{fig:app-inflation-trend}
+\end{figure}
+
+\begin{figure}[ht]\centering
+  \includegraphics[width=0.8\linewidth]{figures/s2_beta_loadings.pdf}
+  \caption{Slope $\beta_{i,n}$ of the yield on trend inflation \eqref{eq:decomp}
+    across maturity, by country (dashed line at one). The long end of the curve
+    loads more heavily on the inflation trend.}
+  \label{fig:app-beta-loadings}
+\end{figure}
+
+\begin{figure}[ht]\centering
+  \includegraphics[width=0.95\linewidth]{figures/s2_cycles_by_country.pdf}
+  \caption{Interest-rate cycles $\cyc^{(n)}_{i,t}$ \eqref{eq:decomp}---the
+    residual of yields on trend inflation---by country and maturity. The cycles
+    are markedly less persistent than the yields they are extracted from.}
+  \label{fig:app-cycles-country}
+\end{figure}
+
+\begin{figure}[ht]\centering
+  \includegraphics[width=0.95\linewidth]{figures/s4_local_cf.pdf}
+  \caption{The local cycle factor $\CF_{i,t}$ \eqref{eq:cf}, the fitted value of
+    the one-year-ahead excess return on the one-year and average cycles, by
+    country.}
+  \label{fig:app-local-cf}
+\end{figure}
+
+% ===========================================================================
+\section{Supplementary Figures: Predictability and the Global Factor}
+\label{app:figures-global}
+
+These figures support the predictability and integration results of
+\Cref{ch:results,ch:robustness}. \Cref{fig:app-rx-scatter} shows the Phase~I
+predictive relation market by market; \Cref{fig:app-gdp-weights} the GDP weights
+that build the global factor; \Cref{fig:app-cf-corr} the cross-country
+co-movement of the local factors that makes a single global factor meaningful;
+and \Cref{fig:app-gcf-gcp} the global cycle factor against its forward-rate
+competitor.
+
+\begin{figure}[ht]\centering
+  \includegraphics[width=0.95\linewidth]{figures/s4_rx_vs_cf_scatter.pdf}
+  \caption{One-year-ahead excess return $\rxbar_{i,t+12}$ against the local cycle
+    factor $\CF_{i,t}$ \eqref{eq:h-local}, by country, with the OLS fit. The
+    positive slope is the Phase~I predictability of \Cref{sec:res-phase1}.}
+  \label{fig:app-rx-scatter}
+\end{figure}
+
+\begin{figure}[ht]\centering
+  \includegraphics[width=0.85\linewidth]{figures/s5_gdp_weights.pdf}
+  \caption{Time-varying GDP weights $w_{i,t}$ \eqref{eq:gcf} across the panel.
+    The global cycle factor is dominated by the largest economies, with the
+    weights renormalised each month over the markets present in the sample.}
+  \label{fig:app-gdp-weights}
+\end{figure}
+
+\begin{figure}[ht]\centering
+  \includegraphics[width=0.8\linewidth]{figures/s5_cf_corr_heatmap.pdf}
+  \caption{Cross-country correlations of the local cycle factors $\CF_{i,t}$. The
+    strong co-movement---tightest within the euro-area bloc---is the empirical
+    regularity that motivates the GDP-weighted global factor.}
+  \label{fig:app-cf-corr}
+\end{figure}
+
+\begin{figure}[ht]\centering
+  \includegraphics[width=0.9\linewidth]{figures/s10_gcf_vs_gcp_ts.pdf}
+  \caption{The GDP-weighted global cycle factor $\GCF_{t}$ against the global
+    Cochrane--Piazzesi forward-rate factor $\GCP_{t}$ (\Cref{sec:rob-cf-cp}).
+    The two carry overlapping but distinct information; only the global cycle
+    factor predicts out of sample.}
+  \label{fig:app-gcf-gcp}
+\end{figure}

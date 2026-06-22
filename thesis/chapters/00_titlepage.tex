@@ -1,21 +1,43 @@
-% Title page. Replace institution/program/date details with the program's
-% official template if one is mandated.
+% Title page.
+% ACTION REQUIRED BEFORE SUBMISSION: the fields wrapped in \tphold{...} below are
+% placeholders. Replace each with your details and confirm the layout against
+% WU's official master-thesis title-page template if one is mandated (the
+% institution, programme, department, and matriculation number in particular).
+\newcommand{\tphold}[1]{\textcolor{blue}{[#1]}}% visible placeholder; remove once filled
 \begin{titlepage}
 \centering
-\vspace*{2cm}
 
+% --- Institution -----------------------------------------------------------
+{\large \tphold{Vienna University of Economics and Business (WU)}\par}
+\vspace{0.3em}
+{\normalsize \tphold{Department / Institute}\par}
+\vspace{0.3em}
+{\normalsize \tphold{Master's Programme, e.g.\ MSc Finance and Accounting}\par}
+
+\vspace*{1.6cm}
+{\large Master's Thesis\par}
+\vspace{1.4cm}
+
+% --- Title -----------------------------------------------------------------
 {\LARGE\bfseries Expected Returns in International\\[0.3em]
 Government Bond Markets\par}
 
-\vspace{2cm}
-{\large Master's Thesis\par}
+\vspace{1.4cm}
+{\normalsize Thesis submitted in partial fulfilment of the requirements\\[0.2em]
+for the degree of Master of Science (MSc)\par}
 
+% --- Author ----------------------------------------------------------------
 \vspace{2cm}
 {\large\bfseries Jan Heissenberger\par}
+\vspace{0.3em}
+{\normalsize Student ID: \tphold{matriculation number}\par}
 
-\vspace{0.5cm}
-{\normalsize Supervised by Giorgia Simion, Ph.D.\par}
+% --- Supervisor ------------------------------------------------------------
+\vspace{1.4cm}
+{\normalsize Supervisor: Giorgia Simion, Ph.D.\par}
+\vspace{0.2em}
+{\normalsize \tphold{Department of Finance, Accounting and Statistics}\par}
 
 \vfill
-{\normalsize \today\par}
+{\normalsize Vienna, \today\par}
 \end{titlepage}
