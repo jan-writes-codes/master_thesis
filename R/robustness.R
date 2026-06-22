@@ -409,21 +409,39 @@ add_oos_factors <- function(base, mt = 60, train_window = Inf) {
     dplyr::group_by(ym) %>% dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
     dplyr::group_by(ym, date) %>%
     dplyr::summarise(GCF_oos = sum(w * CF_oos, na.rm = TRUE), .groups = "drop")
-  agg <- rdo %>% dplyr::filter(!is.na(gdp_val)) %>%
-    dplyr::group_by(ym) %>% dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
-    dplyr::ungroup()
-  gp <- agg %>% dplyr::group_by(ym, date) %>%
-    dplyr::summarise(cyc1_bar_oos = sum(w * cycle_1y_oos, na.rm = TRUE),
-                     cbar_bar_oos = sum(w * c_bar_oos,    na.rm = TRUE), .groups = "drop") %>%
-    dplyr::arrange(ym)
-  rxb <- agg %>% dplyr::filter(!is.na(rx_USD_t12)) %>%
-    dplyr::group_by(ym) %>% dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
-    dplyr::group_by(ym, date) %>%
-    dplyr::summarise(rx_USD_bar_t12 = sum(w * rx_USD_t12, na.rm = TRUE), .groups = "drop") %>%
-    dplyr::arrange(ym)
-  fx <- gp %>% dplyr::left_join(rxb, by = c("ym", "date")) %>% dplyr::arrange(ym)
-  fx$FXGCF_oos <- oos_predict(fx, rx_USD_bar_t12 ~ cyc1_bar_oos + cbar_bar_oos,
-                              min_train = mt, h = 12, train_window = train_window)
+  # FXGCF_oos: construction selected by .FXGCF_METHOD (see data_preparation.R).
+  if (.FXGCF_METHOD == "bu_gdp") {
+    rdo_usd <- rdo %>% dplyr::group_by(country) %>% dplyr::arrange(ym, .by_group = TRUE) %>%
+      dplyr::group_modify(~ {
+        .x$CF_USD_oos <- oos_predict(.x, rx_USD_t12 ~ cycle_1y_oos + c_bar_oos,
+                                     min_train = mt, h = 12, train_window = train_window)
+        .x
+      }) %>% dplyr::ungroup()
+    fx <- rdo_usd %>% dplyr::filter(!is.na(CF_USD_oos), !is.na(gdp_val)) %>%
+      dplyr::group_by(ym) %>% dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
+      dplyr::group_by(ym, date) %>%
+      dplyr::summarise(FXGCF_oos = sum(w * CF_USD_oos, na.rm = TRUE), .groups = "drop") %>%
+      dplyr::arrange(ym)
+  } else {
+    .eq <- (.FXGCF_METHOD == "td_eq")
+    agg <- rdo %>% dplyr::filter(!is.na(gdp_val)) %>%
+      dplyr::group_by(ym) %>% dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
+      dplyr::ungroup()
+    gp <- agg %>% dplyr::group_by(ym, date) %>%
+      dplyr::summarise(cyc1_bar_oos = if (.eq) mean(cycle_1y_oos) else sum(w * cycle_1y_oos, na.rm = TRUE),
+                       cbar_bar_oos = if (.eq) mean(c_bar_oos)    else sum(w * c_bar_oos,    na.rm = TRUE),
+                       .groups = "drop") %>%
+      dplyr::arrange(ym)
+    rxb <- agg %>% dplyr::filter(!is.na(rx_USD_t12)) %>%
+      dplyr::group_by(ym) %>% dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
+      dplyr::group_by(ym, date) %>%
+      dplyr::summarise(rx_USD_bar_t12 = if (.eq) mean(rx_USD_t12) else sum(w * rx_USD_t12, na.rm = TRUE),
+                       .groups = "drop") %>%
+      dplyr::arrange(ym)
+    fx <- gp %>% dplyr::left_join(rxb, by = c("ym", "date")) %>% dplyr::arrange(ym)
+    fx$FXGCF_oos <- oos_predict(fx, rx_USD_bar_t12 ~ cyc1_bar_oos + cbar_bar_oos,
+                                min_train = mt, h = 12, train_window = train_window)
+  }
   rdo %>% dplyr::select(country, ym, date, rx_t12, rx_USD_t12, CF_oos) %>%
     dplyr::left_join(gcfo %>% dplyr::select(ym, GCF_oos),   by = "ym") %>%
     dplyr::left_join(fx   %>% dplyr::select(ym, FXGCF_oos), by = "ym") %>%
@@ -630,18 +648,28 @@ build_cf_chain_is <- function(infl) {
                      by = c("country", "ym")) %>%
     dplyr::filter(!is.na(rx_t12), !is.na(cycle_1y), !is.na(c_bar), !is.na(gdp_val))
   base <- base %>% dplyr::group_by(country) %>% dplyr::group_modify(~ {
-    .x$CF <- predict(lm(rx_t12 ~ cycle_1y + c_bar, data = .x, na.action = na.exclude)); .x
+    .x$CF     <- predict(lm(rx_t12     ~ cycle_1y + c_bar, data = .x, na.action = na.exclude))
+    .x$CF_USD <- predict(lm(rx_USD_t12 ~ cycle_1y + c_bar, data = .x, na.action = na.exclude))
+    .x
   }) %>% dplyr::ungroup()
   base <- base %>% dplyr::group_by(ym) %>%
     dplyr::mutate(w = gdp_val / sum(gdp_val, na.rm = TRUE)) %>% dplyr::ungroup()
   gcf_s <- base %>% dplyr::group_by(ym) %>%
     dplyr::summarise(GCF = sum(w * CF, na.rm = TRUE), .groups = "drop")
-  glob <- base %>% dplyr::group_by(ym) %>%
-    dplyr::summarise(cyc1_bar   = sum(w * cycle_1y,   na.rm = TRUE),
-                     cbar_bar   = sum(w * c_bar,      na.rm = TRUE),
-                     rx_USD_bar = sum(w * rx_USD_t12, na.rm = TRUE), .groups = "drop")
-  fx_s <- glob %>% dplyr::mutate(FXGCF = predict(lm(rx_USD_bar ~ cyc1_bar + cbar_bar, data = glob),
-                                                 newdata = .)) %>% dplyr::select(ym, FXGCF)
+  # FXGCF: construction selected by .FXGCF_METHOD (see data_preparation.R).
+  if (.FXGCF_METHOD == "bu_gdp") {
+    fx_s <- base %>% dplyr::group_by(ym) %>%
+      dplyr::summarise(FXGCF = sum(w * CF_USD, na.rm = TRUE), .groups = "drop")
+  } else {
+    .eq <- (.FXGCF_METHOD == "td_eq")
+    glob <- base %>% dplyr::group_by(ym) %>%
+      dplyr::summarise(cyc1_bar   = if (.eq) mean(cycle_1y)   else sum(w * cycle_1y,   na.rm = TRUE),
+                       cbar_bar   = if (.eq) mean(c_bar)      else sum(w * c_bar,      na.rm = TRUE),
+                       rx_USD_bar = if (.eq) mean(rx_USD_t12) else sum(w * rx_USD_t12, na.rm = TRUE),
+                       .groups = "drop")
+    fx_s <- glob %>% dplyr::mutate(FXGCF = predict(lm(rx_USD_bar ~ cyc1_bar + cbar_bar, data = glob),
+                                                   newdata = .)) %>% dplyr::select(ym, FXGCF)
+  }
   base %>%
     dplyr::left_join(gcf_s, by = "ym") %>%
     dplyr::left_join(fx_s,  by = "ym") %>%
