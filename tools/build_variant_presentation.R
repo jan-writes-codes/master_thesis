@@ -9,7 +9,9 @@
 # It sources the real exhibit pipeline (so every number uses the exact thesis
 # machinery, just with the variant FXGCF), then writes ONLY the exhibits that
 # depend on the FXGCF:
-#   figures : mr_f3_usd_r2, mr_f4_gcf_fxgcf, rob_f1_oos_sub, rob_f2_oos_scheme
+#   figures : mr_f3_usd_r2, mr_f4_gcf_fxgcf, rob_f1_oos_sub, rob_f2_oos_scheme,
+#             and the deck-only Phase III / OOS / strategy figures
+#             pres_usd_drop, pres_usd_r2, pres_oos_r2, pres_usd_cumret
 #   tables  : mr_t3_phase3.tex, mr_t4_oos.tex   (native LaTeX, deck style)
 # All FXGCF-independent exhibits are inherited from the copied final_presentation.
 #
@@ -29,8 +31,97 @@ dir.create(file.path(target, "tables"),  showWarnings = FALSE, recursive = TRUE)
 
 # Build the real exhibits under the variant FXGCF (slow: fully recursive OOS).
 suppressPackageStartupMessages({ library(dplyr); library(ggplot2) })
-source("R/main_results.R")   # -> mr_plots, mr_tables, phase3, oos_summary, gcf_fxgcf_rho
-source("R/strategy.R")       # -> usd_perf (FX-adjusted dollar strategy)
+source("R/main_results.R")   # -> mr_plots, mr_tables, phase2/phase3, r2_oos_tab, oos_summary
+source("R/strategy.R")       # -> usd_perf, btu (FX-adjusted dollar strategy)
+
+# --- presentation-specific figures (FXGCF-method-dependent, deck only) --------
+# Four exhibits for the redesigned Phase III / OOS / strategy slides. They reuse
+# the in-memory pipeline frames (phase2, phase3, r2_oos_tab, btu) so every number
+# matches the thesis machinery, and live here (not in the thesis R files) so no
+# thesis exhibit changes. Written straight into the deck's figures/ folder, and
+# defined before the slow robustness rebuild so they are produced regardless.
+pres_dir <- file.path(target, "figures")
+pct  <- scales::percent_format(accuracy = 1)
+xrot <- ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+# (Slide 14) Currency drop: in-sample R^2 on GCF, local-currency vs dollar rx.
+lab_drop <- c("rx ~ GCF (local currency)", "rx_USD ~ GCF (USD investor)")
+f_drop <- dplyr::left_join(
+    phase2 %>% dplyr::select(country, loc = r2_glb),
+    phase3 %>% dplyr::select(country, usd = r2_g), by = "country") %>%
+  tidyr::pivot_longer(c(loc, usd), names_to = "model", values_to = "r_sq") %>%
+  dplyr::mutate(model = factor(model, levels = c("loc", "usd"), labels = lab_drop)) %>%
+  ggplot2::ggplot(ggplot2::aes(country, r_sq, fill = model)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
+  ggplot2::scale_y_continuous(labels = pct) +
+  ggplot2::scale_fill_manual(values = stats::setNames(c(col_pri, col_sec), lab_drop), name = NULL) +
+  ggplot2::labs(title = expression(paste("Currency risk erodes the in-sample ", R^2)),
+                subtitle = "Global-factor fit: local-currency vs US-dollar returns, by country",
+                x = NULL, y = expression(R^2)) +
+  theme_thesis + xrot
+ggplot2::ggsave(file.path(pres_dir, "pres_usd_drop.pdf"), f_drop, width = 9, height = 5.5)
+
+# (Slide 15) USD investor R^2: local rx~GCF, dollar rx_USD~GCF, dollar rx_USD~FXGCF.
+lab_r2 <- c("rx ~ GCF (local)", "rx_USD ~ GCF (USD)", "rx_USD ~ FXGCF (USD)")
+f_r2 <- dplyr::left_join(
+    phase2 %>% dplyr::select(country, a = r2_glb),
+    phase3 %>% dplyr::select(country, b = r2_g, c = r2_f), by = "country") %>%
+  tidyr::pivot_longer(c(a, b, c), names_to = "model", values_to = "r_sq") %>%
+  dplyr::mutate(model = factor(model, levels = c("a", "b", "c"), labels = lab_r2)) %>%
+  ggplot2::ggplot(ggplot2::aes(country, r_sq, fill = model)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.85), width = 0.8) +
+  ggplot2::scale_y_continuous(labels = pct) +
+  ggplot2::scale_fill_manual(values = stats::setNames(c(col_pri, col_sec, col_ter), lab_r2), name = NULL) +
+  ggplot2::labs(title = expression(paste("US-dollar-investor in-sample ", R^2, ": GCF vs FX-adjusted FXGCF")),
+                subtitle = "Local-currency benchmark, the dollar return on GCF, and the dollar return on FXGCF",
+                x = NULL, y = expression(R^2)) +
+  theme_thesis + xrot
+ggplot2::ggsave(file.path(pres_dir, "pres_usd_r2.pdf"), f_r2, width = 9, height = 5.5)
+
+# (Slide 16) Out-of-sample R^2_oos: local CF, global GCF, and both USD specs.
+lev_oos <- c("rx ~ CF_oos", "rx ~ GCF_oos", "rx_USD ~ GCF_oos", "rx_USD ~ FXGCF_oos")
+lab_oos <- c("rx ~ CF (local)", "rx ~ GCF (global)", "rx_USD ~ GCF", "rx_USD ~ FXGCF")
+f_oos <- r2_oos_tab %>%
+  dplyr::filter(spec %in% lev_oos, !is.na(r2_oos)) %>%
+  dplyr::mutate(spec = factor(as.character(spec), levels = lev_oos, labels = lab_oos),
+                country = ord(country)) %>%
+  ggplot2::ggplot(ggplot2::aes(country, r2_oos, fill = spec)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.85), width = 0.8) +
+  ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  ggplot2::scale_y_continuous(labels = pct) +
+  ggplot2::scale_fill_manual(values = stats::setNames(c(col_pri, col_sec, col_ter, col_qua), lab_oos), name = NULL) +
+  ggplot2::labs(title = expression(paste("Out-of-sample ", R[oos]^2, ": local, global, and the USD investor")),
+                subtitle = "Recursive factor forecast vs recursive prevailing mean (positive beats the mean)",
+                x = NULL, y = expression(R[oos]^2)) +
+  theme_thesis + xrot
+ggplot2::ggsave(file.path(pres_dir, "pres_oos_r2.pdf"), f_oos, width = 9, height = 5.5)
+
+# (Slide 17) USD-investor equity curve: FXGCF-timed vs buy-and-hold (annual, Dec-Dec).
+annu <- btu %>%
+  dplyr::mutate(mth = as.integer(format(date, "%m"))) %>%
+  dplyr::filter(mth == 12) %>%
+  dplyr::mutate(w_fx = eq_exp(mv_raw(mu_fx, var_rt, 5)))
+annu$r_fx <- annu$w_fx * annu$rx
+annu$r_bh <- annu$rx
+usd_curve <- tibble::tibble(
+  date = c(min(annu$date) - 365, annu$date),
+  `FXGCF-timed`  = cumprod(c(1, 1 + annu$r_fx)),
+  `Buy-and-hold` = cumprod(c(1, 1 + annu$r_bh)))
+f_usd_cum <- usd_curve %>%
+  tidyr::pivot_longer(-date, names_to = "strategy", values_to = "wealth") %>%
+  dplyr::mutate(strategy = factor(strategy, levels = c("FXGCF-timed", "Buy-and-hold"))) %>%
+  ggplot2::ggplot(ggplot2::aes(date, wealth, colour = strategy)) +
+  ggplot2::geom_hline(yintercept = 1, linetype = "dashed", colour = "grey60") +
+  ggplot2::geom_line(linewidth = 0.7) +
+  ggplot2::scale_colour_manual(values = c("FXGCF-timed" = col_pri, "Buy-and-hold" = col_sec), name = NULL) +
+  ggplot2::labs(title = "Growth of $1: FXGCF-timed US-dollar portfolio vs buy-and-hold",
+                subtitle = sprintf("Unhedged USD investor, non-overlapping annual rebalancing. Annual Sharpe %.2f vs %.2f",
+                                   sr(annu$r_fx), sr(annu$r_bh)),
+                x = NULL, y = "Cumulative wealth (excess of cash)") +
+  theme_thesis
+ggplot2::ggsave(file.path(pres_dir, "pres_usd_cumret.pdf"), f_usd_cum, width = 9, height = 5)
+cat("[figures] pres_usd_drop, pres_usd_r2, pres_oos_r2, pres_usd_cumret ->", target, "\n")
+
 source("R/robustness.R")     # -> rob_plots (rob_f1_oos_sub, rob_f2_oos_scheme)
 
 # --- figures: write the four FXGCF-sensitive ones at the pipeline's dims ------
