@@ -24,9 +24,10 @@ fonts and stay sharp on a projector.
 ## Regenerate
 
 The FXGCF-sensitive exhibits and the deck-only Phase III / OOS / strategy
-figures — `pres_usd_drop`, `pres_usd_r2`, `pres_oos_r2`, `pres_usd_cumret` — are
-produced by the shared generator under `FXGCF_METHOD=bu_gdp`, which writes into
-`final_presentation_bu_gdp/`. Mirror them here (run from the repository root):
+figures — `pres_usd_drop`, `pres_usd_r2`, `pres_oos_r2`, `pres_gcf_cumret`,
+`pres_usd_cumret` — are produced by the shared generator under
+`FXGCF_METHOD=bu_gdp`, which writes into `final_presentation_bu_gdp/`. Mirror
+them here (run from the repository root):
 
 ```sh
 FXGCF_METHOD=bu_gdp Rscript tools/build_variant_presentation.R   # -> final_presentation_bu_gdp/{figures,tables}
@@ -39,7 +40,7 @@ figures, the hedged strategy curve, appendix) are the thesis figures; refresh
 them from `thesis/figures/` if the pipeline changes:
 
 ```sh
-cp thesis/figures/{mr_f1_r2_phase1,mr_f2_hr_tstats,mr_f2_r2_ladder,s5_gcf,strat_f1_cumret}.pdf final_presentation/figures/
+cp thesis/figures/{mr_f1_r2_phase1,mr_f2_hr_tstats,mr_f2_r2_ladder,s5_gcf}.pdf final_presentation/figures/
 cp thesis/figures/{s1_yield_ts,s1_yield_curve_avg,s2_inflation_trend,s2_yield_decomp,s2_cycles_by_country,s4_local_cf}.pdf final_presentation/figures/  # appendix data slides
 # tables: keep tables/{mr_t1_phase1,mr_t2_phase2,strat_t1_performance,cp_t4}.tex in sync with thesis/tables/*.tex
 ```

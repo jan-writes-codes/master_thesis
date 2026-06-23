@@ -10,8 +10,8 @@
 # machinery, just with the variant FXGCF), then writes ONLY the exhibits that
 # depend on the FXGCF:
 #   figures : mr_f3_usd_r2, mr_f4_gcf_fxgcf, rob_f1_oos_sub, rob_f2_oos_scheme,
-#             and the deck-only Phase III / OOS / strategy figures
-#             pres_usd_drop, pres_usd_r2, pres_oos_r2, pres_usd_cumret
+#             and the deck-only Phase III / OOS / strategy figures pres_usd_drop,
+#             pres_usd_r2, pres_oos_r2, pres_gcf_cumret, pres_usd_cumret
 #   tables  : mr_t3_phase3.tex, mr_t4_oos.tex   (native LaTeX, deck style)
 # All FXGCF-independent exhibits are inherited from the copied final_presentation.
 #
@@ -96,7 +96,25 @@ f_oos <- r2_oos_tab %>%
   theme_thesis + xrot
 ggplot2::ggsave(file.path(pres_dir, "pres_oos_r2.pdf"), f_oos, width = 9, height = 5.5)
 
-# (Slide 17) USD-investor equity curve: FXGCF-timed vs buy-and-hold (annual, Dec-Dec).
+# (Slide 17) Equity curves. The subtitles report the headline 12-month strategy
+# Sharpe (from perf5 / usd_perf), so the chart matches the slide's strategy-table
+# bullets -- not the annual-rebalancing Sharpe of the plotted growth-of-$1 curve.
+gcf_sr_t <- perf5$Sharpe[perf5$Strategy == "GCF-timed"]
+gcf_sr_h <- perf5$Sharpe[perf5$Strategy == "Buy-and-hold"]
+f_gcf_cum <- ann_curve %>%
+  tidyr::pivot_longer(-date, names_to = "strategy", values_to = "wealth") %>%
+  dplyr::mutate(strategy = factor(strategy, levels = c("GCF-timed", "Buy-and-hold"))) %>%
+  ggplot2::ggplot(ggplot2::aes(date, wealth, colour = strategy)) +
+  ggplot2::geom_hline(yintercept = 1, linetype = "dashed", colour = "grey60") +
+  ggplot2::geom_line(linewidth = 0.7) +
+  ggplot2::scale_colour_manual(values = c("GCF-timed" = col_pri, "Buy-and-hold" = col_sec), name = NULL) +
+  ggplot2::labs(title = "Growth of $1: GCF-timed global bond portfolio vs buy-and-hold",
+                subtitle = sprintf("Currency-hedged, equal average exposure. 12-month Sharpe: timed %.2f vs hold %.2f",
+                                   gcf_sr_t, gcf_sr_h),
+                x = NULL, y = "Cumulative wealth (excess of cash)") +
+  theme_thesis
+ggplot2::ggsave(file.path(pres_dir, "pres_gcf_cumret.pdf"), f_gcf_cum, width = 9, height = 5)
+
 annu <- btu %>%
   dplyr::mutate(mth = as.integer(format(date, "%m"))) %>%
   dplyr::filter(mth == 12) %>%
@@ -107,6 +125,8 @@ usd_curve <- tibble::tibble(
   date = c(min(annu$date) - 365, annu$date),
   `FXGCF-timed`  = cumprod(c(1, 1 + annu$r_fx)),
   `Buy-and-hold` = cumprod(c(1, 1 + annu$r_bh)))
+fx_sr_t <- usd_perf$Sharpe[usd_perf$Strategy == "FXGCF-timed"]
+fx_sr_h <- usd_perf$Sharpe[usd_perf$Strategy == "Buy-and-hold"]
 f_usd_cum <- usd_curve %>%
   tidyr::pivot_longer(-date, names_to = "strategy", values_to = "wealth") %>%
   dplyr::mutate(strategy = factor(strategy, levels = c("FXGCF-timed", "Buy-and-hold"))) %>%
@@ -115,12 +135,12 @@ f_usd_cum <- usd_curve %>%
   ggplot2::geom_line(linewidth = 0.7) +
   ggplot2::scale_colour_manual(values = c("FXGCF-timed" = col_pri, "Buy-and-hold" = col_sec), name = NULL) +
   ggplot2::labs(title = "Growth of $1: FXGCF-timed US-dollar portfolio vs buy-and-hold",
-                subtitle = sprintf("Unhedged USD investor, non-overlapping annual rebalancing. Annual Sharpe %.2f vs %.2f",
-                                   sr(annu$r_fx), sr(annu$r_bh)),
+                subtitle = sprintf("Unhedged USD investor, equal average exposure. 12-month Sharpe: timed %.2f vs hold %.2f",
+                                   fx_sr_t, fx_sr_h),
                 x = NULL, y = "Cumulative wealth (excess of cash)") +
   theme_thesis
 ggplot2::ggsave(file.path(pres_dir, "pres_usd_cumret.pdf"), f_usd_cum, width = 9, height = 5)
-cat("[figures] pres_usd_drop, pres_usd_r2, pres_oos_r2, pres_usd_cumret ->", target, "\n")
+cat("[figures] pres_usd_drop, pres_usd_r2, pres_oos_r2, pres_gcf_cumret, pres_usd_cumret ->", target, "\n")
 
 source("R/robustness.R")     # -> rob_plots (rob_f1_oos_sub, rob_f2_oos_scheme)
 
