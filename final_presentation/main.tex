@@ -83,8 +83,8 @@
       but with no economic mechanism.
     \item \citet{cieslak2015}: a \emph{cycle} factor (yields minus trend
       inflation) predicts them through a macro-anchored mechanism.
-    \item \citet{dahlquist2013}: a \emph{global} factor predicts international
-      returns, implying integrated markets.
+    \item \citet{dahlquist2013}: a \emph{global} CP factor predicts international
+returns, implying integrated markets.
   \end{enumerate}
   \vfill
   \textbf{The gap:} the cycle factor is established for the US -- does it extend
@@ -123,11 +123,10 @@
     \item \textbf{Local} $\CF_{i,t}$: fitted return forecast from
       $c^{(1)}_{i,t}$ and the average cycle $\bar c_{i,t}$
     \item \textbf{Global} $\GCF_{t} = \sum_{i} w_{i,t}\,\CF_{i,t}$:
-      the GDP-weighted average of the eleven local factors -- one common cycle
+      the GDP-weighted average of the eleven local factors, i.e. one common cycle
       across the G10 \citep{dahlquist2013}
     \item \textbf{FX-adjusted global}
-      $\FXGCF_{t} = \sum_{i} w_{i,t}\,\CF^{\mathrm{USD}}_{i,t}$: the same recipe
-      built \emph{bottom-up} on each country's \emph{USD} cycle factor,
+      $\FXGCF_{t} = \sum_{i} w_{i,t}\,\CF^{\mathrm{USD}}_{i,t}$: \emph{USD} cycle factor constructed with USD-adjusted excess returns ($\rxbar^{\,\mathrm{USD}}$),
       GDP-weighted for an unhedged US investor
   \end{enumerate}
 \end{frame}
@@ -157,7 +156,7 @@
       international data before any extension
     \item Fully-recursive out-of-sample evaluation
       \citep[Campbell--Thompson $R^{2}_{\mathrm{oos}}$,][]{campbellthompson2008}
-    \item Robustness: crisis subsamples, rolling windows, CF vs. CP factor,
+    \item Robustness: crisis subsamples, varying extension windows,
       core vs. headline inflation
   \end{itemize}
 \end{frame}
@@ -176,7 +175,7 @@
   \end{itemize}
   \vfill
   \begin{block}{Replication as validation}
-    Before testing the factor internationally, I reproduce the published US results: Similar factor correlations, $R^2$ and conclusions for the local US cycle factor.
+    Before testing the factor internationally, I reproduced the published US results: Similar factor correlations, $R^2$ and conclusions for the local US cycle factor.
   \end{block}
 \end{frame}
 
@@ -273,7 +272,7 @@
       \begin{itemize}
         \item $\FXGCF$ raises the USD-investor $R^{2}$ in \textbf{10 of 11}
           markets and the $t$-statistic in \textbf{9 of 11}
-        \item Average $R^{2}$ \textbf{$8\%\to14\%$}: the bottom-up FX adjustment
+        \item Average $R^{2}$ \textbf{$8\%\to14\%$}: the FX adjustment
           nearly doubles the dollar-investor fit
       \end{itemize}
     \end{column}
@@ -322,8 +321,7 @@
       \begin{itemize}
         \item As a single global-portfolio timing signal it lags:
           $R^{2}_{\mathrm{oos}}=-0.01$, Sharpe \textbf{0.20$\to$0.19}
-        \item The bottom-up factor is strong \emph{cross-sectionally}, not at
-          timing the aggregate dollar return
+        \item The factor is strong \emph{cross-sectionally}, not at timing the aggregate dollar return
       \end{itemize}
     \end{column}
   \end{columns}
@@ -342,9 +340,8 @@
     \item Local-factor predictability does not survive real-time evaluation
     \item USD-investor predictability is far weaker (in-sample $R^{2}$ falls
       $25\%\to8\%$) and is negative out of sample for the unadjusted factor
-    \item The bottom-up $\FXGCF$ edge is in-sample and cross-sectional; out of
-      sample it is fragile -- positive only under the expanding 5y window,
-      negative under shorter/longer minimums and the rolling-10y scheme
+    \item The $\FXGCF$ edge is in-sample and cross-sectional, out of
+      sample it is fragile
   \end{itemize}
 \end{frame}
 
@@ -354,8 +351,8 @@
 \begin{frame}{Conclusion}
   \begin{block}{Does the \citet{cieslak2015} cycle factor apply to
       international bonds? Yes.}
-    Correct sign structure in all 11 G10 markets, with an average in-sample
-    $R^{2}$ of 25\% that holds across the maturity spectrum (1--10 years).
+    Significant and correct sign structure in all 11 G10 markets, with an average in-sample
+    $R^{2}$ of 25\%.
   \end{block}
   \begin{enumerate}
     \item \textbf{Local vs.\ global:} one GDP-weighted global factor matches
@@ -364,13 +361,12 @@
       8 of 11 markets, and predictability is overwhelmingly global. Only
       the global factor predicts \emph{out of sample}.
     \item \textbf{USD investor:} currency risk erodes $\sim$2/3 of the
-      predictive power. Built \emph{bottom-up}, the $\FXGCF$ nearly doubles the
-      dollar $R^{2}$ ($8\%\to14\%$) and is \alert{genuinely distinct} (corr
-      \textbf{0.78} with $\GCF$, not the $0.99$ of the top-down version) --
-      though its out-of-sample timing value is limited.
+      predictive power. The $\FXGCF$ nearly doubles the
+      dollar $R^{2}$ ($8\%\to14\%$) and is distinct (corr
+      \textbf{0.78} with $\GCF$, though its out-of-sample timing value is limited.
   \end{enumerate}
   \vfill
-  \textbf{Contribution:} a single global cycle factor for the G10, a new
+  \textbf{Contribution:} a single global cycle factor for the G10, a
   FX-adjusted version of it, and real-time evidence (including the timing
   strategy) that bond-return predictability is mostly global and rooted in
   inflation trends.
