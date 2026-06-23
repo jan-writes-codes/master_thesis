@@ -7,6 +7,21 @@ library(tidyr)
 # @todo add namesspace in front of every function
 # @todo check BE inflation data, seems to be offset in the excel
 
+# FXGCF construction selector (see the FXGCF block below). The thesis baseline
+# is the top-down GDP-weighted factor ("td_gdp"); the FXGCF_METHOD environment
+# variable lets the whole exhibit pipeline be regenerated under an alternative
+# construction without editing code. Unset / "td_gdp" reproduces the baseline.
+#   td_gdp : top-down, GDP-weighted   (baseline / default)
+#   td_eq  : top-down, 1/n-weighted
+#   bu_gdp : bottom-up (GDP-weighted aggregate of the local USD cycle factors)
+.FXGCF_METHOD <- local({
+  m <- Sys.getenv("FXGCF_METHOD", "td_gdp")
+  if (identical(m, "")) m <- "td_gdp"
+  if (!m %in% c("td_gdp", "td_eq", "bu_gdp"))
+    stop("FXGCF_METHOD must be one of td_gdp, td_eq, bu_gdp (got '", m, "')")
+  m
+})
+
 # File path for the data
 file_path <- "data.xlsx"
 
@@ -262,39 +277,25 @@ cycle_avg <- cycle %>%
   group_by(country, ym, date) %>%
   summarise(c_bar = mean(cycle, na.rm = TRUE), .groups = "drop")
 
-cycle_1y <- cycle %>%
-  filter(maturity == 1) %>%
-  select(country, ym, date, cycle_1y = cycle)
-
-cycle_2y <- cycle %>%
-  filter(maturity == 2) %>%
-  select(country, ym, date, cycle_2y = cycle)
-
-cycle_4y <- cycle %>%
-  filter(maturity == 4) %>%
-  select(country, ym, date, cycle_4y = cycle)
-
-cycle_5y <- cycle %>%
-  filter(maturity == 5) %>%
-  select(country, ym, date, cycle_5y = cycle)
-
-cycle_9y <- cycle %>%
-  filter(maturity == 9) %>%
-  select(country, ym, date, cycle_9y = cycle)
-
-cycle_10y <- cycle %>%
-  filter(maturity == 10) %>%
-  select(country, ym, date, cycle_10y = cycle)
+# Per-maturity cycle columns: one wide column per maturity (cycle_1y, cycle_2y,
+# ... cycle_10y), built in a loop instead of six copy-pasted filter/rename blocks.
+cycle_mats <- c(1, 2, 4, 5, 9, 10)
+cycle_wide <- purrr::map(cycle_mats, function(m) {
+  cyc_m <- cycle %>%
+    filter(maturity == m) %>%
+    select(country, ym, date, cycle)
+  names(cyc_m)[names(cyc_m) == "cycle"] <- paste0("cycle_", m, "y")
+  cyc_m
+})
 
 
 
-reg_data <- cycle_1y %>%
+# Assemble the regression panel: the six per-maturity cycles (joined in turn),
+# the average cycle, and the maturity-averaged / forward returns. Every
+# downstream step selects columns by name, so the join order is not load-bearing.
+reg_data <- cycle_wide %>%
+  purrr::reduce(left_join, by = c("country", "ym", "date")) %>%
   left_join(cycle_avg, by = c("country", "ym", "date")) %>%
-  left_join(cycle_2y, by = c("country", "ym", "date")) %>%
-  left_join(cycle_4y, by = c("country", "ym", "date")) %>%
-  left_join(cycle_5y, by = c("country", "ym", "date")) %>%
-  left_join(cycle_9y, by = c("country", "ym", "date")) %>%
-  left_join(cycle_10y, by = c("country", "ym", "date")) %>%
   left_join(rx_avg,    by = c("country", "ym", "date")) %>%
   left_join(forwards,  by = c("country", "ym", "date")) %>%
   mutate(y = as.integer(format(date, "%Y"))) %>%
@@ -359,56 +360,70 @@ gcp <- reg_data %>%
 
 
 # FX-adjusted Global Cycle Factor (FXGCF) ------------------------------------
-# Following Dahlquist-Hasseltoft (2013) FXGCP: the FX-adjusted global factor is
-# the FITTED VALUE of the (GDP-weighted) average USD-investor excess return on
-# the cycle PREDICTOR MENU -- it is NOT a regression on GCF (that would be an
-# affine transform of GCF). DH report corr(FXGCP, GCP) ~ 0.50.
+# Following Dahlquist-Hasseltoft (2013) FXGCP. The construction is selected by
+# .FXGCF_METHOD (set at the top of this file from the FXGCF_METHOD env var):
+#   td_gdp / td_eq : TOP-DOWN -- FXGCF is the FITTED VALUE of the (GDP- or
+#       1/n-)weighted average USD-investor excess return on the weighted average
+#       cycle PREDICTOR MENU. It is NOT a regression on GCF (that would be an
+#       affine transform of GCF). DH report corr(FXGCP, GCP) ~ 0.50.
+#   bu_gdp : BOTTOM-UP -- GDP-weighted aggregate of the per-country USD cycle
+#       factor CF_USD, i.e. the GCF recipe (eq 7-8) with the US-dollar return on
+#       the LHS instead of the local-currency return.
 
-# Dependent variable: GDP-weighted cross-country average USD excess return (incl. US)
-rx_usd_bar <- reg_data %>%
-  group_by(ym, date) %>%
-  summarise(
-    rx_USD_bar_t12  = sum(w * rx_USD_t12, na.rm = TRUE),
-    n_countries_usd = sum(!is.na(rx_USD_t12) & !is.na(w)),
-    .groups = "drop"
-  ) %>%
-  arrange(date)
+if (.FXGCF_METHOD == "bu_gdp") {
+  # Bottom-up: mirror the GCF aggregation, but on the per-country USD factor.
+  fxgcf <- reg_data %>%
+    group_by(ym, date) %>%
+    summarise(FXGCF = sum(w * CF_USD, na.rm = TRUE), .groups = "drop") %>%
+    left_join(gcf %>% select(ym, GCF), by = "ym") %>%
+    select(ym, date, GCF, FXGCF) %>%
+    arrange(date)
+} else {
+  # Top-down: equal (1/n) or GDP weights in the cross-country aggregates.
+  .eq <- (.FXGCF_METHOD == "td_eq")
+  # Dependent variable: weighted cross-country average USD excess return (incl. US)
+  rx_usd_bar <- reg_data %>%
+    group_by(ym, date) %>%
+    summarise(
+      rx_USD_bar_t12 = if (.eq) mean(rx_USD_t12, na.rm = TRUE)
+                       else     sum(w * rx_USD_t12, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    arrange(date)
+  # Predictor menu: weighted cross-country average cycle predictors
+  glob_pred <- reg_data %>%
+    group_by(ym, date) %>%
+    summarise(
+      cyc1_bar = if (.eq) mean(cycle_1y, na.rm = TRUE) else sum(w * cycle_1y, na.rm = TRUE),
+      cbar_bar = if (.eq) mean(c_bar,    na.rm = TRUE) else sum(w * c_bar,    na.rm = TRUE),
+      .groups  = "drop"
+    )
+  fxgcf_data <- rx_usd_bar %>%
+    left_join(glob_pred, by = c("ym", "date")) %>%
+    filter(!is.na(rx_USD_bar_t12), !is.na(cyc1_bar), !is.na(cbar_bar))
+  fit_fxgcf <- lm(rx_USD_bar_t12 ~ cyc1_bar + cbar_bar, data = fxgcf_data)
+  fxgcf <- glob_pred %>%
+    mutate(FXGCF = predict(fit_fxgcf, newdata = .)) %>%
+    select(ym, date, FXGCF) %>%
+    left_join(gcf %>% select(ym, GCF), by = "ym") %>%
+    select(ym, date, GCF, FXGCF)
+}
 
-# Predictor menu: GDP-weighted cross-country average cycle predictors
-glob_pred <- reg_data %>%
-  group_by(ym, date) %>%
-  summarise(
-    cyc1_bar = sum(w * cycle_1y, na.rm = TRUE),
-    cbar_bar = sum(w * c_bar,    na.rm = TRUE),
-    .groups  = "drop"
-  )
-
-# Baseline (top-down, DH-faithful): FXGCF = fitted(rx_USD_bar ~ avg cycle predictors)
-fxgcf_data <- rx_usd_bar %>%
-  left_join(glob_pred, by = c("ym", "date")) %>%
-  filter(!is.na(rx_USD_bar_t12), !is.na(cyc1_bar), !is.na(cbar_bar))
-
-fit_fxgcf <- lm(rx_USD_bar_t12 ~ cyc1_bar + cbar_bar, data = fxgcf_data)
-
-fxgcf <- glob_pred %>%
-  mutate(FXGCF = predict(fit_fxgcf, newdata = .)) %>%
-  select(ym, date, FXGCF) %>%
-  left_join(gcf %>% select(ym, GCF), by = "ym") %>%
-  select(ym, date, GCF, FXGCF)
-
-# Sanity: FXGCF must not be collinear with GCF (DH report corr ~ 0.50)
+# Sanity: report the GCF correlation (DH report ~ 0.50; baseline td_gdp ~ 0.99)
 fxgcf_diag <- fxgcf %>% filter(!is.na(GCF), !is.na(FXGCF))
-cat(sprintf("FXGCF diagnostics: cor(GCF, FXGCF) = %.3f\n",
-            cor(fxgcf_diag$GCF, fxgcf_diag$FXGCF)))
+cat(sprintf("FXGCF diagnostics [%s]: cor(GCF, FXGCF) = %.3f\n",
+            .FXGCF_METHOD, cor(fxgcf_diag$GCF, fxgcf_diag$FXGCF)))
 
 
 # Cleanup ----------------------------------------------------------------
 # Keep objects needed downstream for plotting/analysis (cycle, cycle_avg, gcf,
 # inflation_long, yields_long, fx_long, gdp); drop only intermediate temporaries.
-rm(list = c("cycle_1y", "cycle_2y", "cycle_4y", "cycle_5y", "cycle_9y", "cycle_10y",
+# intersect() with ls() because the top-down-only temporaries (fit_fxgcf,
+# fxgcf_data, glob_pred, rx_usd_bar) are not created on the bottom-up path.
+rm(list = intersect(c("cycle_wide", "cycle_mats",
             "curve_map", "fit_fxgcf", "fx", "fxgcf_data", "glob_pred",
             "fxgcf_diag", "rx_avg", "rx_raw", "rx_usd_bar",
-            "y1_US", "yields", "yields_wide"))
+            "y1_US", "yields", "yields_wide"), ls()))
 
 
 

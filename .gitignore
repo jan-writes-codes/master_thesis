@@ -4,6 +4,9 @@
 .Rproj.user/
 *.Rproj
 
+# Refactor verification artifacts (regenerate with tools/make_snapshot.sh)
+snapshots/
+
 # LaTeX build artifacts
 *.aux
 *.bbl
@@ -16,4 +19,10 @@
 *.toc
 final_presentation/main.log
 final_presentation/main.pdf
+fxgcf_comparison/main.log
+fxgcf_comparison/main.pdf
+final_presentation_bu_gdp/main.log
+final_presentation_bu_gdp/main.pdf
+final_presentation_td_eq/main.log
+final_presentation_td_eq/main.pdf
 thesis/main.pdf

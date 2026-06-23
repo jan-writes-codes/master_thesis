@@ -1,0 +1,497 @@
+% Master Thesis -- Final (Results) Presentation
+% Style mirrors the proposal presentation (Beamer, Madrid theme, per-section TOC).
+% Build: latexmk -pdf main.tex
+%
+% MTS requirements baked into this deck:
+%   - Slide 1: (preliminary) thesis title + supervisor's name
+%   - One motivation slide opens the deck (as in the proposal). The research
+%     question follows immediately on slide 5
+%   - One slide outlining the research design
+%   - 20 minutes + 10 minutes discussion -> ~16 content slides + appendix
+\documentclass[10pt]{beamer}
+
+\usetheme{Madrid}
+
+% Thesis colour scheme (see thesis_palette.R): indigo structure, teal alerts,
+% so the deck matches the figures.
+\definecolor{thesisindigo}{HTML}{3333AB}
+\definecolor{thesisteal}{HTML}{008493}
+\usecolortheme[named=thesisindigo]{structure}
+\setbeamercolor{alerted text}{fg=thesisteal}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{natbib}
+\bibliographystyle{apalike}
+
+% Notation (matches the thesis)
+\newcommand{\CF}{\mathrm{CF}}
+\newcommand{\GCF}{\mathrm{GCF}}
+\newcommand{\FXGCF}{\mathrm{FXGCF}}
+\newcommand{\rx}{\mathit{rx}}
+\newcommand{\rxbar}{\overline{rx}}
+\newcommand{\cyc}{c}                 % cycle
+\newcommand{\cycbar}{\bar{c}}        % average cycle
+\newcommand{\E}{\mathbb{E}}          % expectation
+\newcommand{\panel}[2]{\multicolumn{#1}{@{}l}{\textit{#2}}} % table sub-panel label
+\DeclareMathOperator{\Corr}{Corr}
+
+% Repeat the table of contents at every section start (as in the proposal)
+\AtBeginSection[]{%
+  \begin{frame}{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}}
+
+\title[Exp. Returns in International Bond Markets]{Expected Returns in\\
+  International Government Bond Markets}
+\subtitle{Master Thesis -- Final Presentation\\{\normalsize\itshape Mock variant: FXGCF built bottom-up (GDP-weighted)}}
+\author[Jan Heissenberger]{Jan Heissenberger\\
+  Supervised by Giorgia Simion, Ph.D.}
+\date{June 2026} % TODO: set the exact presentation date once the schedule is announced
+
+\begin{document}
+
+% --------------------------------------------------------------------------
+% Slide 1: title, supervisor (MTS requirement)
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Slide 2: TOC
+\begin{frame}{Table of Contents}
+  \tableofcontents
+\end{frame}
+
+% --------------------------------------------------------------------------
+\section{Motivation \& Research Question}
+
+% Motivation slide (mirrors the proposal's opener): build from the EH baseline
+% and the predictability literature to the international gap that the RQ fills.
+\begin{frame}{Motivation}
+  \textbf{Expectation hypothesis (EH):} a long yield is the average expected
+  future short rate, so bond \emph{excess} returns should be unpredictable.
+  \begin{equation*}
+    y^{(n)}_{t} \;\approx\; \frac{1}{n}\sum_{i=0}^{n-1}
+      \E_{t}\!\left[y^{(1)}_{t+i}\right]
+  \end{equation*}
+  Yet returns are \alert{predictable} -- evidence of time-varying risk premia:
+  \begin{enumerate}
+    \item \citet{cochrane2005}: a forward-rate factor (CP) predicts US returns,
+      but with no economic mechanism.
+    \item \citet{cieslak2015}: a \emph{cycle} factor (yields minus trend
+      inflation) predicts them through a macro-anchored mechanism.
+    \item \citet{dahlquist2013}: a \emph{global} factor predicts international
+      returns, implying integrated markets.
+  \end{enumerate}
+  \vfill
+  \textbf{The gap:} the cycle factor is established for the US -- does it extend
+  across countries and aggregate into a \emph{unified global cycle factor}?
+  \citep[cf.][]{bauer2020,zhang2021}
+\end{frame}
+
+% Research question (stated immediately after the one motivation slide)
+\begin{frame}{Research Question}
+  \begin{block}{Main Question}
+    Does the \citet{cieslak2015} cycle factor (CF) apply to international
+    bonds?
+  \end{block}
+  \textbf{Subquestions}
+  \begin{enumerate}
+    \item What is the role of the local CF in comparison to a GDP-weighted
+      global CF ($\GCF$)?
+    \item Does a global CF subsume the local CFs?
+    \item What is the role of an FX-adjusted global factor ($\FXGCF$) for a
+      USD investor?
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Recap: The Cycle factor framework}
+  Yields decompose into slow-moving \emph{trend inflation} and transitory
+  \emph{cycles} \citep{cieslak2015}:
+  \begin{equation*}
+    y^{(n)}_{i,t} \;=\; \alpha_{i,n} \;+\; \beta_{i,n}\,\pi^{e}_{i,t}
+      \;+\; \underbrace{c^{(n)}_{i,t}}_{\text{cycle}}
+  \end{equation*}
+  The cycles forecast one-year-ahead, duration-standardised,
+  maturity-averaged excess returns $\rxbar_{i,t+12}$.
+  \vfill
+  \textbf{Factor hierarchy}
+  \begin{enumerate}
+    \item \textbf{Local} $\CF_{i,t}$: fitted return forecast from
+      $c^{(1)}_{i,t}$ and the average cycle $\bar c_{i,t}$
+    \item \textbf{Global} $\GCF_{t} = \sum_{i} w_{i,t}\,\CF_{i,t}$:
+      the GDP-weighted average of the eleven local factors -- one common cycle
+      across the G10 \citep{dahlquist2013}
+    \item \textbf{FX-adjusted global}
+      $\FXGCF_{t} = \sum_{i} w_{i,t}\,\CF^{\mathrm{USD}}_{i,t}$: the same recipe
+      built \emph{bottom-up} on each country's \emph{USD} cycle factor,
+      GDP-weighted for an unhedged US investor
+  \end{enumerate}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\section{Research Design \& Data}
+
+% MTS requirement: one slide outlining the research design
+\begin{frame}{Research Design}
+  \textbf{Sample:} G10 markets, monthly zero-coupon yields, core CPI, FX spot
+  rates, and nominal GDP over 1994--2026.
+  \vfill
+  \textbf{Three empirical phases} (in-sample, Newey--West HAC inference)
+  \begin{itemize}
+    \item[\textbf{I}] Local predictability:
+      $\rxbar_{i,t+12}=\alpha_i+\beta_i\,\CF_{i,t}+\varepsilon$ per country
+    \item[\textbf{II}] Integration horse race:
+      $\rxbar_{i,t+12}=\alpha_i+\beta_i\,\CF^{\perp}_{i,t}
+        +\gamma_i\,\GCF_{t}+\varepsilon$
+    \item[\textbf{III}] USD investor:
+      $\rxbar^{\,\mathrm{USD}}_{i,t+12}$ on $\GCF_{t}$ vs.\ $\FXGCF_{t}$
+  \end{itemize}
+  \vfill
+  \textbf{Validation \& stress tests}
+  \begin{itemize}
+    \item Replication of \citet{cieslak2015} and \citet{dahlquist2013} on US /
+      international data before any extension
+    \item Fully-recursive out-of-sample evaluation
+      \citep[Campbell--Thompson $R^{2}_{\mathrm{oos}}$,][]{campbellthompson2008}
+    \item Robustness: crisis subsamples, rolling windows, CF vs. CP factor,
+      core vs. headline inflation
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Data \& Validation}
+  \begin{itemize}
+    \item \textbf{Universe:} G10 (BE, CA, FR, DE, IT, JP, NL, SE, CH, UK, US)
+    \item \textbf{Yields:} zero-coupon curves, maturities 1, 2, 4, 5, 9, 10
+      years (Bloomberg)
+    \item \textbf{Inflation:} core CPI (FRED)
+    \item \textbf{FX:}
+      spot against USD (Bloomberg)
+    \item \textbf{GDP:} nominal (LSEG)
+    \item \textbf{Frequency / span:} monthly, 1994--2026. Returns are
+      one-year-ahead, duration-standardised, and maturity-averaged
+  \end{itemize}
+  \vfill
+  \begin{block}{Replication as validation}
+    Before testing the factor internationally, we reproduce the published US results: Similar factor correlations, $R^2$ and conclusions for the local US cycle factor.
+  \end{block}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\section{Results}
+
+\begin{frame}{Phase I: Local Cycle factor works across the G10}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}
+        \item Sign pattern of \citet{cieslak2015} ($\gamma_{1}<0$ on the
+          1y cycle, $\gamma_{2}>0$ on the average cycle) in \textbf{all 11
+          markets}
+        \item Joint Wald rejects no-predictability at 1\% in 9 countries,
+          at 5\% in 10 (exception: Switzerland, $p=0.20$)
+        \item Pooled panel: $t=-10.7$ and $t=15.5$
+        \item In-sample $R^{2}$: 7\% (CH) to 34\% (NL), \textbf{average
+          25\%}, with the US at 33\%, matching the original study
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \includegraphics[width=\linewidth]{figures/mr_f1_r2_phase1.pdf}
+      {\scriptsize In-sample $R^{2}$ of $\rxbar_{i,t+12}\sim\CF_{i,t}$ by
+        country.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Phase II: One global factor summarises eleven local ones}
+  \centering
+  \includegraphics[width=0.62\linewidth]{figures/s5_gcf.pdf}
+  \begin{itemize}
+    \item $\GCF_{t}$ (GDP-weighted) tracks the centre of mass of the eleven
+      local factors
+    \item On its own, the global factor explains as much as the eleven local
+      ones: both average an $R^{2}$ of \textbf{25\%}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Phase II: GCF largely subsumes the local}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/mr_f2_hr_tstats.pdf}
+      {\scriptsize HAC $t$-statistics in the horse race
+        $\rxbar\sim\CF^{\perp}+\GCF$. Dashed lines $\pm1.96$.}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item $\GCF$ significant in \textbf{every} market
+          ($t$ between 2.1 and 4.5)
+        \item Orthogonalised local factor survives in only
+          \textbf{3 of 11} markets: Italy ($t=3.7$), Netherlands ($t=3.3$),
+          Belgium ($t=2.4$)
+        \item Where subsumed, adding $\CF^{\perp}$ lifts $R^{2}$ only
+          trivially
+        \item Integration is strong but not complete \citep{dahlquist2013}:
+          the three holdouts are all euro-area, where country-specific
+          sovereign-spread risk likely keeps a local signal alive
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Phase III: USD investor}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/pres_usd_drop.pdf}
+      {\scriptsize In-sample $R^{2}$ on $\GCF$: local-currency $\rxbar$ vs.\
+        the dollar return $\rxbar^{\,\mathrm{USD}}$, by country.}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item Average $R^{2}$ collapses from \textbf{25\% (local currency) to
+          8\% (USD returns)}
+        \item Significance lost across the euro area, Switzerland, and Japan, but
+          survives in US (33\%), Canada ($t=2.9$), and marginally SE and UK
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Phase III: The FX adjustment adds distinct information}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \includegraphics[width=\linewidth]{figures/pres_usd_r2.pdf}\\[0.4ex]
+      \includegraphics[width=\linewidth]{figures/mr_f4_gcf_fxgcf.pdf}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      {\scriptsize \textbf{Top:} USD-investor in-sample $R^{2}$ --
+        local-currency $\rxbar\!\sim\!\GCF$, dollar
+        $\rxbar^{\,\mathrm{USD}}\!\sim\!\GCF$, and dollar
+        $\rxbar^{\,\mathrm{USD}}\!\sim\!\FXGCF$. \textbf{Bottom:} $\GCF_{t}$
+        vs.\ $\FXGCF_{t}$ over time.}\\[1ex]
+      \begin{itemize}
+        \item $\FXGCF$ raises the USD-investor $R^{2}$ in \textbf{10 of 11}
+          markets and the $t$-statistic in \textbf{9 of 11}
+        \item Average $R^{2}$ \textbf{$8\%\to14\%$}: the bottom-up FX adjustment
+          nearly doubles the dollar-investor fit
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{OOS regressions}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/pres_oos_r2.pdf}
+      {\scriptsize Campbell--Thompson $R^{2}_{\mathrm{oos}}$ by country: local
+        $\CF$, global $\GCF$, and the USD investor on $\GCF$ vs.\ $\FXGCF$.}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item \textbf{Local CF:} pooled $R^{2}_{\mathrm{oos}}=-0.08$ and
+          beats the mean in only 2 of 11 markets
+        \item \textbf{Global $\GCF$:} pooled $\mathbf{+0.05}$, positive in
+          \textbf{10 of 11} markets, clearest evidence of integration
+        \item \textbf{USD investor:} $\GCF$ at $-0.07$; the bottom-up $\FXGCF$
+          turns it positive ($+0.019$, 6 of 11 markets)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Economic value: Timing a global bond portfolio}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/strat_f1_cumret.pdf}\\[0.2ex]
+      {\scriptsize Currency-hedged $\GCF$ investor (local-currency returns).}\\[0.6ex]
+      \includegraphics[width=\linewidth]{figures/pres_usd_cumret.pdf}\\[0.2ex]
+      {\scriptsize Unhedged USD investor, timed by $\FXGCF$ vs.\ buy-and-hold.}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Investable product:} one GDP-weighted, 10y G10 government-bond
+      basket, timed by a mean--variance rule on the recursive factor.
+      \vfill
+      \textbf{$\GCF$: currency-hedged}\\
+      {\scriptsize (local-currency returns, FX hedged with forwards)}
+      \begin{itemize}
+        \item $R^{2}_{\mathrm{oos}}=0.125$, Sharpe \textbf{0.31$\to$0.38}
+        \item CER ($\gamma=5$): \textbf{+0.51\%/yr} vs.\ buy-and-hold
+      \end{itemize}
+      \textbf{$\FXGCF$: same basket, unhedged in USD}
+      \begin{itemize}
+        \item As a single global-portfolio timing signal it lags:
+          $R^{2}_{\mathrm{oos}}=-0.01$, Sharpe \textbf{0.20$\to$0.19}
+        \item The bottom-up factor is strong \emph{cross-sectionally}, not at
+          timing the aggregate dollar return
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Robustness}
+  \textbf{$\GCF$ survives tests}
+  \begin{itemize}
+    \item The GDP-weighted global cycle factor: in-sample and out-of-sample,
+      across subsamples, with core inflation, and
+      against the Cochrane--Piazzesi forward-rate factor
+  \end{itemize}
+  \vfill
+  \textbf{Fragile findings}
+  \begin{itemize}
+    \item Local-factor predictability does not survive real-time evaluation
+    \item USD-investor predictability is far weaker (in-sample $R^{2}$ falls
+      $25\%\to8\%$) and is negative out of sample for the unadjusted factor
+    \item The bottom-up $\FXGCF$ edge is in-sample and cross-sectional; out of
+      sample it is fragile -- positive only under the expanding 5y window,
+      negative under shorter/longer minimums and the rolling-10y scheme
+  \end{itemize}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+  \begin{block}{Does the \citet{cieslak2015} cycle factor apply to
+      international bonds? Yes.}
+    Correct sign structure in all 11 G10 markets, with an average in-sample
+    $R^{2}$ of 25\% that holds across the maturity spectrum (1--10 years).
+  \end{block}
+  \begin{enumerate}
+    \item \textbf{Local vs.\ global:} one GDP-weighted global factor matches
+      eleven national factors and is significant everywhere.
+    \item \textbf{Subsumption:} the global factor drives out the local one in
+      8 of 11 markets, and predictability is overwhelmingly global. Only
+      the global factor predicts \emph{out of sample}.
+    \item \textbf{USD investor:} currency risk erodes $\sim$2/3 of the
+      predictive power. Built \emph{bottom-up}, the $\FXGCF$ nearly doubles the
+      dollar $R^{2}$ ($8\%\to14\%$) and is \alert{genuinely distinct} (corr
+      \textbf{0.78} with $\GCF$, not the $0.99$ of the top-down version) --
+      though its out-of-sample timing value is limited.
+  \end{enumerate}
+  \vfill
+  \textbf{Contribution:} a single global cycle factor for the G10, a new
+  FX-adjusted version of it, and real-time evidence (including the timing
+  strategy) that bond-return predictability is mostly global and rooted in
+  inflation trends.
+\end{frame}
+
+\begin{frame}{Bibliography}
+  \small
+  \bibliography{references}
+\end{frame}
+
+% --------------------------------------------------------------------------
+\appendix
+\section{Appendix}
+
+% --------------------------------------------------------------------------
+% Data and factor-construction figures (from plots.R, copied into figures/).
+\begin{frame}{Appendix: Zero coupon yield data}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/s1_yield_ts.pdf}\\
+      {\scriptsize Zero-coupon yields by country and maturity, 1994--2026.}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/s1_yield_curve_avg.pdf}\\
+      {\scriptsize Average yield curve over the full sample.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Appendix: Trend Inflation}
+  \centering
+  \includegraphics[width=0.78\linewidth]{figures/s2_inflation_trend.pdf}\\[0.5ex]
+  {\scriptsize Year-on-year core CPI and the discounted moving-average trend
+    inflation ($v=0.987$, $M=120$ months) that anchors the yield level.}
+\end{frame}
+
+\begin{frame}{Appendix: From Yields to Cycles}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/s2_yield_decomp.pdf}\\
+      {\scriptsize Nominal yield against its trend component. The vertical gap
+        is the cycle $c$.}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/s2_cycles_by_country.pdf}\\
+      {\scriptsize Cycle component $c^{(n)}_{i,t}$, the residual of yields on
+        trend inflation.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Appendix: The Local Cycle factors}
+  \centering
+  \includegraphics[width=0.78\linewidth]{figures/s4_local_cf.pdf}\\[0.5ex]
+  {\scriptsize Local cycle factor $\CF_{i,t}$ by country, the fitted return
+    forecast from the 1-year cycle and the average cycle.}
+\end{frame}
+
+\begin{frame}{Appendix: Cycle Factor by Maturity}
+  \centering
+  \input{tables/cp_t4}
+\end{frame}
+
+\begin{frame}{Appendix: Phase I Country Table}
+  \centering
+  \input{tables/mr_t1_phase1}
+\end{frame}
+
+\begin{frame}{Appendix: Phase II Horse-Race Table}
+  \centering
+  \input{tables/mr_t2_phase2}
+\end{frame}
+
+\begin{frame}{Appendix: Phase II $R^{2}$ Ladder}
+  \centering
+  \includegraphics[width=0.85\linewidth]{figures/mr_f2_r2_ladder.pdf}
+\end{frame}
+
+\begin{frame}{Appendix: Phase III USD-Investor Table}
+  \centering
+  \input{tables/mr_t3_phase3}
+\end{frame}
+
+\begin{frame}{Appendix: Out-of-Sample Summary Table}
+  \centering
+  \input{tables/mr_t4_oos}
+\end{frame}
+
+\begin{frame}{Appendix: Strategy performance}
+  \centering
+  \input{tables/strat_t1_performance}
+\end{frame}
+
+\begin{frame}{Appendix: Robustness subsample stability}
+  \centering
+  \includegraphics[height=0.40\textheight]{figures/rob_f1_oos_sub.pdf}\\[0.5ex]
+  \includegraphics[height=0.40\textheight]{figures/rob_f2_oos_scheme.pdf}
+\end{frame}
+
+\begin{frame}{Appendix: G10 Countries}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item Belgium
+        \item Canada
+        \item France
+        \item Germany
+        \item Italy
+        \item Japan
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item Netherlands
+        \item Sweden
+        \item Switzerland
+        \item United Kingdom
+        \item United States
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\end{document}

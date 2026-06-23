@@ -71,45 +71,40 @@
 % Motivation slide (mirrors the proposal's opener): build from the EH baseline
 % and the predictability literature to the international gap that the RQ fills.
 \begin{frame}{Motivation}
-  \textbf{The expectation hypothesis (EH):} a long yield is the average
-  expected future short rate, so bond \emph{excess} returns should be
-  unpredictable.
+  \textbf{Expectation hypothesis (EH):} a long yield is the average expected
+  future short rate, so bond \emph{excess} returns should be unpredictable.
   \begin{equation*}
     y^{(n)}_{t} \;\approx\; \frac{1}{n}\sum_{i=0}^{n-1}
       \E_{t}\!\left[y^{(1)}_{t+i}\right]
   \end{equation*}
-  Yet the \alert{evidence finds them predictable}, consistent with time-varying risk premia:
+  Yet returns are \alert{predictable} -- evidence of time-varying risk premia:
   \begin{enumerate}
-    \item \citet{cochrane2005}: a tent-shaped forward-rate factor (CP) strongly
-      predicts US Treasury returns, but offers no economic mechanism.
-    \item \citet{cieslak2015}: splitting yields into \emph{trend inflation} and
-      \emph{cycles}, the cycle factor predicts returns through a macro-anchored
-      mechanism.
-    \item \citet{dahlquist2013}: a \emph{global} CP factor predicts international
-      returns better than local factors alone, implying integrated bond markets.
+    \item \citet{cochrane2005}: a forward-rate factor (CP) predicts US returns,
+      but with no economic mechanism.
+    \item \citet{cieslak2015}: a \emph{cycle} factor (yields minus trend
+      inflation) predicts them through a macro-anchored mechanism.
+    \item \citet{dahlquist2013}: a \emph{global} factor predicts international
+      returns, implying integrated markets.
   \end{enumerate}
   \vfill
-  \textbf{The gap:} the macro-anchored cycle factor is established for the US.
-  Whether it extends across countries and aggregates into a \emph{unified global
-  cycle factor} is open \citep[cf.][]{bauer2020,zhang2021}.
+  \textbf{The gap:} the cycle factor is established for the US -- does it extend
+  across countries and aggregate into a \emph{unified global cycle factor}?
+  \citep[cf.][]{bauer2020,zhang2021}
 \end{frame}
 
 % Research question (stated immediately after the one motivation slide)
 \begin{frame}{Research Question}
   \begin{block}{Main Question}
     Does the \citet{cieslak2015} cycle factor (CF) apply to international
-    bonds?\\
-    {\small\color{gray} If their propositions hold, the mechanism found in the
-    US market should be fundamental to bond markets in other developed
-    countries.}
+    bonds?
   \end{block}
   \textbf{Subquestions}
   \begin{enumerate}
     \item What is the role of the local CF in comparison to a GDP-weighted
       global CF ($\GCF$)?
-    \item Does a global CF subsume the predictive power of a local CF?
-    \item Does currency risk break the predictability for a USD investor, and
-      does an FX-adjusted global factor ($\FXGCF$) restore it?
+    \item Does a global CF subsume the local CFs?
+    \item What is the role of an FX-adjusted global factor ($\FXGCF$) for a
+      USD investor?
   \end{enumerate}
 \end{frame}
 
@@ -128,9 +123,12 @@
     \item \textbf{Local} $\CF_{i,t}$: fitted return forecast from
       $c^{(1)}_{i,t}$ and the average cycle $\bar c_{i,t}$
     \item \textbf{Global} $\GCF_{t} = \sum_{i} w_{i,t}\,\CF_{i,t}$:
-      GDP-weighted shared risk \citep{dahlquist2013}
-    \item \textbf{FX-adjusted global} $\FXGCF_{t}$: built on the GDP-weighted
-      average \emph{USD} return for an unhedged US investor
+      the GDP-weighted average of the eleven local factors -- one common cycle
+      across the G10 \citep{dahlquist2013}
+    \item \textbf{FX-adjusted global}
+      $\FXGCF_{t} = \sum_{i} w_{i,t}\,\CF^{\mathrm{USD}}_{i,t}$: the same recipe
+      built \emph{bottom-up} on each country's \emph{USD} cycle factor,
+      GDP-weighted for an unhedged US investor
   \end{enumerate}
 \end{frame}
 
@@ -245,8 +243,9 @@
 \begin{frame}{Phase III: USD investor}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
-      \includegraphics[width=\linewidth]{figures/mr_f3_usd_r2.pdf}
-      {\scriptsize USD-investor in-sample $R^{2}$: $\GCF$ vs.\ $\FXGCF$.}
+      \includegraphics[width=\linewidth]{figures/pres_usd_drop.pdf}
+      {\scriptsize In-sample $R^{2}$ on $\GCF$: local-currency $\rxbar$ vs.\
+        the dollar return $\rxbar^{\,\mathrm{USD}}$, by country.}
     \end{column}
     \begin{column}{0.48\textwidth}
       \begin{itemize}
@@ -259,20 +258,23 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Phase III: The FX adjustment only helps modestly}
+\begin{frame}{Phase III: The FX adjustment adds distinct information}
   \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.54\textwidth}
+      \includegraphics[width=\linewidth]{figures/pres_usd_r2.pdf}\\[0.4ex]
       \includegraphics[width=\linewidth]{figures/mr_f4_gcf_fxgcf.pdf}
-      {\scriptsize $\GCF_{t}$ and $\FXGCF_{t}$: correlation $0.99$.}
     \end{column}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.44\textwidth}
+      {\scriptsize \textbf{Top:} USD-investor in-sample $R^{2}$ --
+        local-currency $\rxbar\!\sim\!\GCF$, dollar
+        $\rxbar^{\,\mathrm{USD}}\!\sim\!\GCF$, and dollar
+        $\rxbar^{\,\mathrm{USD}}\!\sim\!\FXGCF$. \textbf{Bottom:} $\GCF_{t}$
+        vs.\ $\FXGCF_{t}$ over time.}\\[1ex]
       \begin{itemize}
         \item $\FXGCF$ raises the USD-investor $R^{2}$ in \textbf{10 of 11}
-          markets and the $t$-statistic in every foreign market
-        \item Average $R^{2}$: $8\%\to10\%$, uniform in direction but small in
-          magnitude
-        \item $\FXGCF$ and $\GCF$ correlate \textbf{0.99} here (far above
-          the $\approx0.50$ in \citet{dahlquist2013})
+          markets and the $t$-statistic in \textbf{9 of 11}
+        \item Average $R^{2}$ \textbf{$8\%\to14\%$}: the bottom-up FX adjustment
+          nearly doubles the dollar-investor fit
       \end{itemize}
     \end{column}
   \end{columns}
@@ -281,9 +283,9 @@
 \begin{frame}{OOS regressions}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
-      \includegraphics[width=\linewidth]{figures/mr_f5_oos_r2.pdf}
-      {\scriptsize Campbell--Thompson $R^{2}_{\mathrm{oos}}$ vs.\ the
-        recursive prevailing mean, by country.}
+      \includegraphics[width=\linewidth]{figures/pres_oos_r2.pdf}
+      {\scriptsize Campbell--Thompson $R^{2}_{\mathrm{oos}}$ by country: local
+        $\CF$, global $\GCF$, and the USD investor on $\GCF$ vs.\ $\FXGCF$.}
     \end{column}
     \begin{column}{0.48\textwidth}
       \begin{itemize}
@@ -291,8 +293,8 @@
           beats the mean in only 2 of 11 markets
         \item \textbf{Global $\GCF$:} pooled $\mathbf{+0.05}$, positive in
           \textbf{10 of 11} markets, clearest evidence of integration
-        \item \textbf{USD investor:} $\GCF$ at $-0.07$, while $\FXGCF$ turns it
-          marginally positive ($+0.002$, 9 of 11 markets)
+        \item \textbf{USD investor:} $\GCF$ at $-0.07$; the bottom-up $\FXGCF$
+          turns it positive ($+0.019$, 6 of 11 markets)
       \end{itemize}
     \end{column}
   \end{columns}
@@ -301,9 +303,10 @@
 \begin{frame}{Economic value: Timing a global bond portfolio}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
-      \includegraphics[width=\linewidth]{figures/strat_f1_cumret.pdf}
-      {\scriptsize Out-of-sample cumulative returns, currency-hedged $\GCF$
-        investor, 2005--2024.}
+      \includegraphics[width=\linewidth]{figures/strat_f1_cumret.pdf}\\[0.2ex]
+      {\scriptsize Currency-hedged $\GCF$ investor (local-currency returns).}\\[0.6ex]
+      \includegraphics[width=\linewidth]{figures/pres_usd_cumret.pdf}\\[0.2ex]
+      {\scriptsize Unhedged USD investor, timed by $\FXGCF$ vs.\ buy-and-hold.}
     \end{column}
     \begin{column}{0.48\textwidth}
       \textbf{Investable product:} one GDP-weighted, 10y G10 government-bond
@@ -317,8 +320,10 @@
       \end{itemize}
       \textbf{$\FXGCF$: same basket, unhedged in USD}
       \begin{itemize}
-        \item $R^{2}_{\mathrm{oos}}=0.120$, Sharpe \textbf{0.20$\to$0.24}
-        \item One-year FX risk caps the Sharpe far below the hedged investor
+        \item As a single global-portfolio timing signal it lags:
+          $R^{2}_{\mathrm{oos}}=-0.01$, Sharpe \textbf{0.20$\to$0.19}
+        \item The bottom-up factor is strong \emph{cross-sectionally}, not at
+          timing the aggregate dollar return
       \end{itemize}
     \end{column}
   \end{columns}
@@ -337,8 +342,9 @@
     \item Local-factor predictability does not survive real-time evaluation
     \item USD-investor predictability is far weaker (in-sample $R^{2}$ falls
       $25\%\to8\%$) and is negative out of sample for the unadjusted factor
-    \item The $\FXGCF$ edge is concentrated post-crisis, fragile dependent on the expanding window and does not survive a
-      rolling estimation window
+    \item The bottom-up $\FXGCF$ edge is in-sample and cross-sectional; out of
+      sample it is fragile -- positive only under the expanding 5y window,
+      negative under shorter/longer minimums and the rolling-10y scheme
   \end{itemize}
 \end{frame}
 
@@ -348,8 +354,8 @@
 \begin{frame}{Conclusion}
   \begin{block}{Does the \citet{cieslak2015} cycle factor apply to
       international bonds? Yes.}
-    Correct sign structure in all 11 G10 markets, average in-sample
-    $R^{2}=25\%$, at every maturity.
+    Correct sign structure in all 11 G10 markets, with an average in-sample
+    $R^{2}$ of 25\% that holds across the maturity spectrum (1--10 years).
   \end{block}
   \begin{enumerate}
     \item \textbf{Local vs.\ global:} one GDP-weighted global factor matches
@@ -358,8 +364,10 @@
       8 of 11 markets, and predictability is overwhelmingly global. Only
       the global factor predicts \emph{out of sample}.
     \item \textbf{USD investor:} currency risk erodes $\sim$2/3 of the
-      predictive power. The novel $\FXGCF$ restores it in direction but only
-      partially, as it is near-collinear (0.99) with $\GCF$ in this sample.
+      predictive power. Built \emph{bottom-up}, the $\FXGCF$ nearly doubles the
+      dollar $R^{2}$ ($8\%\to14\%$) and is \alert{genuinely distinct} (corr
+      \textbf{0.78} with $\GCF$, not the $0.99$ of the top-down version) --
+      though its out-of-sample timing value is limited.
   \end{enumerate}
   \vfill
   \textbf{Contribution:} a single global cycle factor for the G10, a new

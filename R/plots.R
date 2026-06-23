@@ -5,7 +5,7 @@
 # integration, novel FX-adjusted global factor).
 #
 # Run from the project root. This sources `oos.R`, which itself sources
-# `data preperation.R` (note the space in the filename). After sourcing,
+# `data_preparation.R`. After sourcing,
 # the workspace contains the in-sample factor objects (yields_long,
 # inflation_long, cycle, cycle_avg, reg_data, gcf, fxgcf, gdp, fx_long,
 # us_data) and their fully-recursive OOS counterparts (cycle_oos,
@@ -16,7 +16,7 @@
 # to disk with save_all_plots().
 # =============================================================
 
-source("oos.R")  # transitively sources data preperation.R
+source("R/oos.R")  # transitively sources data_preparation.R
 
 library(ggplot2)
 library(dplyr)
@@ -37,59 +37,16 @@ library(lmtest)
 
 plots <- list()
 
-theme_thesis <- theme_bw(base_size = 11) +
-  theme(
-    strip.background = element_rect(fill = "grey92", colour = NA),
-    strip.text       = element_text(face = "bold"),
-    legend.position  = "bottom",
-    panel.grid.minor = element_blank(),
-    plot.title       = element_text(face = "bold")
-  )
-
 # Shared colour scheme (col_pri/col_sec/col_ter/col_qua, mat_palette,
 # country_palette) -- see thesis_palette.R for the role of each colour.
-source("thesis_palette.R")
+source("R/thesis_palette.R")
+source("R/thesis_utils.R")  # shared analysis helpers (hac_fit, theme_thesis, ...)
 
 # Country-month panel with all factors side by side.
 panel <- reg_data %>%
   left_join(gcf   %>% select(ym, GCF),              by = "ym") %>%
   left_join(gcp   %>% select(ym, GCP),              by = "ym") %>%
   left_join(fxgcf %>% select(ym, FXGCF),            by = "ym")
-
-# -------------------------------------------------------------
-# HAC (Newey-West) predictive regression helper.
-# 12-month overlapping returns -> lag = ceil(max(1.5*h, 1.3*sqrt(T))).
-# Returns one tidy row per coefficient (estimate, HAC SE, t, R^2).
-# -------------------------------------------------------------
-hac_fit <- function(df, fml, h = 12, min_obs = 24) {
-  fit <- tryCatch(lm(fml, data = df, na.action = na.omit),
-                  error = function(e) NULL)
-  if (is.null(fit)) return(NULL)
-  Tn <- stats::nobs(fit)
-  if (Tn < min_obs) return(NULL)
-  L <- ceiling(max(1.5 * h, 1.3 * sqrt(Tn)))
-  V <- tryCatch(sandwich::NeweyWest(fit, lag = L, prewhite = FALSE, adjust = TRUE),
-                error = function(e) sandwich::vcovHC(fit))
-  ct <- lmtest::coeftest(fit, vcov. = V)
-  tibble::tibble(
-    term     = rownames(ct),
-    estimate = ct[, 1],
-    std_err  = ct[, 2],
-    t        = ct[, 3],
-    r_sq     = summary(fit)$r.squared,
-    n        = Tn
-  )
-}
-
-run_by_country <- function(df, fml) {
-  split(df, df$country) %>%
-    purrr::imap_dfr(function(d, cty) {
-      res <- hac_fit(d, fml)
-      if (is.null(res)) return(NULL)
-      res$country <- cty
-      res
-    })
-}
 
 # Predictive regressions (proposal eq 18-22).
 tab18 <- run_by_country(panel, rx_t12     ~ CF)         # local: rx ~ CF
@@ -124,17 +81,6 @@ panel_perp <- panel %>%
     d
   }) %>%
   ungroup()
-
-# Like hac_fit but returns the fit + HAC vcov for downstream Wald tests.
-hac_fit_full <- function(df, fml, h = 12, min_obs = 24) {
-  fit <- tryCatch(lm(fml, data = df, na.action = na.omit),
-                  error = function(e) NULL)
-  if (is.null(fit) || stats::nobs(fit) < min_obs) return(NULL)
-  L <- ceiling(max(1.5 * h, 1.3 * sqrt(stats::nobs(fit))))
-  V <- tryCatch(sandwich::NeweyWest(fit, lag = L, prewhite = FALSE, adjust = TRUE),
-                error = function(e) sandwich::vcovHC(fit))
-  list(fit = fit, vcov = V, T_obs = stats::nobs(fit), lag = L)
-}
 
 hr_results <- panel_perp %>%
   split(.$country) %>%

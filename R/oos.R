@@ -16,12 +16,12 @@
 # backward-looking (cp_trend uses a trailing 120m DMA), so it is
 # reused as-is.
 #
-# Run from project root; sources `data preperation.R` (which leaves
+# Run from project root; sources `data_preparation.R` (which leaves
 # `yields_long`, `inflation_long`, `reg_data`, `gcf`, `fxgcf`, `gdp`
 # in the workspace).
 # =============================================================
 
-source("data preperation.R")
+source("R/data_preparation.R")
 
 library(dplyr)
 library(tidyr)
@@ -206,54 +206,67 @@ gcp_oos <- reg_data_oos %>%
 #    minimum as CF_oos / GCF_oos, so FXGCF_oos shares their real-time
 #    burn-in (first forecast ~5y after the recursive cycles begin).
 # -------------------------------------------------------------
-cat("oos.R: building FXGCF_oos (recursive DH top-down) ...\n")
+cat(sprintf("oos.R: building FXGCF_oos [method = %s] ...\n", .FXGCF_METHOD))
 
-agg_oos <- reg_data_oos %>%
-  filter(!is.na(cycle_1y_oos), !is.na(c_bar_oos), !is.na(gdp_val)) %>%
-  group_by(ym) %>%
-  mutate(
-    gdp_total = sum(gdp_val, na.rm = TRUE),
-    w_oos     = gdp_val / gdp_total
-  ) %>%
-  ungroup()
-
-glob_pred_oos <- agg_oos %>%
-  group_by(ym, date) %>%
-  summarise(
-    cyc1_bar_oos = sum(w_oos * cycle_1y_oos, na.rm = TRUE),
-    cbar_bar_oos = sum(w_oos * c_bar_oos,    na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  arrange(ym)
-
-# rx_USD_bar_t12 aggregated over the same OOS-eligible set (renormalised
-# weights to ensure consistency when rx_USD_t12 is NA at the sample tail).
-rx_usd_bar_oos <- agg_oos %>%
-  filter(!is.na(rx_USD_t12)) %>%
-  group_by(ym) %>%
-  mutate(
-    gdp_total = sum(gdp_val, na.rm = TRUE),
-    w_oos     = gdp_val / gdp_total
-  ) %>%
-  group_by(ym, date) %>%
-  summarise(
-    rx_USD_bar_t12 = sum(w_oos * rx_USD_t12, na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  arrange(ym)
-
-fxgcf_oos_data <- glob_pred_oos %>%
-  left_join(rx_usd_bar_oos, by = c("ym", "date")) %>%
-  arrange(ym)
-
-fxgcf_oos_data$FXGCF_oos <- oos_predict(
-  fxgcf_oos_data,
-  rx_USD_bar_t12 ~ cyc1_bar_oos + cbar_bar_oos,
-  min_train = 60, h = 12
-)
-
-fxgcf_oos <- fxgcf_oos_data %>%
-  select(ym, date, cyc1_bar_oos, cbar_bar_oos, FXGCF_oos)
+if (.FXGCF_METHOD == "bu_gdp") {
+  # Bottom-up: recursive per-country USD cycle factor CF_USD_oos (rx_USD on the
+  # recursive cycles), then GDP-weighted -- the GCF_oos recipe on dollar returns.
+  rdo_usd <- reg_data_oos %>%
+    filter(!is.na(cycle_1y_oos), !is.na(c_bar_oos)) %>%
+    group_by(country) %>%
+    arrange(ym, .by_group = TRUE) %>%
+    group_modify(~ {
+      .x$CF_USD_oos <- oos_predict(.x, rx_USD_t12 ~ cycle_1y_oos + c_bar_oos,
+                                   min_train = 60, h = 12)
+      .x
+    }) %>%
+    ungroup()
+  fxgcf_oos <- rdo_usd %>%
+    filter(!is.na(CF_USD_oos), !is.na(gdp_val)) %>%
+    group_by(ym) %>%
+    mutate(w_oos = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
+    group_by(ym, date) %>%
+    summarise(FXGCF_oos = sum(w_oos * CF_USD_oos, na.rm = TRUE), .groups = "drop") %>%
+    arrange(ym)
+} else {
+  # Top-down: recursive DH-style regression on the (GDP- or 1/n-)weighted
+  # aggregates, refit each t.
+  .eq <- (.FXGCF_METHOD == "td_eq")
+  agg_oos <- reg_data_oos %>%
+    filter(!is.na(cycle_1y_oos), !is.na(c_bar_oos), !is.na(gdp_val)) %>%
+    group_by(ym) %>%
+    mutate(w_oos = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
+    ungroup()
+  glob_pred_oos <- agg_oos %>%
+    group_by(ym, date) %>%
+    summarise(
+      cyc1_bar_oos = if (.eq) mean(cycle_1y_oos) else sum(w_oos * cycle_1y_oos, na.rm = TRUE),
+      cbar_bar_oos = if (.eq) mean(c_bar_oos)    else sum(w_oos * c_bar_oos,    na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    arrange(ym)
+  # rx_USD_bar_t12 aggregated over the same OOS-eligible set (renormalised
+  # weights to ensure consistency when rx_USD_t12 is NA at the sample tail).
+  rx_usd_bar_oos <- agg_oos %>%
+    filter(!is.na(rx_USD_t12)) %>%
+    group_by(ym) %>%
+    mutate(w_oos = gdp_val / sum(gdp_val, na.rm = TRUE)) %>%
+    group_by(ym, date) %>%
+    summarise(
+      rx_USD_bar_t12 = if (.eq) mean(rx_USD_t12) else sum(w_oos * rx_USD_t12, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    arrange(ym)
+  fxgcf_oos_data <- glob_pred_oos %>%
+    left_join(rx_usd_bar_oos, by = c("ym", "date")) %>%
+    arrange(ym)
+  fxgcf_oos_data$FXGCF_oos <- oos_predict(
+    fxgcf_oos_data,
+    rx_USD_bar_t12 ~ cyc1_bar_oos + cbar_bar_oos,
+    min_train = 60, h = 12
+  )
+  fxgcf_oos <- fxgcf_oos_data %>% select(ym, date, FXGCF_oos)
+}
 
 # -------------------------------------------------------------
 # 6. panel_oos: country-month panel with all OOS factors side by side
