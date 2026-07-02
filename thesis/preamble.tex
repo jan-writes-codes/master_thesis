@@ -40,9 +40,12 @@
 \usepackage{enumitem}
 
 % --- References -------------------------------------------------------------
-\usepackage[round, authoryear]{natbib}
+% APA citation style via apacite; the natbibapa option keeps the natbib
+% commands (\citet, \citep) used throughout the chapters. Per the apacite
+% documentation, apacite is loaded after hyperref; cleveref stays last.
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+\usepackage[natbibapa]{apacite}
 \usepackage[capitalise, noabbrev]{cleveref}
 
 % --- Notation macros (keep text consistent with the R implementation) -------

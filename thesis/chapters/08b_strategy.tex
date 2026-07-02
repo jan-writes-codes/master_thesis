@@ -1,6 +1,6 @@
-% Ch. Economic Value (~4-6 pp). Turns the OOS result of Ch.7 into a real-time
-% trading strategy for a global bond investor. Exhibits from strategy.R.
-\chapter{Economic Value of the Global Cycle Factor}
+% Ch. Portfolio Construction. Turns the OOS result of the Results chapter into
+% a real-time trading strategy for a global bond investor. Exhibits from strategy.R.
+\chapter{Portfolio Construction}
 \label{ch:strategy}
 
 \Cref{sec:res-oos} established the one statistical fact that matters for an
@@ -13,7 +13,7 @@ out-of-sample market-timing strategy around the global cycle factor and scoring
 it against a passive benchmark. The exercise is deliberately self-contained: it
 uses only the recursive factor and forecasts of \Cref{sec:meth-oos}, takes no
 position that an investor could not have taken in real time, and is implemented
-in \texttt{strategy.R}.
+in \texttt{strategy.R} and \texttt{strategy\_ext.R}.
 
 % ===========================================================================
 \section{Strategy Design}
@@ -57,6 +57,57 @@ as is; the certainty-equivalent (CER) return is reported at equal average
 exposure across strategies so that the variance penalty is comparable.
 
 % ===========================================================================
+\section{Implementation}
+\label{sec:strat-implementation}
+
+This section makes the mapping from signal to position explicit. At the end of
+each month $t$ the investor executes five steps, each using only information
+available at $t$.
+
+\begin{enumerate}[label=(\roman*), itemsep=2pt]
+  \item \emph{Update the signal.} The entire generated-regressor chain is
+    re-estimated on data through $t$: trend inflation \eqref{eq:trendinf} is
+    extended by the latest core-CPI observation (it is backward-looking by
+    construction); the yield--cycle decomposition \eqref{eq:decomp} is re-fit
+    for every country--maturity pair; the local factor regressions
+    \eqref{eq:cf-reg} are re-fit using only excess-return outcomes realised by
+    $t$ (a twelve-month outcome lag, so the last usable observation is dated
+    $t-12$); and the local factors are aggregated with the GDP weights
+    \eqref{eq:gcf} into the recursive global factor $\GCF^{\mathrm{oos}}_{t}$.
+    Every layer requires a minimum training history of sixty months, which
+    produces the five-year burn-in described in \Cref{sec:meth-oos}.
+  \item \emph{Form the return forecast.} The forecasting regression
+    $\rx_{t+12}=a+b\,\GCF^{\mathrm{oos}}_{t}+\varepsilon$ is re-estimated by
+    OLS on the same lag-respecting training sample, and the forecast is
+    $\widehat{\E}_{t}[\rx_{t+12}]=\hat a_{t}+\hat b_{t}\,\GCF^{\mathrm{oos}}_{t}$.
+  \item \emph{Estimate the risk.} The variance $\widehat{\sigma}^{2}_{t}$ is
+    the sample variance of the portfolio's excess returns realised by $t$,
+    computed on an expanding window with the same twelve-month outcome lag.
+  \item \emph{Set the position.} The target weight is the mean--variance
+    exposure \eqref{eq:strat-weight}, truncated at zero (long-only): the
+    strategy de-risks into cash when the signal implies a negative premium but
+    never shorts the global bond portfolio. For reporting, each strategy's
+    weight path is rescaled to an average exposure of one, which leaves the
+    Sharpe ratio unchanged and makes the variance penalty in the CER
+    comparable across strategies.
+  \item \emph{Rebalance.} The portfolio is rebalanced to the target weight
+    once a month. The one-way turnover of the month is
+    $|w_{t}-w_{t-1}|$ times the portfolio notional; because the global cycle
+    factor is highly persistent, target weights move slowly and turnover is
+    low, a property quantified in \Cref{sec:strat-costs}.
+\end{enumerate}
+
+Two implementation details deserve emphasis. First, no step involves a choice
+fitted to the evaluation sample: the risk-aversion parameter enters only
+through the reported CER, the truncation at zero is imposed a priori, and the
+sixty-month minimum training window is inherited from the out-of-sample
+protocol of \Cref{sec:meth-oos} rather than tuned. Second, the strategy is
+deliberately the \emph{simplest} implementation consistent with the evidence:
+one asset, one signal, one linear forecasting regression. Anything the
+strategy earns is therefore attributable to the real-time information content
+of the global cycle factor, not to construction complexity.
+
+% ===========================================================================
 \section{Performance}
 \label{sec:strat-performance}
 
@@ -87,9 +138,7 @@ bond-market drawdowns rather than by amplifying the good years.
 \Cref{fig:strat-exposure} makes the mechanism explicit---the global cycle factor
 cuts bond exposure when it signals a low risk premium and restores it when the
 signal turns favourable, whereas the mean-timing investor holds a nearly constant
-position. The gains are achieved with low turnover, because the global cycle
-factor is highly persistent, so realistic transaction costs would erode little of
-the advantage.
+position.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.85\linewidth]{figures/strat_f1_cumret.pdf}
@@ -106,6 +155,91 @@ the advantage.
     mean-timing investor is nearly static.}
   \label{fig:strat-exposure}
 \end{figure}
+
+The drawdown profile confirms that the value of the signal is defensive.
+\Cref{fig:strat-drawdown} plots the drawdown from peak of the same annual
+wealth curves: the maximum drawdown of the timed portfolio is $21.9\%$,
+against $24.2\%$ for the mean-timing investor and $27.3\%$ for buy-and-hold,
+and the worst single twelve-month loss shrinks from $20.9\%$ to $19.1\%$. All
+three troughs occur in the 2021--2022 global hiking cycle, the deepest
+bond-market drawdown in the sample; the timed investor enters it with reduced
+exposure because the global cycle factor had already turned
+(\Cref{fig:strat-exposure}), which is precisely the behaviour the mechanism
+promises---the factor forecasts low premia when yields sit far below their
+inflation anchor, as they did in 2021. Where the strategy trades, and what
+that trading costs, is quantified in \Cref{sec:strat-costs}.
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.85\linewidth]{figures/strat_f3_drawdown.pdf}
+  \caption{Drawdown from peak of the GCF-timed and buy-and-hold global bond
+    portfolios, computed on the non-overlapping annual wealth curves of
+    \Cref{fig:strat-cumret} at equal average exposure.}
+  \label{fig:strat-drawdown}
+\end{figure}
+
+% ===========================================================================
+\section{Subperiods, Turnover, and Transaction Costs}
+\label{sec:strat-costs}
+
+A full-sample Sharpe ratio can conceal where a strategy earns its keep.
+\Cref{tab:strat-sub} therefore splits the evaluation window in half and
+isolates the 2021--2022 hiking cycle. The split is revealing, and it is worth
+being candid about what it shows. In the strong bond decade of 2005--2014,
+timing did \emph{not} pay on a risk-adjusted basis: the timed portfolio earned
+a full percentage point a year more than buy-and-hold ($6.5\%$ against
+$5.3\%$) but took proportionally more risk, so its Sharpe ratio was lower
+($0.93$ against $1.09$)---when premia are persistently high, the best a
+timing rule can do is stay invested, and any variation in exposure adds
+volatility. The ranking reverses exactly where an investor needs it to: over
+2015--2024, a decade in which the passive portfolio lost money, the timed
+strategy preserves a higher mean and the least-bad Sharpe ratio, and in the
+2021--2022 drawdown it loses least. The full-sample advantage of
+\Cref{tab:strat-perf} is therefore not a uniform edge but a defensive one,
+concentrated in the regime of falling and volatile bond prices---a
+characterisation \Cref{fig:strat-rollsr} makes visible. In the rolling
+five-year Sharpe ratios, the passive portfolio holds the upper hand in the
+early, high-premium windows, the two series then track each other through the
+middle of the sample, and the timed portfolio pulls ahead only as the hiking
+cycle unfolds; across all windows the timed portfolio is on top in barely
+half. The full-sample edge is real, but it is bought in a handful of
+episodes, not accrued steadily.
+
+\begin{table}[t]
+  \caption{Subperiod performance of the GCF-timed global bond portfolio}
+  \label{tab:strat-sub}
+  \centering
+  \input{tables/strat_t4_subperiod}
+\end{table}
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.85\linewidth]{figures/strat_f4_rolling_sharpe.pdf}
+  \caption{Rolling five-year Sharpe ratio of the GCF-timed and buy-and-hold
+    portfolios (overlapping twelve-month returns; descriptive).}
+  \label{fig:strat-rollsr}
+\end{figure}
+
+The strategy's trading intensity is modest. Because the global cycle factor is
+highly persistent, the target weight moves slowly: the average one-way
+turnover of the timed portfolio is $9.2\%$ of notional per month
+(mean-timing: $1.3\%$), roughly one full portfolio turn per year.
+\Cref{tab:strat-costs} converts this into net-of-cost performance by charging
+a proportional one-way cost on every unit of notional traded. At $10$ basis
+points---already conservative for ten-year G10 government bond futures, where
+quoted half-spreads are of the order of one basis point---the Sharpe ratio of
+the timed strategy falls from $0.39$ to $0.37$ and the certainty-equivalent
+gain over buy-and-hold shrinks by about ten basis points a year. Even at an
+implausibly punitive $50$ basis points the timed strategy still matches or
+beats buy-and-hold on both metrics, although at that cost level the
+near-static mean-timing rule becomes the better implementation. Transaction
+costs therefore qualify the magnitude of the economic value but do not
+overturn its existence.
+
+\begin{table}[t]
+  \caption{Turnover and net-of-cost performance}
+  \label{tab:strat-costs}
+  \centering
+  \input{tables/strat_t5_costs}
+\end{table}
 
 % ===========================================================================
 \section{The US-Dollar Investor and the FX-Adjusted Factor}
@@ -155,46 +289,6 @@ overwhelmingly to the investor who hedges the currency exposure of the
 international bond position.
 
 % ===========================================================================
-\section{A Three-Month Illustration}
-\label{sec:strat-example}
-
-To make the mechanics concrete, \Cref{tab:strat-example} traces the actions of
-the FX-adjusted dollar investor over three consecutive months in mid-2022, an
-episode in which the global cycle turned sharply. Each month the investor
-performs the same three steps: (i) read the latest value of the recursive
-FX-adjusted factor; (ii) update the real-time forecast of the next twelve months'
-dollar excess return and the recursive return volatility; and (iii) set the
-mean--variance target weight \eqref{eq:strat-weight} and rebalance the portfolio
-to it.
-
-\begin{table}[t]
-  \caption{Worked example: the FX-adjusted dollar investor over three months in mid-2022}
-  \label{tab:strat-example}
-  \centering
-  \input{tables/strat_t3_example}
-\end{table}
-
-In May 2022 the factor still reads slightly positive ($+0.17$); the real-time
-model forecasts a $3.26\%$ excess return and, against a recursive volatility of
-$6.5\%$, prescribes an overweight position of $1.22$ times the neutral exposure.
-The investor holds bonds above benchmark. One month later the factor has fallen
-to $-0.13$ and the forecast to $2.29\%$; the target weight drops to $0.82$, so the
-investor \emph{sells about a third} of the bond position, moving underweight. By
-July the factor has collapsed to $-0.65$, the forecast is a negligible $0.63\%$,
-and the rule cuts the weight to $0.22$---the investor \emph{sells three quarters}
-of the remaining position and sits almost entirely in cash. The subsequent
-realized twelve-month returns, shown in the final column purely to judge the
-calls, were $-6\%$ to $-10\%$: the deteriorating global cycle led the investor to
-near-cash just before the worst of the 2022 bond drawdown. The episode reads
-consistently across methodologies: \citet{randl2025} find that the expected
-Sharpe ratio of the mean--variance-efficient hedged bond portfolio peaks in the
-fourth quarter of 2022---the cycle signal exited \emph{before} the inflation-shock
-repricing, and the compensation for re-entering peaked after it. The episode is also a
-fair illustration of the strategy's limits---these large, correct calls coexist
-with the modest full-sample Sharpe ratio of \Cref{tab:strat-usd}, because such
-decisive turning points are rare.
-
-% ===========================================================================
 \section{Caveats}
 \label{sec:strat-caveats}
 
@@ -202,10 +296,14 @@ The result should be read as a proof of concept, not a tradable system, and
 three limitations bound it. First, the magnitude is modest---a Sharpe-ratio
 improvement of roughly $0.07$ and a certainty-equivalent gain below one percent a
 year---which is typical of bond-return predictability and consistent with the
-small out-of-sample $R^{2}$. Second, the forecasts use overlapping twelve-month
-returns, so the supporting precision is overstated relative to non-overlapping
-data, and the strategy is evaluated gross of transaction costs (mitigated, but
-not eliminated, by the low turnover noted above). Third, because the global cycle
+small out-of-sample $R^{2}$. Moreover, as \Cref{sec:strat-costs} shows, the
+edge is defensive and episodic rather than uniform: it is earned in the poor
+bond decade and the 2021--2022 drawdown, not in the calm years. Second, the
+forecasts use overlapping twelve-month returns, so the supporting precision is
+overstated relative to non-overlapping data, and subperiod statistics are
+descriptive; transaction costs are quantified in \Cref{tab:strat-costs} and
+erode, but do not eliminate, the advantage at realistic cost levels. Third,
+because the global cycle
 factor is a single series the strategy can only time aggregate exposure; a
 cross-sectional strategy would require a factor with country-specific variation,
 which the out-of-sample evidence does not support for the local factor. The

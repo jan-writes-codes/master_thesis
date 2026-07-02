@@ -2,17 +2,17 @@
 % Notation and constructions are kept consistent with the implementation in
 % data_preparation.R; "Implementation note" paragraphs flag the few places where
 % the code refines the research proposal or the original papers.
-\chapter{Theoretical Framework}
+\section{Theoretical Framework}
 \label{ch:framework}
 
-This chapter develops the theoretical apparatus that underlies the empirical
+This section develops the theoretical apparatus that underlies the empirical
 analysis. We begin from the expectations hypothesis (EH) as a null of no
 predictability, introduce the \citet{cieslak2015} decomposition of yields into a
 slow-moving trend-inflation component and transitory interest-rate cycles, and
 build the three-factor hierarchy that organises the thesis: the \emph{local}
 cycle factor $\CF_{i,t}$, the GDP-weighted \emph{global} cycle factor
 $\GCF_{t}$, and the \emph{FX-adjusted} global cycle factor $\FXGCF_{t}$ for a
-US-dollar investor. The final section states the predictive specifications that
+US-dollar investor. The final subsection states the predictive specifications that
 operationalise the research questions.
 
 Throughout, $i$ indexes countries in the G10 cross-section $\mathcal{G}$, time
@@ -22,7 +22,7 @@ availability (\Cref{ch:data}). All yields are continuously compounded and
 expressed in percent per annum.
 
 % ===========================================================================
-\section{The Expectations Hypothesis as a Null}
+\subsection{The Expectations Hypothesis as a Null}
 \label{sec:fw-eh}
 
 Let $y^{(n)}_{t}$ denote the time-$t$ continuously compounded yield on an
@@ -52,7 +52,7 @@ tests them, and the EH itself returns in \Cref{sec:meth-ehmc} as a simulated
 benchmark for the magnitude of predictive $R^{2}$.
 
 % ===========================================================================
-\section{Yield Decomposition and Interest-Rate Cycles}
+\subsection{Yield Decomposition and Interest-Rate Cycles}
 \label{sec:fw-decomp}
 
 The central premise of \citet{cieslak2015} is that nominal yields are driven by
@@ -92,7 +92,7 @@ parameter $v=0.987$ follows \citet{cieslak2015}; \Cref{ch:robustness} examines
 the sensitivity of the results to this choice and to the window length $M$.
 
 % ===========================================================================
-\section{The Local Cycle Factor}
+\subsection{The Local Cycle Factor}
 \label{sec:fw-localcf}
 
 The cycles at different maturities are highly collinear but not identical.
@@ -129,7 +129,7 @@ $\{2,4,5,9,10\}$ years. This avoids double-counting the short-rate cycle and
 mirrors the role of the average forward rate in the \citet{cochrane2005} factor.
 
 % ===========================================================================
-\section{The Global Cycle Factor and GDP Weights}
+\subsection{The Global Cycle Factor and GDP Weights}
 \label{sec:fw-gcf}
 
 If government-bond markets are internationally integrated, investors should be
@@ -155,10 +155,10 @@ global factor should subsume the predictive content of the local factor
 (\Cref{sec:fw-hypotheses}).
 
 % ===========================================================================
-\section{Excess Returns: Local and US-Dollar Investor}
+\subsection{Excess Returns: Local and US-Dollar Investor}
 \label{sec:fw-returns}
 
-\subsection{Local-currency returns}
+\subsubsection{Local-currency returns}
 The one-year excess return on an $n$-year bond for a domestic investor is given
 by \eqref{eq:rx}. Because return volatility scales roughly with duration, we
 follow \citet{cieslak2015} and work with \emph{duration-standardised} returns,
@@ -185,7 +185,7 @@ return being scaled. As \citet{cieslak2015} note, the results are insensitive to
 this convention, and a simple (unstandardised) average leaves the conclusions
 unchanged.
 
-\subsection{US-dollar investor returns}
+\subsubsection{US-dollar investor returns}
 For a US investor who borrows one year in US dollars, converts to foreign
 currency, holds the foreign bond, and converts the proceeds back, the dollar
 excess return adds the realised currency return and nets out the US short rate:
@@ -203,7 +203,7 @@ dollar return is the object of interest for the international investor and the
 input to the FX-adjusted factor below.
 
 % ===========================================================================
-\section{The FX-Adjusted Global Cycle Factor}
+\subsection{The FX-Adjusted Global Cycle Factor}
 \label{sec:fw-fxgcf}
 
 A global factor built from local-currency returns ignores the currency risk
@@ -247,7 +247,7 @@ relevant property that $\FXGCF_{t}$ is only moderately correlated with $\GCF_{t}
 (\Cref{ch:results}).
 
 % ===========================================================================
-\section{Hypotheses and Predictive Specifications}
+\subsection{Hypotheses and Predictive Specifications}
 \label{sec:fw-hypotheses}
 
 The three-factor hierarchy maps directly onto the research questions through a
