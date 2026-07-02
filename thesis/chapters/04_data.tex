@@ -111,14 +111,6 @@ show the resulting 10-year yield series.
   \label{fig:coverage}
 \end{figure}
 
-\begin{figure}[t]\centering
-  \includegraphics[width=0.9\linewidth]{figures/s1_yield_ts.pdf}
-  \caption{Ten-year zero-coupon yields across the G10, 1989--2026. The secular
-    decline in nominal yields and the post-2021 reversal are common across
-    countries.}
-  \label{fig:yield-ts}
-\end{figure}
-
 % ===========================================================================
 \section{Cleaning and Variable Construction}
 \label{sec:data-cleaning}
@@ -173,11 +165,6 @@ show the average curve shapes.
   \input{tables/dh_t1_summary}
 \end{table}
 
-\begin{figure}[t]\centering
-  \includegraphics[width=0.8\linewidth]{figures/s1_yield_curve_avg.pdf}
-  \caption{Average zero-coupon yield curve by country over the sample.}
-  \label{fig:yield-curve-avg}
-\end{figure}
 
 In \Cref{tab:dh-t1-corr} we report the cross-country correlation matrix of the
 ten-year yield, computed pairwise-complete over the full per-country sample. We
@@ -188,9 +175,3 @@ factor. If the levels of long yields share a common component across countries,
 it seems plausible that the predictable component of their returns does so as
 well. We examine this integration hypothesis in \Cref{ch:results}.
 
-\begin{table}[t]
-  \caption{Cross-country correlation of the ten-year zero-coupon yield}
-  \label{tab:dh-t1-corr}
-  \centering
-  \input{tables/dh_t1_corr10y}
-\end{table}

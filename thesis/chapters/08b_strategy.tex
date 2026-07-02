@@ -273,27 +273,29 @@ Two observations help us interpret the result. First, over this sample the
 unhedged dollar bond premium is modest but positive. The passive portfolio
 earns about $1.5\%$ a year in excess return for a Sharpe ratio near $0.20$, as
 the strength of the dollar through the 2010s offsets much, though not all, of
-the foreign-bond return for a US investor. Second, in statistical terms, the
-FX adjustment does what it was designed to do. The FX-adjusted factor raises
-the out-of-sample $R^{2}$ to $0.120$, above the $0.073$ of the unadjusted
-global factor, which confirms that it carries genuine incremental information
-about dollar returns (the in-sample message of \Cref{sec:res-phase3}, now out
-of sample).
+the foreign-bond return for a US investor. Second, the two dollar signals
+part ways at the aggregate level. Timing on the unadjusted recursive global
+factor works: the GCF-timed dollar strategy earns a Sharpe ratio of $0.25$
+against the passive $0.20$, with an aggregate-portfolio out-of-sample $R^{2}$
+of $0.073$. The FX-adjusted factor, in contrast, does not time the
+\emph{aggregate} dollar portfolio well. Its forecast of the GDP-weighted
+portfolio return has an out-of-sample $R^{2}$ of $-0.01$, and the FXGCF-timed
+strategy earns a Sharpe ratio of $0.19$, no better than buy-and-hold.
 
-However, this statistical edge does not translate into superior risk-adjusted
-performance over the unadjusted factor. Because the FX-adjusted signal is
-noisier in dollars than in local currency, the FXGCF-timed strategy runs a
-markedly higher volatility and earns a Sharpe ratio of $0.24$. This is a clear
-improvement on the passive and mean-timing benchmarks (both near $0.20$), but
-no better than the $0.25$ of the simpler GCF-timed dollar strategy, and well
-below the $0.38$ of the currency-hedged investor in
-\Cref{sec:strat-performance}. We therefore arrive at a clear conclusion that
-is consistent throughout our thesis. Timing adds value for the dollar investor
+This is not a contradiction of Phase~III but a reflection of where the
+FX-adjusted factor's strength lies. Its in-sample recovery
+(\Cref{sec:res-phase3}) and its pooled out-of-sample edge
+(\Cref{ch:robustness}) come from the per-country USD regressions, that is,
+from the cross-section of dollar returns. Aggregating the portfolio before
+forecasting averages away exactly the country-level currency variation the
+factor is built to capture, and what remains is timed at least as well by the
+simpler unadjusted factor. We therefore arrive at a clear conclusion that is
+consistent throughout our thesis. Timing adds value for the dollar investor
 as well, but currency risk, and not a failure of the cycle signal, caps the
-level it can reach. The FX adjustment sharpens the forecast without raising
-the risk-adjusted return, and the economic value of the global cycle factor
-accrues overwhelmingly to the investor who hedges the currency exposure of the
-international bond position.
+level it can reach; both dollar strategies remain well below the $0.38$ of
+the currency-hedged investor in \Cref{sec:strat-performance}. The economic
+value of the global cycle factor accrues overwhelmingly to the investor who
+hedges the currency exposure of the international bond position.
 
 % ===========================================================================
 \section{Caveats}

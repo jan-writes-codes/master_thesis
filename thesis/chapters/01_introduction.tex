@@ -7,8 +7,7 @@
 \label{ch:intro}
 
 % --- Motivation: the EH puzzle --------------------------------------------
-\section{Motivation}
-\label{sec:intro-motivation}
+\section*{Motivation}
 
 In this chapter, we motivate and introduce our research question. Investors
 earn more on long-term government bonds than on rolling over short-term
@@ -100,8 +99,7 @@ predictability is a global phenomenon, and whether it survives in real time,
 is thus still an open question. In our thesis, we aim to answer it.
 
 % --- Research question -----------------------------------------------------
-\section{Research Question}
-\label{sec:intro-rq}
+\section*{Research Question}
 
 In our thesis, we ask one main question:
 \begin{quote}
@@ -139,8 +137,7 @@ the cycles, the predictive coefficients, and the global weights, is rebuilt
 each month from historically available data only.
 
 % --- Contribution ----------------------------------------------------------
-\section{Contribution}
-\label{sec:intro-contribution}
+\section*{Contribution}
 
 With our thesis, we contribute a three-factor hierarchy and the evidence to
 evaluate it. At the base sits the \emph{local cycle factor} $\CF_{i,t}$,
@@ -152,10 +149,11 @@ cycle factor} $\GCF_{t}$ aggregates the national factors with time-varying
 GDP weights. With this factor, we transplant the integration test of
 \citet{dahlquist2013} from the forward-rate family to the macro-anchored
 cycle family. At the top, the \emph{FX-adjusted global cycle factor}
-$\FXGCF_{t}$ is, to the best of our knowledge, new. It projects the
-GDP-weighted \emph{dollar} excess return on the global cycle factor and
-thereby isolates the component of global cycles that is informative for a
-US investor's currency-converted returns.
+$\FXGCF_{t}$ is, to the best of our knowledge, new. It fits a USD cycle
+factor per country, that is, the country's \emph{dollar} excess return
+projected on its own cycles, and aggregates these with GDP weights, and it
+thereby isolates the component of the cycles that is informative for a US
+investor's currency-converted returns.
 
 Three features distinguish our evidence from its closest predecessors. The
 first is breadth. Relative to the four markets of \citet{dahlquist2013} and
@@ -178,8 +176,7 @@ replicate the published US and international results
 (\Cref{ch:replication}) to validate our empirical engine.
 
 % --- Preview of findings & roadmap -----------------------------------------
-\section{Main Findings and Structure}
-\label{sec:intro-roadmap}
+\section*{Main Findings and Structure}
 
 We arrive at four main findings. First, we find that the cycle mechanism
 also works outside the United States. The local cycle factor predicts
@@ -198,12 +195,14 @@ capture. We would therefore suggest that integration is the rule, although
 this rule weakens under severe sovereign stress. Third, we find that
 currency risk is the binding constraint for the dollar investor. Dollar
 conversion erodes roughly two-thirds of the global factor's predictive
-power, and the FX-adjusted factor recovers only part of it. The reason is
-that, in our sample, it is nearly collinear with the unadjusted factor
-(correlation $0.99$, against roughly $0.50$ for the forward-rate analogue in
-\citet{dahlquist2013}). The FX adjustment that transforms the global forward
-factor thus adds little to the global cycle factor, and we consider this
-contrast a finding in itself. Fourth, and in our view most importantly, only
+power. The FX-adjusted factor recovers much of it in sample, nearly doubling
+the average dollar-investor $R^{2}$ from $8\%$ to $14\%$ and restoring
+significance in ten of eleven markets, provided it is built bottom-up from
+the country-level USD regressions. A top-down variant is nearly collinear
+with the unadjusted factor (correlation $0.99$) and adds almost nothing, so
+where the FX-relevant information sits, namely in the cross-section rather
+than the aggregate, is a finding in itself. Out of sample, however, the
+FX adjustment delivers only a small and conditional edge. Fourth, and in our view most importantly, only
 the global factor survives in real time. Out of sample, the local factors
 lose to the recursive historical mean almost everywhere, while the global
 cycle factor beats it in ten of eleven markets. This real-time edge holds

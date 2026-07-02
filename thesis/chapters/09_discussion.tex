@@ -106,31 +106,39 @@ analysis (\Cref{sec:rob-subsample}), which we take as a further sign that
 international bond premia are anchored in inflation dynamics.
 
 \paragraph{The role of the FX adjustment.}
-Our third finding is a contrast with the forward-rate literature and, we
-would argue, a substantive one. For \citet{dahlquist2013}, adjusting the
-global factor for currency risk matters. Their FX-adjusted forward factor
-correlates only about $0.50$ with the unadjusted one and recovers
-dollar-investor predictability. The cycle-factor analogue we build is
-nearly collinear with the unadjusted global factor (correlation $0.99$), so
-the FX adjustment, while uniformly helpful in direction, has almost no
-independent information to add. A possible economic explanation could lie in
-what each factor family retains. The forward-rate factor is built from the
-level and shape of the forward curve, and cross-country differences in rate
-levels are exactly the interest differentials that forecast currency
-returns through the failure of uncovered interest parity. An FX adjustment
-of a forward factor therefore has carry-relevant information to work with.
-The cycle factor, in contrast, removes the level by construction, because
+Our third finding refines the comparison with the forward-rate literature.
+For \citet{dahlquist2013}, adjusting the global factor for currency risk
+matters. Their FX-adjusted forward factor correlates only about $0.50$ with
+the unadjusted one and recovers dollar-investor predictability. Once we
+build the cycle-factor analogue bottom-up, it behaves in a comparable way:
+our baseline $\FXGCF_{t}$ correlates $0.78$ with the unadjusted global
+factor and nearly doubles the dollar investor's in-sample fit
+(\Cref{sec:res-phase3}). However, two qualifications separate the cycle
+family from the forward family. First, the recovery depends on the
+construction. The top-down variant, which projects the aggregate dollar
+return on the aggregate cycle predictors, is nearly collinear with the
+unadjusted factor (correlation $0.99$) and adds almost nothing
+(\Cref{sec:rob-fxgcf-construction}). The currency-relevant information in
+the cycles therefore lives in the cross-section of the country-level USD
+regressions and is lost once the aggregation happens before the fit.
+Second, the in-sample recovery translates into only a small and
+scheme-sensitive real-time edge, and it does not help in timing the
+aggregate dollar portfolio (\Cref{ch:strategy}). A possible economic
+explanation could lie in what each factor family retains. The forward-rate
+factor is built from the level and shape of the forward curve, and
+cross-country differences in rate levels are exactly the interest
+differentials that forecast currency returns through the failure of
+uncovered interest parity, so an FX adjustment of a forward factor has
+carry-relevant information to work with even at the aggregate level. The
+cycle factor, in contrast, removes the level by construction, because
 detrending by trend inflation strips out the persistent rate-differential
-component and keeps the transitory deviation. What remains forecasts bond
-premia well but currencies hardly at all, so projecting dollar returns on
-global cycles returns essentially the cycles themselves. On this reading,
-the near-collinearity is not a failure of implementation but a property of
-macro-anchored factors. The same detrending that gives the cycle factor its
-real-time stability in bonds also removes its ability to forecast
-currencies. The regime evidence supports this explanation, as the residual
-dollar-investor predictability is concentrated before 2008, when rate
-differentials were wide, and turns negative in the post-crisis regime of
-compressed, synchronised policy rates (\Cref{sec:rob-subsample}).
+component and keeps the transitory deviation. The currency-relevant
+cyclical information that remains is country-specific and regime-dependent,
+which is why it shows up strongly in the in-sample cross-section, weakly in
+real time, and hardly at all in the aggregate. The regime evidence supports
+this reading, as the dollar-investor predictability is concentrated before
+2008, when rate differentials were wide, and disappears in the post-crisis
+regime of compressed, synchronised policy rates (\Cref{sec:rob-subsample}).
 
 \paragraph{What ultimately survives.}
 When we assemble the four findings, our evidence reduces to one robust
@@ -197,8 +205,10 @@ $\{1,2,4,5,9,10\}$ years is dictated by the available Bloomberg curves, so
 individual excess returns exist only for $n\in\{2,5,10\}$ and the
 duration-standardisation uses the continuous-compounding convention
 $D^{(n)}=n$ (\Cref{sec:meth-deviations}). Additionally, the FX-adjusted
-factor is built top-down on aggregate dollar returns rather than as the
-projection in the original proposal. These choices are internally consistent
+factor is built bottom-up as the GDP-weighted average of per-country USD
+cycle factors rather than as the projection in the original proposal; the
+alternative constructions are compared in
+\Cref{sec:rob-fxgcf-construction}. These choices are internally consistent
 and we hold them fixed throughout. However, exact level comparisons with the
 published US results inherit them.
 
@@ -219,8 +229,8 @@ disappears under ten- and fifteen-year rolling windows
 (\Cref{sec:rob-oos-scheme}). Furthermore, it depends materially on measuring
 the trend with core rather than headline inflation
 (\Cref{sec:rob-core-headline}), and it fails inside the 2008 crisis window.
-The FX-adjusted factor's thin pooled gain is concentrated post-2009 and is
-sensitive to the training minimum. We do not regard these results as minor
+The FX-adjusted factor's small pooled gain is earned mainly in the 2008
+window and is sensitive to the training minimum. We do not regard these results as minor
 details, because they delimit the population of investors for whom the
 real-time predictability exists, namely patient investors who estimate a
 slow factor from a long history and base the trend on core inflation.

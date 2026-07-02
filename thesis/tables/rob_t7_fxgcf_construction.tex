@@ -1,0 +1,27 @@
+% rob_t7_fxgcf_construction — the four FXGCF constructions compared.
+% Numbers from the construction-comparison analysis (fxgcf_comparison/,
+% build_comparison.R), run on the identical thesis pipeline.
+\small
+\begin{tabular}{ll c c c c c}
+  \toprule
+  Construction & Weights & $\Corr(\cdot,\GCF)$ & Mean IS $R^{2}$
+    & $|t|>1.96$ & $R^{2}_{\mathrm{oos}}$ (pooled) & OOS$+$ \\
+  \midrule
+  Bottom-up (baseline) & GDP   & $0.78$ & $0.143$ & $10/11$ & $+0.019$ & $6/11$ \\
+  Bottom-up            & $1/n$ & $0.73$ & $0.141$ & $9/11$  & $+0.015$ & $6/11$ \\
+  Top-down             & GDP   & $0.99$ & $0.095$ & $4/11$  & $+0.002$ & $9/11$ \\
+  Top-down             & $1/n$ & $0.94$ & $0.106$ & $7/11$  & $+0.027$ & $8/11$ \\
+  \bottomrule
+\end{tabular}
+\tabnotes{All four constructions use the same cycle predictors, the one-year
+  cycle $\cyc^{(1)}_{i,t}$ and the average cycle $\cycbar_{i,t}$, and predict
+  the US-dollar excess return $\rxbar^{\,\mathrm{USD}}_{i,t+12}$. The
+  bottom-up variants fit a USD cycle factor per country
+  \eqref{eq:fxcf-reg}--\eqref{eq:fxcf} and aggregate the fitted factors; the
+  top-down variants first aggregate the dollar return and the predictors and
+  fit one regression on the aggregates. Weights are nominal-GDP shares or
+  equal ($1/n$). ``Mean IS $R^{2}$'' is the cross-country mean in-sample fit,
+  ``$|t|>1.96$'' the number of markets with a significant HAC $t$-statistic,
+  and the two out-of-sample columns report the pooled fully-recursive
+  \citet{campbellthompson2008} statistic and the number of markets with a
+  positive value.}

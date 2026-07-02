@@ -40,12 +40,12 @@
 \usepackage{enumitem}
 
 % --- References -------------------------------------------------------------
-% APA citation style via apacite; the natbibapa option keeps the natbib
-% commands (\citet, \citep) used throughout the chapters. Per the apacite
-% documentation, apacite is loaded after hyperref; cleveref stays last.
+% Author-year citations via natbib with the chicago bibliography style, the
+% referencing convention of the finance academic literature (per the
+% supervisor's thesis guidelines). cleveref stays loaded last.
+\usepackage[round, authoryear]{natbib}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
-\usepackage[natbibapa]{apacite}
 \usepackage[capitalise, noabbrev]{cleveref}
 
 % --- Notation macros (keep text consistent with the R implementation) -------
@@ -58,6 +58,7 @@
 \newcommand{\CF}{\mathit{CF}}                    % local cycle factor
 \newcommand{\GCF}{\mathit{GCF}}                  % global cycle factor
 \newcommand{\FXGCF}{\mathit{FXGCF}}              % FX-adjusted global cycle factor
+\newcommand{\FXCF}{\mathit{FXCF}}                % per-country USD cycle factor
 \newcommand{\CP}{\mathit{CP}}                    % Cochrane-Piazzesi factor
 \newcommand{\GCP}{\mathit{GCP}}                  % global CP factor
 \DeclareMathOperator{\Var}{Var}

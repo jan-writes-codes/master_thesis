@@ -164,7 +164,7 @@ the global factor should subsume the predictive content of the local factor
 \subsection{Excess Returns: Local and US-Dollar Investor}
 \label{sec:fw-returns}
 
-\subsubsection{Local-currency returns}
+\paragraph{Local-currency returns.}
 The one-year excess return on an $n$-year bond for a domestic investor is given
 by \eqref{eq:rx}. Because return volatility scales roughly with duration, we
 follow \citet{cieslak2015} and work with \emph{duration-standardised} returns,
@@ -191,7 +191,7 @@ contemporaneous yield and, therefore, exogenous to the return being scaled. As
 \citet{cieslak2015} note, the results are insensitive to this convention, and a
 simple (unstandardised) average leaves our conclusions unchanged.
 
-\subsubsection{US-dollar investor returns}
+\paragraph{US-dollar investor returns.}
 We now consider a US investor who borrows for one year in US dollars, converts
 to foreign currency, holds the foreign bond, and converts the proceeds back.
 For this investor, the dollar excess return adds the realised currency return
@@ -214,45 +214,46 @@ to the FX-adjusted factor below.
 \label{sec:fw-fxgcf}
 
 A global factor built from local-currency returns ignores the currency risk
-that an international investor bears. Because of this, we follow the logic of
-the FX-adjusted global factor (FXGCP) of \citet{dahlquist2013} and construct an
-analogous \emph{FX-adjusted global cycle factor} $\FXGCF_{t}$ that targets
-dollar returns directly. We let the GDP-weighted cross-country averages of the
-dollar return and of the cycle predictors be
-\begin{equation}
-  \rxbar^{\,\mathrm{USD}}_{t+12} = \sum_{i\in\mathcal{G}} w_{i,t}\,
-      \rxbar^{\,\mathrm{USD}}_{i,t+12},
-  \quad
-  \overline{\cyc}^{\,(1)}_{t} = \sum_{i} w_{i,t}\,\cyc^{(1)}_{i,t},
-  \quad
-  \overline{\cycbar}_{t} = \sum_{i} w_{i,t}\,\cycbar_{i,t}.
-  \label{eq:fxgcf-agg}
-\end{equation}
-We then define the FX-adjusted factor as the fitted value from the projection
-of the average dollar return on the average cycle predictors:
+that an international investor bears. Because of this, we construct an
+\emph{FX-adjusted global cycle factor} $\FXGCF_{t}$ that targets dollar
+returns directly, in analogy to the FX-adjusted global factor (FXGCP) of
+\citet{dahlquist2013}. We build the factor bottom-up, exactly as the global
+factor in \eqref{eq:gcf}, but from country-level factors that are fitted to
+dollar returns. For each country, we first estimate the \emph{USD cycle
+factor} $\FXCF_{i,t}$ as the fitted value of the country's dollar excess
+return on its own cycle predictors:
 \begin{align}
-  \rxbar^{\,\mathrm{USD}}_{t+12}
-     &= \delta_{0} + \delta_{1}\,\overline{\cyc}^{\,(1)}_{t}
-        + \delta_{2}\,\overline{\cycbar}_{t} + \varepsilon_{t+12},
-        \label{eq:fxgcf-reg}\\[2pt]
-  \FXGCF_{t} &= \hat\delta_{0} + \hat\delta_{1}\,\overline{\cyc}^{\,(1)}_{t}
-              + \hat\delta_{2}\,\overline{\cycbar}_{t}.
-        \label{eq:fxgcf}
+  \rxbar^{\,\mathrm{USD}}_{i,t+12}
+     &= \delta_{i,0} + \delta_{i,1}\,\cyc^{(1)}_{i,t}
+        + \delta_{i,2}\,\cycbar_{i,t} + \varepsilon_{i,t+12},
+        \label{eq:fxcf-reg}\\[2pt]
+  \FXCF_{i,t} &= \hat\delta_{i,1}\,\cyc^{(1)}_{i,t}
+              + \hat\delta_{i,2}\,\cycbar_{i,t}.
+        \label{eq:fxcf}
 \end{align}
+We then aggregate the national USD cycle factors with the same GDP weights as
+in \eqref{eq:gcf}:
+\begin{equation}
+  \FXGCF_{t} \;=\; \sum_{i\in\mathcal{G}} w_{i,t}\,\FXCF_{i,t}.
+  \label{eq:fxgcf}
+\end{equation}
 
-\paragraph{Implementation note.} With equations
-\eqref{eq:fxgcf-agg}--\eqref{eq:fxgcf}, we implement the FX-adjusted factor in
-the ``top-down'' manner of \citet{dahlquist2013}. $\FXGCF_{t}$ is the fitted
-value of the average dollar return on the average cycle \emph{predictor menu},
-not the fitted value of a regression on $\GCF_{t}$. The latter specification,
-which our proposal wrote as
+\paragraph{Implementation note.} Two design choices deserve comment. First,
+\eqref{eq:fxcf-reg}--\eqref{eq:fxgcf} mirror the construction of the global
+factor exactly. $\FXGCF_{t}$ is to the dollar returns what $\GCF_{t}$ is to
+the local-currency returns, so any difference between the two factors can be
+attributed to the return currency alone. Second, an alternative is the
+``top-down'' construction of \citet{dahlquist2013}, in which the GDP-weighted
+average dollar return is projected on the GDP-weighted average cycle
+predictors. We examined this variant and found that it is nearly collinear
+with the unadjusted global factor in our sample (correlation $0.99$), so it
+carries almost no incremental information about currency risk. We therefore
+adopt the bottom-up construction as our main specification and compare the
+two constructions in \Cref{sec:rob-fxgcf-construction}. A third
+specification, which our proposal wrote as
 $\rxbar^{\,\mathrm{USD}}_{t+12}=\delta_{0}+\delta_{1}\GCF_{t}+\varepsilon_{t+12}$,
 would make $\FXGCF_{t}$ an affine transform of $\GCF_{t}$ and, hence,
-statistically indistinguishable from it. By targeting the underlying cycle
-predictors instead, we let $\FXGCF_{t}$ load on the combination of cycles and
-currency dynamics that is relevant for dollar returns. This also reproduces the
-empirically relevant property that $\FXGCF_{t}$ is only moderately correlated
-with $\GCF_{t}$ (\Cref{ch:results}).
+statistically indistinguishable from it; we do not pursue it.
 
 % ===========================================================================
 \subsection{Hypotheses and Predictive Specifications}

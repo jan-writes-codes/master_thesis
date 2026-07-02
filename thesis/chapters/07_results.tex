@@ -52,12 +52,6 @@ fitted combination.
   \input{tables/mr_t1_phase1}
 \end{table}
 
-\begin{figure}[t]\centering
-  \includegraphics[width=0.85\linewidth]{figures/mr_f1_r2_phase1.pdf}
-  \caption{In-sample $R^{2}$ of the local predictive regression
-    \eqref{eq:h-local}, $\rxbar_{i,t+12}\sim\CF_{i,t}$, by country.}
-  \label{fig:mr-r2-phase1}
-\end{figure}
 
 We find that the cycle mechanism extends to the international cross-section, and
 it does so with a remarkably uniform structure. In \Cref{tab:mr-phase1} we can
@@ -102,14 +96,6 @@ that prices the whole curve rather than one maturity segment, exactly as in the
 United States. The per-maturity $R^{2}$ tracks the maturity-averaged figures and
 is largest at the five- and ten-year points, reaching $35\%$ at ten years for
 the United States and $36\%$ at five years for the Netherlands.
-
-\begin{table}[t]
-  \caption{Phase~I by maturity: predicting individual excess returns with the
-    cycle factor}
-  \label{tab:mr-phase1-mat}
-  \centering
-  \input{tables/mr_t1b_maturity}
-\end{table}
 
 We can therefore answer the first research question affirmatively. The
 macro-anchored cycle of \citet{cieslak2015} is not a US-specific phenomenon. It
@@ -161,14 +147,6 @@ $\rxbar_{i,t+12}=\alpha_i+\beta_i\,\CF^{\perp}_{i,t}+\gamma_i\,\GCF_{t}
   \label{fig:mr-hr-tstats}
 \end{figure}
 
-\begin{figure}[t]\centering
-  \includegraphics[width=0.9\linewidth]{figures/mr_f2_r2_ladder.pdf}
-  \caption{Phase~II in-sample $R^{2}$ ladder by country: the local factor alone
-    \eqref{eq:h-local}, the global factor alone \eqref{eq:h-global}, and the
-    joint horse race \eqref{eq:h-horse}.}
-  \label{fig:mr-r2-ladder}
-\end{figure}
-
 We find that the evidence favours a strong but incomplete form of integration.
 In \Cref{tab:mr-phase2} we can see that the global factor is statistically
 significant in every market, with HAC $t$-statistics between $2.1$ and $4.5$,
@@ -218,9 +196,9 @@ excess return \eqref{eq:rx-usd}, which augments the local return with the
 realised currency return and nets out the US short rate. In Phase~III, we ask
 two questions for this investor. First, how far does currency risk erode the
 global-factor predictability we documented in Phase~II? Second, does the
-FX-adjusted global cycle factor $\FXGCF_{t}$, which we build top-down on the
-GDP-weighted average dollar return (\Cref{sec:fw-fxgcf}), recover what an
-unadjusted factor loses?
+FX-adjusted global cycle factor $\FXGCF_{t}$, which we build bottom-up as the
+GDP-weighted average of the per-country USD cycle factors
+(\Cref{sec:fw-fxgcf}), recover what an unadjusted factor loses?
 \Cref{tab:mr-phase3} reports the dollar-investor regressions \eqref{eq:h-usd-global}
 and \eqref{eq:h-fxgcf}.
 
@@ -256,42 +234,43 @@ predict: the volatility of the one-year currency return swamps the cyclical
 signal in the bond.
 
 The FX-adjusted factor was designed for exactly this problem, and we find that
-it helps, albeit modestly. Across the panel, it raises the dollar-investor
-$R^{2}$ in ten of the eleven markets and lifts the HAC $t$-statistic in every
-foreign market. The cross-country average $R^{2}$ recovers from $8\%$ under the
-global factor to $10\%$ under the FX-adjusted factor, and several markets that
-were insignificant under $\GCF_{t}$ move closer to, or past, significance under
-$\FXGCF_{t}$ (Sweden, $t=2.2$; Canada, $t=3.0$; the euro markets to
-$t\approx 1.8$--$1.9$). The improvement is uniform in direction, which is
-consistent with the factor doing what it is meant to do, but it is small in
-magnitude. \Cref{fig:mr-gcf-fxgcf} explains why: in this G10 sample, the
-FX-adjusted factor correlates $0.99$ with the unadjusted global factor, so the
-two are near-perfect substitutes and the FX adjustment has little room to add
-independent information. This contrasts with the correlation of about $0.50$
-that \citet{dahlquist2013} report for their FX-adjusted global CP factor, and we
-consider this discrepancy a substantive finding in its own right. It indicates
-that, over the 1994--2026 G10 sample and with the top-down construction we
-adopt, the GDP-weighted average dollar return loads on essentially the same
-cyclical combination as the local-currency global factor. In
-\Cref{ch:robustness}, we stress-test this finding across the financial- and
-euro-area-crisis subsamples and out of sample, and we take up the economic
+it helps substantially. Across the panel, it raises the dollar-investor
+$R^{2}$ in ten of the eleven markets and lifts the HAC $t$-statistic in nine.
+The cross-country average $R^{2}$ recovers from $8\%$ under the global factor
+to $14\%$ under the FX-adjusted factor, so the adjustment nearly doubles the
+dollar-investor fit. Moreover, markets that were insignificant under
+$\GCF_{t}$ become significant under $\FXGCF_{t}$: the entire euro-area bloc
+moves to $t\approx 2.6$, Switzerland to $t=3.0$, and Japan to $t=2.1$, so
+that the factor is significant in ten of eleven markets (the exception is the
+United Kingdom). In \Cref{fig:mr-gcf-fxgcf}, we can see why the adjustment
+has room to work: the FX-adjusted factor correlates $0.78$ with the
+unadjusted global factor, so the two series share the global cycle but the
+FX-adjusted factor carries genuinely distinct information about the currency
+leg of the dollar return. This is comparable in spirit to the correlation of
+about $0.50$ that \citet{dahlquist2013} report for their FX-adjusted global
+CP factor. We note that this property depends on the construction: the
+top-down variant of the factor, which projects the average dollar return on
+the average cycle predictors, is nearly collinear with the global factor in
+our sample (correlation $0.99$) and adds almost nothing. We compare the
+constructions in \Cref{sec:rob-fxgcf-construction} and take up the economic
 interpretation in \Cref{ch:discussion}.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/mr_f4_gcf_fxgcf.pdf}
   \caption{The global cycle factor $\GCF_{t}$ \eqref{eq:gcf} and the FX-adjusted
-    global cycle factor $\FXGCF_{t}$ \eqref{eq:fxgcf} over the common sample. The
-    two series are near-collinear (correlation $0.99$).}
+    global cycle factor $\FXGCF_{t}$ \eqref{eq:fxgcf} over the common sample.
+    The two series share the global cycle but are distinct (correlation
+    $0.78$).}
   \label{fig:mr-gcf-fxgcf}
 \end{figure}
 
 Our answer to the third research question is therefore twofold. Currency risk
 does break the global-factor predictability for an unhedged dollar investor in
 most markets and reduces the average $R^{2}$ by roughly two-thirds. The
-FX-adjusted global cycle factor restores part of this predictability, reliably
-in direction and across markets. However, because it is nearly collinear with
-the unadjusted factor in this sample, the restoration is partial rather than
-complete.
+bottom-up FX-adjusted global cycle factor restores a large part of this
+predictability in-sample, raising the average fit to $14\%$ and restoring
+significance in ten of eleven markets. Whether this in-sample recovery
+survives in real time is the subject of the next section.
 
 % ---------------------------------------------------------------------------
 \section{Out-of-Sample Predictability}
@@ -348,16 +327,16 @@ economically exploitable. In \Cref{ch:strategy}, we turn the global factor into
 a bond-timing strategy for a currency-hedged investor and show that it raises
 the Sharpe ratio of a global bond portfolio and delivers a positive
 certainty-equivalent gain out of sample. Third, for the dollar investor, the
-out-of-sample picture sharpens the in-sample finding of Phase~III. The recursive
-$R^{2}_{\mathrm{oos}}$ is clearly negative for the unadjusted global factor
-($-0.07$), which beats the recursive mean in only two markets. The FX-adjusted
-factor erases this loss: it turns marginally positive at the pooled level
-($+0.002$) and beats the mean in nine of the eleven markets. The pooled margin
-is thin and, as \Cref{ch:robustness} shows, fragile, since it is concentrated in
-the post-crisis period and does not survive a rolling estimation window.
-However, the FX adjustment does what it was designed to do and converts the
-unadjusted factor's broad out-of-sample failure into a broad, if economically
-marginal, success for the currency-converted investor.
+out-of-sample picture qualifies the strong in-sample finding of Phase~III. The
+recursive $R^{2}_{\mathrm{oos}}$ is clearly negative for the unadjusted global
+factor ($-0.07$), which beats the recursive mean in only two markets. The
+FX-adjusted factor erases this loss: it turns positive at the pooled level
+($+0.019$) and beats the mean in six of the eleven markets. The pooled margin
+is, however, an order of magnitude smaller than the in-sample gain, and, as
+\Cref{ch:robustness} shows, it is sensitive to the estimation scheme. The FX
+adjustment therefore does what it was designed to do, but the real-time edge
+it delivers for the currency-converted investor is far more modest than the
+in-sample fit suggests.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/mr_f5_oos_r2.pdf}
@@ -386,20 +365,21 @@ though not complete, integration of government-bond risk premia. This is the
 central message of \citet{dahlquist2013}, now established for the cycle factor
 rather than the forward-rate factor. Third, the global investor's problem is
 currency risk: dollar conversion erodes roughly two-thirds of the global
-factor's predictive power, and the FX-adjusted factor recovers only part of it,
-because in this sample it is nearly indistinguishable from the unadjusted global
-factor.
+factor's predictive power. The bottom-up FX-adjusted factor recovers much of
+it in-sample, nearly doubling the average dollar-investor $R^{2}$ from $8\%$
+to $14\%$ and restoring significance in ten of eleven markets.
 
 Fourth, these conclusions survive out of sample and, in one respect, even
 sharpen. The global cycle factor beats the recursive prevailing mean clearly and
 robustly (pooled $R^{2}_{\mathrm{oos}}=+0.05$, positive in ten of eleven
 markets), while the local cycle factor and the \emph{unadjusted} dollar-investor
 factor do not (both negative, positive in only two markets each). The
-FX-adjusted factor is the marginal case: it turns the unadjusted dollar factor's
-loss into a slim pooled gain ($+0.002$, positive in nine of eleven markets),
-although \Cref{ch:robustness} shows this gain to be fragile. Real-time
+FX-adjusted factor sits in between: it turns the unadjusted dollar factor's
+loss into a pooled gain ($+0.019$, positive in six of eleven markets), but
+this real-time edge is much smaller than its in-sample fit and, as
+\Cref{ch:robustness} shows, sensitive to the estimation scheme. Real-time
 predictability is therefore clearly led by the global cycle factor, with the FX
-adjustment recovering a thin and conditional edge for the currency-converted
+adjustment recovering a genuine but conditional edge for the currency-converted
 investor. The contrast between the local factor's strong in-sample fit and its
 negative out-of-sample $R^{2}$ is the clearest sign that the predictability we
 should take seriously is the global one.

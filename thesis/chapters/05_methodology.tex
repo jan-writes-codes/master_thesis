@@ -27,9 +27,9 @@ $\{2,4,5,9,10\}$ years. (iii) The local cycle factor $\CF_{i,t}$ is
 the fitted value of the duration-standardised, maturity-averaged excess return
 on these two cycle predictors \eqref{eq:cf-reg}--\eqref{eq:cf}. (iv) The global
 factor $\GCF_{t}$ is the GDP-weighted average of local factors \eqref{eq:gcf},
-and (v) the FX-adjusted factor $\FXGCF_{t}$ is the fitted value of the
-GDP-weighted average dollar return on the GDP-weighted average cycle predictors
-\eqref{eq:fxgcf-agg}--\eqref{eq:fxgcf}. We deliberately treat the cycle factors
+and (v) the FX-adjusted factor $\FXGCF_{t}$ is the GDP-weighted average of the
+per-country USD cycle factors, which are fitted to dollar returns
+\eqref{eq:fxcf-reg}--\eqref{eq:fxgcf}. We deliberately treat the cycle factors
 as \emph{generated regressors}. We repeat the same estimation choices that
 build the factor, recursively, in the out-of-sample exercise of
 \Cref{sec:meth-oos}, so that no future information enters the real-time factor.
@@ -241,9 +241,10 @@ bears on the results.
     reason given in \Cref{sec:meth-inference}.
   \item \textbf{Duration convention.} We use $D^{(n)}=n$ (continuous
     compounding) for the duration-standardisation rather than $n/(1+y^{(n)})$.
-  \item \textbf{FX-adjusted factor.} We build $\FXGCF_{t}$ top-down on the
-    average cycle predictors rather than as a projection on $\GCF_{t}$
-    (\Cref{sec:fw-fxgcf}).
+  \item \textbf{FX-adjusted factor.} We build $\FXGCF_{t}$ bottom-up, as the
+    GDP-weighted average of per-country USD cycle factors, rather than
+    top-down or as a projection on $\GCF_{t}$ (\Cref{sec:fw-fxgcf}). We
+    compare the constructions in \Cref{sec:rob-fxgcf-construction}.
 \end{itemize}
 These choices keep our construction internally consistent and reproducible
 while remaining as close to the source methodology as the data permit.
