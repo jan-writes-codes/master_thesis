@@ -5,27 +5,27 @@
 \section{Theoretical Framework}
 \label{ch:framework}
 
-This section develops the theoretical apparatus that underlies the empirical
-analysis. We begin from the expectations hypothesis (EH) as a null of no
-predictability, introduce the \citet{cieslak2015} decomposition of yields into a
-slow-moving trend-inflation component and transitory interest-rate cycles, and
-build the three-factor hierarchy that organises the thesis: the \emph{local}
-cycle factor $\CF_{i,t}$, the GDP-weighted \emph{global} cycle factor
-$\GCF_{t}$, and the \emph{FX-adjusted} global cycle factor $\FXGCF_{t}$ for a
-US-dollar investor. The final subsection states the predictive specifications that
-operationalise the research questions.
+In this section, we develop the theoretical framework that underlies our
+empirical analysis. We start from the expectations hypothesis (EH) as a null of
+no predictability. We then introduce the \citet{cieslak2015} decomposition of
+yields into a slow-moving trend-inflation component and transitory
+interest-rate cycles, and we build the three-factor hierarchy that organises
+our thesis: the \emph{local} cycle factor $\CF_{i,t}$, the GDP-weighted
+\emph{global} cycle factor $\GCF_{t}$, and the \emph{FX-adjusted} global cycle
+factor $\FXGCF_{t}$ for a US-dollar investor. In the final subsection, we state
+the predictive specifications that operationalise our research questions.
 
-Throughout, $i$ indexes countries in the G10 cross-section $\mathcal{G}$, time
-$t$ is measured in months, and bond maturity $n$ is measured in years. The
-empirical maturity menu is $N=\{1,2,4,5,9,10\}$ years, dictated by data
-availability (\Cref{ch:data}). All yields are continuously compounded and
-expressed in percent per annum.
+Throughout this section, $i$ indexes countries in the G10 cross-section
+$\mathcal{G}$, time $t$ is measured in months, and bond maturity $n$ is
+measured in years. The empirical maturity menu is $N=\{1,2,4,5,9,10\}$ years,
+which is dictated by data availability (\Cref{ch:data}). All yields are
+continuously compounded and expressed in percent per annum.
 
 % ===========================================================================
 \subsection{The Expectations Hypothesis as a Null}
 \label{sec:fw-eh}
 
-Let $y^{(n)}_{t}$ denote the time-$t$ continuously compounded yield on an
+We let $y^{(n)}_{t}$ denote the time-$t$ continuously compounded yield on an
 $n$-year zero-coupon bond and $p^{(n)}_{t}=-n\,y^{(n)}_{t}$ the corresponding log
 price. Under the expectations hypothesis, the long yield equals the average
 expected future short rate, up to a constant term premium:
@@ -34,33 +34,35 @@ expected future short rate, up to a constant term premium:
   \label{eq:eh}
 \end{equation}
 A direct implication of \eqref{eq:eh} is that bond excess returns are
-unpredictable: the compensation for holding a longer-maturity bond is not
-forecastable using time-$t$ information. The one-year holding-period excess
-return on an $n$-year bond,
+unpredictable. In other words, the compensation for holding a longer-maturity
+bond cannot be forecast using time-$t$ information. The one-year
+holding-period excess return on an $n$-year bond,
 \begin{equation}
   \rx^{(n)}_{t+12} \;=\; p^{(n-1)}_{t+12}-p^{(n)}_{t}-y^{(1)}_{t}
                   \;=\; n\,y^{(n)}_{t}-(n-1)\,y^{(n-1)}_{t+12}-y^{(1)}_{t},
   \label{eq:rx}
 \end{equation}
 should therefore satisfy $\E_{t}\!\left[\rx^{(n)}_{t+12}\right]=\text{const}$.
-The empirical bond-pricing literature decisively rejects this restriction:
-forward rates \citep{cochrane2005} and, more powerfully, macro-anchored cycles
-\citep{cieslak2015} predict $\rx^{(n)}_{t+12}$ with economically large
-$R^{2}$. The remainder of this chapter builds the predictors used to document
-and interpret this predictability in an international setting; \Cref{ch:results}
-tests them, and the EH itself returns in \Cref{sec:meth-ehmc} as a simulated
-benchmark for the magnitude of predictive $R^{2}$.
+However, the empirical bond-pricing literature clearly rejects this
+restriction. Forward rates \citep{cochrane2005} and, even more powerfully,
+macro-anchored cycles \citep{cieslak2015} predict $\rx^{(n)}_{t+12}$ with
+economically large $R^{2}$. In the remainder of this chapter, we build the
+predictors that we use to document and interpret this predictability in an
+international setting. We test them in \Cref{ch:results}, and we return to the
+EH itself in \Cref{sec:meth-ehmc}, where it serves as a simulated benchmark for
+the magnitude of predictive $R^{2}$.
 
 % ===========================================================================
 \subsection{Yield Decomposition and Interest-Rate Cycles}
 \label{sec:fw-decomp}
 
 The central premise of \citet{cieslak2015} is that nominal yields are driven by
-two forces: a persistent \emph{trend-inflation} component $\trendinf_{i,t}$ that
-anchors the level of interest rates over long horizons, and transitory
-\emph{cycles} $\cyc^{(n)}_{i,t}$ that capture business-cycle conditions, real-rate
-movements, and variation in risk appetite. For each country $i$ and maturity
-$n$, yields are decomposed by the linear projection
+two forces. The first is a persistent \emph{trend-inflation} component
+$\trendinf_{i,t}$ that anchors the level of interest rates over long horizons,
+and the second consists of transitory \emph{cycles} $\cyc^{(n)}_{i,t}$ that
+capture business-cycle conditions, real-rate movements, and variation in risk
+appetite. For each country $i$ and maturity $n$, we decompose yields by the
+linear projection
 \begin{equation}
   y^{(n)}_{i,t} \;=\; \alpha_{i,n} + \beta_{i,n}\,\trendinf_{i,t}
                     + \cyc^{(n)}_{i,t},
@@ -68,45 +70,48 @@ $n$, yields are decomposed by the linear projection
   \cyc^{(n)}_{i,t} \;\equiv\; \varepsilon^{(n)}_{i,t},
   \label{eq:decomp}
 \end{equation}
-so that the cycle is \emph{defined} as the residual of yields on trend inflation,
-estimated separately for every country--maturity pair by ordinary least squares.
+so that the cycle is, by definition, the residual of yields on trend inflation.
+We estimate this projection separately for every country--maturity pair by
+ordinary least squares.
 
-Trend inflation is constructed as a backward-looking, exponentially weighted
+We construct trend inflation as a backward-looking, exponentially weighted
 moving average of realised year-on-year core inflation $\pi_{i,t}$:
 \begin{equation}
   \trendinf_{i,t} \;=\; \frac{1-v}{1-v^{M}}\sum_{j=0}^{M-1} v^{j}\,\pi_{i,t-j},
   \qquad M=120,\quad v=0.987.
   \label{eq:trendinf}
 \end{equation}
-The window spans $M=120$ months (ten years) and the geometric decay
-$v=0.987$ places the bulk of the weight on the most recent two to three years
-while never looking forward, so $\trendinf_{i,t}$ is observable at $t$ and
-introduces no look-ahead bias. The normalising constant $(1-v)/(1-v^{M})$ makes
-the weights sum to one.
+The window spans $M=120$ months (ten years), and the geometric decay
+$v=0.987$ places the bulk of the weight on the most recent two to three years.
+Because the average never looks forward, $\trendinf_{i,t}$ is observable at $t$
+and introduces no look-ahead bias. The normalising constant $(1-v)/(1-v^{M})$
+makes the weights sum to one.
 
-\paragraph{Implementation note.} The decomposition in \eqref{eq:decomp} is run
+\paragraph{Implementation note.} We run the decomposition in \eqref{eq:decomp}
 country-by-country and maturity-by-maturity, so the loadings
-$(\alpha_{i,n},\beta_{i,n})$ and hence the cycles are local objects; the cross
--country structure enters only later, through the global factor. The decay
-parameter $v=0.987$ follows \citet{cieslak2015}; \Cref{ch:robustness} examines
-the sensitivity of the results to this choice and to the window length $M$.
+$(\alpha_{i,n},\beta_{i,n})$, and thus the cycles, are local objects. The
+cross-country structure only enters later, through the global factor. The decay
+parameter $v=0.987$ follows \citet{cieslak2015}. In \Cref{ch:robustness}, we
+examine the sensitivity of our results to this choice and to the window length
+$M$.
 
 % ===========================================================================
 \subsection{The Local Cycle Factor}
 \label{sec:fw-localcf}
 
 The cycles at different maturities are highly collinear but not identical.
-\citet{cieslak2015} summarise the cross-section of cycles with two objects: the
-one-year cycle $\cyc^{(1)}_{i,t}$, which tracks the cyclical position of the
-short rate, and the \emph{average cycle}
+\citet{cieslak2015} summarise the cross-section of cycles with two objects.
+The first is the one-year cycle $\cyc^{(1)}_{i,t}$, which tracks the cyclical
+position of the short rate, and the second is the \emph{average cycle}
 \begin{equation}
   \cycbar_{i,t} \;=\; \frac{1}{|N\setminus\{1\}|}
                       \sum_{n\in N,\, n\neq 1}\cyc^{(n)}_{i,t},
   \label{eq:cbar}
 \end{equation}
 which captures the common, longer-maturity cyclical variation and attenuates
-maturity-specific measurement error. The \emph{local cycle factor} is the fitted
-value of the one-year-ahead excess return projected on these two predictors:
+maturity-specific measurement error. We define the \emph{local cycle factor} as
+the fitted value of the one-year-ahead excess return projected on these two
+predictors:
 \begin{align}
   \rxbar_{i,t+12} &= \gamma_{0} + \gamma_{i,1}\,\cyc^{(1)}_{i,t}
                      + \gamma_{i,2}\,\cycbar_{i,t} + \varepsilon_{i,t+12},
@@ -115,18 +120,19 @@ value of the one-year-ahead excess return projected on these two predictors:
                      + \hat\gamma_{i,2}\,\cycbar_{i,t}.
                      \label{eq:cf}
 \end{align}
-Here $\rxbar_{i,t+12}$ is the duration-standardised, maturity-averaged excess
-return defined in \Cref{sec:fw-returns}. Equation \eqref{eq:cf} is the empirical
-analogue of the single return-forecasting factor of \citet{cochrane2005}, but
-anchored in the macroeconomic cycle rather than in forward rates;
-$\CF_{i,t}$ is, by construction, the component of the cycle cross-section that is
-relevant for predicting returns.
+Here, $\rxbar_{i,t+12}$ is the duration-standardised, maturity-averaged excess
+return that we define in \Cref{sec:fw-returns}. Equation \eqref{eq:cf} is the
+empirical analogue of the single return-forecasting factor of
+\citet{cochrane2005}, but it is anchored in the macroeconomic cycle rather than
+in forward rates. $\CF_{i,t}$ is, by construction, the component of the cycle
+cross-section that is relevant for predicting returns.
 
 \paragraph{Implementation note.} The average cycle in \eqref{eq:cbar} excludes
 the one-year maturity, which already enters \eqref{eq:cf-reg} separately as
-$\cyc^{(1)}_{i,t}$; $\cycbar_{i,t}$ is therefore the mean cycle over
-$\{2,4,5,9,10\}$ years. This avoids double-counting the short-rate cycle and
-mirrors the role of the average forward rate in the \citet{cochrane2005} factor.
+$\cyc^{(1)}_{i,t}$. $\cycbar_{i,t}$ is, therefore, the mean cycle over
+$\{2,4,5,9,10\}$ years. Because of this, we avoid double-counting the
+short-rate cycle and mirror the role of the average forward rate in the
+\citet{cochrane2005} factor.
 
 % ===========================================================================
 \subsection{The Global Cycle Factor and GDP Weights}
@@ -134,8 +140,8 @@ mirrors the role of the average forward rate in the \citet{cochrane2005} factor.
 
 If government-bond markets are internationally integrated, investors should be
 compensated for exposure to a \emph{common} source of risk rather than for
-country-specific fluctuations \citep{dahlquist2013}. To capture this, we
-aggregate the local cycle factors into a single global factor, using
+country-specific fluctuations \citep{dahlquist2013}. To capture this idea, we
+aggregate the local cycle factors into a single global factor. We use
 time-varying GDP weights so that larger economies contribute proportionally
 more:
 \begin{equation}
@@ -145,13 +151,13 @@ more:
                      {\sum_{j\in\mathcal{G}}\mathrm{GDP}_{j,t}}.
   \label{eq:gcf}
 \end{equation}
-The weights $w_{i,t}$ are recomputed each month over the set of countries that
-are present in the estimation panel at $t$, so that $\sum_{i}w_{i,t}=1$ by
-construction even when coverage is unbalanced (\Cref{sec:data-coverage}).
-Nominal GDP is converted to a common currency before weighting. The global
+We recompute the weights $w_{i,t}$ each month over the set of countries that
+are present in the estimation panel at $t$, so that $\sum_{i}w_{i,t}=1$ holds
+by construction even when coverage is unbalanced (\Cref{sec:data-coverage}).
+We convert nominal GDP to a common currency before weighting. The global
 factor $\GCF_{t}$ is the international counterpart of the local $\CF_{i,t}$ and
-provides the natural test of market integration: under full integration, the
-global factor should subsume the predictive content of the local factor
+provides us with a natural test of market integration. Under full integration,
+the global factor should subsume the predictive content of the local factor
 (\Cref{sec:fw-hypotheses}).
 
 % ===========================================================================
@@ -171,24 +177,25 @@ across the maturity set to obtain a single, scale-comparable return series:
   \label{eq:rxbar}
 \end{equation}
 The duration weight $D^{(n)}=n$ is the Macaulay duration of a continuously
-compounded zero-coupon bond. The averaging set used in construction is
-$\mathcal{N}=\{2,5,10\}$ years, the maturities for which a clean
-one-year-ahead excess return is identified given the data menu (each requires
-the adjacent shorter yield $y^{(n-1)}$, i.e.\ $y^{(1)},y^{(4)},y^{(9)}$, all
-available).
+compounded zero-coupon bond. For the construction, we use the averaging set
+$\mathcal{N}=\{2,5,10\}$ years. These are the maturities for which a clean
+one-year-ahead excess return is identified given the data menu, since each
+requires the adjacent shorter yield $y^{(n-1)}$, i.e.\
+$y^{(1)},y^{(4)},y^{(9)}$, which are all available.
 
-\paragraph{Implementation note.} The proposal specified a yield-adjusted duration
-$D^{(n)}_{i,t}=n/(1+y^{(n)}_{i,t})$. Under continuous compounding the Macaulay
-duration of a zero is exactly $n$, so we adopt $D^{(n)}=n$; this also keeps the
-standardisation free of the contemporaneous yield and therefore exogenous to the
-return being scaled. As \citet{cieslak2015} note, the results are insensitive to
-this convention, and a simple (unstandardised) average leaves the conclusions
-unchanged.
+\paragraph{Implementation note.} Our proposal specified a yield-adjusted
+duration $D^{(n)}_{i,t}=n/(1+y^{(n)}_{i,t})$. However, under continuous
+compounding the Macaulay duration of a zero-coupon bond is exactly $n$, so we
+adopt $D^{(n)}=n$. This choice also keeps the standardisation free of the
+contemporaneous yield and, therefore, exogenous to the return being scaled. As
+\citet{cieslak2015} note, the results are insensitive to this convention, and a
+simple (unstandardised) average leaves our conclusions unchanged.
 
 \subsubsection{US-dollar investor returns}
-For a US investor who borrows one year in US dollars, converts to foreign
-currency, holds the foreign bond, and converts the proceeds back, the dollar
-excess return adds the realised currency return and nets out the US short rate:
+We now consider a US investor who borrows for one year in US dollars, converts
+to foreign currency, holds the foreign bond, and converts the proceeds back.
+For this investor, the dollar excess return adds the realised currency return
+and nets out the US short rate:
 \begin{equation}
   \rx^{(n),\mathrm{USD}}_{i,t+12}
     \;=\; \rx^{(n)}_{i,t+12} + y^{(1)}_{i,t}
@@ -196,22 +203,22 @@ excess return adds the realised currency return and nets out the US short rate:
   \label{eq:rx-usd}
 \end{equation}
 where $s_{i,t}=\log(\text{USD per unit of currency }i)$, so that
-$s_{i,t+12}-s_{i,t}$ is the one-year log currency return. The same
-duration-standardisation and maturity-averaging as in \eqref{eq:rxbar} are
-applied to \eqref{eq:rx-usd} to obtain $\rxbar^{\,\mathrm{USD}}_{i,t+12}$. The
-dollar return is the object of interest for the international investor and the
-input to the FX-adjusted factor below.
+$s_{i,t+12}-s_{i,t}$ is the one-year log currency return. We apply the same
+duration-standardisation and maturity-averaging as in \eqref{eq:rxbar} to
+\eqref{eq:rx-usd} and obtain $\rxbar^{\,\mathrm{USD}}_{i,t+12}$. This dollar
+return is the object of interest for the international investor and the input
+to the FX-adjusted factor below.
 
 % ===========================================================================
 \subsection{The FX-Adjusted Global Cycle Factor}
 \label{sec:fw-fxgcf}
 
 A global factor built from local-currency returns ignores the currency risk
-borne by an international investor. Following the logic of the FX-adjusted
-global factor (FXGCP) of \citet{dahlquist2013}, we construct an analogous
-\emph{FX-adjusted global cycle factor} $\FXGCF_{t}$ that targets dollar returns
-directly. Let the GDP-weighted cross-country averages of the dollar return and
-of the cycle predictors be
+that an international investor bears. Because of this, we follow the logic of
+the FX-adjusted global factor (FXGCP) of \citet{dahlquist2013} and construct an
+analogous \emph{FX-adjusted global cycle factor} $\FXGCF_{t}$ that targets
+dollar returns directly. We let the GDP-weighted cross-country averages of the
+dollar return and of the cycle predictors be
 \begin{equation}
   \rxbar^{\,\mathrm{USD}}_{t+12} = \sum_{i\in\mathcal{G}} w_{i,t}\,
       \rxbar^{\,\mathrm{USD}}_{i,t+12},
@@ -221,8 +228,8 @@ of the cycle predictors be
   \overline{\cycbar}_{t} = \sum_{i} w_{i,t}\,\cycbar_{i,t}.
   \label{eq:fxgcf-agg}
 \end{equation}
-The FX-adjusted factor is then the fitted value from the projection of the
-average dollar return on the average cycle predictors:
+We then define the FX-adjusted factor as the fitted value from the projection
+of the average dollar return on the average cycle predictors:
 \begin{align}
   \rxbar^{\,\mathrm{USD}}_{t+12}
      &= \delta_{0} + \delta_{1}\,\overline{\cyc}^{\,(1)}_{t}
@@ -233,35 +240,38 @@ average dollar return on the average cycle predictors:
         \label{eq:fxgcf}
 \end{align}
 
-\paragraph{Implementation note.} Equations
-\eqref{eq:fxgcf-agg}--\eqref{eq:fxgcf} implement the FX-adjusted factor in the
-``top-down'' manner of \citet{dahlquist2013}: $\FXGCF_{t}$ is the fitted value of
-the average dollar return on the average cycle \emph{predictor menu}, not the
-fitted value of a regression on $\GCF_{t}$. The latter, written as
-$\rxbar^{\,\mathrm{USD}}_{t+12}=\delta_{0}+\delta_{1}\GCF_{t}+\varepsilon_{t+12}$
-in the proposal, would make $\FXGCF_{t}$ an affine transform of $\GCF_{t}$ and
-hence statistically indistinguishable from it. Targeting the underlying cycle
-predictors instead lets $\FXGCF_{t}$ load on the dollar-return-relevant
-combination of cycles and currency dynamics, and reproduces the empirically
-relevant property that $\FXGCF_{t}$ is only moderately correlated with $\GCF_{t}$
-(\Cref{ch:results}).
+\paragraph{Implementation note.} With equations
+\eqref{eq:fxgcf-agg}--\eqref{eq:fxgcf}, we implement the FX-adjusted factor in
+the ``top-down'' manner of \citet{dahlquist2013}. $\FXGCF_{t}$ is the fitted
+value of the average dollar return on the average cycle \emph{predictor menu},
+not the fitted value of a regression on $\GCF_{t}$. The latter specification,
+which our proposal wrote as
+$\rxbar^{\,\mathrm{USD}}_{t+12}=\delta_{0}+\delta_{1}\GCF_{t}+\varepsilon_{t+12}$,
+would make $\FXGCF_{t}$ an affine transform of $\GCF_{t}$ and, hence,
+statistically indistinguishable from it. By targeting the underlying cycle
+predictors instead, we let $\FXGCF_{t}$ load on the combination of cycles and
+currency dynamics that is relevant for dollar returns. This also reproduces the
+empirically relevant property that $\FXGCF_{t}$ is only moderately correlated
+with $\GCF_{t}$ (\Cref{ch:results}).
 
 % ===========================================================================
 \subsection{Hypotheses and Predictive Specifications}
 \label{sec:fw-hypotheses}
 
-The three-factor hierarchy maps directly onto the research questions through a
-sequence of one-year-ahead predictive regressions. Each is estimated with the
-overlapping-return inference described in \Cref{sec:meth-inference}.
+In this final subsection, we map the three-factor hierarchy onto our research
+questions through a sequence of one-year-ahead predictive regressions. We
+estimate each of them with the overlapping-return inference described in
+\Cref{sec:meth-inference}.
 
 \paragraph{Phase~I --- Does the cycle factor predict returns locally?}
-For each country we estimate
+For each country, we estimate
 \begin{equation}
   \rxbar_{i,t+12} = \alpha_{i} + \beta_{i}\,\CF_{i,t} + \varepsilon_{i,t+12},
   \label{eq:h-local}
 \end{equation}
-testing $H_{0}\!:\beta_{i}=0$. A rejection establishes that the macro-anchored
-cycle mechanism of \citet{cieslak2015} operates outside the United States.
+and test $H_{0}\!:\beta_{i}=0$. A rejection of this null establishes that the
+macro-anchored cycle mechanism of \citet{cieslak2015} also operates outside the
+United States.
 
 \paragraph{Phase~II --- Does the global factor subsume the local factor?}
 We run the horse race
@@ -272,15 +282,16 @@ We run the horse race
   \rxbar_{i,t+12} &= \alpha_{i} + \gamma_{i}\,\GCF_{t} + \varepsilon_{i,t+12}.
                      \label{eq:h-global}
 \end{align}
-Under full market integration the global factor should drive out the local
-factor: adding $\CF_{i,t}$ to \eqref{eq:h-global} should not raise predictive
-power, i.e.\ $\beta_{i}=0$ in \eqref{eq:h-horse}. To make the comparison clean we
-orthogonalise the local factor with respect to the global factor before the
-joint regression, so that $\beta_{i}$ measures the incremental local content.
+Under full market integration, the global factor should drive out the local
+factor. In this case, adding $\CF_{i,t}$ to \eqref{eq:h-global} should not
+raise the predictive power, i.e.\ $\beta_{i}=0$ in \eqref{eq:h-horse}. To make
+this comparison clean, we orthogonalise the local factor with respect to the
+global factor before the joint regression, so that $\beta_{i}$ measures the
+incremental local content.
 
 \paragraph{Phase~III --- Does currency risk break the model, and does the
 FX-adjusted factor restore it?}
-For the dollar investor we estimate
+For the dollar investor, we estimate
 \begin{align}
   \rxbar^{\,\mathrm{USD}}_{i,t+12}
      &= \alpha_{i} + \beta_{i}\,\CF_{i,t}
@@ -293,10 +304,10 @@ For the dollar investor we estimate
      &= \alpha_{i} + \delta_{i}\,\FXGCF_{t} + \varepsilon_{i,t+12}.
         \label{eq:h-fxgcf}
 \end{align}
-Specifications \eqref{eq:h-usd-local}--\eqref{eq:h-usd-global} ask whether the
-local-currency factors retain predictive power once currency risk is
-introduced; \eqref{eq:h-fxgcf} asks whether the purpose-built FX-adjusted factor
-$\FXGCF_{t}$ recovers the predictability that an unadjusted global factor loses
-on currency-converted returns. Together, \eqref{eq:h-local}--\eqref{eq:h-fxgcf}
-constitute the empirical programme tested in \Cref{ch:results} and stress-tested
-in \Cref{ch:robustness}.
+With specifications \eqref{eq:h-usd-local}--\eqref{eq:h-usd-global}, we ask
+whether the local-currency factors retain their predictive power once currency
+risk is introduced. With \eqref{eq:h-fxgcf}, we ask whether the purpose-built
+FX-adjusted factor $\FXGCF_{t}$ recovers the predictability that an unadjusted
+global factor loses on currency-converted returns. Together,
+\eqref{eq:h-local}--\eqref{eq:h-fxgcf} constitute the empirical programme that
+we test in \Cref{ch:results} and stress-test in \Cref{ch:robustness}.
