@@ -5,7 +5,7 @@
   \toprule
   Strategy & Mean (\%) & Vol (\%) & Sharpe & OOS $R^{2}$ \\
   \midrule
-  $\FXGCF$-timed         & $2.68$ & $11.24$ & $0.24$ & $0.120$ \\
+  $\FXGCF$-timed         & $1.50$ & $7.90$  & $0.19$ & $-0.008$ \\
   $\GCF$-timed           & $1.95$ & $7.95$  & $0.25$ & $0.073$ \\
   Recursive-mean timing  & $1.60$ & $7.82$  & $0.20$ & --      \\
   Buy-and-hold           & $1.53$ & $7.72$  & $0.20$ & --      \\
@@ -19,6 +19,7 @@
   mean--variance rule \eqref{eq:strat-weight} and equal-average-exposure
   reporting as the hedged strategy of \Cref{tab:strat-perf}. OOS $R^{2}$ is the
   \citet{campbellthompson2008} statistic of the corresponding factor forecast.
-  The unhedged dollar bond premium is modest over the sample, so the dollar
-  strategies improve on the passive portfolio but remain well below the
-  currency-hedged investor.}
+  The unhedged dollar bond premium is modest over the sample. Timing on the
+  unadjusted global factor improves on the passive portfolio, while the
+  FX-adjusted factor, whose strength is cross-sectional rather than
+  aggregate, does not; both remain well below the currency-hedged investor.}

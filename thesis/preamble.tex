@@ -40,6 +40,9 @@
 \usepackage{enumitem}
 
 % --- References -------------------------------------------------------------
+% Author-year citations via natbib with the chicago bibliography style, the
+% referencing convention of the finance academic literature (per the
+% supervisor's thesis guidelines). cleveref stays loaded last.
 \usepackage[round, authoryear]{natbib}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
@@ -55,6 +58,7 @@
 \newcommand{\CF}{\mathit{CF}}                    % local cycle factor
 \newcommand{\GCF}{\mathit{GCF}}                  % global cycle factor
 \newcommand{\FXGCF}{\mathit{FXGCF}}              % FX-adjusted global cycle factor
+\newcommand{\FXCF}{\mathit{FXCF}}                % per-country USD cycle factor
 \newcommand{\CP}{\mathit{CP}}                    % Cochrane-Piazzesi factor
 \newcommand{\GCP}{\mathit{GCP}}                  % global CP factor
 \DeclareMathOperator{\Var}{Var}

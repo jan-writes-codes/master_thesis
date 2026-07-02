@@ -2,24 +2,114 @@
 \chapter{Appendix}
 \label{ch:appendix}
 
-\section{Full Per-Country Predictability Tables}
+\section{Additional Tables}
 \label{app:per-country}
-% Detailed per-country / per-maturity regression output behind the Ch.7 figures.
+This section collects detailed tables that support the main text: the per-maturity Phase~I estimates, the cross-country yield correlations, the in-sample subsample and inflation-measure estimates, and the Italy crisis decomposition.
+
+\begin{table}[htbp]
+  \caption{Phase~I by maturity: predicting individual excess returns with the
+    cycle factor}
+  \label{tab:mr-phase1-mat}
+  \centering
+  \input{tables/mr_t1b_maturity}
+\end{table}
+
+\begin{table}[htbp]
+  \caption{Cross-country correlation of the ten-year zero-coupon yield}
+  \label{tab:dh-t1-corr}
+  \centering
+  \input{tables/dh_t1_corr10y}
+\end{table}
+
+\begin{table}[htbp]
+  \caption{In-sample predictability across subsamples}
+  \label{tab:rob-sub-is}
+  \centering
+  \input{tables/rob_t1_sub_is}
+\end{table}
+
+\begin{table}[htbp]
+  \caption{Italy across subsamples}
+  \label{tab:rob-italy}
+  \centering
+  \input{tables/rob_t3_italy}
+\end{table}
+
+\begin{table}[htbp]
+  \caption{Core versus headline CPI: in-sample}
+  \label{tab:rob-core-headline}
+  \centering
+  \input{tables/rob_t5_core_vs_reg}
+\end{table}
 
 \section{Additional Figures}
 \label{app:figures}
-% Supporting exhibits not in the main text (e.g. s2_* decomposition, s3_* US
-% replication, factor time series).
+This section collects supporting figures referenced in the main text.
 
-\section{Data Definitions and Construction}
-\label{app:data}
-% Precise variable definitions, the EWMA trend-inflation parameters, GDP-weight
-% construction, FX conventions.
+\begin{figure}[htbp]\centering
+  \includegraphics[width=0.85\linewidth]{figures/mr_f1_r2_phase1.pdf}
+  \caption{In-sample $R^{2}$ of the local predictive regression
+    \eqref{eq:h-local}, $\rxbar_{i,t+12}\sim\CF_{i,t}$, by country.}
+  \label{fig:mr-r2-phase1}
+\end{figure}
 
-\section{Inference Details}
-\label{app:inference}
-% Newey-West lag choice, the reverse-regression / Hodrick-1B note, BIC formula,
-% the stationary block bootstrap, and the EH Monte-Carlo calibration.
+\begin{figure}[htbp]\centering
+  \includegraphics[width=0.8\linewidth]{figures/s1_yield_curve_avg.pdf}
+  \caption{Average zero-coupon yield curve by country over the sample.}
+  \label{fig:yield-curve-avg}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+  \begin{minipage}[t]{0.49\linewidth}\centering
+    \includegraphics[width=\linewidth]{figures/s10_r2_is_compare.pdf}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.49\linewidth}\centering
+    \includegraphics[width=\linewidth]{figures/s10_cf_cp_corr.pdf}
+  \end{minipage}
+  \caption{Left: in-sample $R^{2}$ by country for the cycle factors (CF, GCF)
+    against the forward-rate factors (CP, GCP). Right: per-country correlation
+    between the local cycle factor and the local forward factor.}
+  \label{fig:s10-is}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+  \includegraphics[width=0.88\linewidth]{figures/rob_f3_core_vs_reg.pdf}
+  \caption{In-sample $R^{2}$ of the local predictive regression
+    $\rxbar_{i,t+12}\sim\CF_{i,t}$ by country, with the cycle factor built on core
+    (ex food and energy) versus regular all-items CPI.}
+  \label{fig:rob-core-headline}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+  \includegraphics[width=0.9\linewidth]{figures/mr_f2_r2_ladder.pdf}
+  \caption{Phase~II in-sample $R^{2}$ ladder by country: the local factor alone
+    \eqref{eq:h-local}, the global factor alone \eqref{eq:h-global}, and the
+    joint horse race \eqref{eq:h-horse}.}
+  \label{fig:mr-r2-ladder}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+  \includegraphics[width=0.9\linewidth]{figures/s1_yield_ts.pdf}
+  \caption{Ten-year zero-coupon yields across the G10, 1989--2026. The secular
+    decline in nominal yields and the post-2021 reversal are common across
+    countries.}
+  \label{fig:yield-ts}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+  \begin{minipage}[t]{0.49\linewidth}\centering
+    \includegraphics[width=\linewidth]{figures/s8_gcf_oos_vs_is.pdf}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.49\linewidth}\centering
+    \includegraphics[width=\linewidth]{figures/s8_oos_is_corr.pdf}
+  \end{minipage}
+  \caption{Left: the full-sample global cycle factor $\GCF_{t}$ against the
+    fully-recursive $\GCF^{\mathrm{oos}}_{t}$; convergence after the trend-inflation
+    burn-in signals a stable real-time estimator. Right: per-country correlation
+    between the full-sample and recursive \emph{local} cycle factors, where a
+    value closer to one means that the full-sample look-ahead added little.}
+  \label{fig:s8-gcf-conv}
+\end{figure}
 
 \section{AI Disclaimer}
 \label{app:ai}
@@ -27,21 +117,22 @@
 % consistent with the "Statement on the use of generative AI tools" in the
 % Declaration of Authorship.
 
-The following AI-assisted language and coding models were used in the
-preparation of this work: Claude (Sonnet~4.6 and Opus~4.8, Anthropic),
-ChatGPT Codex (Codex~5.3 and GPT~5.5, OpenAI).
+In the preparation of this work, we used the following AI-assisted language and
+coding models: Claude (Sonnet~4.6 and Opus~4.8, Anthropic) and ChatGPT Codex
+(Codex~5.3 and GPT~5.5, OpenAI).
 
-Claude and ChatGPT Codex were used to support the implementation of the coding
-pipeline, including code generation and debugging, validation of model outputs,
-summarization of results, and the production of charts and figures.
+We used Claude and ChatGPT Codex to support the implementation of the coding
+pipeline, including code generation and debugging, the validation of model
+outputs, the summarisation of results, and the production of charts and
+figures.
 
-ChatGPT Codex additionally served as the execution environment for running the
-code pipeline. Claude was also used in a minor supporting capacity during the
-preparation of presentation slides; however, all slides were conceived,
-structured, and finalized by the human author, with AI assistance representing
+Additionally, ChatGPT Codex served as the execution environment for running
+the code pipeline. We also used Claude in a minor supporting capacity during
+the preparation of the presentation slides. However, all slides were conceived,
+structured, and finalised by the human author, and the AI assistance represents
 a negligible share of the final content.
 
 All AI-generated outputs were reviewed, critically assessed, and adapted by the
-author. The data handling and model analysis were performed locally. Model
+author. We performed the data handling and model analysis locally. Model
 training and index construction were implemented via cloud computing
 (Vast.ai and GCP).

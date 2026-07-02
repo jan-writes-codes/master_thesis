@@ -9,268 +9,286 @@
 \label{sec:disc-econ}
 
 \paragraph{What the cycle factor captures internationally.}
-The central empirical fact of \Cref{ch:results} is that the trend--cycle
+The central empirical result of \Cref{ch:results} is that the trend--cycle
 mechanism of \citet{cieslak2015} is not a property of one market but of the
-asset class. In every G10 market, the deviation of yields from their
-trend-inflation anchor predicts next year's excess return with the same sign
-structure---a negative loading on the one-year cycle and a positive loading
-on the average cycle---and with loadings that are flat-to-rising across the
-maturity curve, the signature of a single premium that prices the whole curve.
-The natural reading is the one \citet{cieslak2015} give for the United States,
-now with cross-sectional support: trend inflation pins down where investors
-expect yields to settle, so the distance of today's curve from that anchor
-measures the compensation demanded for holding duration, and that compensation
-mean-reverts at business-cycle frequency. The uniformity across eleven
-countries with different monetary histories is hard to reconcile with a
-data-mined artefact; it is exactly what one expects if the mechanism is
-fundamental, as the falling-stars evidence of \citet{bauer2020} implies---once
-the slow-moving macro anchors are accounted for, the cyclical deviation is
-where the risk premium lives.
+asset class as a whole. In every G10 market, the deviation of yields from
+their trend-inflation anchor predicts next year's excess return with the same
+sign structure, namely a negative loading on the one-year cycle and a
+positive loading on the average cycle. Furthermore, the loadings are flat to
+rising across the maturity curve, which is what we would expect from a single
+premium that prices the whole curve. We would suggest the same reading that
+\citet{cieslak2015} give for the United States, now with cross-sectional
+support. Trend inflation pins down where investors expect yields to settle,
+so the distance of today's curve from this anchor measures the compensation
+demanded for holding duration, and this compensation mean-reverts at
+business-cycle frequency. The uniformity across eleven countries with
+different monetary histories seems hard to reconcile with a data-mined
+artefact. It is, however, exactly what we would expect if the mechanism is
+fundamental, as the falling-stars evidence of \citet{bauer2020} implies. Once
+the slow-moving macro anchors are accounted for, the risk premium is
+contained in the cyclical deviation.
 
 The comparison with the forward-rate factor sharpens this interpretation. In
-sample, the \citet{cochrane2005} factor fits \emph{better} than the cycle
-factor across the G10 ($R^{2}$ of $0.38$ against $0.25$ on average), as a
-six-predictor combination of prices should against a two-predictor one. Out
-of sample the ranking reverses decisively: of the four candidate factors,
-only the \emph{global cycle} factor beats the recursive historical mean
-(\Cref{sec:rob-cf-cp}). The macro anchoring is therefore not packaging; it is
-load-bearing. Detrending by a slowly-moving, backward-looking inflation trend
-produces predictive loadings that are stable enough to estimate in real time,
-whereas the forward-rate combination---fit to the fast-moving forward curve
-itself---is precisely the kind of in-sample construct that the out-of-sample
-test exists to expose. The thesis's evidence thus speaks to the oldest
-dispute in this literature, the choice of state vector: between prices
-(forwards) and macro-anchored cycles, the cycle wins where it matters, in
-real time.
+sample, the \citet{cochrane2005} factor fits better than the cycle factor
+across the G10 ($R^{2}$ of $0.38$ against $0.25$ on average), which we would
+expect from a six-predictor combination of prices compared to a two-predictor
+one. Out of sample, however, the ranking clearly reverses. Of the four
+candidate factors, only the global cycle factor beats the recursive
+historical mean (\Cref{sec:rob-cf-cp}). We would suggest that the macro
+anchoring is therefore not a cosmetic feature but essential to the result.
+Detrending by a slowly-moving, backward-looking inflation trend produces
+predictive loadings that are stable enough to estimate in real time. The
+forward-rate combination, in contrast, is fit to the fast-moving forward
+curve itself and is therefore exactly the kind of in-sample construct that
+the out-of-sample test is designed to expose. Our evidence thus speaks to
+the oldest dispute in this literature, the choice of state vector. Between
+prices (forwards) and macro-anchored cycles, the cycle performs better where
+it matters most, namely in real time.
 
 \paragraph{The integration story.}
-The second finding---that a single GDP-weighted global cycle factor matches
+Our second finding is that a single GDP-weighted global cycle factor matches
 the explanatory power of eleven national factors and drives the local factor
-out in eight of eleven markets---re-establishes the integration result of
-\citet{dahlquist2013} on the macro-anchored factor family. The economic
-content is that the predictable component of government-bond returns is
-compensation for a \emph{common} risk: bond risk premia in the G10 rise and
-fall together, and a domestic investor in, say, Sweden is rewarded for
-exposure to the global cycle, not to a Swedish one. Two mechanisms plausibly
-support this. Economically, the inputs to the factor are themselves
-synchronised---inflation trends fell together across the G10 over the sample,
-business cycles co-move, and monetary policy responded to common shocks, so
-the national cycles share their informative variation. Statistically,
-aggregation averages away the estimation noise in eleven separately fitted
-generated regressors, which is why the global factor is also the only one
-that survives out of sample (\Cref{sec:rob-oos}). These two readings are
-complements, not rivals: the GDP-weighted average can only de-noise the
-national signals because there is a common signal to recover.
+out in eight of eleven markets. This re-establishes the integration result
+of \citet{dahlquist2013} on the macro-anchored factor family. The economic
+content of this finding is that the predictable component of government-bond
+returns is compensation for a common risk. Bond risk premia in the G10 rise
+and fall together, and a domestic investor in, for example, Sweden is
+rewarded for exposure to the global cycle, not to a Swedish one. We can
+think of two mechanisms that plausibly support this. Economically, the
+inputs to the factor are themselves synchronised. Inflation trends fell
+together across the G10 over the sample, business cycles co-move, and
+monetary policy responded to common shocks, so the national cycles share
+their informative variation. Statistically, aggregation averages away the
+estimation noise in eleven separately fitted generated regressors, which is
+why the global factor is also the only one that survives out of sample
+(\Cref{sec:rob-oos}). We see these two readings as complements rather than
+rivals, because the GDP-weighted average can only de-noise the national
+signals if there is a common signal to recover.
 
 A recent asset-class perspective adds an important qualification to what
 ``integration'' can and cannot mean here. \citet{randl2025} document that
-hedged developed-market bond \emph{returns} have a strong factor
-structure---three principal components explain $86\%$ of their
-variance---yet these common sources of variation are largely
-\emph{unpriced}: they account for only about a third of the variation in the
-mean--variance-efficient portfolio that prices the asset class. Common
-variation and common compensation are different objects. The integration
-documented in this thesis concerns the second: a single global factor
-describes the \emph{conditional premium}---the time-variation in expected
-returns---across the G10. That is fully compatible with much of the common
-realised-return variation being unpriced noise; indeed, it is the
+hedged developed-market bond returns have a strong factor structure, with
+three principal components explaining $86\%$ of their variance. However,
+these common sources of variation are largely unpriced, as they account for
+only about a third of the variation in the mean--variance-efficient
+portfolio that prices the asset class. Common variation and common
+compensation are therefore two different objects. The integration we
+document in this thesis concerns the second one: a single global factor
+describes the conditional premium, that is, the time-variation in expected
+returns, across the G10. This is fully compatible with much of the common
+realised-return variation being unpriced noise. In fact, it is the
 combination of the two findings that gives the global cycle factor its
 practical meaning, as the parsimonious real-time summary of the priced,
-forecastable component rather than of return co-movement at large.
+forecastable component rather than of return co-movement in general.
 
-The exceptions are as informative as the rule. The local factor retains
-incremental content in Italy, the Netherlands and Belgium, and the Italian
-case decomposes cleanly in the subsample analysis: Italian local
-predictability is overwhelmingly a 2010--2012 phenomenon, with a horse-race
-$t$-statistic above ten and a positive real-time $R^{2}_{\mathrm{oos}}$ of
-$+0.21$---the only economically meaningful local out-of-sample result in the
-study---while the global factor enters with the wrong sign
-(\Cref{sec:rob-italy}). Integration, in other words, is a regime, not a law.
-When redenomination and sovereign-credit risk reprice a peripheral market,
-the compensation becomes local again, and a GDP-weighted factor dominated by
-the core economies cannot price it. This conditionality refines rather than
-contradicts \citet{dahlquist2013}: global risk compensation is the rule in
-calm integration, and the limit of that rule is sovereign stress. The
-timing of the premium also lines up with independent evidence:
-\citet{randl2025} estimate that the market price of risk of the hedged
-international bond asset class peaks in the financial crisis, the
-2010--2012 euro-area crisis, and the 2022 inflation shock, and that it is
-related to trend inflation and, after 2008, to the \emph{dispersion} of
-inflation across markets---the same crisis windows in which the cycle
-factors' explanatory power concentrates here
-(\Cref{sec:rob-subsample}), and a further sign that international bond
-premia are anchored in inflation dynamics.
+We consider the exceptions to be as informative as the rule. The local
+factor retains incremental content in Italy, the Netherlands and Belgium,
+and the Italian case decomposes cleanly in the subsample analysis. Italian
+local predictability is overwhelmingly a 2010--2012 phenomenon, with a
+horse-race $t$-statistic above ten and a positive real-time
+$R^{2}_{\mathrm{oos}}$ of $+0.21$, which is the only economically meaningful
+local out-of-sample result in our study, while the global factor enters with
+the wrong sign (\Cref{sec:rob-italy}). This suggests that integration is
+conditional on the prevailing regime rather than a universal property. When
+redenomination and sovereign-credit risk reprice a peripheral market, the
+compensation becomes local again, and a GDP-weighted factor dominated by
+the core economies cannot price it. We see this conditionality as a
+refinement of \citet{dahlquist2013} rather than a contradiction: global risk
+compensation appears to hold in calm periods of integration, while sovereign
+stress marks the limit of this rule. The timing of the premium is also in
+line with independent evidence. \citet{randl2025} estimate that the market
+price of risk of the hedged international bond asset class peaks in the
+financial crisis, the 2010--2012 euro-area crisis, and the 2022 inflation
+shock, and that it is related to trend inflation and, after 2008, to the
+dispersion of inflation across markets. These are the same crisis windows in
+which the explanatory power of the cycle factors concentrates in our
+analysis (\Cref{sec:rob-subsample}), which we take as a further sign that
+international bond premia are anchored in inflation dynamics.
 
 \paragraph{The role of the FX adjustment.}
-The third finding is a contrast with the forward-rate literature and, we
-would argue, a substantive one. For \citet{dahlquist2013}, adjusting the
-global factor for currency risk matters: their FX-adjusted forward factor
-correlates only about $0.50$ with the unadjusted one and recovers
-dollar-investor predictability. The cycle-factor analogue built here is
-nearly collinear with the unadjusted global factor (correlation $0.99$), so
-the FX adjustment, while uniformly helpful in direction, has almost no
-independent information to add. A plausible economic explanation lies in
-what each factor family retains. The forward-rate factor is built from the
-\emph{level} and shape of the forward curve, and cross-country differences in
-rate levels are exactly the interest differentials that forecast currency
-returns through the failure of uncovered interest parity; an FX adjustment
-of a forward factor therefore has carry-relevant information to work with.
-The cycle factor, by construction, \emph{removes} the level: detrending by
-trend inflation strips out the persistent rate-differential component and
-keeps the transitory deviation. What remains forecasts bond premia well but
-currencies hardly at all, so projecting dollar returns on global cycles
-returns essentially the cycles themselves. On this reading, the
-near-collinearity is not a failure of implementation but a property of
-macro-anchored factors: the same detrending that gives the cycle factor its
-real-time stability in bonds takes away its leverage over currencies. The
-regime evidence supports this: the residual dollar-investor predictability
-is concentrated before 2008, when rate differentials were wide, and turns
-negative in the post-crisis regime of compressed, synchronised policy rates
-(\Cref{sec:rob-subsample}).
+Our third finding refines the comparison with the forward-rate literature.
+For \citet{dahlquist2013}, adjusting the global factor for currency risk
+matters. Their FX-adjusted forward factor correlates only about $0.50$ with
+the unadjusted one and recovers dollar-investor predictability. Once we
+build the cycle-factor analogue bottom-up, it behaves in a comparable way:
+our baseline $\FXGCF_{t}$ correlates $0.78$ with the unadjusted global
+factor and nearly doubles the dollar investor's in-sample fit
+(\Cref{sec:res-phase3}). However, two qualifications separate the cycle
+family from the forward family. First, the recovery depends on the
+construction. The top-down variant, which projects the aggregate dollar
+return on the aggregate cycle predictors, is nearly collinear with the
+unadjusted factor (correlation $0.99$) and adds almost nothing
+(\Cref{sec:rob-fxgcf-construction}). The currency-relevant information in
+the cycles therefore lives in the cross-section of the country-level USD
+regressions and is lost once the aggregation happens before the fit.
+Second, the in-sample recovery translates into only a small and
+scheme-sensitive real-time edge, and it does not help in timing the
+aggregate dollar portfolio (\Cref{ch:strategy}). A possible economic
+explanation could lie in what each factor family retains. The forward-rate
+factor is built from the level and shape of the forward curve, and
+cross-country differences in rate levels are exactly the interest
+differentials that forecast currency returns through the failure of
+uncovered interest parity, so an FX adjustment of a forward factor has
+carry-relevant information to work with even at the aggregate level. The
+cycle factor, in contrast, removes the level by construction, because
+detrending by trend inflation strips out the persistent rate-differential
+component and keeps the transitory deviation. The currency-relevant
+cyclical information that remains is country-specific and regime-dependent,
+which is why it shows up strongly in the in-sample cross-section, weakly in
+real time, and hardly at all in the aggregate. The regime evidence supports
+this reading, as the dollar-investor predictability is concentrated before
+2008, when rate differentials were wide, and disappears in the post-crisis
+regime of compressed, synchronised policy rates (\Cref{sec:rob-subsample}).
 
 \paragraph{What ultimately survives.}
-Assembling the four findings, the thesis's evidence reduces to one robust
-object and a set of conditional ones. The GDP-weighted global cycle factor
-predicts international bond returns in sample, out of sample, in every
-subsample except the 2008 panic, beats the forward-rate alternative in real
-time, and carries economic value for a hedged investor
-(\Cref{ch:strategy}). The local factors are real in sample but are, for
-nine of eleven markets, not estimable precisely enough to use in real time;
-the dollar-investor factors are creatures of the currency regime. The
-honest summary is therefore not ``the cycle factor works everywhere'' but
-something more specific and more useful: \emph{international bond risk
-premia contain a common, macro-anchored, slowly-moving component that is
-large enough and stable enough to estimate in real time---provided one
-aggregates across markets, measures the inflation anchor cleanly, and does
-not ask it to forecast exchange rates.}
+When we assemble the four findings, our evidence reduces to one robust
+result and a set of conditional ones. The GDP-weighted global cycle factor
+predicts international bond returns in sample, out of sample, and in every
+subsample except the 2008 panic. Furthermore, it beats the forward-rate
+alternative in real time and carries economic value for a hedged investor
+(\Cref{ch:strategy}). The local factors are real in sample but, for nine of
+eleven markets, cannot be estimated precisely enough to use in real time.
+The dollar-investor factors, in turn, depend strongly on the prevailing
+currency regime. We would therefore not summarise our results as ``the
+cycle factor works everywhere'' but in a more specific and, we believe,
+more useful way. International bond risk premia contain a common,
+macro-anchored, slowly-moving component that is large enough and stable
+enough to estimate in real time, provided that we aggregate across markets,
+measure the inflation anchor cleanly, and do not use it to forecast
+exchange rates.
 
 \section{Limitations}
 \label{sec:disc-limitations}
 
-Five limitations qualify these conclusions; none, we believe, overturns
-them, but each bounds how far they should be pushed.
+In the process of writing our thesis we faced five limitations that qualify
+these conclusions. We believe that none of them overturns our results, but
+each of them limits how far the conclusions should be pushed.
 
 \paragraph{Inference under overlapping returns and persistent regressors.}
-All headline $t$-statistics use $18$-lag Newey--West HAC standard errors
+All our headline $t$-statistics use $18$-lag Newey--West HAC standard errors
 \citep{neweywest1987}, whereas \citet{cieslak2015} use the
 reverse-regression delta method of \citet{weiwright2013}, which requires the
 underlying monthly returns and is not identified from the twelve-month
-overlapping panel constructed here (\Cref{sec:meth-inference}). For highly
+overlapping panel we construct (\Cref{sec:meth-inference}). For highly
 persistent regressors the two can diverge, and HAC inference at long
 horizons is known to over-reject in finite samples \citep{hodrick1992}. The
 block-bootstrap intervals \citep{politis1994} and the
-expectations-hypothesis Monte Carlo mitigate this---the predictive $R^{2}$
-are judged against a simulated no-predictability band, not only against
-asymptotic $t$-ratios---but a residual upward bias in the in-sample
-significance cannot be excluded. It is precisely because of this that the
-thesis leans its conclusions on the out-of-sample evidence, which is immune
-to the over-rejection problem: a recursive forecast either beats the
+expectations-hypothesis Monte Carlo mitigate this problem, because the
+predictive $R^{2}$ are judged against a simulated no-predictability band and
+not only against asymptotic $t$-ratios. However, a residual upward bias in
+the in-sample significance cannot be excluded. Because of this, we base our
+conclusions primarily on the out-of-sample evidence, which is immune to the
+over-rejection problem, since a recursive forecast either beats the
 prevailing mean or it does not.
 
-\paragraph{Sample span and a single macro regime.} The panel covers
-1989/1994--2026: roughly thirty years of monthly data, but---because returns
-overlap---the equivalent of only about thirty non-overlapping annual
-observations per country, spanning one secular disinflation, one
-zero-lower-bound decade, and one inflation shock. The sample is also
-unbalanced (the nine non-US, non-Japanese markets begin only in December
-1994), and the five euro-area members share a currency and a monetary
-policy from 1999, so the eleven markets contribute far fewer than eleven
-independent observations of the ``global'' cycle. The GDP-weighted factor is
-to a significant degree a US--euro-area--Japan factor, and the integration
-finding should be read accordingly; alternative weightings (equal,
-market-capitalisation, principal-component) were not explored. An
+\paragraph{Sample span and a single macro regime.} Our panel covers
+1989/1994--2026, which corresponds to roughly thirty years of monthly data.
+However, because the returns overlap, this is the equivalent of only about
+thirty non-overlapping annual observations per country, spanning one secular
+disinflation, one zero-lower-bound decade, and one inflation shock. The
+sample is also unbalanced (the nine non-US, non-Japanese markets begin only
+in December 1994), and the five euro-area members share a currency and a
+monetary policy from 1999, so the eleven markets contribute far fewer than
+eleven independent observations of the ``global'' cycle. The GDP-weighted
+factor is to a significant degree a US--euro-area--Japan factor, and the
+integration finding should be read accordingly. Alternative weightings
+(equal, market-capitalisation, principal-component) were not explored. An
 alternative design, adopted by \citet{randl2025}, represents the euro area
 by German Bunds alone and includes Australia, New Zealand, and Norway
-instead---a cross-section chosen for currency diversity rather than debt
-size. The two universes are complementary: theirs avoids the euro-bloc
-redundancy, while the one used here is what makes the periphery
-(Italy) result observable at all.
+instead, which is a cross-section chosen for currency diversity rather than
+debt size. We see the two universes as complementary. Theirs avoids the
+euro-bloc redundancy, while ours is what makes the periphery (Italy) result
+observable at all.
 
 \paragraph{Construction constraints.} The maturity menu
 $\{1,2,4,5,9,10\}$ years is dictated by the available Bloomberg curves, so
 individual excess returns exist only for $n\in\{2,5,10\}$ and the
 duration-standardisation uses the continuous-compounding convention
-$D^{(n)}=n$ (\Cref{sec:meth-deviations}). The FX-adjusted factor is built
-top-down on aggregate dollar returns rather than as the projection in the
-original proposal. These choices are internally consistent and are held
-fixed throughout, but exact level comparisons with the published US results
-inherit them.
+$D^{(n)}=n$ (\Cref{sec:meth-deviations}). Additionally, the FX-adjusted
+factor is built bottom-up as the GDP-weighted average of per-country USD
+cycle factors rather than as the projection in the original proposal; the
+alternative constructions are compared in
+\Cref{sec:rob-fxgcf-construction}. These choices are internally consistent
+and we hold them fixed throughout. However, exact level comparisons with the
+published US results inherit them.
 
-\paragraph{The EH Monte Carlo calibration gap.} The simulated
+\paragraph{The EH Monte Carlo calibration gap.} Our simulated
 expectations-hypothesis benchmark reproduces the qualitative pattern of
-\citet{cieslak2015}---a null $R^{2}$ band that widens with regressor
-persistence---but not the exact published band
+\citet{cieslak2015}, namely a null $R^{2}$ band that widens with regressor
+persistence, but not the exact published band
 (\Cref{sec:meth-ehmc}). The claim that the observed in-sample $R^{2}$
 ``exceeds the EH null'' therefore rests on our own calibration. The margin
 is wide (the realised $R^{2}$ sit far above the simulated 95th percentile),
-which is why we regard the conclusion as safe, but the gap is documented
-rather than closed.
+which is why we regard the conclusion as safe. However, the gap is
+documented rather than closed.
 
 \paragraph{Conditionality of the real-time result.} Finally, the robustness
 chapter itself draws the sharpest boundaries. The global factor's
-out-of-sample edge is a property of \emph{expanding-window} estimation and
+out-of-sample edge is a property of expanding-window estimation and
 disappears under ten- and fifteen-year rolling windows
-(\Cref{sec:rob-oos-scheme}); it depends materially on measuring the trend
-with \emph{core} rather than headline inflation
-(\Cref{sec:rob-core-headline}); and it fails inside the 2008 crisis window.
-The FX-adjusted factor's thin pooled gain is concentrated post-2009 and is
-sensitive to the training minimum. These are not footnotes: they delimit
-the population of investors---patient, long-memory, core-inflation-based
-estimators of a slow factor---for whom the real-time predictability exists.
+(\Cref{sec:rob-oos-scheme}). Furthermore, it depends materially on measuring
+the trend with core rather than headline inflation
+(\Cref{sec:rob-core-headline}), and it fails inside the 2008 crisis window.
+The FX-adjusted factor's small pooled gain is earned mainly in the 2008
+window and is sensitive to the training minimum. We do not regard these results as minor
+details, because they delimit the population of investors for whom the
+real-time predictability exists, namely patient investors who estimate a
+slow factor from a long history and base the trend on core inflation.
 
 \section{Implications}
 \label{sec:disc-implications}
 
 \paragraph{For the international bond investor.} The portfolio prescription
-that follows from the evidence has three parts. First, \emph{hedge the
-currency}. The predictable component of international bond returns lives in
-local-currency space; dollar conversion destroys roughly two-thirds of it
-in sample and almost all of it out of sample, and the timing strategy's
-Sharpe ratio falls from $0.38$ hedged to about $0.25$ unhedged
-(\Cref{ch:strategy}). Currency exposure in a G10 bond portfolio is, from
-the standpoint of cycle-based predictability, uncompensated noise. This
-prescription does not rest on the cycle evidence alone:
-\citet{randl2025} reach it from the pricing side, showing that the
-mean--variance-efficient hedged bond portfolio carries economically
-negligible currency exposure and that the priced risks of international
-bonds are fundamentally distinct from those of currencies---the bond
-premium and the currency premium are separate objects, best harvested
-separately. Second,
-\emph{time the aggregate, not the cross-section}. The factor that survives
-real time is a single global series; it supports varying overall duration
-exposure---which raised the hedged Sharpe ratio from $0.31$ to $0.38$ with
+that follows from our evidence has three parts. First, we would advise
+hedging the currency. The predictable component of international bond
+returns is found in local-currency space. Dollar conversion destroys roughly
+two-thirds of it in sample and almost all of it out of sample, and the
+timing strategy's Sharpe ratio falls from $0.38$ hedged to about $0.25$
+unhedged (\Cref{ch:strategy}). From the standpoint of cycle-based
+predictability, currency exposure in a G10 bond portfolio therefore adds
+risk without adding compensation. This prescription does not rest on the
+cycle evidence alone. \citet{randl2025} reach it from the pricing side,
+showing that the mean--variance-efficient hedged bond portfolio carries
+economically negligible currency exposure and that the priced risks of
+international bonds are fundamentally distinct from those of currencies.
+The bond premium and the currency premium are separate objects and are
+therefore best harvested separately. Second, we would advise timing the
+aggregate rather than the cross-section. The factor that survives in real
+time is a single global series. It supports varying overall duration
+exposure, which raised the hedged Sharpe ratio from $0.31$ to $0.38$ with
 a certainty-equivalent gain of about half a percent a year, achieved mainly
-by sidestepping drawdowns such as 2022---but the out-of-sample evidence
-gives no licence for country selection on local cycle factors. Third,
-\emph{respect the factor's limits}: it is slow, it requires a long
-estimation history, and it carries no protection in a flight-to-quality
+by avoiding drawdowns such as 2022. However, the out-of-sample evidence
+gives no support for country selection on local cycle factors. Third, the
+limits of the factor should be respected. It is slow, it requires a long
+estimation history, and it offers no protection in a flight-to-quality
 panic, when its real-time forecasts were at their worst.
 
 \paragraph{For risk management and the periphery.} The Italian result has a
-practical reading for holders of peripheral euro-area debt: under sovereign
+practical reading for holders of peripheral euro-area debt. Under sovereign
 stress, local cycle deviations regain forecasting power that the global
-factor misses entirely, so a risk manager monitoring peripheral exposure
-should track the \emph{local} factor exactly when spreads widen---the one
-regime in which it demonstrably worked in real time. Integration-based risk
-models that price peripheral bonds off a common factor will be most wrong
-precisely when the position is most dangerous.
+factor misses entirely. A risk manager monitoring peripheral exposure
+should therefore track the \emph{local} factor exactly when spreads widen,
+as this is the one regime in which it demonstrably worked in real time.
+Integration-based risk models that price peripheral bonds off a common
+factor will thus be least accurate exactly in the periods when the position
+carries the highest risk.
 
-\paragraph{For the term-premium literature.} The findings carry two
+\paragraph{For the term-premium literature.} Our findings carry two
 messages back to the research literature. First, they add G10 evidence that
-term premia are anchored by slow macro trends---the international
-counterpart of the falling-stars mechanism of \citet{bauer2020}, and a
+term premia are anchored by slow macro trends. This is the international
+counterpart of the falling-stars mechanism of \citet{bauer2020} and a
 factor-level complement to the trend-augmented forecasting of
-\citet{zhang2021}: it is the \emph{deviation} from the trend, aggregated
-globally, that is priced, and it is priced in common across markets. Second,
-they suggest that the in-sample horse race between forward-rate and
+\citet{zhang2021}: it is the deviation from the trend, aggregated globally,
+that is priced, and it is priced in common across markets. Second, our
+findings suggest that the in-sample horse race between forward-rate and
 macro-anchored predictors is the wrong contest. In sample the forward
-factor wins; in real time only the macro-anchored global factor survives.
-Studies that evaluate candidate state variables purely in sample will
-systematically favour price-based over macro-anchored predictors, and the
-out-of-sample discipline of \citet{campbellthompson2008}---applied here to
-the full generated-regressor chain, not only to the final
-regression---reverses that verdict. A natural next step, beyond the scope
-of this thesis, is to embed the global cycle in a no-arbitrage term
-structure model with a shared international trend, closing the gap between
-the reduced-form evidence assembled here and the structural falling-stars
-framework.
+factor wins, while in real time only the macro-anchored global factor
+survives. Studies that evaluate candidate state variables purely in sample
+will therefore systematically favour price-based over macro-anchored
+predictors. The out-of-sample discipline of \citet{campbellthompson2008},
+which we apply to the full generated-regressor chain and not only to the
+final regression, reverses this verdict. A natural next step, which lies
+beyond the scope of this thesis, would be to embed the global cycle in a
+no-arbitrage term structure model with a shared international trend. This
+would close the gap between the reduced-form evidence we assemble here and
+the structural falling-stars framework.

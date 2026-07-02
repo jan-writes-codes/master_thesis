@@ -8,3 +8,89 @@
 %   (3) does the FX-adjusted FXGCF help the USD investor?
 % Summarize the contribution (unified global cycle factor + FX adjustment) and
 % outline future work (more maturities, longer samples, no-arbitrage embedding).
+
+In our thesis, we asked whether the cycle factor of \citet{cieslak2015}
+applies to international government bonds. To answer this question, we
+constructed the local cycle factor for eleven G10 markets exactly as in the
+original study, aggregated the national factors into a GDP-weighted global
+cycle factor, and additionally built a novel FX-adjusted global cycle factor
+for an unhedged US-dollar investor. We evaluated this three-factor hierarchy
+in three empirical phases, both in-sample and under a fully recursive
+out-of-sample protocol, and we validated our empirical engine by replicating
+the published US and international results (\Cref{ch:replication}). In this
+chapter, we summarise our answers to the research question and its two
+sub-questions, restate our contribution, and outline directions for future
+work.
+
+Our answer to the main question is affirmative. In all eleven markets, the
+local cycle factor predicts one-year excess returns with the same sign
+pattern that \citet{cieslak2015} document for the United States,
+significantly so in ten, with an average in-sample $R^{2}$ of $25\%$ and
+loadings that are uniform across the maturity curve. We would therefore
+suggest that the trend--cycle mechanism is not a US idiosyncrasy but a
+property of the asset class. This is in line with the falling-stars evidence
+of \citet{bauer2020}, according to which the predictable component of bond
+returns appears once the slow-moving macro anchors are accounted for.
+
+Regarding our first sub-question, on the role of the local relative to the
+global cycle factor, we find that the predictability is overwhelmingly
+global. The GDP-weighted global cycle factor is significant in every market
+and matches the explanatory power of the eleven separately estimated local
+factors. Regarding our second sub-question, we find that the global factor
+does subsume the local factors in most markets. Once the global factor is
+included, genuinely local content survives only in Italy, the Netherlands,
+and Belgium, and the Italian predictability concentrates in the 2010--2012
+sovereign-debt crisis, when redenomination risk was priced locally. Similar
+to the findings of \citet{dahlquist2013} for the forward-rate family, we can
+therefore conclude that government-bond risk premia are internationally
+integrated, although our results also show that severe sovereign stress
+marks the limit of this integration.
+
+For the unhedged US-dollar investor, our results are mixed. Dollar
+conversion erodes roughly two-thirds of the global factor's predictive
+power. The FX-adjusted global cycle factor, built bottom-up from the
+country-level USD regressions, recovers much of it in sample: it nearly
+doubles the average dollar-investor fit and correlates only $0.78$ with the
+unadjusted factor, comparable in spirit to the $0.50$ that
+\citet{dahlquist2013} report for the forward-rate family. We also find,
+however, that this recovery depends on the construction (a top-down variant
+is nearly collinear with the unadjusted factor, at $0.99$) and that it
+translates into only a small, scheme-sensitive real-time edge that does not
+help in timing the aggregate dollar portfolio. The practical implication we
+draw from this is that the dollar investor should hedge the currency
+exposure, since the exploitable component of international bond returns
+lives in local-currency space.
+
+The finding we regard as most important concerns real time. Out of sample,
+the local factors lose to the recursive historical mean almost everywhere,
+while the global cycle factor beats it in ten of eleven markets. This edge
+holds across crisis subsamples, beats the global forward-rate factor, and
+depends materially on measuring the inflation trend with core rather than
+headline inflation. Moreover, it carries economic value. A timing strategy
+based on the global factor raises the Sharpe ratio of a hedged global bond
+portfolio from $0.31$ to $0.38$ with a positive certainty-equivalent gain
+(\Cref{ch:strategy}).
+
+With our thesis, we thus contribute a unified, macro-anchored global cycle
+factor together with its FX-adjusted counterpart, and we provide the first
+G10-wide evidence on the international validity of the \citet{cieslak2015}
+mechanism. Summarising our findings, we conclude that international bond
+risk premia contain a common, macro-anchored, and slowly moving component
+that is large enough and stable enough to estimate in real time, provided
+one aggregates across markets, measures the inflation anchor cleanly, and
+does not ask the factor to forecast exchange rates.
+
+Our conclusions are subject to the limitations we discussed in
+\Cref{ch:discussion}, in particular the inference under overlapping
+returns, the single macro regime covered by our sample, and the dependence
+of the real-time result on expanding-window estimation and core inflation.
+Because of this, we see several natural directions for future work. First,
+a richer maturity menu and longer samples would allow a more precise
+estimation of the factor loadings and would add independent observations of
+the global cycle. Second, alternative weightings of the global factor, such
+as equal or market-capitalisation weights, could show how much the
+integration result depends on the GDP weighting. Third, the global cycle
+factor could be embedded in a no-arbitrage term structure model with a
+shared international trend, which would close the gap between our
+reduced-form evidence and the structural framework of \citet{bauer2020}. We
+leave these extensions to future research.
