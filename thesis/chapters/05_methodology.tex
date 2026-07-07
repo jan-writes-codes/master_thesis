@@ -317,100 +317,42 @@ we test in \Cref{ch:results} and stress-test in \Cref{ch:robustness}.
 \section{Estimation and Inference}
 \label{sec:meth-inference}
 
-Having defined the predictive regressions, we now state how we estimate their
-standard errors, test them, and evaluate them out of sample. We keep each tool
-brief and introduce it where it is used.
-
-\paragraph{HAC standard errors.} For our headline $t$-statistics, we use
-heteroskedasticity- and autocorrelation-consistent (HAC) standard errors of the
-Newey--West form \citep{neweywest1987}, with a bandwidth of $18$ lags. The
-bandwidth comfortably exceeds the $11$-month overlap induced by the twelve-month
-horizon, so it captures the serial correlation in $\varepsilon_{i,t+12}$; we use
-it for every twelve-month regression. For a fitted slope we report the estimate
-$\hat b$, its HAC standard error, and the ratio $\hat b/\mathrm{se}(\hat b)$. We
-note one caveat that we revisit in \Cref{ch:discussion}: \citet{cieslak2015}
-report $t$-statistics from the reverse-regression delta method of
-\citet{weiwright2013}, which requires the underlying \emph{monthly} returns.
-Our constructed panel stores only the twelve-month overlapping returns, so that
-estimator is not identified from our data, and HAC and reverse-regression
-$t$-values can diverge for highly persistent regressors.
-
-\paragraph{Joint significance (Wald).} For multi-regressor specifications we
-report a joint Wald test that all slopes are zero. With slope vector $\hat b_{s}$
-(intercept excluded) and the corresponding HAC covariance block $V_{s}$,
-$W=\hat b_{s}'\,V_{s}^{-1}\,\hat b_{s}\sim\chi^{2}_{k}$ with $k$ the number of
-slopes; we report $W$ with its $\chi^{2}$ p-value. We apply the same statistic
-to the orthogonalised local factor in the horse race \eqref{eq:h-horse} to
-measure whether the local factor adds power beyond the global factor.
-
-\paragraph{Model comparison (BIC).} To compare competing predictor sets we use
-Bayesian information criteria expressed as relative probabilities, following
-\citet{cieslak2015}. For model $i$ on a common sample of length $T$ with $n_{i}$
-slope regressors, $\mathrm{BIC}_{i}=\ln(\hat\sigma^{2}_{i})+\ln(T)\,n_{i}/T$ with
-$\hat\sigma^{2}_{i}=\mathrm{SSE}_{i}/T$, and the relative probability of model
-$i$ is $\exp\{(\mathrm{BIC}_{\min}-\mathrm{BIC}_{i})/2\}$, normalised so the
-lowest-BIC model maps to $1.0$. This rewards fit while penalising the parameter
-count, letting us weigh the two-regressor cycle factor against the six-yield
-specification.
-
-\paragraph{Small-sample intervals.} Where we report finite-sample bands, we use
-the stationary block bootstrap of \citet{politis1994}, which resamples
-contiguous blocks of random (geometrically distributed) length and wraps around
-the sample end. We set the mean block length to at least the twelve-month
-overlap so the resampled series preserve the serial dependence, and we
-studentise the bootstrapped slope with the same $18$-lag HAC standard error as
-the headline estimate (matching the bandwidth is essential; ignoring the overlap
-inside the bootstrap would spuriously inflate the $t$-statistic).
-
-\paragraph{The expectations-hypothesis null.}
-\label{sec:meth-ehmc}
-A predictive $R^{2}$ is only informative relative to what the EH itself would
-produce in a finite sample: even with zero risk premia, realised twelve-month
-returns embed the future yield $y_{t+12}$, so the in-sample $R^{2}$ has a
-non-degenerate null distribution. Following \citet{cieslak2015}, Section~1, we
-characterise it by Monte Carlo. We simulate an EH economy with two AR(1) states,
-trend inflation and a real factor, driving the short rate; under the EH each
-yield is the average expected future short rate and hence affine in the states.
-We calibrate the innovation variances so that the trend and the one-year cycle
-match their empirical standard deviations ($1.90\%$ and $1.74\%$), and for each
-of $10{,}000$ draws we build EH yields, form $\rxbar$ exactly as in
-\eqref{eq:rxbar}, regress it on the states, and store the adjusted $R^{2}$. We
-summarise the null by its $5$th, $50$th, and $95$th percentiles across the grid
-of persistence pairs tabulated by \citet{cieslak2015}. The simulated band is
-sensitive to the exact affine mapping and the state variances; our
-implementation reproduces the \emph{qualitative} pattern (a null $95$th
-percentile that rises with persistence) but not the published percentiles
-exactly, so we interpret the realised $R^{2}$ against our own band and document
-this calibration gap rather than close it (\Cref{ch:discussion}).
-
-\paragraph{Out-of-sample evaluation.}
-\label{sec:meth-oos}
-Because in-sample predictability can reflect over-fitting of generated
-regressors, we re-evaluate the factors in real time. We rebuild the entire
-chain recursively using only data available at each date $t$: we re-fit the
-yield-cycle decomposition \eqref{eq:decomp} on an expanding window, re-estimate
-the local predictive regression \eqref{eq:cf-reg}, and reconstruct the global
-and FX-adjusted factors from the recursive local factors (trend inflation is
-already backward-looking and is reused as is). We respect two cutoffs: the
-yield-cycle residual is contemporaneous, whereas the predictive regression
-trains only on observations whose twelve-month outcome has already been realised
-by $t$ (dates with $\text{date}+12\text{m}\le t$). Because both the factor and
-the forecasting regression respect $t$, the forecast is ``doubly
-out-of-sample''. We score accuracy by the \citet{campbellthompson2008}
-out-of-sample $R^{2}$ against the recursive prevailing-mean benchmark,
+We estimate every predictive regression by ordinary least squares and tailor
+the inference to the overlapping-return structure. Headline $t$-statistics use
+heteroskedasticity- and autocorrelation-consistent (HAC) Newey--West standard
+errors \citep{neweywest1987} with $18$ lags, comfortably above the $11$-month
+overlap induced by the twelve-month horizon; because our panel stores only the
+twelve-month returns, we cannot form the exact reverse-regression $t$-values of
+\citet{weiwright2013} that \citet{cieslak2015} report, which can diverge from
+HAC for highly persistent regressors (\Cref{ch:discussion}). For
+multi-regressor specifications we add a joint HAC Wald test that all slopes are
+zero, we compare predictor sets by Bayesian information criteria expressed as
+relative probabilities \citep{cieslak2015}, and, where we report finite-sample
+bands, we use the stationary block bootstrap of \citet{politis1994} with the
+block length matched to the overlap. Two further checks discipline the in-sample
+fit. First, because even the expectations hypothesis produces a non-degenerate
+distribution of predictive $R^{2}$ in a finite sample, we calibrate that null by
+Monte Carlo\label{sec:meth-ehmc}, simulating an EH economy of two AR(1) states
+(trend inflation and a real factor) and comparing the realised $R^{2}$ against
+its simulated $5$/$50$/$95$th percentiles; the band is sensitive to the
+calibration, so we read our $R^{2}$ against our own simulated null and document
+this gap rather than close it (\Cref{ch:discussion}). Second, because the cycle
+factors are generated regressors, we re-evaluate them fully
+recursively\label{sec:meth-oos}, rebuilding the entire factor chain
+(decomposition, local regression, and global aggregation) from data available at
+each date $t$ so that both the factor and the forecasting regression respect $t$
+(a ``doubly out-of-sample'' forecast), and scoring it by the
+\citet{campbellthompson2008} out-of-sample $R^{2}$ against the recursive
+prevailing mean,
 \begin{equation}
   R^{2}_{\mathrm{oos}} \;=\; 1 -
      \frac{\sum_{t}\big(\rxbar_{t+12}-\widehat{\rxbar}^{\,\text{factor}}_{t+12}\big)^{2}}
           {\sum_{t}\big(\rxbar_{t+12}-\widehat{\rxbar}^{\,\text{mean}}_{t+12}\big)^{2}},
   \label{eq:meth-ctr2}
 \end{equation}
-where the benchmark is the recursive mean passed through the same training
-cutoff. A positive $R^{2}_{\mathrm{oos}}$ means the factor beats the historical
-average out of sample. We pool countries by summing the factor and benchmark
-sums of squares before forming the ratio, so each country competes against its
-own recursive mean, and we apply the identical protocol to the
-Cochrane--Piazzesi comparison factors for the head-to-head evidence of
-\Cref{ch:robustness}.
+pooled across countries so that each competes against its own recursive mean and
+applied identically to the Cochrane--Piazzesi comparison factors for the
+head-to-head evidence of \Cref{ch:robustness}.
 
 % ===========================================================================
 \section{Deviations from the Original Studies}
