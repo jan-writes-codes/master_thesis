@@ -1,39 +1,24 @@
-% Ch.4 Methodology (~10-12 pp). Absorbs the former theoretical-framework chapter
-% (Template B): the empirical objects and the estimation/inference are developed
-% together here. Notation is kept consistent with data_preparation.R,
-% cp_inference.R, cp_montecarlo.R and oos.R; "Implementation note" paragraphs
-% flag where the code refines the research proposal or the original papers.
-\chapter{Methodology}
-\label{ch:methodology}
-
-In this chapter, we develop the formal apparatus of our empirical analysis and
-set out how we estimate and evaluate it. We start from the expectations
-hypothesis (EH) as a null of no predictability. We then introduce the
-\citet{cieslak2015} decomposition of yields into a slow-moving trend-inflation
-component and transitory interest-rate cycles, and we build the three-factor
-hierarchy that organises our thesis: the \emph{local} cycle factor $\CF_{i,t}$,
-the GDP-weighted \emph{global} cycle factor $\GCF_{t}$, and the \emph{FX-adjusted}
-global cycle factor $\FXGCF_{t}$ for a US-dollar investor. We state the
-predictive specifications that operationalise our research questions, and we
-close with the estimation and inference machinery (HAC standard errors, joint
-and model-comparison tests, the expectations-hypothesis Monte Carlo, and the
-out-of-sample protocol) and a transparent statement of where our implementation
-departs from the original studies.
-
-Throughout, $i$ indexes countries in the G10 cross-section $\mathcal{G}$, time
-$t$ is measured in months, and bond maturity $n$ is measured in years. The
-empirical maturity menu is $N=\{1,2,4,5,9,10\}$ years, which is dictated by data
-availability (\Cref{ch:data}). All yields are continuously compounded and
-expressed in percent per annum.
+% Methodology sections (~10-12 pp). Part of the "Data and Methodology" chapter
+% (the \chapter and both labels live in 04_data.tex). The empirical objects and
+% the estimation/inference are developed together here. Notation is kept
+% consistent with data_preparation.R, cp_inference.R, cp_montecarlo.R and oos.R;
+% "Implementation note" paragraphs flag where the code refines the research
+% proposal or the original papers.
 
 % ===========================================================================
 \section{The Expectations Hypothesis as a Null}
 \label{sec:fw-eh}
 
-We let $y^{(n)}_{t}$ denote the time-$t$ continuously compounded yield on an
-$n$-year zero-coupon bond and $p^{(n)}_{t}=-n\,y^{(n)}_{t}$ the corresponding log
-price. Under the expectations hypothesis, the long yield equals the average
-expected future short rate, up to a constant term premium:
+Having described the data, we now develop the formal apparatus that it feeds.
+Throughout, $i$ indexes countries in the G10 cross-section $\mathcal{G}$, time
+$t$ is measured in months, and bond maturity $n$ in years; the empirical
+maturity menu is $N=\{1,2,4,5,9,10\}$ years, dictated by data availability
+(\Cref{sec:data-coverage}), and all yields are continuously compounded and
+expressed in percent per annum. We let $y^{(n)}_{t}$ denote the time-$t$
+continuously compounded yield on an $n$-year zero-coupon bond and
+$p^{(n)}_{t}=-n\,y^{(n)}_{t}$ the corresponding log price. Under the
+expectations hypothesis, the long yield equals the average expected future
+short rate, up to a constant term premium:
 \begin{equation}
   y^{(n)}_{t} \;\approx\; \frac{1}{n}\sum_{i=0}^{n-1}\E_{t}\!\left[y^{(1)}_{t+i}\right].
   \label{eq:eh}
