@@ -1,18 +1,22 @@
 % Ch.4 Data (~6-8 pp). Drafted Day 1 (full draft Day 2).
 % Sourced directly from data.xlsx (sheets: yields, fx, inflation, gdp,
 % curve_translation, overview) and the construction in data_preparation.R.
-\chapter{Data}
+\chapter{Data and Methodology}
 \label{ch:data}
+\label{ch:methodology}
 
-In this chapter, we describe the data we use to construct the cycle factors and
-to run the predictive regressions of \Cref{ch:results}. We assemble all series
-in a single workbook (\texttt{data.xlsx}) and process them into a monthly
-country--maturity panel. The construction follows the steps in
-\Cref{ch:framework} and is implemented in \texttt{data\_preparation.R}. We
-start by describing the cross-sectional universe and the four raw inputs
-(yields, inflation, GDP, and exchange rates) with their sources and units. We
-then present the sample coverage and our cleaning and alignment choices, before
-we turn to summary statistics.
+In this chapter, we describe the data and develop the methodology of our
+empirical analysis. We first describe the data we use to construct the cycle
+factors and to run the predictive regressions of \Cref{ch:results}: we assemble
+all series in a single workbook (\texttt{data.xlsx}) and process them into a
+monthly country--maturity panel, implemented in \texttt{data\_preparation.R}. We
+begin with the cross-sectional universe and the four raw inputs (yields,
+inflation, GDP, and exchange rates) with their sources and units, then present
+the sample coverage, our cleaning and alignment choices, and summary statistics.
+We then develop the formal apparatus, namely the expectations-hypothesis null,
+the yield decomposition, the three-factor hierarchy, the excess-return
+definitions, and the predictive specifications, and set out the estimation and
+inference used to evaluate them.
 
 % ===========================================================================
 \section{Universe and Sources}
@@ -117,8 +121,8 @@ show the resulting 10-year yield series.
 
 We align the raw inputs to a common monthly grid keyed on year--month and
 reshape the panel to long form (country $\times$ maturity $\times$ month). Four
-of our construction steps deserve a note, and each of them is tied to
-\Cref{ch:framework}:
+of our construction steps deserve a note, and each is tied to the methodology
+developed later in this chapter:
 
 \begin{enumerate}[leftmargin=1.6em]
   \item \textbf{Trend inflation.} We compute year-on-year core inflation from
