@@ -8,7 +8,7 @@ In this chapter, we describe the data we use to construct the cycle factors and
 to run the predictive regressions of \Cref{ch:results}. We assemble all series
 in a single workbook (\texttt{data.xlsx}) and process them into a monthly
 country--maturity panel. The construction follows the steps in
-\Cref{ch:framework} and is implemented in \texttt{data\_preparation.R}. We
+\Cref{ch:methodology} and is implemented in \texttt{data\_preparation.R}. We
 start by describing the cross-sectional universe and the four raw inputs
 (yields, inflation, GDP, and exchange rates) with their sources and units. We
 then present the sample coverage and our cleaning and alignment choices, before
@@ -118,7 +118,7 @@ show the resulting 10-year yield series.
 We align the raw inputs to a common monthly grid keyed on year--month and
 reshape the panel to long form (country $\times$ maturity $\times$ month). Four
 of our construction steps deserve a note, and each of them is tied to
-\Cref{ch:framework}:
+\Cref{ch:methodology}:
 
 \begin{enumerate}[leftmargin=1.6em]
   \item \textbf{Trend inflation.} We compute year-on-year core inflation from
