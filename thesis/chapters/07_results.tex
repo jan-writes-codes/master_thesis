@@ -269,8 +269,107 @@ does break the global-factor predictability for an unhedged dollar investor in
 most markets and reduces the average $R^{2}$ by roughly two-thirds. The
 bottom-up FX-adjusted global cycle factor restores a large part of this
 predictability in-sample, raising the average fit to $14\%$ and restoring
-significance in ten of eleven markets. Whether this in-sample recovery
-survives in real time is the subject of the next section.
+significance in ten of eleven markets. Before we ask whether this in-sample
+recovery survives in real time, we look more closely at how the two global
+factors relate to one another over the sample, because this relationship is
+what decides whether the FX adjustment can matter at all.
+
+% ---------------------------------------------------------------------------
+\subsection{Properties and Dynamics of the Two Global Factors}
+\label{sec:res-fxgcf-dynamics}
+
+The global factor and its FX-adjusted counterpart are two views of the same
+cross-section of cycles, seen through two different currencies of measurement.
+The unadjusted factor $\GCF_{t}$ prices the \emph{hedged}, local-currency
+return, so it is a summary of \emph{interest-rate-cycle risk}, the compensation
+for holding duration when yields sit far from their macro anchor. The
+FX-adjusted factor $\FXGCF_{t}$ prices the \emph{unhedged} dollar return, so it
+carries that same duration signal \emph{plus} the currency leg that a dollar
+investor cannot avoid. Because the two are built identically except for the
+currency of the return \eqref{eq:fxcf-reg}--\eqref{eq:fxgcf}, their difference
+isolates the currency component,
+\begin{equation}
+  \FXGCF_{t}-\GCF_{t}
+  \;=\; \sum_{i\in\mathcal{G}} w_{i,t}\bigl(\FXCF_{i,t}-\CF_{i,t}\bigr),
+  \label{eq:fxgcf-wedge}
+\end{equation}
+which we call the \emph{wedge}. Reading $\GCF_{t}$ as the interest-rate factor
+and the wedge as the FX factor lets us ask a sharper question than the
+predictive tables answer on their own: not only whether the FX adjustment
+helps on average, but \emph{when} the two factors carry genuinely different
+information, and why.
+
+\Cref{tab:fxd-properties} collects their properties. The wedge is not a small
+residual: its standard deviation ($0.34$) is as large as that of the
+interest-rate factor itself ($0.34$) and it is highly persistent (first-order
+autocorrelation $0.98$, half-life of three years), so the FX component is a
+slow-moving second factor in its own right rather than measurement noise. Yet
+the full-sample correlation between the two factors, $0.78$, hides pronounced
+time variation. \Cref{fig:fxd-rollcorr} plots the $36$-month rolling
+correlation of $\GCF_{t}$ and $\FXGCF_{t}$. It swings from near zero in the
+early 1990s and around the global financial crisis to essentially one for most
+of the post-2008 decade: split at 2008, the two factors correlate $0.45$ in the
+first half of the sample and $0.96$ in the second. In other words, the FX
+adjustment does distinct work in the earlier sample, and almost none in the
+later one.
+
+\begin{table}[t]
+  \caption{Properties and dynamics of the two global cycle factors}
+  \label{tab:fxd-properties}
+  \centering
+  \input{tables/fxd_t1_properties}
+\end{table}
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.9\linewidth]{figures/fxd_f1_rollcorr.pdf}
+  \caption{Dynamics of the two global factors: the $36$-month rolling
+    correlation of the interest-rate factor $\GCF_{t}$ \eqref{eq:gcf} and the
+    FX-adjusted factor $\FXGCF_{t}$ \eqref{eq:fxgcf}. The dashed line marks the
+    full-sample correlation ($0.78$); the dotted line marks 2008.}
+  \label{fig:fxd-rollcorr}
+\end{figure}
+
+This timing is not accidental, and it points to a clean economic reason why the
+distinction between the two factors is interesting. The currency leg carries
+independent information only to the extent that currency returns are themselves
+predictable, and the classic source of that predictability is the cross-country
+interest-rate differential through the failure of uncovered interest parity.
+When policy rates are high and spread apart, differentials are wide, the carry
+channel is active, and the currency component moves on its own; when rates
+converge to a synchronised zero lower bound, differentials compress and the
+currency component has little left to say that the bond cycle does not already
+say. \Cref{fig:fxd-regime} shows exactly this pattern: the rolling correlation
+of the two factors falls when the GDP-weighted G10 short rate is high and rises
+as it approaches zero, with the two moving in opposite directions
+(correlation $-0.57$). The regimes in \Cref{tab:fxd-properties} tell the same
+story in levels: the low-correlation first half of the sample is the high-rate
+regime (mean short rate $3.9\%$, cross-country yield dispersion $1.37$), and
+the near-collinear second half is the low-rate regime (mean short rate $0.9\%$,
+dispersion $0.68$). The brief decoupling at the right edge of
+\Cref{fig:fxd-regime}, as rates rose again after 2022, fits the same logic.
+
+\begin{figure}[t]\centering
+  \includegraphics[width=0.9\linewidth]{figures/fxd_f2_regime.pdf}
+  \caption{The FX premium decouples in the high-rate regime. Top: the
+    $36$-month rolling correlation of $\GCF_{t}$ and $\FXGCF_{t}$. Bottom: the
+    GDP-weighted G10 one-year yield ($36$-month mean). The two series correlate
+    $-0.57$: the factors are most distinct when rates are high and
+    differentials wide, and collapse onto each other at the synchronised zero
+    lower bound.}
+  \label{fig:fxd-regime}
+\end{figure}
+
+This dynamic reconciles two facts that otherwise sit awkwardly together. It
+explains why our full-sample FX adjustment recovers less than the one
+\citet{dahlquist2013} report, since their forward-rate factor retains the
+rate-level information that drives carry even after aggregation and their
+sample is weighted more towards the high-differential decades, whereas our
+detrended cycle factor removes the level and our sample is dominated by the
+post-2008 low-rate regime in which the currency component is nearly redundant.
+It also anticipates the out-of-sample evidence below: a factor whose extra
+information is concentrated in one rate regime, and largely absent in the
+regime that fills the second half of the sample, should help only
+intermittently in real time. We now turn to that test.
 
 % ---------------------------------------------------------------------------
 \section{Out-of-Sample Predictability}

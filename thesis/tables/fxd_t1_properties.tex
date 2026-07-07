@@ -1,0 +1,36 @@
+% fxd_t1_properties — properties and dynamics of the two global factors.
+% Numbers from R/fxgcf_dynamics.R (HEADLINE SUMMARY block), run on the identical
+% thesis pipeline under the bottom-up GDP-weighted FXGCF construction.
+\small
+\begin{tabular}{l ccccc}
+  \toprule
+  \multicolumn{6}{l}{\emph{Panel A. Univariate properties (full sample, 412 months)}} \\
+  \midrule
+  & Mean & SD & AR(1) & Half-life & SD pre / post \\
+  Factor & & & & (months) & 2008 \\
+  \midrule
+  $\GCF_{t}$              & $0.33$  & $0.34$ & $0.96$ & $16.5$ & $0.20\ /\ 0.35$ \\
+  $\FXGCF_{t}$            & $0.20$  & $0.53$ & $0.97$ & $25.0$ & $0.50\ /\ 0.44$ \\
+  Wedge $\FXGCF_{t}-\GCF_{t}$ & $-0.13$ & $0.34$ & $0.98$ & $36.1$ & $0.45\ /\ 0.15$ \\
+  \midrule
+  \multicolumn{6}{l}{\emph{Panel B. Correlation and the rate regime}} \\
+  \midrule
+  Regime & $N$ & $\Corr(\GCF,\FXGCF)$ & \multicolumn{2}{c}{Short rate} & Dispersion \\
+  \midrule
+  Full 1990--2024 & $412$ & $0.78$ & \multicolumn{2}{c}{$2.5\%$} & $1.04$ \\
+  Pre-2008        & $216$ & $0.45$ & \multicolumn{2}{c}{$3.9\%$} & $1.37$ \\
+  Post-2008       & $196$ & $0.96$ & \multicolumn{2}{c}{$0.9\%$} & $0.68$ \\
+  \bottomrule
+\end{tabular}
+\tabnotes{The global cycle factor $\GCF_{t}$ prices the hedged local-currency
+  premium; the FX-adjusted factor $\FXGCF_{t}$ prices the unhedged US-dollar
+  premium; their difference (the ``wedge'') isolates the currency component,
+  $\FXGCF_{t}-\GCF_{t}=\sum_{i}w_{i,t}(\FXCF_{i,t}-\CF_{i,t})$.
+  Both factors are GDP-weighted aggregates of the per-country USD/local cycle
+  factors under the bottom-up construction \eqref{eq:fxgcf}. AR(1) is the
+  monthly first-order autocorrelation and the half-life is
+  $\ln(0.5)/\ln(\mathrm{AR}(1))$. Panel~B splits the sample at the global
+  financial crisis; ``Short rate'' is the mean GDP-weighted G10 one-year yield
+  and ``Dispersion'' the mean cross-country standard deviation of one-year
+  yields in each regime. The 36-month rolling correlation of the two factors
+  and the rolling short-rate level correlate $-0.57$.}

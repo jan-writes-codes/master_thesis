@@ -27,6 +27,7 @@ subsume the predictive power of the local CF?
 | `R/empirical.R` | 11 rendered result tables (CP 1/2/4, DH 1/3/4/6/7) → `save_all_tables()` → `tables/*.pdf` |
 | `R/plots.R` | 40 figures (sections s1–s10) → `save_all_plots()` → `figures/*.pdf` |
 | `R/main_results.R` | Ch.7 three-phase in-sample tables/figures (`mr_t*/mr_f*`) → `save_main_results()` |
+| `R/fxgcf_dynamics.R` | Ch.7 §III GCF-vs-FXGCF properties/dynamics (rolling correlation, FX wedge, rate-regime split; `fxd_f1/f2`, `fxd_t1`) → `save_fxgcf_dynamics()` (run under `FXGCF_METHOD=bu_gdp`) |
 | `R/robustness.R` | Ch.8 crisis-subsample IS+OOS tables and Italy focus (`rob_t1/t2/t3`, `rob_f1`) → `save_robustness()` |
 | `R/cp_inference.R` | `hac_inf`, `bic_relprob`, `block_boot_t`, `block_boot_r2_ci` |
 | `R/cp_montecarlo.R` | EH Monte-Carlo R² grid |
@@ -89,6 +90,7 @@ then revised.
 # Regenerate exhibits (run from repo root; output goes under thesis/)
 Rscript R/empirical.R                                  # thesis/tables/*.pdf
 Rscript -e 'source("R/plots.R"); save_all_plots()'     # thesis/figures/*.pdf
+FXGCF_METHOD=bu_gdp Rscript -e 'source("R/fxgcf_dynamics.R"); save_fxgcf_dynamics()'  # thesis/figures/fxd_*.pdf
 
 # Compile the thesis
 cd thesis && latexmk -pdf main.tex
