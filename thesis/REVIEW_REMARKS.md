@@ -8,6 +8,13 @@ the end.
 Remarks are extracted from author-annotated PDFs (highlight colour + highlighted
 text + attached comment), then located in the source `.tex`.
 
+> ⚠️ **Staleness caveat (batch of 2026-07-08 / `first_proof_read`):** this PDF
+> was proof-read **before the structure changes made on 2026-07-07**. Section
+> numbers, page numbers, and even which `.tex` file a passage lives in may have
+> shifted. In Phase 2, **re-locate every remark by its quoted text against the
+> current source** before editing; do not trust the page/section anchors below.
+> If a quoted passage no longer exists, flag it rather than force-fitting.
+
 ---
 
 ## Colour legend
@@ -207,15 +214,16 @@ Page numbers are the **printed** page (PDF page in parentheses where useful).
   unconditionally. However, it does not ask which observable state variable
   tracks the conditional premium in real time, and this is the question we pose
   in this thesis."*
-- [ ] **R-054** 🟣 Too long: *"A final strand of the literature"* (paragraph) →
-  condense.
-- [ ] **R-055** 🔴 Large ✗ spanning the bottom of p.17 into the top of p.18, over
-  the out-of-sample-discipline paragraph (Welch & Goyal 2008; Campbell & Thompson
-  2008; Thornton & Valente 2012). **Intent ambiguous** (delete vs. flag) —
-  **confirm with author in Phase 2.**
+- [ ] **R-054 + R-055** 🔴 **DELETE** the whole passage from *"A final strand of
+  the literature"* through *"…a simulated no-predictability benchmark."*
+  (the out-of-sample-discipline paragraph: Welch & Goyal 2008; Campbell &
+  Thompson 2008; Thornton & Valente 2012; Bauer & Hamilton 2018). ✅ *Q-1
+  resolved by author — the large ✗ means drop it.* Supersedes the earlier
+  "too long / condense" reading and absorbs R-056.
 
 #### §2.1.5 tail + §2.2 opening (p.18)
-- [ ] **R-056** 🟣 Too long: *"a simulated no-predictability benchmark."*
+- [ ] **R-056** 🟣 Too long: *"a simulated no-predictability benchmark."* →
+  **absorbed into R-054+R-055 (deleted).**
 - [ ] **R-057** 🟡 Rewrite: *"with bootstrap and Monte-Carlo inference calibrated
   to the overlapping-return environment."*
 - [ ] **R-058** 🔴 Note at §2.2 heading: *"Fact check everything here"* → see G-9.
@@ -295,8 +303,8 @@ Page numbers are the **printed** page (PDF page in parentheses where useful).
 
 ## Open questions for the author (resolve before/at Phase 2)
 
-- **Q-1 (R-055):** the large ✗ over the out-of-sample-discipline paragraph
-  (p.17–18) — delete the paragraph, or just a flag to revisit?
+- ✅ **Q-1 (R-054+R-055) — RESOLVED:** delete the passage *"A final strand of the
+  literature → … → a simulated no-predictability benchmark."*
 
 ---
 
@@ -304,4 +312,4 @@ Page numbers are the **printed** page (PDF page in parentheses where useful).
 
 | Date | Source PDF(s) | Chapters covered | Remarks added |
 |------|---------------|------------------|---------------|
-| 2026-07-08 | `master_thesis_first_proof_read.pdf` | Front matter, Ch. 1 (Intro), Ch. 2 (Lit. + Framework), Ch. 3 (Data) | R-001 – R-083, G-1 – G-11 |
+| 2026-07-08 | `master_thesis_first_proof_read.pdf` *(pre-restructure — proof-read before the 2026-07-07 structure changes; see staleness caveat at top)* | Front matter, Ch. 1 (Intro), Ch. 2 (Lit. + Framework), Ch. 3 (Data) | R-001 – R-083, G-1 – G-11 |
