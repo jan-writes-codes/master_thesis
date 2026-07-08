@@ -51,6 +51,11 @@ page and elsewhere). Handle once, globally, in Phase 2.
 - **G-10** — Figure short names/captions are "**very crazy**" — rename figures to
   clearer names (List of Figures, p.6). 🔴
 - **G-11** — Check the **word-count / page limit** for the abstract/thesis (p.1). 🔴
+- **G-12** — Strategy performance figures are on a **non-overlapping annual**
+  basis; author wants a **monthly** version (Fig 5.1 wealth → R-133; Fig 5.3
+  drawdown → R-139). Regenerate from the strategy R script. 🔴
+- **G-13** — Several exhibits need **"more detail"** (Fig 4.7 → R-122); relates
+  to G-10 (figure naming). 🔴
 
 ---
 
@@ -299,6 +304,177 @@ Page numbers are the **printed** page (PDF page in parentheses where useful).
   than long-maturity yields."* → verify the claim holds across all countries in
   Table 3.2.
 
+### `07_results.tex` — Chapter 4, Empirical Findings
+
+*(Batch of 2026-07-08 / `master_thesis_6_2` — **post-restructure**, maps to
+current files directly.)*
+
+#### Intro (p.28)
+- [ ] **R-084** 🟡 Rewrite (phrases): "estimation engine"; *"the international
+  evidence of Dahlquist and Hasseltoft (2013)."*; *"which is the natural test of
+  international market integration"*; *"In Phase III, we ask whether currency risk
+  overturns the predictability for a US-dollar investor and, if so, whether the
+  purpose-built FX-adjusted global factor restores it."*; *"; the
+  reverse-regression caveat stated there applies throughout."*; *"We read the
+  magnitudes of the predictive R² against the expectations-hypothesis Monte Carlo
+  of Section 3.12, whose 95th percentile under the null lies well below the R² we
+  document here."*
+- [ ] **R-085** 🟡 Rewrite: *"with a remarkably uniform structure."*
+
+#### §4.1 Local cycle factor + Table 4.1 (p.29)
+- [ ] **R-086** 🟡 Rewrite: *"economic magnitude of this predictability is
+  large."*; *"leave little cyclical variation for the factor to explain."*
+- [ ] **R-087** 🟡 Rewrite: *"Seven of the eleven markets exceed an R² of 24%.
+  These values lie far above the 95th percentile of the predictive R² that the
+  expectations hypothesis generates in a sample of this length (Section 3.12)."*
+- [ ] **R-088** 🟢 Fact-check: *"each individual maturity and not only for the
+  maturity-averaged return."*
+
+#### §4.1 / §4.2 + Figure 4.1 (p.30)
+- [ ] **R-089** 🟡 Rewrite: Figure 4.1 subtitle wording — *"Indigo: GCF_t. Grey:
+  country-level local CFs."* (reword "Indigo"). *(figure from R)*
+- [ ] **R-090** 🩷 Understanding: *"This is the signature of a single
+  return-forecasting factor that prices the whole curve rather than one maturity
+  segment, exactly as in the United States."*
+- [ ] **R-091** 🟡 Rewrite: "common" (in "a common source of risk").
+
+#### §4.2 + Table 4.2 (p.31)
+- [ ] **R-092** 🔴 Note (arrow to Table 4.2): *"Pooled result?"* → consider
+  adding/showing a pooled result.
+- [ ] **R-093** 🟡 Rewrite (table note): *"A significant GCF together with an
+  insignificant CF⊥ signals that the global factor subsumes the local factor."*
+- [ ] **R-094** 🟡 Rewrite: *"and an essentially identical 25% for the global
+  factor"*; *", and is statistically indistinguishable from zero in the other
+  eight, where it sometimes even enters with the wrong sign."*
+- [ ] **R-095** 🟡 Rewrite: *"(for example, Germany from 28.4% to 28.4% and Sweden
+  from 29.1% to 29.3%)."*
+- [ ] **R-096** 🟡 Rewrite: *"This confirms that the combined cycle information is
+  genuinely priced everywhere."*
+
+#### §4.2 / §4.3 + Figure 4.2 (p.32)
+- [ ] **R-097** 🟡 Rewrite: *"For the euro-area members, this residual plausibly
+  reflects sovereign-spread and redenomination dynamics that are local in origin
+  yet absent from the common factor."*
+- [ ] **R-098** 🟡 Rewrite: *"dollar excess return"*.
+- [ ] **R-099** 🟢 Fact-check: *"find that currency risk is the dominant influence
+  on the dollar investor's returns"*.
+- [ ] **R-100** 🩷 Understanding: *"exchange-rate exposure is small or itself
+  cyclical"* (spans p.32→33).
+
+#### §4.3 + Table 4.3 (p.33)
+- [ ] **R-101** 🩷 Understanding: *"Canada (t = 2.9), and,"*.
+- [ ] **R-102** 🟡 Rewrite: "HAC" (in "lifts the HAC t-statistic in nine").
+- [ ] **R-103** 🟡 Rewrite: *"why the adjustment has room to work:"*.
+
+#### §4.3.1 + Figure 4.3 (p.34)
+- [ ] **R-104** 🔴+🟡 Note over the §4.3.1 heading (*"Properties and Dynamics of
+  the Two Global Factors"*): *"This should not be a subsection → it's part of the
+  research question."* → fold this material into the main flow rather than a
+  numbered subsection.
+
+#### §4.3.1 cont. + Figure 4.4 (p.35)
+- [ ] **R-105** 🟢 Fact-check: *"so the FX component is a slow-moving second factor
+  in its own right rather than measurement noise."*
+- [ ] **R-106** 🟡 Rewrite: *"0.78, hides pronounced time variation."*
+- [ ] **R-107** 🟡 Rewrite: *"This timing is not accidental, and it points to a
+  clean economic reason why the distinction between the two factors is
+  interesting."*
+- [ ] **R-108** 🔴 Note (margin brace): *"Source ???"* → the uncovered-interest-
+  parity / carry-channel paragraph needs a citation.
+- [ ] **R-109** 🟡 Rewrite: *"otherwise sit awkwardly together."*
+- [ ] **R-110** 🟣 Too long: the passage *"…recovers less than the one Dahlquist
+  and Hasseltoft (2013) report, since their forward-rate factor…"* → condense
+  (spans p.35→36).
+
+#### Table 4.4 + §4.4 (p.36)
+- [ ] **R-111** 🟣 Too long: *"since their forward-rate factor retains the
+  rate-level information that drives carry even after aggregation and their sample
+  is weighted more towards the high-differential decades, whereas our detrended
+  cycle factor removes the level and our sample is dominated by the post-2008
+  low-rate regime in which the currency component is nearly redundant."*
+- [ ] **R-112** 🟡 Rewrite: *"We now turn to that test."*
+- [ ] **R-113** 🟡 Rewrite: *"could have exploited"*.
+- [ ] **R-114** 🟡 Rewrite: *"This statistic compares the squared forecast errors
+  of the recursive factor with those of a competing real-time forecast, the
+  recursive prevailing mean, i.e. the historical average return updated each
+  period using only past data, so that R²_oos = 1 − SSE_factor/SSE_mean."*
+- [ ] **R-115** 🟡 Rewrite: *"The OOS R² is therefore measured against a far more
+  demanding benchmark than the in-sample R², which is the variance explained
+  around the full-sample mean using full-sample coefficients."*
+
+#### Figure 4.5 + text (p.37)
+- [ ] **R-116** 🟡 Rewrite: *"not comparable in level:"*.
+- [ ] **R-117** 🟡 Rewrite: *"The strong in-sample fit of Section 4.1 is, for most
+  countries, the in-sample over-fit of a generated regressor"*.
+- [ ] **R-118** 🟡 Rewrite: *"We consider this the strongest evidence in our thesis
+  for integration:"*.
+
+#### Figure 4.6 + §4.5 (p.38)
+- [ ] **R-119** 🟡 Rewrite: *"is far more modest than"*.
+- [ ] **R-120** 🟡 Rewrite: *"which is well beyond what the expectations hypothesis
+  can produce."*
+
+#### Table 4.5 + text (p.39)
+- [ ] **R-121** 🟡 Rewrite: *"we should take seriously is"* (…"the global one.").
+
+#### Figure 4.7 (p.40)
+- [ ] **R-122** 🔴 Note: *"the graph with more detail"* → Figure 4.7 needs more
+  detail. *(regenerate from R; see G-13)*
+
+### `08b_strategy.tex` — Chapter 5, Portfolio Construction
+
+#### Intro + §5.1 Strategy Design (p.41)
+- [ ] **R-123** 🟡 Rewrite: *"is precisely the"* (in "A positive out-of-sample R²
+  is precisely the condition…").
+- [ ] **R-124** 🟡 Rewrite: *"we take no position that an investor could not have
+  taken in real time,"*.
+- [ ] **R-125** 🟡 Rewrite: *"We therefore run the strategy for a currency-hedged
+  global investor and analyse the unhedged US-dollar investor separately in
+  Section 5.5."*
+- [ ] **R-126** 🟡 Rewrite: *"Even this naive weighting already captures
+  substantial diversification benefits from imperfectly correlated term-structure
+  movements across markets (Randl et al., 2025)."*
+
+#### §5.2 Implementation (p.42)
+- [ ] **R-127** 🔴 Strikethrough: *"Because both the factor and the regression are
+  recursive, the exposure is 'doubly out-of-sample'."* → delete.
+- [ ] **R-128** 🩷 Understanding: *"We report the Sharpe ratio, which is invariant
+  to a constant rescaling of w_t, as is. The certainty-equivalent (CER) return, in
+  contrast, is reported at equal average exposure across strategies so that the
+  variance penalty is comparable."*
+- [ ] **R-129** 🟡+🔴 Rewrite + margin note *"Shorten considerably"*: the whole
+  five-step enumerated Implementation list (i)–(v) → shorten considerably.
+- [ ] **R-130** 🟡 Rewrite: *"rather than tuned"*.
+
+#### Table 5.1 + §5.3 Performance (p.43)
+- [ ] **R-131** 🟡 Rewrite: *"and not to construction complexity."*
+- [ ] **R-132** 🟡 Rewrite: *"The global bond portfolio itself has an out-of-sample
+  R² of 0.125 against the recursive mean. This is higher than the pooled panel
+  figure of Section 4.4 because aggregating the eleven national cycles into one
+  global signal averages away estimation noise."*
+- [ ] **R-133** 🔴 Note (margin, Fig 5.1): *"I would like to see monthly instead of
+  yearly"* → show performance monthly, not non-overlapping annual. *(see G-12)*
+
+#### Figure 5.1 + §5.4 Subperiods, Turnover, Costs (p.44)
+- [ ] **R-134** 🟡 Rewrite: *"When premia are persistently high, the best a timing
+  rule can do is stay invested, and any variation in exposure adds volatility."*
+- [ ] **R-135** 🟡 Rewrite: *"least-bad Sharpe ratio,"*.
+- [ ] **R-136** 🟡 Rewrite: *"Across all windows, the timed portfolio is on top in
+  barely half."*
+- [ ] **R-137** 🩷 Understanding: *"one-way turnover of the timed portfolio is 9.2%
+  of notional per month (mean-timing: 1.3%),"*.
+
+#### Figure 5.2 + §5.5 US-Dollar Investor (p.45)
+- [ ] **R-138** 🟢 Fact-check: *"conservative for ten-year G10 government bond
+  futures,"* (the ~1 bp half-spread assumption).
+
+#### Figure 5.3 + §5.6 Caveats (p.46)
+- [ ] **R-139** 🔴 Note: *"also monthly?"* → Figure 5.3 (drawdown, annual) — also
+  produce a monthly version. *(see G-12)*
+- [ ] **R-140** 🟡 Rewrite: the whole §5.6 Caveats opening paragraph (*"We would
+  suggest reading this result as a proof of concept … the strategy can only time
+  aggregate"*) → rewrite/condense.
+
 ---
 
 ## Open questions for the author (resolve before/at Phase 2)
@@ -313,3 +489,4 @@ Page numbers are the **printed** page (PDF page in parentheses where useful).
 | Date | Source PDF(s) | Chapters covered | Remarks added |
 |------|---------------|------------------|---------------|
 | 2026-07-08 | `master_thesis_first_proof_read.pdf` *(pre-restructure — proof-read before the 2026-07-07 structure changes; see staleness caveat at top)* | Front matter, Ch. 1 (Intro), Ch. 2 (Lit. + Framework), Ch. 3 (Data) | R-001 – R-083, G-1 – G-11 |
+| 2026-07-08 | `master_thesis_6_2.pdf` *(post-restructure — maps to current files)* | Ch. 4 (Empirical Findings → `07_results.tex`), Ch. 5 (Portfolio Construction → `08b_strategy.tex`) | R-084 – R-140, G-12 – G-13 |
