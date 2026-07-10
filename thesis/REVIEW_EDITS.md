@@ -138,8 +138,86 @@ Global decisions (from the questions):
 
 ---
 
-*Playbook in progress — remaining files: `02_literature`, `04_data`,
-`05_methodology`, `07_results`, `08b_strategy`, `08_robustness`,
-`09_discussion`, `10_conclusion`, `A_appendix`, `06_replication`. Global sweeps
-(G-4 proposal, G-8 punctuation/italics, G-10/G-15 figures, etc.) collected at the
-end.*
+## `02_literature.tex` — Chapter 2, Related Literature  *(pre-restructure batch; the §2.2 framework moved to `05_methodology.tex`)*
+
+> **Reconciliation note:** the old Ch. 2 "Theoretical Framework" (§2.2, remarks
+> R-058–R-076) is now in `05_methodology.tex` with equations renumbered 2.x→3.x;
+> those are handled in the methodology section below, not here.
+
+- **R-034 · VERIFY → OK** — "A fourth, methodological strand… shapes our research
+  design" is self-referential framing, accurate. No change.
+- **R-035 · VERIFY → OK** — Fama–Bliss (1987) did introduce both the forward–spot
+  result and the zero-coupon ("Fama–Bliss") data that became standard. Accurate.
+- **R-036 · VERIFY → OK** — Ludvigson–Ng (2009) macro factors forecast returns
+  beyond the curve. Accurate.
+- **R-037 · EDIT** (clarify "unspanned"):
+  - **OLD:** "…forecast excess returns over and above forward rates and yields, which is the empirical origin of ``unspanned'' macro risk."
+  - **NEW:** "…forecast excess returns over and above forward rates and yields. This is the empirical origin of ``unspanned'' macro risk—predictive information that the current yield curve does not reveal."
+- **R-038 · EDIT** (clarify the hidden-factor idea):
+  - **OLD:** "A state variable can move expected short rates and term premia in offsetting directions, leaving yields nearly unchanged while still forecasting returns."
+  - **NEW:** "A state variable can move expected short rates and term premia in offsetting directions, leaving the yield curve nearly unchanged while still forecasting returns—a ``hidden'' factor."
+- **R-039 · EDIT** (clarify the Stambaugh bias):
+  - **OLD:** "Persistent regressors, overlapping returns, and the endogeneity highlighted by \citet{stambaugh1999} make standard tests over-reject the spanning null,"
+  - **NEW:** "Persistent regressors, overlapping returns, and the small-sample bias that \citet{stambaugh1999} identified for predictive regressions with a persistent, predetermined regressor make standard tests over-reject the spanning null,"
+- **R-040 · EDIT** (de-duplicate "this critique … this critique"):
+  - **OLD:** "…are, therefore, in large part a response to this critique."
+  - **NEW:** "…are, therefore, in large part a response to it."
+- **R-041 · VERIFY → OK** — cross-refs resolve correctly (replicate in
+  \Cref{ch:replication}, compare in \Cref{ch:robustness}). No change.
+- **R-042 · KEEP (minor)** — "with monthly decay $v=0.987$ over a ten-year window"
+  reads fine. No change (confirm).
+- **R-043 · VERIFY → OK** — Kozicki–Tinsley (2001) shifting-endpoint origin.
+  Accurate.
+- **R-044 · EDIT** (minor):
+  - **OLD:** "subsume the CP factor in head-to-head comparisons."
+    **NEW:** "subsume the CP factor in direct comparisons."
+- **R-045 · KEEP** — "reduces the near-unit-root persistence… because the cycle is
+  stationary while the yield is not" already self-explains. No change (confirm).
+- **R-046 · EDIT** (gloss "structural"):
+  - **OLD:** "The structural counterpart to this reduced-form approach is \citet{bauer2020}."
+    **NEW:** "The structural (model-based) counterpart to this reduced-form approach is \citet{bauer2020}."
+- **R-047 · EDIT**:
+  - **OLD:** "captures something real rather than a fortunate parameterisation."
+    **NEW:** "captures something real rather than an artefact of a fortunate parameter choice."
+- **R-048 / R-049 · VERIFY** ("Can we also mirror his finding?") — the thesis does
+  mirror Zhu (2015): the global cycle factor is OOS-positive where the local factor
+  fails (Ch. 4 / Ch. 6). Sentence stands. **Check `zhu2015` exists in
+  `references.bib` and is correctly characterised.**
+- **R-050 · EDIT** (tighten):
+  - **OLD:** "The FX-adjusted cycle factor we build in this thesis is the direct analogue to this construction, and the contrast between the FX adjustments of the two factor families turns out to be one of our findings (\Cref{sec:res-phase3})."
+  - **NEW:** "The FX-adjusted cycle factor we build is the direct analogue of this construction, and the contrast between how the FX adjustment behaves for the two factor families is one of our findings (\Cref{sec:res-phase3})."
+- **R-051 · EDIT** (clarify "synthesis on the factor level"):
+  - **OLD:** "However, they stop short of a synthesis on the factor level."
+    **NEW:** "However, they stop short of combining the trends into a single macro-anchored \emph{factor}."
+- **R-052 · EDIT** (minor):
+  - **OLD:** "On the asset-class side, \citet{randl2025}"
+    **NEW:** "From an asset-pricing perspective, \citet{randl2025}"
+- **R-053 · EDIT** (clarify unconditional vs conditional):
+  - **OLD:** "Their work prices the asset class unconditionally. However, it does not ask which observable state variable tracks the conditional premium in real time, and this is the question we pose in this thesis."
+  - **NEW:** "Their work characterises the \emph{average} (unconditional) pricing of the asset class. It does not ask which observable state variable tracks the \emph{time-varying} (conditional) premium in real time, and this is the question we pose."
+- **R-054 + R-055 · DELETE (Q-1 resolved)** — remove the whole paragraph *"A final
+  strand of the literature disciplines how such a question should be answered. …
+  and a simulated no-predictability benchmark."* (the Welch–Goyal / Campbell–Thompson
+  / Thornton paragraph).
+  - **KNOCK-ON (must handle on apply):**
+    1. Chapter-intro sentence (lines ~19–22) still promises "A fourth,
+       methodological strand… we review each strand in turn." Trim to *"A fourth,
+       methodological concern—the out-of-sample and small-sample scrutiny of
+       predictive regressions—cuts across all three and shapes our research
+       design (\Cref{ch:methodology})."* and drop "we review each strand in turn".
+    2. Check citations `welch2008`, `thornton2012`: if used only in the deleted
+       paragraph, they drop from the bibliography (acceptable). `campbellthompson2008`
+       and `bauerhamilton2018` are still cited elsewhere, so they stay.
+    3. The final gap paragraph's OOS-discipline reference still stands.
+- **R-056 · OBSOLETE** — part of the R-054+R-055 deletion.
+- **R-057 · EDIT** (tighten; MC de-emphasis theme):
+  - **OLD:** "scored against the prevailing mean \citep{campbellthompson2008}, with bootstrap and Monte-Carlo inference calibrated to the overlapping-return environment."
+  - **NEW:** "scored against the prevailing mean \citep{campbellthompson2008}, with bootstrap and Monte-Carlo inference suited to overlapping returns."
+
+---
+
+*Playbook in progress — remaining files: `05_methodology` (holds the old §2.2
+framework, R-058–R-076), `04_data`, `07_results`, `08b_strategy`,
+`08_robustness`, `09_discussion`, `10_conclusion`, `A_appendix`,
+`06_replication`. Global sweeps (G-4 proposal, G-8 punctuation/italics,
+G-10/G-15 figures, etc.) collected at the end.*
