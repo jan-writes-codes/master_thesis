@@ -402,6 +402,39 @@ KEEP (confirm). Concrete edits and tasks below; everything else is KEEP.**
 
 ---
 
-*Playbook in progress — done: batch-1 + Ch.4 Results. Remaining: `08b_strategy`,
-`08_robustness`, `09_discussion`, `10_conclusion`, `A_appendix`, `06_replication`
-(R-123–R-208). Global sweeps collected at the end.*
+## `08b_strategy.tex` — Chapter 5, Portfolio Construction  *(R-123–R-140, post-restructure)*
+
+- **R-123, R-124, R-125, R-126, R-130, R-131, R-132, R-134, R-136, R-137 · KEEP** —
+  read fine (R-126 optional: "naive" → "simple"; R-137 already glossed with "one
+  full portfolio turn per year").
+- **R-127 · DELETE** "Because both the factor and the regression are recursive,
+  the exposure is ``doubly out-of-sample''." (already explained in methodology).
+- **R-128 · EDIT** (clarify; remove "as is"):
+  - **OLD:** "We report the Sharpe ratio, which is invariant to a constant rescaling of $w_{t}$, as is. The certainty-equivalent (CER) return, in contrast, is reported at equal average exposure across strategies so that the variance penalty is comparable."
+  - **NEW:** "The Sharpe ratio is invariant to a constant rescaling of $w_{t}$, so we report it directly. The certainty-equivalent (CER) return is not scale-invariant, so we report it at equal average exposure across strategies, which makes the variance penalty comparable."
+- **R-129 · EDIT (condense the 5-step list "considerably")** — replace the whole
+  `\begin{enumerate}…\end{enumerate}` (l.68–101) with a compact single paragraph:
+  - **NEW:** "Each month $t$, using only information available at $t$: \emph{(i)} we re-estimate the full generated-regressor chain—trend inflation \eqref{eq:trendinf}, the yield--cycle decomposition \eqref{eq:decomp}, the local-factor regressions \eqref{eq:cf-reg}, and the GDP aggregation \eqref{eq:gcf}—on outcomes realised by $t$ (a twelve-month lag), with a sixty-month minimum training history (\Cref{sec:meth-oos}); \emph{(ii)} we form the forecast $\widehat{\E}_{t}[\rx_{t+12}]=\hat a_{t}+\hat b_{t}\,\GCF^{\mathrm{oos}}_{t}$ from the recursive regression; \emph{(iii)} we estimate the variance $\widehat{\sigma}^{2}_{t}$ on an expanding, lag-respecting window; \emph{(iv)} we set the target weight to the mean--variance exposure \eqref{eq:strat-weight}, truncated at zero (long-only) and rescaled to unit average exposure for reporting; and \emph{(v)} we rebalance monthly, with one-way turnover $|w_{t}-w_{t-1}|$."
+  - Keep the following "two implementation details" paragraph (l.103–112) as-is.
+- **R-133 + R-139 · R-CODE (figures, G-12) + AUTHOR decision** — *"monthly instead
+  of yearly"* / *"also monthly?"* for Fig 5.1 (`strat_f1_cumret`) and Fig 5.3
+  (`strat_f3_drawdown`). Currently non-overlapping **annual** (a deliberate choice
+  to avoid overlapping-return artefacts in the wealth path). A monthly version
+  needs a modelling choice: **monthly-rebalanced 1-month-holding wealth** vs a
+  rolling 12-month construct. **Recommend** monthly-rebalanced cumulative excess
+  return; confirm, then regenerate both figures in `strategy.R`. Captions update to
+  drop "non-overlapping annual".
+- **R-135 · EDIT**:
+  - **OLD:** "the timed strategy preserves a higher mean and the least-bad Sharpe ratio,"
+    **NEW:** "the timed strategy preserves a higher mean and the highest (least negative) Sharpe ratio,"
+- **R-138 · VERIFY → OK** — "$\sim$1 bp half-spreads for 10Y G10 bond futures" is
+  reasonable for the liquid contracts (Bund/UST/JGB); the $10$ bp cost is indeed
+  conservative. No change; optionally cite a microstructure source.
+- **R-140 · EDIT (condense the Caveats paragraph)** — replace l.304–331:
+  - **NEW:** "We read this result as a proof of concept rather than a tradable system, and note three limitations. First, the magnitude is modest—a Sharpe-ratio improvement of about $0.07$ and a certainty-equivalent gain below one percent a year—and the edge is defensive and episodic, earned in the poor bond decade and the 2021--2022 drawdown rather than in the calm years. Second, the forecasts use overlapping twelve-month returns, so the supporting precision is overstated and the subperiod statistics are descriptive; transaction costs (\Cref{tab:strat-costs}) erode but do not eliminate the advantage. Third, because the global cycle factor is a single series, the strategy can only time aggregate exposure; a cross-sectional strategy would need country-specific predictability, which the local factor does not deliver out of sample. The ceiling for richer constructions is nonetheless higher: \citet{randl2025} show that a mean--variance-efficient portfolio across hedged developed markets attains a Sharpe ratio above one (against $0.46$ for individual markets), with the expected-return forecast the crucial input—so a stable real-time signal of the kind documented here is a natural input to cross-sectionally optimised portfolios. With these caveats, the predictability of \Cref{ch:results} carries genuine, if moderate, economic value for a currency-hedged global bond investor. We take up the broader interpretation in \Cref{ch:discussion}."
+
+---
+
+*Playbook in progress — done: batch-1 + Ch.4 Results + Ch.5 Strategy. Remaining:
+`08_robustness` (incl. Q-2 OOS move + Q-3 Italy cuts), `09_discussion`,
+`10_conclusion`, `A_appendix`, `06_replication` (R-143–R-208). Global sweeps at end.*
