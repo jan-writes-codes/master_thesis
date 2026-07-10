@@ -699,14 +699,31 @@ exhibit regeneration.
 
 ---
 
-## Status: PLAYBOOK COMPLETE (pending author confirmations)
+## Status: PLAYBOOK COMPLETE — confirmations resolved (2026-07-10)
 
-All 208 remarks + 18 global items resolved into decided actions above. **Nothing
-applied to the thesis yet.** Open confirmations before "go":
-1. Intro: remove all four `\section*` headings or keep "Main Findings and Structure"? (R-007/R-022/R-025)
-2. Q-3 scope: keep Italy as a named data point in factual result lists? (discussion note)
-3. Q-2 boundary: OK to keep estimation-scheme robustness in Ch. 6 while moving base OOS to Ch. 4?
-4. Notation: apply the $\CF^{\perp}$ fix in `eq:h-horse`? (R-076)
-5. Drop "novel"/"engine"/"operationalise" globally? (sweeps)
-6. R-code exhibits: regenerate now or leave for a separate pass?
-7. Author-supplied: title/subtitle (R-141), acknowledgements (R-005), word limit (G-11), WU-library (G-3).
+All 208 remarks + 18 global items resolved. **Text edits still not applied**
+(awaiting the author's per-item exception review + final "go"). R-code exhibits
+greenlit and in progress. Author confirmations:
+1. **Intro headings — REMOVE ALL FOUR** `\section*` (Motivation, Research Question,
+   Contribution, Main Findings and Structure) per the program guideline. The intro
+   becomes a flowing chapter with no sub-headings. *(updates R-007/R-022/R-025 →
+   also delete `\section*{Main Findings and Structure}`.)*
+2. **Q-3 — remove only the DEDICATED Italy treatment**; Italy stays as a named
+   data point in factual result lists. (My interpretation confirmed.)
+3. **Q-2 boundary — OK**: base OOS → Ch. 4; estimation-scheme robustness stays Ch. 6.
+4. **Notation — YES, apply $\CF^{\perp}$ in `eq:h-horse` AND define it in the
+   methodology.** Add to §`sec:fw-hypotheses` Phase II a defining line:
+   $\CF^{\perp}_{i,t}$ is the residual of the construction regression
+   $\CF_{i,t}=a_i+b_i\,\GCF_{t}+\CF^{\perp}_{i,t}$ (orthogonalisation of the local
+   factor on the global factor), so $\beta_i$ in `eq:h-horse` measures incremental
+   local content. Update `eq:h-horse` (and `eq:h-usd-local`) to use $\CF^{\perp}_{i,t}$.
+5. **Word swaps — ON HOLD** (author's deeper review pending). Do **not** apply the
+   "novel"/"engine"/"operationalise"/hedging swaps yet (G-8 punctuation sweep also
+   waits). Everything else in the sweeps section is unaffected.
+6. **R-code exhibits — GO NOW.** Using recommended defaults where a modelling choice
+   was flagged (monthly-rebalanced cumulative excess return for R-133/R-139; add
+   min/max/AR(1) for R-081; grid $M\in\{60,120,180\}$, $v\in\{0.859,0.975,0.987\}$
+   for R-167). Flag any that can't run in this environment.
+7. **Author-supplied — author will do:** title/subtitle (R-141), acknowledgements
+   (R-005), word/page limit (G-11), WU-library check (G-3). **⏰ REMIND before final
+   compile.**
