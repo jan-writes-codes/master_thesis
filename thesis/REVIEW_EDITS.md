@@ -708,14 +708,24 @@ use it.
 - **R-089 · s5_gcf subtitle** — "Indigo: …" → "Heavy line: global cycle factor GCF…".
 - **R-197 · s8_oos_is_corr subtitle** — reworded to plainer language.
 
-**STILL TO DO (R):**
-- **R-155** — annotate the baseline scheme in `rob_f2_oos_scheme` (robustness.R).
-- **R-122** — add detail (value labels) to Fig 4.7 `mr_f5_oos_r2` (plots.R).
-- **R-133 / R-139** — monthly-rebalanced versions of `strat_f1_cumret` /
-  `strat_f3_drawdown` (strategy.R) — recommended default = monthly-rebalanced
-  cumulative excess return.
-- **R-167** — v/M sensitivity table ($M\in\{60,120,180\}$, $v\in\{0.859,0.975,0.987\}$)
-  — new analysis (robustness.R), then transcribe to a new `.tex` table.
+- **R-155 · DONE** — `rob_f2_oos_scheme` (+ table) now label the expanding-5y
+  scheme as "(baseline)". Regenerated.
+- **R-122 · DONE** — Fig 4.7 `mr_f5_oos_r2` now shows per-bar value labels.
+  Regenerated.
+
+**STILL TO DO (R) — the two substantial ones:**
+- **R-133 / R-139 · HELD for author confirmation** — monthly `strat_f1_cumret` /
+  `strat_f3_drawdown`. Changes the wealth/drawdown from non-overlapping annual to
+  monthly (a methodology change to a results figure). Recommended default =
+  monthly-rebalanced, 1-month-holding cumulative excess return. **Confirm the
+  compounding before regenerating.**
+- **R-167 · TO DO (new analysis)** — v/M sensitivity table. The trend is built in
+  `data_preparation.R` (`cp_trend`, hardcoded $v=0.987$, $M=120$). Plan: a
+  parameterised `cp_trend(pi, v, M)`, rebuild trend→cycle→CF/GCF for each grid
+  point ($M\in\{60,120,180\}$, $v\in\{0.859,0.975,0.987\}$), report cross-country
+  mean in-sample $R^2$ (local + global) and the correlation of each alternative
+  global factor with the baseline (to show stability). New table + a short §6.5
+  paragraph. Needs a focused, tested implementation pass.
 
 **Table `.tex` edits (fold into the "go" prose pass; numbers computed from R):**
 - **R-208** — drop the "Bootstrap $t$ [5\%,95\%]" row from `tables/cp_t4.tex`.
