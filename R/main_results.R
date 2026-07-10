@@ -437,11 +437,16 @@ mr_plots$mr_f5_oos_r2 <- r2_oos_tab %>%
   ggplot2::ggplot(ggplot2::aes(country, r2_oos, fill = spec)) +
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
   ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
+  # Per-bar value labels (review remark R-122: "the graph with more detail").
+  ggplot2::geom_text(ggplot2::aes(label = scales::percent(r2_oos, accuracy = 1),
+                                  y = r2_oos + ifelse(r2_oos >= 0, 0.012, -0.012)),
+                     position = ggplot2::position_dodge(width = 0.8),
+                     size = 2.1, colour = "grey25") +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   ggplot2::scale_fill_manual(values = c("rx ~ CF_oos" = col_pri, "rx ~ GCF_oos" = col_sec),
                              name = NULL) +
   ggplot2::labs(title = expression(paste("Out-of-sample ", R[oos]^2, ": local CF vs global GCF")),
-                subtitle = "Recursive factor forecast vs recursive prevailing mean (positive = beats the mean)",
+                subtitle = "Recursive factor forecast vs recursive prevailing mean; bar labels show pooled-scored per-country R2_oos",
                 x = NULL, y = expression(R[oos]^2)) +
   theme_thesis +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
