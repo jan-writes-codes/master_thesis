@@ -56,6 +56,18 @@ page and elsewhere). Handle once, globally, in Phase 2.
   drawdown → R-139). Regenerate from the strategy R script. 🔴
 - **G-13** — Several exhibits need **"more detail"** (Fig 4.7 → R-122); relates
   to G-10 (figure naming). 🔴
+- **G-14** — **Structural:** the author questions whether **Chapter 6
+  (Robustness)** should stay a dedicated chapter or be moved/merged, since Ch. 4
+  already carries the OOS analysis (R-142, "Scratch this chapter" R-158). → **Q-2.** 🔴
+- **G-15** — The **ggplot figures/tables don't match the LaTeX style** — restyle
+  them for visual consistency (R-194). Relates to G-10/G-13. 🔴
+- **G-16** — **Appendix B (Replication) prose is too long** — condense to a
+  summary that points to the tables rather than narrating each one (R-197). 🔴
+- **G-17** — **Attribution:** do not credit Campbell–Thompson (2008) with
+  *inventing* the OOS R²; check and soften the wording (R-143, R-187). 🔴
+- **G-18** — **Italy theme:** the author marks the dedicated Italy treatment for
+  removal in several places (§6.2.1, R-159, R-185, Table A.4 R-193, appendix
+  mention R-192). Treat as one coordinated cut. → **Q-3.** 🔴
 
 ---
 
@@ -475,12 +487,268 @@ current files directly.)*
   suggest reading this result as a proof of concept … the strategy can only time
   aggregate"*) → rewrite/condense.
 
+### `00_titlepage.tex` — Title page  *(from `master_thesis_6_3`)*
+- [ ] **R-141** 🔵 Note (blue ink): title/subtitle brainstorm playing on "cycle":
+  *"Circling back on: Expected returns…"*, *"Breaking the cycle? Expected
+  returns…"*, *"Stuck in a cycle: Expected returns…"* → consider a catchier
+  title/subtitle (author's decision in Phase 2).
+
+### `00_acknowledgements.tex`  *(from `master_thesis_6_3`)*
+- [ ] **R-142** 🔴 Large ✗ over the whole page again — **reaffirms R-005**
+  (rework/replace the acknowledgements).
+
+### `08_robustness.tex` — Chapter 6, Robustness  *(from `master_thesis_6_4`, post-restructure)*
+
+#### Intro + §6.1 Out-of-Sample Predictability (p.50)
+- [ ] **R-143** 🟡 Rewrite: *"a sceptical reader will want to see tested."*; *"of
+  the core measure,"*.
+- [ ] **R-144** 🔴 Note (margin, §6.1): *"I feel like this chapter should move… we
+  already have OOS analysis in Chapter 4?"* → **Q-2 / G-14.**
+- [ ] **R-145** 🔴 Note + underline on "Campbell and Thompson (2008)": *"they did
+  not invent the R²_oos ??"* → check/soften attribution. **G-17.**
+
+#### §6.1.1 Expanding vs Rolling Windows (p.52)
+- [ ] **R-146** 🟢 Fact-check: "Figure A.7)" (cross-ref).
+- [ ] **R-147** 🟡 Rewrite: "entire"; "from scratch".
+
+#### §6.1.1 cont. (p.53)
+- [ ] **R-148** 🟡 Rewrite: *"Each scheme scores its factor against the prevailing
+  mean constructed under the same scheme, so the comparison is internally
+  consistent. Table 6.1 and Figure 6.4 report the pooled out-of-sample R². The
+  expanding/five-year column reproduces the baseline of Table 6.2 exactly, which
+  serves as a check on the rebuilt machinery."*
+- [ ] **R-149** 🟢 Fact-check: *"the FX-adjusted factor's real-time edge exists at
+  the baseline but is not a robust feature of every reasonable scheme."*
+- [ ] **R-150** 🟡 Rewrite: *"we have to be clear about this point:"*.
+
+#### Table 6.1 + §6.2 Subsample Stability (p.54)
+- [ ] **R-151** 🟡 Rewrite: *"sharpens those loadings."*; "correspondingly"; *"It
+  is positive only under the baseline five-year expanding minimum and, marginally,
+  the fifteen-year rolling window, so its real-time edge should be read as
+  conditional on the estimation scheme."*
+- [ ] **R-152** 🔴 Note (margin, §6.2): *"are the time frames ok?"* → verify the
+  subsample date ranges.
+- [ ] **R-153** 🟢 Fact-check: subsample dates *"global financial crisis (July
+  2007–December 2009)"*; *"euro-area sovereign-debt crisis (2010–2012)"*.
+- [ ] **R-154** 🟡 Rewrite: "HAC".
+
+#### Figure 6.4 + text (p.55)
+- [ ] **R-155** 🔴 Note (arrow to x-axis): *"which one is the baseline?"* →
+  label/clarify the baseline scheme in Figure 6.4.
+- [ ] **R-156** 🟡 Rewrite: "the flight-to-quality"; "exposes a"; "conceals".
+- [ ] **R-157** 🩷 Understanding: *"Section 4.3 is therefore largely a pre-2008
+  phenomenon. Once the post-crisis currency regime of near-zero rate differentials
+  and synchronised monetary policy sets in, the cyclical signal in dollar returns
+  disappears."*
+- [ ] **R-158** 🔴 Note (margin arrow): *"would rather present this as a suspicion
+  than a fact + source"* → soften *"We see this as a genuine limitation…"* to a
+  conjecture and add a citation.
+
+#### Table 6.2 + §6.2.1 (p.56)
+- [ ] **R-159** 🟡 Rewrite: *", the one regime in which no slow-moving macro factor
+  can be expected to forecast the panic-driven repricing of 2008."*; *"It is the
+  only specification that stays positive through the financial crisis (+0.08)…"*;
+  *"and it breaks down only in the financial crisis of 2008 itself."*
+- [ ] **R-160** 🔴 §6.2.1 heading *"The Euro-Area Crisis and Italy"* struck
+  through + notes *"Scratch this chapter"* and *"no subsubsection if it is only
+  one"* → remove the lone subsubsection (fold into §6.2). **Q-2 / Q-3.**
+
+#### Figure 6.5 + §6.3 (p.57)
+- [ ] **R-161** 🔴 Large ✗ over the Italy paragraph (*"driven by redenomination and
+  sovereign-spread dynamics… reasserts local predictability exactly when it
+  matters most."*) → delete. **Q-3 / G-18.**
+
+#### Figure 6.6 + §6.4 (p.58)
+- [ ] **R-162** 🔴 Note (arrow, end §6.3): *"how much do we differ from
+  Dahlquist?"* → clarify/quantify the contribution vs Dahlquist & Hasseltoft (2013).
+
+#### Table 6.3 + §6.4 Core vs Headline Inflation (p.59)
+- [ ] **R-163** 🔴 Note (arrow to Table 6.3): *"I think the in-sample is more
+  telling here"* → lead with in-sample for the core-vs-headline comparison.
+- [ ] **R-164** 🔴 Strikethrough: *"While the measure barely matters in sample, out
+  of sample it makes the difference between a result and none."* → delete.
+- [ ] **R-165** 🟡 Rewrite: *"), plausibly because the energy-price component that
+  contaminates the headline trend also moves exchange rates and is therefore not
+  pure noise for a dollar-return factor (Table 6.3)."*
+
+#### §6.4 tail + §6.5 Sensitivity + §6.5.1 (p.60)
+- [ ] **R-166** 🟡 Rewrite: *"The use of core CPI is therefore not merely a
+  convention inherited from Cieslak and Povala (2015). It is material to the
+  headline real-time result, and the global cycle factor's out-of-sample
+  predictability is a property of the macro anchor measured cleanly."*
+- [ ] **R-167** 🔴 Note (§6.5 heading): *"robustness check with M=60, M=180,
+  v=0.859, v=0.975"* → add EWMA window/decay robustness checks.
+- [ ] **R-168** 🟡 Rewrite: "afresh"; *"because it is the one choice that changes a
+  result."*; "weighting:".
+
+#### Table 6.4 + §6.5 tail (p.61)
+- [ ] **R-169** 🩷 Understanding: table note *"'Mean IS R²' is the cross-country
+  mean in-sample fit,"*.
+- [ ] **R-170** 🟡 Rewrite: *"(+0.00 to +0.03), and"*; *"It is equally important to
+  state clearly what is fragile."*
+
+### `09_discussion.tex` — Chapter 7, Discussion
+
+#### §7.1 Economic Interpretation (p.62)
+- [ ] **R-171** 🟢 Fact-check: *"expect from a single premium that prices the whole
+  curve"*.
+- [ ] **R-172** 🟡 Rewrite: "which we would expect from".
+- [ ] **R-173** 🩷 Understanding: "four candidate factors,".
+- [ ] **R-174** 🟡 Rewrite: *"the choice of state vector. Between prices (forwards)
+  and macro-anchored cycles, the cycle performs better where it matters most,
+  namely in real time."*
+
+#### §7.1 The integration story (p.63)
+- [ ] **R-175** 🟢 Fact-check (green margin bracket) on *"The integration story"*
+  paragraph (*"Economically, the inputs to the factor are themselves
+  synchronised…"*) → verify claims.
+- [ ] **R-176** 🔴 Large ✗ over the *"A recent asset-class perspective adds an
+  important qualification… rather than of return co-movement in general."*
+  paragraph → delete.
+- [ ] **R-177** 🟢 Fact-check: *"Randl et al. (2025) estimate that the market price
+  of risk of the hedged international bond asset class peaks in the financial
+  crisis, the 2010–2012 euro-area crisis, and the 2022 inflation shock,"*.
+
+#### §7.1 cont. — FX adjustment / What ultimately survives (p.64)
+- [ ] **R-178** 🟢 Fact-check: "in our analysis (Section 6.2),"; *"the level and
+  shape of the forward curve,"*; *"removes the level by construction"*; *"which is
+  why it shows up strongly in the in-sample cross-section, weakly in real time,
+  and hardly at all in the aggregate"*.
+- [ ] **R-179** 🟡 Rewrite: "almost nothing ("; "ultimately survives".
+
+#### §7.2 Limitations (p.65)
+- [ ] **R-180** 🟡 Rewrite: *"The block-bootstrap intervals (Politis and Romano,
+  1994) and the expectations-hypothesis Monte Carlo mitigate this problem…"*;
+  *"which is immune to the over-rejection problem, since a recursive forecast
+  either beats the prevailing mean or it does not"*.
+- [ ] **R-181** 🟡 Rewrite: *"the equivalent of only about thirty non-overlapping
+  annual observations per country, spanning one secular disinflation, one
+  zero-lower-bound decade, and one inflation shock."*
+- [ ] **R-182** 🟡 Rewrite: *"An alternative design, adopted by Randl et al. (2025),
+  represents the euro area by German Bunds alone and includes Australia, New
+  Zealand, and Norway instead… ours is what makes the periphery (Italy) result
+  observable at all."*
+
+#### §7.2 cont. + §7.3 Implications (p.66)
+- [ ] **R-183** 🟡 Rewrite: "only for"; *"rather than as the projection in the
+  original proposal"* (proposal ref → **G-4**).
+- [ ] **R-184** 🔴 Large ✗ over *"The EH Monte Carlo calibration gap."* limitation
+  paragraph → delete.
+- [ ] **R-185** 🟡 Rewrite: *"We do not regard these results as minor details,
+  because"*.
+- [ ] **R-186** 🔴 Strikethrough: *"This prescription does not rest on the cycle
+  evidence alone. Randl et al. (2025) reach it from the pricing side… best
+  harvested separately."* → delete.
+
+#### §7.3 cont. (p.67)
+- [ ] **R-187** 🔴 Large ✗ over the *"For risk management and the periphery."*
+  paragraph → delete. **G-18 / Q-3.**
+- [ ] **R-188** 🟢 Fact-check: *"This is the international counterpart of the
+  falling-stars mechanism of Bauer and Rudebusch (2020) and a factor-level
+  complement to the trend-augmented forecasting of Zhang et al. (2021):"*.
+- [ ] **R-189** 🔴 Strikethrough: *"of Campbell and Thompson (2008),"* → remove/soften
+  attribution. **G-17.**
+- [ ] **R-190** 🟡 Rewrite: *"the full generated-regressor chain"*.
+- [ ] **R-191** 🩷 Understanding: *"A natural next step, which lies beyond the scope
+  of this thesis, would be to embed the global cycle in a no-arbitrage term
+  structure model with a shared international trend. This would close the gap
+  between the reduced-form evidence we assemble here and the structural
+  falling-stars framework."*
+
+### `10_conclusion.tex` — Chapter 8, Conclusion
+
+#### (p.68)
+- [ ] **R-192** 🟡 Rewrite: *"This is in line with the falling-stars evidence of
+  Bauer and Rudebusch (2020), according to which the predictable component of bond
+  returns appears once the slow-moving macro anchors are accounted for."*; *"and
+  the Italian predictability concentrates in the 2010–2012 sovereign-debt crisis,
+  when redenomination risk was priced locally."*; *"although our results also show
+  that severe sovereign stress marks the limit of this integration."*
+
+#### (p.69)
+- [ ] **R-193** 🟡 Rewrite: *"We also find, however, that this recovery depends on
+  the construction (a top-down variant is nearly collinear with the unadjusted
+  factor, at 0.99) and that it translates into only a small, scheme-sensitive
+  real-time edge that does not help in timing the aggregate dollar portfolio."*;
+  *"7, in particular the inference under overlapping returns, the single macro
+  regime covered by our sample, and the dependence of the real-time result on
+  expanding-window estimation and core inflation."*
+
+### `A_appendix.tex` — Appendix A
+
+#### §A.1 Additional Tables (p.72)
+- [ ] **R-194** 🟡 Rewrite: *"and the Italy crisis decomposition."* (in the §A.1
+  intro list) → update if the Italy content is removed. **G-18 / Q-3.**
+
+#### Table A.4 (p.74)
+- [ ] **R-195** 🔴 Large ✗ over Table A.4 *"Italy across subsamples"* → delete the
+  table. **G-18 / Q-3.**
+
+#### Figures A.3 / A.4 (p.76)
+- [ ] **R-196** 🔴 Note: *"The ggplot Tables do not have Latex style"* → restyle
+  the ggplot figures to match. **G-15.**
+
+#### Figure A.7 + §A.3 AI Disclaimer (p.78)
+- [ ] **R-197** 🟡 Rewrite: Figure A.7 right-panel subtitle *"cor(CF, CF_oos) per
+  country / Closer to 1 means full-sample look-ahead added little to the local
+  factor"* → reword.
+- [ ] **R-198** 🔴 Large ✗ over §A.3 *AI Disclaimer* → rework/reconsider.
+  **Intent ambiguous** (delete vs revise; a disclaimer is usually required) → **Q-4.**
+
+### `06_replication.tex` — Appendix B, Replication and Validation
+
+#### Appendix B intro + §B.1 (p.79)
+- [ ] **R-199** 🔴 Note (top): *"The text here is kind of too long. I think it
+  would be sufficient to summarise and point to the tables"* → condense Appendix B
+  prose to a summary + table pointers. **G-16.**
+
+#### Table B.1 + text (p.80)
+- [ ] **R-200** 🟡 Rewrite: *", if anything, slightly stronger"*.
+
+#### Figure B.1 + text (p.81)
+- [ ] **R-201** 🟡 Rewrite: *"the Bayesian information criterion, expressed as a
+  relative posterior probability"*; *"places essentially all the weight on the
+  yields-plus-trend specification."*
+- [ ] **R-202** 🟡 Rewrite: *"We note, consistent with the scope set out in Section
+  3.12, that our Monte Carlo reproduces the shape and tail behaviour of the null
+  but is not calibrated to match the exact percentiles that Cieslak and Povala
+  (2015) report."*; *"which we document rather than close."*
+
+#### Figure B.2 + §B.2 Dahlquist–Hasseltoft (p.82)
+- [ ] **R-203** 🟡 Rewrite: *"which is the signature of a single return-forecasting
+  factor that prices the whole term structure rather than one segment."*;
+  *"(Politis and Romano, 1994)"*.
+- [ ] **R-204** 🔴 Note (arrow, end §B.1): *"did we actually double check this?"* →
+  verify the replication claim (*"we thus reproduce the United States evidence in
+  full…"*).
+
+#### Table B.2 + §B.2 text (p.83)
+- [ ] **R-205** 🩷 Understanding: *"Fama–Bliss regression"*.
+- [ ] **R-206** 🟢 Fact-check: *"up to 69%) that they note as well."* (the Japan
+  R²≈69% claim, and that DH note it).
+
+#### Table B.3 + §B.2 tail (p.84)
+- [ ] **R-207** 🟡 Rewrite: "very pattern"; "cycle"; "engine validated".
+
+#### Table B.4 (p.85)
+- [ ] **R-208** 🔴 Strikethrough: the *"Bootstrap t [5%, 95%]"* row in Table B.4 →
+  delete the row. *(table from `R/empirical.R`)*
+
 ---
 
 ## Open questions for the author (resolve before/at Phase 2)
 
 - ✅ **Q-1 (R-054+R-055) — RESOLVED:** delete the passage *"A final strand of the
   literature → … → a simulated no-predictability benchmark."*
+- ❓ **Q-2 (R-144, R-160 / G-14):** should **Chapter 6 (Robustness)** remain a
+  dedicated chapter, or be moved/merged given that Ch. 4 already carries the OOS
+  analysis? Big structural call — needs your decision before Phase 2.
+- ❓ **Q-3 (G-18):** confirm the scope of the **Italy cut** — the ✗ marks on
+  §6.2.1, R-161, R-187, and Table A.4 (R-195) read as *delete*; R-194 (appendix
+  list) then needs updating too. Remove the dedicated Italy treatment everywhere?
+- ❓ **Q-4 (R-198):** the big ✗ over **§A.3 AI Disclaimer** — delete it entirely,
+  or just rework/update it? (A disclaimer is usually required by the program, so I
+  read this as "revise" unless you say otherwise.)
 
 ---
 
@@ -490,3 +758,5 @@ current files directly.)*
 |------|---------------|------------------|---------------|
 | 2026-07-08 | `master_thesis_first_proof_read.pdf` *(pre-restructure — proof-read before the 2026-07-07 structure changes; see staleness caveat at top)* | Front matter, Ch. 1 (Intro), Ch. 2 (Lit. + Framework), Ch. 3 (Data) | R-001 – R-083, G-1 – G-11 |
 | 2026-07-08 | `master_thesis_6_2.pdf` *(post-restructure — maps to current files)* | Ch. 4 (Empirical Findings → `07_results.tex`), Ch. 5 (Portfolio Construction → `08b_strategy.tex`) | R-084 – R-140, G-12 – G-13 |
+| 2026-07-10 | `master_thesis_6_3.pdf` | Title page (`00_titlepage.tex`), Acknowledgements (reaffirms R-005) | R-141 – R-142 |
+| 2026-07-10 | `master_thesis_6_4.pdf` *(post-restructure — maps to current files)* | Ch. 6 (Robustness → `08_robustness.tex`), Ch. 7 (Discussion → `09_discussion.tex`), Ch. 8 (Conclusion → `10_conclusion.tex`), Appendix A (`A_appendix.tex`), Appendix B (Replication → `06_replication.tex`) | R-143 – R-208, G-14 – G-18, Q-2 – Q-4 |
