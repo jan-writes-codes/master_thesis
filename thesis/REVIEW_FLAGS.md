@@ -58,7 +58,28 @@ confirm or overrule.
   not expect a slow-moving macro factor to forecast …") so it no longer reads
   as a citable fact. Confirm that framing is acceptable.
 
+## F-6 · `08b_strategy.tex` — transaction-cost source (R-138)
+- You asked to "cite a reliable microstructure source" for the 1 bp
+  half-spreads / 10 bp cost on 10Y G10 bond futures. **I have no source to
+  hand** and did not invent one. The claim stands uncited. Supply a reference
+  (e.g. a bid–ask/liquidity study of Treasury/Bund futures) and I'll insert it.
+
+## Answer · "What is `strategy_ext.R`?" (author todo)
+- It is the **extended performance-analytics** script for the Portfolio
+  Construction chapter. It `source()`s `strategy.R` (which builds the backtest
+  objects `bt`/`btu` and the baseline exhibits) and adds: (1) subperiod
+  performance (halves of the OOS window + the 2022 episode), (2) turnover and
+  net-of-transaction-cost performance, (3) maximum drawdown on the
+  non-overlapping annual wealth curves, (4) rolling five-year Sharpe ratios.
+  It produces `strat_t4_subperiod`, `strat_t5_costs`, `strat_f3_drawdown`, and
+  `strat_f4_rolling_sharpe`.
+
 ## Deferred (needs R / author input, not yet applied)
+- **R-133 / R-139** — monthly (1-month-holding) versions of `strat_f1_cumret`
+  and `strat_f3_drawdown`. You chose 1-month holding. This is an R change to
+  `strategy.R`/`strategy_ext.R`; the figure captions and the surrounding text
+  still say "non-overlapping annual" and will be updated once the figures are
+  regenerated. **Not yet done.**
 - **R-081** — you want summary stats for the *other* inputs (inflation, FX,
   GDP), possibly in the appendix. Needs a new R table; not yet built.
 - **R-089** — you asked for a lower-triangle correlation table of GCF with the
