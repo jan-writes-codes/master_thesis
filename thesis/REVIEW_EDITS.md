@@ -507,8 +507,63 @@ KEEP (confirm). Concrete edits and tasks below; everything else is KEEP.**
     **NEW:** "deliver only small pooled gains (between zero and $+0.03$), and no construction dominates."
   - "It is equally important to state clearly what is fragile." — KEEP.
 
+## `09_discussion.tex` — Chapter 7, Discussion  *(R-171–R-191, post-restructure)*
+
+> **Q-3 interpretation (confirm):** "remove Italy everywhere" = remove the
+> **dedicated Italy narrative/treatment** (the §6.2.1 subsection + Table A.4 +
+> the risk-management/periphery implication + the extended Italy decomposition
+> stats). Italy still appears as a **named data point** where it is simply a
+> result (e.g. "local content survives in three markets: Italy, the Netherlands,
+> Belgium"). Tell me if you want Italy scrubbed from those factual mentions too.
+
+- **R-171 · VERIFY → OK** — "single premium that prices the whole curve":
+  interpretive, supported. No change.
+- **R-172 · KEEP**. *(Note: "we would suggest/advise/expect" recurs across the
+  discussion — see global sweep: optionally reduce this hedging.)*
+- **R-173 · EDIT** (gloss "four candidate factors"):
+  - **OLD:** "Of the four candidate factors, only the global cycle factor beats the recursive historical mean (\Cref{sec:rob-cf-cp})."
+  - **NEW:** "Of the four candidate factors—the local and global cycle factors and their forward-rate counterparts—only the global cycle factor beats the recursive historical mean (\Cref{sec:rob-cf-cp})."
+- **R-174 · KEEP** — reads well.
+- **R-175 · VERIFY → OK** — the integration-story claims (synchronised inputs,
+  aggregation de-noises) are supported. No change.
+- **R-176 · DELETE** the paragraph "A recent asset-class perspective adds an
+  important qualification … rather than of return co-movement in general."
+  (l.68–82). *(Randl-trim theme; consistent with R-186.)*
+- **R-177 · EDIT (Q-3 trim + verify Randl)** — condense the exceptions paragraph
+  (l.84–106): drop the dedicated Italy stats (horse-race $t=10$, $R^2_{oos}=+0.21$)
+  and the `\Cref{sec:rob-italy}` ref (that subsection is deleted); keep the general
+  exceptions point and the Randl crisis-timing:
+  - **NEW:** "We consider the exceptions as informative as the rule. The local factor retains incremental content in Italy, the Netherlands, and Belgium, concentrated in periods of sovereign stress, which suggests that integration is conditional on the prevailing regime rather than a universal property. When redenomination and sovereign-credit risk reprice a peripheral market, the compensation becomes local again, and a GDP-weighted factor dominated by the core economies cannot price it. We read this conditionality as a refinement of \citet{dahlquist2013} rather than a contradiction. The timing is in line with independent evidence: \citet{randl2025} estimate that the market price of hedged international bond risk peaks in the financial crisis, the 2010--2012 euro-area crisis, and the 2022 inflation shock, and is related to trend inflation and, after 2008, to cross-market inflation dispersion—the same windows in which the cycle factors' explanatory power concentrates in our analysis (\Cref{sec:rob-subsample})." **VERIFY the Randl market-price-of-risk claim against the paper.**
+- **R-178 · VERIFY → OK + citation** — the FX/level/UIP interpretation is sound;
+  add the same UIP citation as R-108 (`\citep{fama1984}`) at "the failure of
+  uncovered interest parity" (l.130–131). Otherwise no change.
+- **R-179 · KEEP**.
+- **R-180, R-181 · KEEP** — read fine.
+- **R-182 · EDIT (Q-3: drop the Italy-result reference)**:
+  - **OLD:** "We see the two universes as complementary. Theirs avoids the euro-bloc redundancy, while ours is what makes the periphery (Italy) result observable at all."
+  - **NEW:** "We see the two universes as complementary: theirs avoids the euro-bloc redundancy, while ours retains the full euro-area cross-section."
+- **R-183 · EDIT (G-4, drop "proposal")** + KEEP:
+  - **OLD:** "the FX-adjusted factor is built bottom-up as the GDP-weighted average of per-country USD cycle factors rather than as the projection in the original proposal;"
+  - **NEW:** "the FX-adjusted factor is built bottom-up as the GDP-weighted average of per-country USD cycle factors rather than top-down or as a projection on $\GCF_{t}$;"
+  - "only for" — KEEP.
+- **R-184 · DELETE** the "The EH Monte Carlo calibration gap." limitation paragraph
+  (l.226–234). **Companion:** change "five limitations" → "four limitations"
+  (l.174).
+- **R-185 · KEEP**.
+- **R-186 · DELETE** "This prescription does not rest on the cycle evidence alone.
+  \citet{randl2025} reach it from the pricing side … best harvested separately."
+  (l.260–266). *(paragraph then flows "…adds risk without adding compensation.
+  Second, we would advise timing the aggregate…".)*
+- **R-187 · DELETE (Q-3)** the whole `\paragraph{For risk management and the
+  periphery.}` (l.277–285).
+- **R-188 · VERIFY → OK** — Bauer–Rudebusch / Zhang framing accurate. No change.
+- **R-189 · EDIT (G-17, drop the C&T "invented" attribution)**:
+  - **OLD:** "The out-of-sample discipline of \citet{campbellthompson2008}, which we apply to the full generated-regressor chain and not only to the final regression, reverses this verdict."
+  - **NEW:** "Out-of-sample evaluation—applied here to the full generated-regressor chain, not only to the final regression—reverses this verdict."
+- **R-190 · KEEP**.
+- **R-191 · KEEP** — the "natural next step" (no-arbitrage model) reads clearly.
+
 ---
 
-*Playbook in progress — done: batch-1 + Ch.4 + Ch.5 + Ch.6. Remaining:
-`09_discussion`, `10_conclusion`, `A_appendix`, `06_replication` (R-171–R-208).
-Global sweeps at end.*
+*Playbook in progress — done: batch-1 + Ch.4–7. Remaining: `10_conclusion`,
+`A_appendix`, `06_replication` (R-192–R-208). Global sweeps at end.*
