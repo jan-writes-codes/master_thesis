@@ -17,3 +17,19 @@ confirm or overrule.
   "fundamentally distinct" → "distinct" (consistent with R-021/R-176), and
   clarified the *unconditional* vs *conditional* distinction (R-053's note).
 - **Decide:** keep as clarified (current), or delete the passage entirely.
+
+## F-2 · `04_data.tex` — Core CPI source (R-077/R-078)
+- You said the core-CPI data is from **FRED, not LSEG Refinitiv**. I changed
+  the provider label to FRED and "seasonally relevant" → "seasonally
+  adjusted".
+- The old example ticker `aUSCCORF/C` is a Datastream/Refinitiv mnemonic, so
+  it can't be right if the source is FRED. I replaced it with **`CPILFESL`**
+  (FRED's US core-CPI, all items less food & energy, seasonally adjusted).
+- **Confirm:** (a) FRED is the source for *all eleven* countries' core CPI
+  (the GDP and yield items still read Bloomberg/LSEG — I left those); (b)
+  `CPILFESL` is the actual US series you used; (c) the series really are
+  seasonally adjusted (if NSA, drop the word).
+
+## Deferred (needs R / author input, not yet applied)
+- **R-081** — you want summary stats for the *other* inputs (inflation, FX,
+  GDP), possibly in the appendix. Needs a new R table; not yet built.
