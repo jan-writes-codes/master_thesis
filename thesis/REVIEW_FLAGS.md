@@ -74,6 +74,43 @@ confirm or overrule.
   It produces `strat_t4_subperiod`, `strat_t5_costs`, `strat_f3_drawdown`, and
   `strat_f4_rolling_sharpe`.
 
+## Answer · R-089 — what GCF correlates with ("who else? check weights")
+Computed `corr(CF_i, GCF)` per country (bu_gdp) against the mean GDP weight:
+
+| Country | corr(CF_i, GCF) | mean GDP weight |
+|---------|-----------------|-----------------|
+| US | 0.96 | 0.477 |
+| DE | 0.94 | 0.099 |
+| SE | 0.93 | 0.013 |
+| CA | 0.89 | 0.039 |
+| BE | 0.84 | 0.013 |
+| GB | 0.83 | 0.074 |
+| NL | 0.80 | 0.022 |
+| FR | 0.75 | 0.070 |
+| JP | 0.73 | 0.199 |
+| CH | 0.66 | 0.016 |
+| IT | 0.20 | 0.056 |
+
+**Finding:** the US (largest weight, 0.48) does have the highest correlation
+and Germany is second — but it is **not** mainly a weight story. The
+cross-country correlation between `corr(CF_i,GCF)` and the GDP weight is only
+**0.24**: Sweden and Canada correlate highly (0.93, 0.89) despite tiny weights,
+because their cycles co-move with the global business cycle, while Japan (2nd
+largest weight) sits at only 0.73. **Italy is the clear outlier (0.20)**,
+consistent with its idiosyncratic sovereign-crisis predictability. So GCF
+tracks the common business cycle, which the large core economies dominate by
+weight, rather than being mechanically pinned to the biggest economies.
+The full lower-triangle CF×CF table you asked for is ready to build on request
+(it needs a manual `.tex` transcription, so I left it for your review first).
+
+## R-122 — resolved by the Q-2 move (no separate figure change)
+You asked to add `rx_usd ~ GCF` and `rx_usd ~ FXGCF` OOS bars to the
+per-country OOS figure (`mr_f5_oos_r2`). The Q-2 restructure already brings the
+`s8-oos-usd` figure (USD unadjusted vs FX-adjusted, per country) into the same
+`sec:res-oos` section, alongside `mr_f5` (local vs global). All four OOS specs
+are now shown per country across two clean figures, so cramming four bars into
+one chart is unnecessary. The value-labels enhancement was done earlier.
+
 ## Deferred (needs R / author input, not yet applied)
 - **R-133 / R-139** — monthly (1-month-holding) versions of `strat_f1_cumret`
   and `strat_f3_drawdown`. You chose 1-month holding. This is an R change to
