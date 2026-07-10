@@ -433,8 +433,82 @@ KEEP (confirm). Concrete edits and tasks below; everything else is KEEP.**
 - **R-140 · EDIT (condense the Caveats paragraph)** — replace l.304–331:
   - **NEW:** "We read this result as a proof of concept rather than a tradable system, and note three limitations. First, the magnitude is modest—a Sharpe-ratio improvement of about $0.07$ and a certainty-equivalent gain below one percent a year—and the edge is defensive and episodic, earned in the poor bond decade and the 2021--2022 drawdown rather than in the calm years. Second, the forecasts use overlapping twelve-month returns, so the supporting precision is overstated and the subperiod statistics are descriptive; transaction costs (\Cref{tab:strat-costs}) erode but do not eliminate the advantage. Third, because the global cycle factor is a single series, the strategy can only time aggregate exposure; a cross-sectional strategy would need country-specific predictability, which the local factor does not deliver out of sample. The ceiling for richer constructions is nonetheless higher: \citet{randl2025} show that a mean--variance-efficient portfolio across hedged developed markets attains a Sharpe ratio above one (against $0.46$ for individual markets), with the expected-return forecast the crucial input—so a stable real-time signal of the kind documented here is a natural input to cross-sectionally optimised portfolios. With these caveats, the predictability of \Cref{ch:results} carries genuine, if moderate, economic value for a currency-hedged global bond investor. We take up the broader interpretation in \Cref{ch:discussion}."
 
+## `08_robustness.tex` — Chapter 6, Robustness  *(R-143–R-170, post-restructure; Q-2 + Q-3 apply)*
+
+### Structural (do first)
+- **Q-2 · MOVE (OOS → Ch. 4)** — move the **base OOS development** §`sec:rob-oos`
+  (l.28–116: pooled Fig `s8-oos`, per-country `s8-oos-local`, convergence
+  `s8-gcf-conv`, dollar `s8-oos-usd`, and their prose) into `07_results.tex`
+  §`sec:res-oos`, expanding that section from summary to full. **Keep in Ch. 6**
+  the estimation-scheme robustness (§`sec:rob-oos-scheme`, "Expanding vs Rolling")
+  as its own top-level section — it is a robustness *test*, not the base OOS.
+  - **Companion:** rewrite the Ch. 6 intro (l.5–26) so the "tests" list is:
+    estimation-scheme sensitivity, subsample stability, CF-vs-CP, core-vs-headline,
+    construction sensitivity (OOS full development now lives in Ch. 4). Replace the
+    §`sec:rob-oos` cross-ref with a one-line pointer: "The out-of-sample evidence
+    is developed in \Cref{sec:res-oos}; here we test its robustness to the
+    estimation scheme, the sample period, the predictor family, the inflation
+    measure, and the construction choices."
+  - **CONFIRM the boundary:** I'm moving the base OOS but keeping scheme-sensitivity
+    in Ch. 6. Say if you'd rather move that too.
+- **Q-3 · DELETE (Italy)** — delete the whole subsection §`sec:rob-italy`
+  *"The Euro-Area Crisis and Italy"* (l.282–312) **and** its Table `tab:rob-italy`
+  (`rob_t3`). Update the intro (l.16–17): drop "and we give the euro-area crisis
+  and Italy a dedicated treatment". This also resolves R-160 (lone subsubsection)
+  and R-161 (the crossed-out Italy paragraph is inside this subsection).
+
+### Line-level
+- **R-143 · KEEP** — "a sceptical reader will want to see tested."; "in place of
+  the core measure," read fine.
+- **R-145 · G-17 (handled elsewhere)** — the note "they did not invent R²_oos" is
+  resolved by the R-054 lit deletion and R-189 (discussion strikethrough). In this
+  file l.38–39 ("the \citet{campbellthompson2008} out-of-sample statistic") is a
+  fair attribution of the *specific statistic form* — **no change**.
+- **R-146 · VERIFY → OK** — the "Figure A.7" cross-ref now resolves to
+  `\Cref{fig:s8-gcf-conv}`. OK.
+- **R-147, R-151, R-154, R-156, R-159, R-165, R-166, R-168 · KEEP** — read fine.
+- **R-148 · KEEP** — the "Each scheme scores its factor…" block reads fine.
+- **R-149 · VERIFY → OK** — supported by the scheme table (FXGCF +0.019 at
+  baseline, negative under 3y/7y/rolling). No change.
+- **R-150 · EDIT** (drop the filler):
+  - **OLD:** "The window shape, by contrast, matters a great deal, and we have to be clear about this point: the out-of-sample advantage of every specification depends on the expanding window."
+  - **NEW:** "The window shape, by contrast, matters a great deal: the out-of-sample advantage of every specification depends on the expanding window."
+- **R-152 / R-153 · VERIFY → OK (confirm)** — subsample datings (pre-crisis
+  →2007-06; GFC 2007-07–2009-12; euro crisis 2010–2012; post-crisis 2013–) are
+  standard and defensible. Confirm they match your preferred windows.
+- **R-155 · R-CODE (figure) + caption** — *"which one is the baseline?"* Annotate
+  the baseline scheme (expanding/5-year) in Fig `rob_f2_oos_scheme` and add to the
+  caption "the baseline is the expanding-window, five-year-minimum scheme."
+- **R-157 · KEEP** — the "pre-2008 phenomenon" sentence reads clearly.
+- **R-158 · EDIT** (soften to a suspicion, per the note):
+  - **OLD:** "We see this as a genuine limitation of the FX-adjusted factor, and the subsample evidence states it more sharply than the pooled regression can."
+  - **NEW:** "We read this as a likely limitation of the FX-adjusted factor rather than a firm conclusion, and the subsample evidence states it more sharply than the pooled regression can."
+- **R-160 / R-161 · DONE via Q-3** (Italy subsection + paragraph deleted above).
+- **R-162 · EDIT** (make the contribution vs Dahlquist explicit):
+  - **OLD:** "The integration finding of \Cref{ch:results} is, if anything, stronger for the cycle factor than for the forward factor on which \citet{dahlquist2013} originally established it."
+  - **NEW:** "The integration finding of \Cref{ch:results} is, if anything, stronger for the cycle factor than for the forward factor: \citet{dahlquist2013} established global integration in-sample for four markets with the forward-rate factor, whereas we establish it out-of-sample across the G10 with the macro-anchored cycle."
+- **R-163 · EDITORIAL (minor)** — "the in-sample is more telling here": optionally
+  present the in-sample core-vs-headline table before the OOS one. Low priority;
+  keep the OOS finding (it is the section's point). Default: no reorder unless you
+  want it.
+- **R-164 · DELETE** the struck sentence "While the measure barely matters in
+  sample, out of sample it makes the difference between a result and none."
+  (the paragraph then opens "The out-of-sample comparison is where the choice of
+  inflation measure becomes important…").
+- **R-167 · R-CODE / NEW ANALYSIS (§6.5 Sensitivity)** — the section currently
+  *argues* robustness to $v,M$ without showing it. Add a small sensitivity
+  exhibit re-running the factor over the grid the author specifies: **$M\in\{60,120,180\}$
+  months and $v\in\{0.859,0.975,0.987\}$**, reporting in-sample and OOS $R^2$.
+  Needs R work (new table/figure); recommend a compact table. Confirm the grid.
+- **R-169 · KEEP** — Table `rob_t7` note ("'Mean IS R²' is the cross-country mean
+  in-sample fit") already clarifies. No change.
+- **R-170 · EDIT (minor)** + KEEP:
+  - **OLD:** "deliver only small pooled gains ($+0.00$ to $+0.03$), and no construction dominates."
+    **NEW:** "deliver only small pooled gains (between zero and $+0.03$), and no construction dominates."
+  - "It is equally important to state clearly what is fragile." — KEEP.
+
 ---
 
-*Playbook in progress — done: batch-1 + Ch.4 Results + Ch.5 Strategy. Remaining:
-`08_robustness` (incl. Q-2 OOS move + Q-3 Italy cuts), `09_discussion`,
-`10_conclusion`, `A_appendix`, `06_replication` (R-143–R-208). Global sweeps at end.*
+*Playbook in progress — done: batch-1 + Ch.4 + Ch.5 + Ch.6. Remaining:
+`09_discussion`, `10_conclusion`, `A_appendix`, `06_replication` (R-171–R-208).
+Global sweeps at end.*
