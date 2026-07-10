@@ -1,10 +1,10 @@
 # Thesis Review — Remarks Log
 
-**Status:** RESOLVING (Phase 2 prep). Review gathering is done. We are now
-converting each remark into a **concrete decided edit** recorded in
-`REVIEW_EDITS.md` — the implementation playbook. **Still do not touch the thesis
-`.tex` files**; edits are applied only when the author gives the explicit "go",
-at which point `REVIEW_EDITS.md` is executed top to bottom.
+**Status:** PLAYBOOK COMPLETE (awaiting author "go"). Every remark below is
+resolved into a concrete decided edit in **`REVIEW_EDITS.md`** (reconciled against
+the current, post-restructure source). **The thesis `.tex` files are still
+untouched.** On the author's explicit "go", `REVIEW_EDITS.md` is executed top to
+bottom. A short list of open confirmations sits at the end of that file.
 
 Remarks are extracted from author-annotated PDFs (highlight colour + highlighted
 text + attached comment), then located in the source `.tex`.

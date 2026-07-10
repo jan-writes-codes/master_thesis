@@ -563,7 +563,150 @@ KEEP (confirm). Concrete edits and tasks below; everything else is KEEP.**
 - **R-190 · KEEP**.
 - **R-191 · KEEP** — the "natural next step" (no-arbitrage model) reads clearly.
 
+## `10_conclusion.tex` — Chapter 8, Conclusion  *(R-192–R-193)*
+
+- **R-192 · EDIT (Q-3 Italy trim) + KEEP**:
+  - The Bauer falling-stars sentence (l.31–33): KEEP.
+  - **OLD:** "Once the global factor is included, genuinely local content survives only in Italy, the Netherlands, and Belgium, and the Italian predictability concentrates in the 2010--2012 sovereign-debt crisis, when redenomination risk was priced locally. Similar to the findings of \citet{dahlquist2013}…"
+  - **NEW:** "Once the global factor is included, genuinely local content survives only in Italy, the Netherlands, and Belgium, concentrated in periods of sovereign stress. Similar to the findings of \citet{dahlquist2013}…"
+  - "although our results also show that severe sovereign stress marks the limit of this integration": KEEP.
+- **R-193 · KEEP** — both flagged sentences read fine. *(Note: the deleted
+  EH-MC-gap limitation (R-184) is not listed here, so this stays consistent.)*
+- **Also (global "novel"):** l.16 "a novel FX-adjusted global cycle factor" — apply
+  the same decision as the abstract R-001 ("novel" drop/keep) for consistency.
+
+## `A_appendix.tex` — Appendix A  *(R-194–R-198)*
+
+- **R-194 · EDIT (Q-3)** — remove the Italy item from the §A.1 intro list:
+  - **OLD:** "…the in-sample subsample and inflation-measure estimates, and the Italy crisis decomposition."
+    **NEW:** "…and the in-sample subsample and inflation-measure estimates."
+- **R-195 · DELETE (Q-3)** — delete the Table block "Italy across subsamples"
+  (`tab:rob-italy` / `rob_t3_italy`, l.31–36). *(Same table flagged in Robustness.)*
+- **R-196 · R-CODE (G-15, broad)** — *"The ggplot Tables do not have Latex style."*
+  Apply a consistent LaTeX-matching `ggplot2` theme (serif font e.g. via
+  `showtext`/`extrafont`, matched sizes, muted palette) to **all** generated
+  figures in `R/plots.R` (and `main_results.R`, `fxgcf_dynamics.R`,
+  `robustness.R`, `strategy.R`). This is a one-pass styling change across the
+  figure pipeline. *(Ties to G-10 figure naming, R-089/R-197 subtitles.)*
+- **R-197 · R-CODE (figure subtitle)** — Fig A.7 (`s8_oos_is_corr`) right-panel
+  subtitle "cor(CF, CF_oos) per country / Closer to 1 means full-sample look-ahead
+  added little to the local factor" → reword to plainer language in `R/plots.R`.
+  The `.tex` caption (l.106–110) is fine.
+- **R-198 · DELETE (Q-4)** — delete the entire `\section{AI Disclaimer}`
+  (l.114–138). **Companion check (important):** the acknowledgements and the
+  disclaimer comment both point to a *"Statement on the use of generative AI
+  tools"* in the **Declaration of Authorship** (`00_declaration.tex`). Before
+  deleting, **verify `00_declaration.tex` carries the AI-use statement**; if not,
+  move the essential content there rather than losing it. (Programs typically
+  require the AI statement somewhere.)
+
+> **R-198 companion — RESOLVED:** `00_declaration.tex` already carries a full
+> *"Statement on the use of generative AI tools"* (l.21–35). Deleting the appendix
+> §A.3 disclaimer loses nothing required. ✅ Safe to delete.
+
+## `06_replication.tex` — Appendix B, Replication and Validation  *(R-199–R-208)*
+
+- **R-199 · EDIT (G-16, condense the whole appendix)** — replace each table's
+  paragraph-length walk-through with a 1–2 sentence summary + pointer. Keep all
+  section headings, tables, and figures. Drafted condensed prose:
+  - **§B.1 (CP) Panel A** (l.30–43): "In \Cref{tab:cp-t1} we reproduce Table~1 of \citet{cieslak2015}. Panel~A regresses each US yield on trend inflation \eqref{eq:decomp}: the slope is large and significant at every maturity ($1.63$–$1.88$, HAC $t$ from $5.8$ to $12.8$), and the share of yield variation the trend explains rises from $58\%$ (one year) to $84\%$ (ten). \Cref{fig:s2-yield-decomp} shows the split for the US."
+  - **§B.1 Panel B** (l.59–71): "Panel~B confirms a single cycle factor: adjacent-maturity cycle correlations are near unity ($0.99$) and fall to $0.74$ between the one- and ten-year cycles, and the cycles are far less persistent than the yields (half-life $55\to10$ months versus $\sim46$–$56$)."
+  - **§B.1 CF** (l.73–80, absorbs R-200): "The fitted factor $\CF_{t}$ \eqref{eq:cf} correlates $0.69$ with the average cycle in our US sample, close to the $0.61$ of \citet{cieslak2015} (\Cref{fig:s3-cbar-cf})."
+  - **§B.1 Table 2** (l.90–105, absorbs R-201): "In \Cref{tab:cp-t2a} the forward curve alone explains $25\%$ of return variation and adding trend inflation lifts this to $46\%$ (trend loading $t=-3.6$); the two-predictor cycle representation recovers $27\%$ with the opposite-signed loadings that define the mechanism, and the BIC places essentially all posterior weight on the yields-plus-trend specification."
+  - **§B.1 Monte Carlo** (l.114–131, absorbs R-202): "Read against a simulated expectations-hypothesis null (\Cref{tab:cp-t2b}, \Cref{sec:meth-ehmc}), whose $95$th percentile reaches $15\%$–$19\%$ at our $300$-month window, the realised $27\%$–$46\%$ sits far in the right tail. Our Monte Carlo reproduces the shape of the null but not the exact published percentiles—a gap we document rather than close."
+  - **§B.1 Table 4** (l.140–154, absorbs R-203): "Finally, \Cref{tab:cp-t4} shows the single cycle factor loading positively and significantly at every maturity ($0.69$/$1.37$/$1.42$ at two/five/ten years), with the opposite-signed cycle structure and the long end most predictable ($R^{2}=32\%$ at ten years); block-bootstrap bands \citep{politis1994} exclude zero throughout. We thus reproduce the US evidence in its essentials."
+  - **§B.2 (DH)** (l.167–271): condense each of the four table paragraphs to one
+    sentence + pointer analogously (Table 3 correlations $0.76$–$0.97$; Table 4
+    CP dominates FB; Table 6 global subsumes local; Table 7 FX-adjustment restores
+    dollar predictability). Keep the closing "engine validated" paragraph, tightened.
+  - *This is the single largest rewrite; apply carefully and recompile.*
+- **R-204 · VERIFY → OK (soften)** — *"did we actually double check this?"* The
+  reproduced CP numbers (slopes, $R^2$ rising to $84\%$, corr $0.69$ vs $0.61$,
+  predictive $27\%$–$46\%$, per-maturity loadings) are consistent with
+  Cieslak–Povala (2015). Soften "reproduce … in full" → "reproduce … in its
+  essentials" (done in the R-199 condensation).
+- **R-205 · EDIT** (gloss Fama–Bliss):
+  - **OLD:** "the single-forward Fama--Bliss regression \citep{famabliss1987}"
+    **NEW:** "the single forward--spot-spread regression of \citet{famabliss1987}"
+- **R-206 · VERIFY** — check "$R^2$ up to $69\%$ in Japan … that they note as well"
+  against `tables/dh_t4_fb_cp` (should show Japan ≈ 69%) and the Dahlquist–Hasseltoft
+  (2013) paper. Plausible; confirm from the source.
+- **R-207 · KEEP** — "very pattern", "cycle" read fine; "engine" → global swap
+  (estimation pipeline, R-084/G global).
+- **R-208 · R-CODE / table edit** — delete the *"Bootstrap t [5%, 95%]"* row from
+  Table B.4 (`tables/cp_t4`, generated by `R/empirical.R`).
+
 ---
 
-*Playbook in progress — done: batch-1 + Ch.4–7. Remaining: `10_conclusion`,
-`A_appendix`, `06_replication` (R-192–R-208). Global sweeps at end.*
+## Global sweeps & cross-cutting tasks
+
+- **G-1** — every claim needs a source: covered case-by-case via the VERIFY items;
+  no blanket action beyond those.
+- **G-3** — WU-library availability of cited papers: **AUTHOR** (I can't check WU's
+  catalogue). List of key cites to confirm: `randl2025`, `zhu2015`, `zhang2022`,
+  `weiwright2013`, `hodrick1992`, `politis1994`.
+- **G-4 · DONE (4 sites, verified by grep)** — "proposal" removed at
+  `05_methodology` l.181 & l.248 (R-073/R-075), `09_discussion` l.220 (R-183),
+  **and `01_introduction` l.113** (newly found): change "we take three
+  sub-questions from our research proposal:" → "we pose three sub-questions:".
+  Re-grep on apply to confirm zero body-text hits.
+- **G-8 · SWEEP (punctuation/italics)** — on apply, sweep for consistency:
+  `;` usage, `--`/`---` (en/em dash) usage, and italic (`\emph`) usage of the
+  factor names (`CF`, `GCF`, `FXGCF`) — make first-use italic, later uses roman,
+  consistently.
+- **"operationalise" / "engine" / "novel" / "we would suggest" · SWEEP** —
+  - replace "operationalise/operationalises" → "put into practice"/"translate…into"
+    (intro l.135, `02_literature` l.10);
+  - replace "estimation engine"/"empirical engine" → "estimation pipeline" (intro
+    l.8, `07_results` l.8, `06_replication` closing);
+  - decide "novel" (abstract R-001, conclusion l.16, replication l.236) —
+    recommend dropping it (reads as self-promotional) — apply consistently;
+  - optionally thin the "we would suggest/advise/expect" hedging in the discussion.
+- **G-9 · DONE via R-058** — framework equations spot-checked; consistent.
+- **G-10 / G-13 · R-CODE** — figure short names/"crazy names" and "more detail":
+  rename figure files/labels to descriptive names is risky (breaks `\includegraphics`
+  paths); instead **improve captions/titles** and add detail per R-089, R-122,
+  R-155, R-197. Confirm scope.
+- **G-11 · AUTHOR** — abstract/thesis word & page limit: confirm against WU
+  guidelines (abstract ≈ 235 words).
+- **G-12 · R-CODE** — monthly strategy figures (R-133, R-139), pending your
+  compounding choice.
+- **G-15 · R-CODE** — restyle all ggplot figures to LaTeX style (R-196): one pass
+  over `R/plots.R`, `main_results.R`, `fxgcf_dynamics.R`, `robustness.R`,
+  `strategy.R`.
+- **G-16 · DONE in playbook** — replication appendix condensed (R-199).
+- **G-17 · DONE** — C&T "invented R²_oos" softened (discussion R-189; lit mention
+  removed with R-054).
+- **G-18 · DONE** — Italy removed everywhere (robustness §rob-italy + table,
+  appendix table + list, discussion trims, results/intro/conclusion trims).
+
+### Bibliography checks (verified by grep)
+- **`fama1984` — CONFIRMED MISSING from `references.bib`.** Add it for the UIP
+  citation (R-108/R-178), or cite an available carry/UIP reference instead.
+- **`welch2008` / `thornton2012` — used ONLY in `02_literature.tex`** (the R-054
+  paragraph being deleted). After the deletion they are **orphaned** → remove both
+  entries from `references.bib` (or keep only if you re-cite them elsewhere).
+- Present & OK: `zhu2015`, `randl2025`, `thornton2012`/`welch2008` (until deleted).
+- Still to confirm from sources: `randl2025` market-price claim (R-177), Zhang
+  (2021) characterisation (R-020), DH Japan 69% (R-206).
+
+### R-code / exhibit tasks (need an R run; separate from the .tex edits)
+R-079, R-080, R-081 (data figs/table); R-089, R-092, R-122 (results figs/table);
+R-133, R-139 (monthly strat figs); R-155 (scheme fig), R-167 (v/M sensitivity —
+new exhibit); R-196, R-197 (figure restyle/subtitle); R-208 (drop table row).
+**These are listed but NOT drafted as text**; they run when you green-light the
+exhibit regeneration.
+
+---
+
+## Status: PLAYBOOK COMPLETE (pending author confirmations)
+
+All 208 remarks + 18 global items resolved into decided actions above. **Nothing
+applied to the thesis yet.** Open confirmations before "go":
+1. Intro: remove all four `\section*` headings or keep "Main Findings and Structure"? (R-007/R-022/R-025)
+2. Q-3 scope: keep Italy as a named data point in factual result lists? (discussion note)
+3. Q-2 boundary: OK to keep estimation-scheme robustness in Ch. 6 while moving base OOS to Ch. 4?
+4. Notation: apply the $\CF^{\perp}$ fix in `eq:h-horse`? (R-076)
+5. Drop "novel"/"engine"/"operationalise" globally? (sweeps)
+6. R-code exhibits: regenerate now or leave for a separate pass?
+7. Author-supplied: title/subtitle (R-141), acknowledgements (R-005), word limit (G-11), WU-library (G-3).
