@@ -30,6 +30,43 @@ confirm or overrule.
   `CPILFESL` is the actual US series you used; (c) the series really are
   seasonally adjusted (if NSA, drop the word).
 
+## F-3 · `07_results.tex` — exchange-rate exposure explanation (R-100/R-101)
+- You asked for a short explanation of why dollar predictability "survives
+  only where exchange-rate exposure is small or itself cyclical," to be
+  **verified with you**.
+- **What I wrote:** "In these cases the currency return is either absent (the
+  United States carries no currency leg) or tends to move with the domestic
+  rate cycle, so that part of it is already captured by the bond factor rather
+  than adding independent noise; for the euro bloc, Switzerland, and Japan, by
+  contrast, the exchange rate moves largely independently of the bond cycle and
+  its volatility swamps the signal."
+- **Verify:** is the "CAD/SEK/GBP exchange rate co-moves with the domestic rate
+  cycle" mechanism something you're comfortable asserting? I did not compute a
+  formal FX–cycle correlation to back it; if you want, I can add one in R.
+
+## F-4 · `08_robustness.tex` — core-vs-headline FX argument needs a source (R-165)
+- I split the sentence as you asked ("We could argue that the energy-price
+  component … also moves exchange rates …"). You wanted a "Like in (source)"
+  citation for this claim. **I have no source** and did not invent one — the
+  clause currently stands uncited. Supply a reference or I'll leave it as our
+  own conjecture.
+
+## F-5 · `08_robustness.tex` — 2008 "no macro factor can forecast" (R-159)
+- You flagged "the one regime in which no slow-moving macro factor can be
+  expected to forecast the panic-driven repricing of 2008" as possibly needing
+  a source. I reframed it as our own expectation ("a regime in which we would
+  not expect a slow-moving macro factor to forecast …") so it no longer reads
+  as a citable fact. Confirm that framing is acceptable.
+
 ## Deferred (needs R / author input, not yet applied)
 - **R-081** — you want summary stats for the *other* inputs (inflation, FX,
   GDP), possibly in the appendix. Needs a new R table; not yet built.
+- **R-089** — you asked for a lower-triangle correlation table of GCF with the
+  local CFs (and a note that GCF correlates most with the largest economies by
+  construction). New R exhibit; not yet built.
+- **R-092** — G10-panel (country-FE) row for Table 4.2 (`mr_t2_phase2`). Needs R.
+- **R-122** — add `rx_usd ~ GCF` and `rx_usd ~ FXGCF` OOS bars to Fig 4.7
+  (`mr_f5_oos_r2`). Value labels already added; the extra USD bars need R.
+- **R-167** — v/M sensitivity table (§6.5). New R analysis; not yet built.
+- The figure `figures/s8_r2_oos_local.pdf` is now unused (its role is filled by
+  `mr_f5_oos_r2` in Ch. 4). Harmless; can be deleted from the pipeline later.
