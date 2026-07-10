@@ -216,8 +216,86 @@ Global decisions (from the questions):
 
 ---
 
-*Playbook in progress — remaining files: `05_methodology` (holds the old §2.2
-framework, R-058–R-076), `04_data`, `07_results`, `08b_strategy`,
-`08_robustness`, `09_discussion`, `10_conclusion`, `A_appendix`,
-`06_replication`. Global sweeps (G-4 proposal, G-8 punctuation/italics,
-G-10/G-15 figures, etc.) collected at the end.*
+## `05_methodology.tex` — old §2.2 framework  *(R-058–R-076; equations renumbered, e.g. old (2.3)→`eq:decomp`, (2.7)→`eq:cf`, (2.15)→`eq:h-horse`)*
+
+> **Note:** the restructure added a *"Deviations from the Original Studies"*
+> section (`sec:meth-deviations`) that already collects the proposal/paper
+> departures, so several old "Implementation note" asides are now redundant.
+> **G-4 (remove "proposal")** is executed here.
+
+- **R-058 · VERIFY (G-9)** — "fact-check everything here" over the framework. The
+  file header states notation is kept consistent with `data_preparation.R`,
+  `cp_inference.R`, `oos.R`. Spot-check on apply: eqs `eq:eh`, `eq:rx`,
+  `eq:decomp`, `eq:trendinf` ($v=0.987$, $M=120$), `eq:rxbar` ($D^{(n)}=n$),
+  `eq:rx-usd` against the code. All look standard and internally consistent.
+- **R-059 · EDIT (→ global sweep)** — "operationalise" reads as jargon; add to the
+  **global word-swap sweep** (replace "operationalise/operationalises" with "put
+  into practice"/"translate … into" at each occurrence: intro l.135,
+  `02_literature` l.10). "menu" (maturity menu) is standard — keep.
+- **R-060 · KEEP** — $N=\{1,2,4,5,9,10\}$ is defined at first use ("empirical
+  maturity menu … dictated by data availability"). Adequate. No change (confirm).
+- **R-061 · KEEP (minor)** — "dictated by data availability (\Cref{sec:data-coverage})"
+  reads fine.
+- **R-062 · EDIT** (gloss the constant-expected-return restriction):
+  - **OLD:** "should therefore satisfy $\E_{t}\!\left[\rx^{(n)}_{t+12}\right]=\text{const}$."
+  - **NEW:** "should therefore satisfy $\E_{t}\!\left[\rx^{(n)}_{t+12}\right]=\text{const}$—the expected excess return is the same at every date."
+- **R-063 · DELETE** the sentence "Forward rates \citep{cochrane2005} and, even
+  more powerfully, macro-anchored cycles \citep{cieslak2015} predict
+  $\rx^{(n)}_{t+12}$ with economically large $R^{2}$." (paragraph then reads
+  "…rejects this restriction. In the remainder of this chapter, we build…").
+- **R-064 · EDIT** (tighten):
+  - **OLD:** "In the remainder of this chapter, we build the predictors that we use to document and interpret this predictability in an international setting."
+  - **NEW:** "The remainder of this chapter builds the predictors we use to document and interpret this predictability internationally."
+  - The "we return to the EH itself in \Cref{sec:meth-ehmc}…" clause reads fine — keep.
+- **R-065 · KEEP** — the cycle term $\cyc^{(n)}_{i,t}$ is defined ("transitory
+  cycles"; "the cycle is, by definition, the residual"). No change.
+- **R-066 · KEEP + explain (confirm)** — "shouldn't $\alpha,\beta$ have hats?"
+  Current notation is **internally consistent**: defining projections
+  (`eq:decomp`, `eq:cf-reg`) use plain Greek (population coefficients); only the
+  *fitted factor* carries hats (`eq:cf` $\hat\gamma$). Hatting $\alpha,\beta$ in
+  `eq:decomp` would force hats in `eq:cf-reg` too and break the fitted-value
+  definition. **Recommend keep**; optionally add a footnote "empirically the cycle
+  is the OLS residual $\hat\varepsilon^{(n)}_{i,t}$." Confirm your preference.
+- **R-067 / R-071 · EDIT (drop the "Implementation note." device)** — remove the
+  `\paragraph{Implementation note.}` labels at l.80 and (the surviving one) so the
+  content flows as normal prose; keep the substance (local estimation; $v=0.987$
+  follows CP; sensitivity examined in \Cref{ch:robustness}).
+- **R-068 · KEEP (minor)** — "The cycles at different maturities are highly
+  collinear but not identical." reads fine.
+- **R-069 · KEEP (minor)** — "Equation \eqref{eq:cf} is the empirical analogue of
+  the single return-forecasting factor of \citet{cochrane2005}…" reads fine.
+- **R-070 · DELETE** the "Implementation note" block "The average cycle in
+  \eqref{eq:cbar} excludes the one-year maturity … mirror the role of the average
+  forward rate in the \citet{cochrane2005} factor." (redundant: `eq:cbar` already
+  shows $n\neq1$).
+- **R-072 · EDIT** (specify the currency):
+  - **OLD:** "We convert nominal GDP to a common currency before weighting."
+    **NEW:** "We convert nominal GDP to US dollars before weighting."
+  - "even when coverage is unbalanced": keep.
+- **R-073 · DELETE + PRESERVE (G-4)** — remove the proposal framing "Our proposal
+  specified a yield-adjusted duration $D^{(n)}_{i,t}=n/(1+y^{(n)}_{i,t})$. However,
+  under continuous compounding …"; the duration choice is already in the
+  Deviations section. **Keep** the insensitivity sentence (R-074) as plain prose:
+  "As \citet{cieslak2015} note, the results are insensitive to this convention,
+  and a simple (unstandardised) average leaves our conclusions unchanged."
+- **R-074 · VERIFY → OK, RETAIN** — CP do note the standardisation is not critical.
+  Keep the sentence (see R-073).
+- **R-075 · DELETE (G-4)** — remove "A third specification, which our proposal
+  wrote as $\rxbar^{\mathrm{USD}}_{t+12}=\delta_0+\delta_1\GCF_t+\varepsilon_{t+12}$,
+  would make $\FXGCF_t$ an affine transform of $\GCF_t$ … we do not pursue it."
+  Also drop the `\paragraph{Implementation note.}` label on that paragraph; keep
+  the first/second design-choice content (bottom-up mirrors GCF; top-down 0.99
+  collinear).
+- **R-076 · EDIT (notation consistency — confirm; touches an equation)** — the
+  horse-race `eq:h-horse` writes $\beta_i\,\CF_{i,t}$, but the text and the
+  results (Table 4.2, "$CF^{\perp}$") use the **orthogonalised** local factor.
+  Change $\beta_i\,\CF_{i,t}\rightarrow\beta_i\,\CF^{\perp}_{i,t}$ in `eq:h-horse`
+  (and correspondingly note it in `eq:h-usd-local`), so the equation matches the
+  reported regressor. Flagged because it edits an equation.
+
+---
+
+*Playbook in progress — remaining files: `04_data`, `07_results`,
+`08b_strategy`, `08_robustness`, `09_discussion`, `10_conclusion`, `A_appendix`,
+`06_replication`. Global sweeps (G-4 done in methodology; G-8 punctuation/italics,
+G-10/G-15 figures, "operationalise" swap, etc.) collected at the end.*
