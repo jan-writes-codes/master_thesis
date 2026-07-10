@@ -483,7 +483,7 @@ cyc_180 <- build_cycle_base(180)
 
 schemes <- tibble::tribble(
   ~key,        ~label,                  ~base,     ~mt, ~tw,
-  "exp60",     "Expanding, 5y min",     "exp",     60L, Inf,
+  "exp60",     "Expanding, 5y min (baseline)", "exp", 60L, Inf,
   "exp36",     "Expanding, 3y min",     "exp",     36L, Inf,
   "exp84",     "Expanding, 7y min",     "exp",     84L, Inf,
   "roll120",   "Rolling 10y window",    "120",     60L, 120,

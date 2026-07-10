@@ -1,9 +1,10 @@
 # Thesis Review — Remarks Log
 
-**Status:** GATHERING. Do **not** edit thesis `.tex` files based on this log
-until the author explicitly says review is finished. This file is an
-append-only staging area; the editing pass happens as one deliberate action at
-the end.
+**Status:** PLAYBOOK COMPLETE (awaiting author "go"). Every remark below is
+resolved into a concrete decided edit in **`REVIEW_EDITS.md`** (reconciled against
+the current, post-restructure source). **The thesis `.tex` files are still
+untouched.** On the author's explicit "go", `REVIEW_EDITS.md` is executed top to
+bottom. A short list of open confirmations sits at the end of that file.
 
 Remarks are extracted from author-annotated PDFs (highlight colour + highlighted
 text + attached comment), then located in the source `.tex`.
@@ -740,15 +741,12 @@ current files directly.)*
 
 - ✅ **Q-1 (R-054+R-055) — RESOLVED:** delete the passage *"A final strand of the
   literature → … → a simulated no-predictability benchmark."*
-- ❓ **Q-2 (R-144, R-160 / G-14):** should **Chapter 6 (Robustness)** remain a
-  dedicated chapter, or be moved/merged given that Ch. 4 already carries the OOS
-  analysis? Big structural call — needs your decision before Phase 2.
-- ❓ **Q-3 (G-18):** confirm the scope of the **Italy cut** — the ✗ marks on
-  §6.2.1, R-161, R-187, and Table A.4 (R-195) read as *delete*; R-194 (appendix
-  list) then needs updating too. Remove the dedicated Italy treatment everywhere?
-- ❓ **Q-4 (R-198):** the big ✗ over **§A.3 AI Disclaimer** — delete it entirely,
-  or just rework/update it? (A disclaimer is usually required by the program, so I
-  read this as "revise" unless you say otherwise.)
+- ✅ **Q-2 (R-144, R-160 / G-14) — RESOLVED:** Robustness **stays its own
+  chapter**, but the **§6.1 out-of-sample analysis moves into Chapter 4**
+  (`07_results.tex`); Chapter 6 keeps only a short **pointer/remark** back to it.
+- ✅ **Q-3 (G-18) — RESOLVED:** **remove the dedicated Italy treatment everywhere**
+  (§6.2.1, R-161, R-187, Table A.4 / R-195; update the appendix list R-194).
+- ✅ **Q-4 (R-198) — RESOLVED:** **delete §A.3 AI Disclaimer entirely.**
 
 ---
 
