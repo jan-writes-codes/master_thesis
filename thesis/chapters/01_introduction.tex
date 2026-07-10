@@ -6,15 +6,17 @@
 \chapter{Introduction}
 \label{ch:intro}
 
-% --- Motivation: the EH puzzle --------------------------------------------
-\section*{Motivation}
-
-In this chapter, we motivate and introduce our research question. Investors
+Investors
 earn more on long-term government bonds than on rolling over short-term
 bills, and this compensation varies predictably over time. According to
 classical theory, this should not be the case. Under the expectations
 hypothesis (EH), the yield on an $n$-year bond is the average of expected
-future short rates plus at most a constant term premium,
+future short rates plus at most a constant term premium,%
+\footnote{This is the log-linearised expectations hypothesis: iterating the
+  one-period relation $p^{(n)}_{t}=\E_{t}\!\left[p^{(n-1)}_{t+1}\right]-y^{(1)}_{t}$
+  under a constant term premium and using $y^{(n)}_{t}=-p^{(n)}_{t}/n$ gives the
+  average-expected-short-rate expression below. See \citet{campbell1991} for the
+  standard treatment.}
 \begin{equation*}
   y^{(n)}_{t} \;\approx\; \frac{1}{n}\sum_{i=0}^{n-1}
   \E_{t}\!\left[y^{(1)}_{t+i}\right],
@@ -22,7 +24,7 @@ future short rates plus at most a constant term premium,
 so excess returns from holding longer maturities should not be forecastable,
 because whatever is known today about future short rates is already priced
 into the curve. The EH is the natural null hypothesis of bond pricing.
-However, it fails empirically. Four decades of evidence on US Treasuries
+However, it fails empirically. Four decades of evidence on US treasuries
 document that excess returns are forecastable with information available at
 the start of the holding period. This evidence begins with the forward--spot
 spread of \citet{famabliss1987} and the yield spread regressions of
@@ -30,60 +32,59 @@ spread of \citet{famabliss1987} and the yield spread regressions of
 to the EH benchmark. The modern statement of the puzzle comes from
 \citet{cochrane2005}, who show that a single ``tent-shaped'' linear
 combination of forward rates, the CP factor, predicts one-year excess
-returns across maturities with an $R^{2}$ of $0.35$ to $0.44$. We can
-therefore say that bond risk premia are large, time-varying, and
+returns across maturities with an $R^{2}$ of $0.35$ to $0.44$. From their
+research we take that bond risk premia are time-varying and
 countercyclical.
 
 The CP factor sets a strong statistical benchmark. However, it tells us
 little about the economics, since it is a reduced-form combination of prices
-that explains predictability with other prices. The natural follow-up
-question is therefore which macroeconomic forces drive the premium.
+that explains predictability with other prices. Consequently, the question
+remains which macroeconomic forces drive the premium.
 \citet{ludvigson2009} show that factors extracted from a large macro panel
-forecast bond returns over and above the information in the yield curve, and
-\citet{cieslak2015} provide the sharpest economic mechanism to date. They
-decompose nominal yields into a slow-moving \emph{trend-inflation}
-component, a discounted moving average of past core inflation that anchors
-the level of interest rates at long horizons, and transitory \emph{cycles},
-which are the deviations of yields from this anchor. A single \emph{cycle
+forecast bond returns above the information in the yield curve, and
+\citet{cieslak2015} provide a clear economic mechanism. They
+decompose nominal yields into a slow-moving trend-inflation component and
+transitory cycles. The first is a discounted moving average of past core
+inflation which serves as an anchor and the latter are the deviations from
+it. A single \emph{cycle
 factor} built from these detrended yields predicts US Treasury excess
 returns more strongly than the CP factor and, in their sample, subsumes it.
 The economic intuition is that the trend pins down where yields will settle,
 so the distance of today's curve from its macro anchor measures the premium
 investors demand for holding duration. The structural counterpart of this
-view is the ``falling stars'' evidence of \citet{bauer2020}, who show that
-accounting for the drifting long-run anchors $\pi^{*}$ and $r^{*}$ is
-precisely what uncovers the predictable component of returns.
+view is the ``falling stars'' evidence of \citet{bauer2020}. Once the slow
+drift in the long-run inflation and real-rate anchors ($\pi^{*}$ and $r^{*}$)
+is accounted for, the predictable component of returns remains.
 
 However, this macro-anchored evidence is almost exclusively evidence about
-the United States, and thus about one market, one monetary history, and one
-disinflation. If trend inflation truly anchors yields and cycles truly carry
-the risk premium, the same mechanism should also operate in other developed
-bond markets, and a failure to do so would cast doubt on the economic
-interpretation. The international literature gives us reason for optimism,
-although it has pursued a different predictor. \citet{dahlquist2013} take
+the United States. If the trend--cycle mechanism is real---if trend
+inflation anchors yields and the cycles carry the risk premium---the same
+mechanism should also operate in other developed bond markets, and a failure
+to do so would cast doubt on the economic interpretation. The international
+literature is encouraging, though it has pursued different predictors.
+\citet{dahlquist2013} take
 the forward-rate factor abroad. They construct local CP factors for four
 markets, aggregate them into a GDP-weighted \emph{global} CP factor, and
 show that the global factor predicts bond returns in every country and
-largely drives out the local factors. This is direct evidence that
+largely drives out the local factors. These findings suggest that
 government-bond risk premia are internationally integrated. They also
 address a problem that is central to the international setting. An unhedged
 US-dollar investor earns the foreign bond return plus a volatile currency
-return, which erodes the predictability, and because of this they build an
-FX-adjusted global factor to recover it. On the macro side,
+return. Because this currency component erodes predictability,
+\citet{dahlquist2013} build an FX-adjusted global factor to recover it. On
+the macro side,
 \citet{zhang2021} document that the falling-stars trends improve return
 forecasts in four markets outside the United States, and related evidence
 extends to China \citep{zhang2022}. Most recently, \citet{randl2025} treat
 developed-market government bonds as a distinct asset class. By deriving a
 stochastic discount factor for currency-hedged G10 bond portfolios, they
-show that the priced risks of international bonds are fundamentally distinct
-from those of currencies. This gives independent support for studying the
-hedged (local-currency) bond premium separately from the currency overlay,
-as we do in our thesis.
+show that the priced risks of international bonds are distinct from those of
+currencies, which motivates studying the hedged (local-currency) bond
+premium separately from the currency overlay, as we do.
 
 When we place these strands side by side, we can identify a clear gap. The
-cycle factor of \citet{cieslak2015}, which is the predictor with the
-strongest claim to an economic mechanism, has not yet been taken
-international. There is no country-level evidence across the G10, no
+cycle factor of \citet{cieslak2015}, a factor with a strong economic
+rationale, has not yet been taken international. There is no country-level evidence across the G10, no
 GDP-weighted \emph{global} cycle factor analogous to the global CP factor of
 \citet{dahlquist2013}, and no FX-adjusted version of such a factor for the
 dollar investor. \citet{zhang2021} come closest. However, they add raw
@@ -99,7 +100,6 @@ predictability is a global phenomenon, and whether it survives in real time,
 is thus still an open question. In our thesis, we aim to answer it.
 
 % --- Research question -----------------------------------------------------
-\section*{Research Question}
 
 In our thesis, we ask one main question:
 \begin{quote}
@@ -109,8 +109,7 @@ In our thesis, we ask one main question:
 If the trend--cycle mechanism is a fundamental property of bond pricing
 rather than a US idiosyncrasy, it should predict excess returns in other
 developed markets with the same sign structure and a comparable magnitude.
-To sharpen the international dimension, we take three sub-questions from our
-research proposal:
+To sharpen the international dimension, we pose three sub-questions:
 \begin{enumerate}
   \item \emph{What is the role of the local cycle factor relative to a
     GDP-weighted global cycle factor?} Integrated bond markets suggest a
@@ -146,46 +145,40 @@ the cycles, the predictive coefficients, and the global weights, is rebuilt
 each month from historically available data only.
 
 % --- Contribution ----------------------------------------------------------
-\section*{Contribution}
 
 With our thesis, we contribute a three-factor hierarchy and the evidence to
 evaluate it. At the base sits the \emph{local cycle factor} $\CF_{i,t}$,
 which we construct for each of eleven G10 markets exactly as
 \citet{cieslak2015} construct it for the United States, on a monthly panel
 of zero-coupon yields, core inflation, exchange rates, and GDP spanning
-1989--2026 (1994--2026 for most markets). One level up, the \emph{global
+1989--2026. One level up, the \emph{global
 cycle factor} $\GCF_{t}$ aggregates the national factors with time-varying
 GDP weights. With this factor, we transplant the integration test of
 \citet{dahlquist2013} from the forward-rate family to the macro-anchored
-cycle family. At the top, the \emph{FX-adjusted global cycle factor}
-$\FXGCF_{t}$ is, to the best of our knowledge, new. It fits a USD cycle
-factor per country, that is, the country's \emph{dollar} excess return
-projected on its own cycles, and aggregates these with GDP weights, and it
-thereby isolates the component of the cycles that is informative for a US
-investor's currency-converted returns.
+cycle family. At the top, we create another new factor, the \emph{FX-adjusted global
+cycle factor} $\FXGCF_{t}$. It fits a USD cycle factor per country. The
+country's \emph{dollar} excess return is projected on its own cycles and
+aggregated with GDP weights, and it thereby isolates the component of the
+cycles that is informative for a US investor's currency-converted returns.
 
 Three features distinguish our evidence from its closest predecessors. The
 first is breadth. Relative to the four markets of \citet{dahlquist2013} and
 \citet{zhang2021}, we cover the full G10 cross-section of eleven markets,
-including the euro-area periphery, whose sovereign-debt crisis provides a
-natural experiment on the limits of integration. The second is the
+including the euro-area periphery. The second is the
 predictive object. While \citet{zhang2021} add inflation and real-rate
 trends to yield-curve regressions, we carry the cycle-factor construction
 itself abroad, so that the US benchmark and the international evidence are
 directly comparable factor by factor. The third is real-time discipline. We
 re-estimate all three factors fully recursively and score them with the
 \citet{campbellthompson2008} out-of-sample $R^{2}$ against a recursive
-prevailing-mean benchmark. We complement this with an
-expectations-hypothesis Monte Carlo that calibrates how much in-sample
-$R^{2}$ overlapping returns can produce under the null, a crisis-subsample
+prevailing-mean benchmark. We complement this with a crisis-subsample
 analysis, a horse race against the global forward-rate factor, a
-core-versus-headline-inflation reconstruction, and a market-timing strategy
+core-versus-headline-inflation reconstruction and a market-timing strategy
 that converts the statistical evidence into economic value. Furthermore, we
 replicate the published US and international results
 (\Cref{ch:replication}) to validate our empirical engine.
 
 % --- Preview of findings & roadmap -----------------------------------------
-\section*{Main Findings and Structure}
 
 We arrive at four main findings. First, we find that the cycle mechanism
 also works outside the United States. The local cycle factor predicts
@@ -197,20 +190,14 @@ Second, we find that the predictability is overwhelmingly global. The
 GDP-weighted global cycle factor is significant in every market and matches
 the explanatory power of the eleven separately estimated local factors.
 Once it is included, genuinely local content survives in only three markets
-(Italy, the Netherlands, Belgium). The Italian exception is informative, as
-its local predictability concentrates in the 2010--2012 sovereign-debt
-crisis, when redenomination risk priced locally what no global factor could
-capture. We would therefore suggest that integration is the rule, although
-this rule weakens under severe sovereign stress. Third, we find that
-currency risk is the binding constraint for the dollar investor. Dollar
+(Italy, the Netherlands, Belgium). Integration is therefore the rule,
+although it weakens under severe sovereign stress. Third, we find that
+currency risk is the dominant obstacle for the dollar investor. Dollar
 conversion erodes roughly two-thirds of the global factor's predictive
 power. The FX-adjusted factor recovers much of it in sample, nearly doubling
 the average dollar-investor $R^{2}$ from $8\%$ to $14\%$ and restoring
 significance in ten of eleven markets, provided it is built bottom-up from
-the country-level USD regressions. A top-down variant is nearly collinear
-with the unadjusted factor (correlation $0.99$) and adds almost nothing, so
-where the FX-relevant information sits, namely in the cross-section rather
-than the aggregate, is a finding in itself. The two factors are, moreover,
+the country-level USD regressions. The two factors are, moreover,
 distinct only in the high-rate regime: they correlate $0.45$ before 2008 but
 $0.96$ afterwards, as policy rates converge to the zero lower bound and the
 cross-country interest differentials that make currency returns predictable
