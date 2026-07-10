@@ -17,10 +17,9 @@ rejection of the expectations hypothesis in US Treasury markets and the
 search for the right return-forecasting state variable, the macro-finance
 research that anchors yields to slow-moving inflation trends, and the
 international evidence on common, global bond risk premia. A fourth,
-methodological strand, namely the out-of-sample and small-sample scrutiny
-of predictive regressions, cuts across all three and shapes our research
-design. In the following, we review each strand in turn and move from the
-US evidence to the international gap our thesis aims to fill.
+methodological concern, the out-of-sample evaluation, cuts across all three
+and shapes our research design (\Cref{ch:methodology}). In the following, we
+move from the US evidence to the international gap our thesis aims to fill.
 
 % ===========================================================================
 \section{The Expectations Hypothesis and Bond Return Predictability}
@@ -52,12 +51,13 @@ distilled into a single combination of forward rates
 variables matter beyond the curve. \citet{ludvigson2009} extract factors
 from a large panel of macro series and show that real-activity and
 inflation factors forecast excess returns over and above forward rates and
-yields, which is the empirical origin of ``unspanned'' macro risk. The
+yields. This is the empirical origin of ``unspanned'' macro risk, which is
+predictive information that the current yield curve does not reveal. The
 third position, articulated by \citet{duffee2011}, holds that a
 substantial part of risk-premium variation is hidden from the current
-curve altogether. A state variable can move expected short rates and term
-premia in offsetting directions, leaving yields nearly unchanged while
-still forecasting returns. The macro-anchored cycle factor at the centre
+curve altogether. Such a hidden factor can move expected short rates and term
+premia in offsetting directions, leaving the yield curve nearly unchanged.
+The change in term premia can still be used to forecast returns. The macro-anchored cycle factor at the centre
 of our thesis (\Cref{sec:lit-cp2015}) can be seen as a sharpened version
 of the second position, since it relies on one specific, economically
 interpretable macro variable, namely trend inflation, rather than on a
@@ -67,14 +67,15 @@ This debate is not settled, and the strongest challenge is an econometric
 one. \citet{bauerhamilton2018} re-examine the published evidence for
 predictors beyond the level, slope, and curvature of the yield curve and
 argue that much of it is a small-sample artefact. Persistent regressors,
-overlapping returns, and the endogeneity highlighted by
-\citet{stambaugh1999} make standard tests over-reject the spanning null,
+overlapping returns, and the small-sample bias that \citet{stambaugh1999}
+identified for predictive regressions with a persistent, predetermined
+regressor make standard tests over-reject the spanning null,
 and under a bootstrap designed for this null the case for unspanned
 predictors weakens considerably. This critique applies with full force to
 any study of the cycle factor, because the cycle is a persistent,
 estimated regressor in an overlapping twelve-month regression. The
 methodological choices we make in \Cref{ch:methodology} are, therefore,
-in large part a response to this critique.
+in large part a response to this.
 
 % ===========================================================================
 \section{Forward-Rate Predictors: Cochrane and Piazzesi (2005)}
@@ -111,8 +112,7 @@ yields. While the level of yields is anchored by long-run inflation
 expectations, which move only slowly across decades, the return-relevant
 variation is the transitory deviation of yields from this anchor.
 Operationally, trend inflation is a discounted moving average of past
-year-on-year core CPI inflation, with monthly decay $v=0.987$ over a
-ten-year window. This construction goes back to \citet{kozicki2001}, who
+year-on-year core CPI inflation. This construction goes back to \citet{kozicki2001}, who
 showed that long-rate dynamics are dominated by a shifting perceived
 ``endpoint'' tied to inflation expectations, and that discounting past
 inflation tracks survey measures of these expectations closely.
@@ -121,7 +121,7 @@ Projecting each maturity's yield on this trend yields maturity-specific
 the short-maturity cycle and the average cycle, then forecasts one-year
 excess returns with in-sample fits that exceed the forward-rate
 benchmark, peak at long maturities, and subsume the CP factor in
-head-to-head comparisons. Beyond its fit, two properties make this
+direct comparisons. Beyond its fit, two properties make this
 construction attractive. Economically, the factor has a clear
 interpretation. The premium is the distance of the curve from its macro
 anchor, and it mean-reverts at business-cycle frequency.
@@ -129,7 +129,7 @@ Econometrically, the detrending reduces the near-unit-root persistence of
 yields that complicates predictive regressions, because the cycle is
 stationary while the yield is not.
 
-The structural counterpart to this reduced-form approach is
+The structural (model-based) counterpart to this reduced-form approach is
 \citet{bauer2020}. In their shifting-endpoint term-structure model, the
 risk-neutral long-run mean of the short rate moves with trend inflation
 and the equilibrium real rate ($i^{*}=\pi^{*}+r^{*}$). Accounting for
@@ -139,8 +139,8 @@ attributes the great post-1980s yield decline largely to the falling
 anchors rather than to the premium. We can view the reduced-form cycle
 factor and the structural falling-stars model as two views of the same
 mechanism, and their agreement is, in our view, the strongest argument
-that the trend--cycle decomposition captures something real rather than a
-fortunate parameterisation. It is precisely this mechanism-based
+that the trend--cycle decomposition captures something real rather than an
+artefact of a fortunate parameter choice. It is precisely this mechanism-based
 character that leads to the testable international prediction we exploit
 in this thesis. If the mechanism is fundamental, it should not be a US
 idiosyncrasy.
@@ -168,7 +168,9 @@ than to local exposure. Furthermore, they tie the global factor to US
 premia and the international business cycle. \citet{zhu2015} extends this
 result to real time and shows that the GDP-weighted global CP factor
 predicts out of sample across developed markets where local predictors
-fail. We will later mirror this finding for the cycle family.
+fail. We later mirror this pattern with the global cycle factor, which
+predicts out of sample where the local cycle factors do not
+(\Cref{sec:res-oos}).
 
 \citet{dahlquist2013} also address currency risk, which is the issue that
 separates international from domestic bond economics. A US-dollar
@@ -185,10 +187,7 @@ Against this background, \citet{dahlquist2013} construct an
 fitted to dollar-denominated returns, and show that it recovers much of
 the predictability that the currency conversion destroys, while remaining
 only moderately correlated with the unadjusted factor. The FX-adjusted
-cycle factor we build in this thesis is the direct analogue to this
-construction, and the contrast between the FX adjustments of the two
-factor families turns out to be one of our findings
-(\Cref{sec:res-phase3}).
+cycle factor we build is the direct analogue of this construction.
 
 % ===========================================================================
 \section{International Macro-Anchored Predictability and the Gap}
@@ -203,37 +202,22 @@ both trends to canonical excess-return regressions delivers notable
 out-of-sample gains in Canada, Germany, Japan, and the United Kingdom.
 Related evidence extends the trend-augmented approach to Chinese
 government bonds \citep{zhang2022}. These papers establish that the macro
-anchor matters outside the United States. However, they stop short of a
-synthesis on the factor level. They add raw trends to yield-based
+anchor matters outside the United States. However, they stop short of
+combining the trends into a single macro-anchored factor. They add raw
+trends to yield-based
 regressions market by market rather than constructing the cycle factor
 itself, they cover four markets instead of the G10, and they build
-neither a global aggregate nor a currency-adjusted factor. On the
-asset-class side, \citet{randl2025} derive a stochastic discount factor
-for currency-hedged developed-market government bond portfolios and
-document that the priced risks of international bonds are fundamentally
-distinct from those of currencies, that the market price of bond risk
-peaks in crises and varies with inflation levels and cross-market
-inflation dispersion, and that common sources of return variation are
-largely unpriced. Their work prices the asset class unconditionally.
-However, it does not ask which observable state variable tracks the
-conditional premium in real time, and this is the question we pose in
-this thesis.
-
-A final strand of the literature disciplines how such a question should
-be answered. \citet{welch2008} showed for the equity premium that most
-well-known predictors fail out of sample against the historical mean.
-\citet{campbellthompson2008} introduced the out-of-sample $R^{2}$ against
-the recursive prevailing mean, which has since become the standard
-yardstick, and showed that even small positive values are economically
-meaningful for an investor. For bonds specifically, \citet{thornton2012}
-found that forward-rate predictability of the CP type generates little
-systematic economic value for a real-time investor, which is a
-cautionary benchmark for any factor whose case rests on in-sample fit.
-Combined with the small-sample critique of \citet{bauerhamilton2018}
-from \Cref{sec:lit-eh}, the message for our research design is clear.
-In-sample fit is only weak evidence, and a credible predictability claim
-must survive recursive real-time estimation, demanding inference, and a
-simulated no-predictability benchmark.
+neither a global aggregate nor a currency-adjusted factor. From an
+asset-pricing perspective, \citet{randl2025} derive a stochastic discount
+factor for currency-hedged developed-market government bond portfolios and
+document that the priced risks of international bonds are distinct from
+those of currencies, that the market price of bond risk peaks in crises and
+varies with inflation levels and cross-market inflation dispersion, and that
+common sources of return variation are largely unpriced. Their work prices
+the asset class \emph{unconditionally}, identifying the average priced risks
+without asking which observable state variable tracks the \emph{conditional}
+premium in real time. That conditional, real-time question is the one we
+pose in this thesis.
 
 From this review, we can identify a specific gap in the literature. To
 our knowledge, no study takes the \citet{cieslak2015} cycle factor itself
@@ -248,5 +232,4 @@ factors for eleven G10 markets and by evaluating them in the three-phase
 design of \Cref{sec:fw-hypotheses}. We hold every result to the real-time
 standard, that is, fully-recursive estimation of the entire
 generated-regressor chain, scored against the prevailing mean
-\citep{campbellthompson2008}, with bootstrap and Monte-Carlo inference
-calibrated to the overlapping-return environment.
+\citep{campbellthompson2008}.
