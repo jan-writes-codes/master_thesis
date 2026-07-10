@@ -334,8 +334,74 @@ Global decisions (from the questions):
 
 ---
 
-*Playbook in progress — batch-1 (front matter, Ch.1, Ch.2, methodology, data)
-resolved. Remaining files: `07_results`, `08b_strategy`, `08_robustness`,
-`09_discussion`, `10_conclusion`, `A_appendix`, `06_replication` (R-084–R-208).
-Global sweeps (G-4 done; G-8 punctuation/italics, G-10/G-15 figures,
-"operationalise" swap, G-16/G-17) collected at the end.*
+## `07_results.tex` — Chapter 4, Empirical Findings  *(R-084–R-122, post-restructure)*
+
+> This chapter also **receives the OOS content moved from Ch. 6 §6.1** (Q-2):
+> §`sec:res-oos` is expanded with the per-country detail; see the `08_robustness`
+> MOVE entry. And **R-104** folds the dynamics subsection into §4.3 (below).
+
+**Well-written chapter — most yellow flags are "revisit tone" and resolve to
+KEEP (confirm). Concrete edits and tasks below; everything else is KEEP.**
+
+- **R-084 · KEEP** (intro phrases read fine) — *except* "estimation engine" →
+  **global sweep** (see R-143; replace "estimation/empirical engine" with
+  "estimation pipeline" everywhere).
+- **R-085, R-086, R-091, R-094, R-096, R-098, R-102, R-103, R-106, R-109 (partial),
+  R-112–R-121 · KEEP** — these yellow phrases read well; no change unless you flag
+  a specific issue. (R-109 optional: "sit awkwardly together" → "be hard to
+  reconcile".)
+- **R-087 · KEEP / minor** — optionally soften the MC reference: "…lie far above
+  what the expectations hypothesis can generate in a sample of this length
+  (\Cref{sec:meth-ehmc})."
+- **R-088 · VERIFY → OK** — "holds at each individual maturity" is supported by
+  Table `mr_t1_phase1_mat` (positive & significant loadings in 10/11). No change.
+- **R-089 · R-CODE (figure)** — Fig 4.1 subtitle says "Indigo: GCF_t. Grey:…";
+  reword "Indigo" → "Heavy line" (or the actual colour) in `R/plots.R` (`s5_gcf`).
+- **R-090 · EDIT** (clarify "single factor"):
+  - **OLD:** "This is the signature of a \emph{single} return-forecasting factor that prices the whole curve rather than one maturity segment, exactly as in the United States."
+  - **NEW:** "This is the signature of a \emph{single} return-forecasting factor—one common factor priced across all maturities, with loadings that differ only in scale—rather than maturity-specific premia, exactly as in the United States."
+- **R-092 · R-CODE (table) + text** — *"Pooled result?"* on Table 4.2: add a
+  **G10-panel (country-FE) row** to `tables/mr_t2_phase2` (mirroring Table 4.1's
+  panel row), via `main_results.R`; add one sentence reading it off.
+- **R-093 · KEEP** — Table 4.2 note ("A significant GCF together with an
+  insignificant CF⊥ signals…") reads fine (in `mr_t2_phase2` table file).
+- **R-095 · EDIT** (the "28.4% → 28.4%" looks like a typo):
+  - **OLD:** "(for example, Germany from $28.4\%$ to $28.4\%$ and Sweden from $29.1\%$ to $29.3\%$)."
+  - **NEW:** "(for example, Germany is essentially unchanged at $28.4\%$ and Sweden rises only from $29.1\%$ to $29.3\%$)."
+- **R-097 · KEEP (Q-3 check)** — the "euro-area members… sovereign-spread and
+  redenomination dynamics" sentence explains the Phase-II exceptions; it is general
+  (not the dedicated Italy treatment), so it stays. Confirm it's consistent with
+  the Italy cut.
+- **R-099 · VERIFY → OK** — "currency risk is the dominant influence" supported by
+  the $R^2$ collapse. No change.
+- **R-100 · EDIT** (clarify "itself cyclical"):
+  - **OLD:** "only where the exchange-rate exposure is small or itself cyclical:"
+    **NEW:** "only where the currency exposure is small or where the currency return is itself cyclical (co-moving with the bond signal):"
+- **R-101 · EDIT** (punctuation):
+  - **OLD:** "in Canada ($t=2.9$), and, more marginally, in Sweden and the United Kingdom"
+    **NEW:** "in Canada ($t=2.9$) and, more marginally, in Sweden and the United Kingdom"
+- **R-104 · STRUCTURAL (fold subsection)** — remove
+  `\subsection{Properties and Dynamics of the Two Global Factors}` (l.278) and let
+  the content run on within §4.3 (Phase III). If a visual break is wanted, use an
+  unnumbered lead-in sentence, not a numbered subsection.
+- **R-105 · VERIFY → OK** — wedge SD/AR(1) support "slow-moving second factor". No change.
+- **R-107 · EDIT** (light):
+  - **OLD:** "This timing is not accidental, and it points to a clean economic reason why the distinction between the two factors is interesting."
+    **NEW:** "This timing is not accidental; it reflects a clear economic reason the distinction matters."
+- **R-108 · EDIT (add citation — "Source ???")** — the UIP-failure/carry claim
+  ("the classic source of that predictability is the cross-country interest-rate
+  differential through the failure of uncovered interest parity") needs a cite. Add
+  \citep{fama1984} (and/or the carry literature already cited, `lustig2019`).
+  **Check `fama1984` is in `references.bib`; add if missing.**
+- **R-110 + R-111 · EDIT (condense the long Dahlquist-contrast sentence):**
+  - **OLD:** "It explains why our full-sample FX adjustment recovers less than the one \citet{dahlquist2013} report, since their forward-rate factor retains the rate-level information that drives carry even after aggregation and their sample is weighted more towards the high-differential decades, whereas our detrended cycle factor removes the level and our sample is dominated by the post-2008 low-rate regime in which the currency component is nearly redundant."
+  - **NEW:** "It explains why our full-sample FX adjustment recovers less than \citet{dahlquist2013} report: their forward-rate factor retains the rate-level information that drives carry, and their sample is weighted towards the high-differential decades, whereas our detrended cycle factor removes the level and our sample is dominated by the post-2008 low-rate regime, in which the currency component is nearly redundant."
+- **R-122 · R-CODE (figure)** — *"the graph with more detail"* for Fig 4.7
+  (`mr_f5_oos_r2.pdf`, `fig:mr-oos`). Enhance in `R/plots.R` (e.g. value labels,
+  or add the CP/GCP comparison bars). Confirm what detail you want.
+
+---
+
+*Playbook in progress — done: batch-1 + Ch.4 Results. Remaining: `08b_strategy`,
+`08_robustness`, `09_discussion`, `10_conclusion`, `A_appendix`, `06_replication`
+(R-123–R-208). Global sweeps collected at the end.*
