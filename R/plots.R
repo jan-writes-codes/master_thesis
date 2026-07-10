@@ -183,10 +183,14 @@ plots$s1_yield_curve_avg <- yields_long %>%
 plots$s1_coverage <- yields_long %>%
   group_by(country, date) %>%
   summarise(p_obs = mean(!is.na(yield)), .groups = "drop") %>%
+  # Start the panel at first availability rather than showing the empty
+  # pre-1989 margin (review remark: "coverage should start at first availability").
+  filter(date >= min(date[p_obs > 0])) %>%
   ggplot(aes(date, country, fill = p_obs)) +
   geom_tile() +
   scale_fill_gradient(low = "white", high = col_pri,
-                      name = "Share of\nmaturities\nobserved") +
+                      name = "Maturities\nobserved", limits = c(0, 1),
+                      breaks = c(0, 0.5, 1), labels = c("none", "half", "all")) +
   labs(title = "Yield panel coverage", x = NULL, y = NULL) +
   theme_thesis + theme(panel.grid = element_blank())
 
@@ -370,7 +374,7 @@ plots$s5_gcf <- ggplot() +
   geom_line(data = gcf, aes(date, GCF), colour = col_pri, linewidth = 0.8) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   labs(title = "Global cycle factor (GDP-weighted, eq 7-8)",
-       subtitle = "Indigo: GCF_t. Grey: country-level local CFs.",
+       subtitle = "Heavy line: global cycle factor GCF. Light lines: country-level local factors.",
        y = "Factor value", x = NULL) +
   theme_thesis
 
@@ -564,7 +568,7 @@ plots$s8_oos_is_corr <- cf_compare %>%
   coord_flip() +
   scale_y_continuous(limits = c(-0.2, 1.0)) +
   labs(title = TeX("$\\mathrm{cor}(CF, CF_{\\mathrm{oos}})$ per country"),
-       subtitle = "Closer to 1 means full-sample look-ahead added little to the local factor",
+       subtitle = "Values near 1: the recursive local factor already matches the full-sample factor",
        x = NULL, y = "Correlation") +
   theme_thesis
 

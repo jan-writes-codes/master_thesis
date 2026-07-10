@@ -69,13 +69,17 @@ wald_p <- function(fit, V, terms) {
 # Shared ggplot2 theme so every figure in the thesis has one consistent look.
 # The strip.* settings only affect faceted plots; they are harmless on the
 # non-faceted strategy figures.
-theme_thesis <- ggplot2::theme_bw(base_size = 11) +
+# base_family = "serif" maps to a Times-like serif on the pdf device, so figure
+# text matches the serif body of the LaTeX document rather than the ggplot
+# sans-serif default (review remark: "the ggplot figures do not have LaTeX style").
+theme_thesis <- ggplot2::theme_bw(base_size = 11, base_family = "serif") +
   ggplot2::theme(
     strip.background = ggplot2::element_rect(fill = "grey92", colour = NA),
     strip.text       = ggplot2::element_text(face = "bold"),
     legend.position  = "bottom",
     panel.grid.minor = ggplot2::element_blank(),
-    plot.title       = ggplot2::element_text(face = "bold")
+    plot.title       = ggplot2::element_text(face = "bold"),
+    text             = ggplot2::element_text(family = "serif")
   )
 
 # Render a data frame as a styled, PDF-able table grob: an optional bold title

@@ -690,12 +690,38 @@ KEEP (confirm). Concrete edits and tasks below; everything else is KEEP.**
 - Still to confirm from sources: `randl2025` market-price claim (R-177), Zhang
   (2021) characterisation (R-020), DH Japan 69% (R-206).
 
-### R-code / exhibit tasks (need an R run; separate from the .tex edits)
-R-079, R-080, R-081 (data figs/table); R-089, R-092, R-122 (results figs/table);
-R-133, R-139 (monthly strat figs); R-155 (scheme fig), R-167 (v/M sensitivity —
-new exhibit); R-196, R-197 (figure restyle/subtitle); R-208 (drop table row).
-**These are listed but NOT drafted as text**; they run when you green-light the
-exhibit regeneration.
+### R-code / exhibit tasks
+
+**Environment now set up:** R 4.3.3 + `r-cran-*` packages (+ `latex2exp` from
+GitHub) installed; the pipeline runs and reproduces the thesis numbers. **All
+exhibits regenerate with `FXGCF_METHOD=bu_gdp`** (matches the 0.78 captions and
+the ROADMAP); the default `td_gdp` would silently change FXGCF figures — do not
+use it.
+
+**DONE (regenerated, verified):**
+- **R-196 · figure restyle** — `theme_thesis` now uses `base_family="serif"`
+  (`R/thesis_utils.R`), so every figure's text is serif, matching the LaTeX body.
+  All 40+ figures regenerated. Verified: coverage, GCF, mr_f4, strat_f1 render
+  serif; mr_f4 shows "Correlation = 0.78" (consistent), wedge stats match Table 4.4.
+- **R-079 · coverage start** — `s1_coverage` now begins at first availability (~1989).
+- **R-080 · coverage legend** — legend relabelled "Maturities observed: none/half/all".
+- **R-089 · s5_gcf subtitle** — "Indigo: …" → "Heavy line: global cycle factor GCF…".
+- **R-197 · s8_oos_is_corr subtitle** — reworded to plainer language.
+
+**STILL TO DO (R):**
+- **R-155** — annotate the baseline scheme in `rob_f2_oos_scheme` (robustness.R).
+- **R-122** — add detail (value labels) to Fig 4.7 `mr_f5_oos_r2` (plots.R).
+- **R-133 / R-139** — monthly-rebalanced versions of `strat_f1_cumret` /
+  `strat_f3_drawdown` (strategy.R) — recommended default = monthly-rebalanced
+  cumulative excess return.
+- **R-167** — v/M sensitivity table ($M\in\{60,120,180\}$, $v\in\{0.859,0.975,0.987\}$)
+  — new analysis (robustness.R), then transcribe to a new `.tex` table.
+
+**Table `.tex` edits (fold into the "go" prose pass; numbers computed from R):**
+- **R-208** — drop the "Bootstrap $t$ [5\%,95\%]" row from `tables/cp_t4.tex`.
+- **R-081** — add min/max/AR(1) columns to `tables/dh_t1_summary.tex` (compute in R).
+- **R-092** — add a G10-panel row to `tables/mr_t2_phase2.tex` (compute in R).
+- **R-083** — table-note fix in `tables/dh_t1_summary.tex` (already in data section).
 
 ---
 
