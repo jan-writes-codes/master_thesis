@@ -103,8 +103,13 @@ component of returns should reflect a common source of risk rather than
 eleven separate national cycles \citep{dahlquist2013}. The GDP-weighted global
 cycle factor $\GCF_{t}$ of \eqref{eq:gcf} is the natural summary of this common
 component. In \Cref{fig:s5-gcf}, we can see that it tracks the centre of mass of
-the country-level factors. In Phase~II, we test integration directly through the
-horse race \eqref{eq:h-horse}--\eqref{eq:h-global}.
+the country-level factors. It correlates most strongly with the large core
+economies (the United States, $0.96$; Germany, $0.94$), but this is not purely a
+weight effect: Sweden and Canada also correlate above $0.89$ despite small
+weights, while Italy is the clear outlier at $0.20$, so the global factor
+captures common business-cycle co-movement rather than the biggest economies
+mechanically (\Cref{tab:mr-gcf-corr}). In Phase~II, we test integration directly
+through the horse race \eqref{eq:h-horse}--\eqref{eq:h-global}.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/s5_gcf.pdf}
@@ -160,7 +165,10 @@ rises from $7.4\%$ on the global factor alone to $31.5\%$ jointly, and the
 Netherlands from $26.3\%$ to $35.0\%$. Furthermore, the joint Wald test rejects
 in all eleven markets, and the rejections survive the Benjamini--Hochberg
 correction for multiple testing across the panel. This suggests that the
-combined cycle information is priced everywhere.
+combined cycle information is priced everywhere. On the pooled G10 panel with
+country fixed effects, both factors enter significantly ($t=6.1$ on
+$\CF^{\perp}$ and $t=14.5$ on $\GCF$), with a joint $R^{2}$ of $0.29$ of which
+the global factor accounts for the larger part (\Cref{tab:mr-phase2}).
 
 Two readings of the three exceptions are consistent with our framework. Italy,
 Belgium and the Netherlands retain idiosyncratic cyclical predictability that

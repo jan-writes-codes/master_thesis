@@ -245,12 +245,29 @@ print(as.data.frame(phase2 %>%
 cat(sprintf("CF_perp significant (|t|>1.96): %d/11 ; GCF significant: %d/11\n",
             sum(abs(phase2$t_loc) > 1.96), sum(abs(phase2$t_glb) > 1.96)))
 
-t2_disp <- phase2 %>%
+# Pooled G10 panel (country fixed effects) for the horse race, mirroring the
+# Phase I panel row (review remark R-092: "Pooled result?").
+p2_fe   <- lm(rx_t12 ~ CF_perp + GCF + factor(country), data = panel_perp)
+L2_fe   <- ceiling(max(18, 1.3 * sqrt(stats::nobs(p2_fe))))
+V2_fe   <- sandwich::NeweyWest(p2_fe, lag = L2_fe, prewhite = FALSE, adjust = TRUE)
+ct2_fe  <- lmtest::coeftest(p2_fe, vcov. = V2_fe)
+p2_pool <- tibble::tibble(
+  country = "G10 panel",
+  t_loc = ct2_fe["CF_perp", 3], t_glb = ct2_fe["GCF", 3],
+  r2_jnt = summary(p2_fe)$r.squared,
+  r2_loc = summary(lm(rx_t12 ~ CF  + factor(country), data = panel_perp))$r.squared,
+  r2_glb = summary(lm(rx_t12 ~ GCF + factor(country), data = panel_perp))$r.squared,
+  wp = wald_p(p2_fe, V2_fe, c("CF_perp", "GCF")), wp_bh = NA_real_)
+cat(sprintf("G10 panel (FE): R2_joint=%.3f t(CFperp)=%.2f t(GCF)=%.2f\n",
+            p2_pool$r2_jnt, p2_pool$t_loc, p2_pool$t_glb))
+
+t2_disp <- dplyr::bind_rows(phase2, p2_pool) %>%
   dplyr::transmute(
-    Country = dplyr::recode(as.character(country), !!!mr_name),
+    Country = dplyr::recode(as.character(country), !!!mr_name, "G10 panel" = "G10 panel"),
     `R2 CF`    = fmt3(r2_loc), `R2 GCF` = fmt3(r2_glb), `R2 joint` = fmt3(r2_jnt),
     `t(CF_perp)` = fmt2(t_loc), `t(GCF)` = fmt2(t_glb),
-    `Wald p` = fmt3(wp), `Wald p (BH)` = fmt3(wp_bh))
+    `Wald p` = fmt3(wp),
+    `Wald p (BH)` = ifelse(is.na(wp_bh), "--", fmt3(wp_bh)))
 
 mr_tables$mr_t2_phase2 <- table_to_grob(
   as.data.frame(t2_disp),
@@ -261,8 +278,56 @@ mr_tables$mr_t2_phase2 <- table_to_grob(
                  "orthogonal to GCF (Eq 19). HAC t-stats; Wald p tests joint ",
                  "significance; BH = Benjamini-\nHochberg FDR across the eleven ",
                  "markets. A significant GCF with an insignificant CF_perp signals ",
-                 "subsumption by the global factor."),
+                 "subsumption by the global factor.\n'G10 panel' adds country ",
+                 "fixed effects (BH not applicable)."),
   base_size = 8)
+
+# Correlation structure of the local cycle factors, their correlation with the
+# global factor, and the GDP weights (review remark R-089: is GCF driven by the
+# largest economies?). Numbers feed the appendix table tables/mr_t2b_gcf_corr.
+cf_wide <- panel %>%
+  dplyr::select(country, ym, CF) %>%
+  tidyr::pivot_wider(names_from = country, values_from = CF) %>%
+  dplyr::select(dplyr::all_of(mr_order))
+cf_cormat <- stats::cor(cf_wide, use = "pairwise.complete.obs")
+cf_gcf_cor <- vapply(mr_order, function(k) {
+  s <- panel %>% dplyr::filter(country == k)
+  stats::cor(s$CF, s$GCF, use = "complete.obs") }, numeric(1))
+cf_wt <- vapply(mr_order, function(k)
+  mean(panel$w[panel$country == k], na.rm = TRUE), numeric(1))
+cat("\n===== CF-GCF correlation structure (R-089) =====\n")
+cat("corr(CF_i, GCF):\n"); print(round(cf_gcf_cor, 2))
+cat("mean GDP weight:\n"); print(round(cf_wt, 3))
+cat(sprintf("cor(corr, weight) across countries = %.2f\n",
+            stats::cor(cf_gcf_cor, cf_wt)))
+cat("lower-triangle CF correlation matrix:\n")
+print(round(cf_cormat, 2))
+
+# Summary statistics of the non-yield inputs -- core inflation, the 12-month
+# currency return vs USD, and the GDP weight -- over each country's yield sample
+# (review remark R-081). Feeds the appendix table tables/dh_t1b_inputs.
+in_win <- reg_data %>% dplyr::group_by(country) %>%
+  dplyr::summarise(ym0 = min(ym), ym1 = max(ym), .groups = "drop")
+in_infl <- inflation_long %>% dplyr::inner_join(in_win, by = "country") %>%
+  dplyr::filter(ym >= ym0, ym <= ym1, !is.na(yoy_infl)) %>%
+  dplyr::group_by(country) %>%
+  dplyr::summarise(infl_mean = mean(yoy_infl), infl_sd = sd(yoy_infl), .groups = "drop")
+in_cmap <- tibble::tibble(country = mr_order,
+  currency = c("EUR","EUR","EUR","EUR","EUR","CHF","GBP","SEK","CAD","JPY","USD"))
+in_fxret <- fx_long %>% dplyr::arrange(currency, ym) %>% dplyr::group_by(currency) %>%
+  dplyr::mutate(fxret = (log(fx_USD) - dplyr::lag(log(fx_USD), 12)) * 100) %>% dplyr::ungroup()
+in_fx <- in_cmap %>% dplyr::left_join(in_fxret, by = "currency", relationship = "many-to-many") %>%
+  dplyr::inner_join(in_win, by = "country") %>%
+  dplyr::filter(ym >= ym0, ym <= ym1, !is.na(fxret)) %>%
+  dplyr::group_by(country) %>%
+  dplyr::summarise(fx_mean = mean(fxret), fx_sd = sd(fxret), .groups = "drop")
+inputs_summary <- tibble::tibble(country = mr_order) %>%
+  dplyr::left_join(in_infl, by = "country") %>%
+  dplyr::left_join(in_fx, by = "country") %>%
+  dplyr::left_join(dplyr::tibble(country = names(cf_wt), wt = cf_wt * 100), by = "country")
+cat("\n===== Non-yield input summary stats (R-081) =====\n")
+print(as.data.frame(inputs_summary %>% dplyr::mutate(dplyr::across(-country, ~round(., 2)))),
+      row.names = FALSE)
 
 # Figure: R^2 ladder (local-only / global-only / joint) per country.
 mr_plots$mr_f2_r2_ladder <- phase2 %>%
