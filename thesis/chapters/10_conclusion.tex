@@ -11,14 +11,13 @@
 
 In our thesis, we asked whether the cycle factor of \citet{cieslak2015}
 applies to international government bonds. To answer this question, we
-constructed the local cycle factor for eleven G10 markets exactly as in the
-original study, aggregated the national factors into a GDP-weighted global
+constructed the local cycle factor for eleven G10 markets, aggregated the national factors into a GDP-weighted global
 cycle factor, and additionally built a novel FX-adjusted global cycle factor
 for an unhedged US-dollar investor. We evaluated this three-factor hierarchy
 in three empirical phases, both in-sample and under a fully recursive
-out-of-sample protocol, and we validated our empirical engine by replicating
+out-of-sample pipeline, and we validated our empirical engine by replicating
 the published US and international results (\Cref{ch:replication}). In this
-chapter, we summarise our answers to the research question and its two
+chapter, we summarise our answers to the research question and its three
 sub-questions, restate our contribution, and outline directions for future
 work.
 
@@ -50,7 +49,7 @@ integration result should be read with that in mind.
 For the unhedged US-dollar investor, our results are mixed. Dollar
 conversion erodes roughly two-thirds of the global factor's predictive
 power. The FX-adjusted global cycle factor, built bottom-up from the
-country-level USD regressions, recovers much of it in sample: it
+country-level USD regressions, recovers much of it in sample. It
 substantially raises the average dollar-investor fit and correlates only $0.81$ with the
 unadjusted factor, comparable in spirit to the $0.50$ that
 \citet{dahlquist2013} report for the forward-rate family. We also find,
@@ -65,7 +64,7 @@ The finding we regard as most important concerns real time. Out of sample,
 the local factors lose to the recursive historical mean almost everywhere,
 while the global cycle factor beats it in ten of eleven markets. This edge
 holds across crisis subsamples, beats the global forward-rate factor, and
-depends materially on measuring the inflation trend with core rather than
+depends on measuring the inflation trend with core rather than
 headline inflation. Moreover, it carries economic value. A timing strategy
 based on the global factor raises the Sharpe ratio of a hedged global bond
 portfolio from $0.34$ to $0.40$ with a positive certainty-equivalent gain
@@ -78,7 +77,7 @@ mechanism. Summarising our findings, we conclude that international bond
 risk premia contain a common, macro-anchored, and slowly moving component
 that is large enough and stable enough to estimate in real time, provided
 one aggregates across markets, measures the inflation anchor cleanly, and
-does not ask the factor to forecast exchange rates.
+does not require the factor to forecast exchange rates.
 
 Our conclusions are subject to the limitations we discussed in
 \Cref{ch:discussion}, in particular the inference under overlapping

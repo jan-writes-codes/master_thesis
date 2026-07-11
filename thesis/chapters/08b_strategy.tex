@@ -4,17 +4,15 @@
 \label{ch:strategy}
 
 In \Cref{sec:res-oos} we established the one statistical result that matters
-for an investor. Of the cycle factors, only the \emph{global} factor beats the
-recursive prevailing mean out of sample. A positive out-of-sample $R^{2}$ is
+for an investor is the global cycle factor. A positive out-of-sample $R^{2}$ is
 the condition under which a real-time investor can convert
 predictability into utility \citep{campbellthompson2008}. In this chapter, we
 ask whether this conversion is economically meaningful. To answer this
 question, we build a fully out-of-sample market-timing strategy around the
-global cycle factor and compare it against a passive benchmark. We keep the
-exercise deliberately self-contained: we use only the recursive factor and
+global cycle factor and compare it against a passive benchmark. We keep this
+exercise self-contained. We use only the recursive factor and
 forecasts of \Cref{sec:meth-oos}, entering positions with information known
-only at time~$t$, and we implement everything in
-\texttt{strategy.R} and \texttt{strategy\_ext.R}.
+only at time~$t$.
 
 % ===========================================================================
 \section{Strategy Design}
@@ -22,7 +20,7 @@ only at time~$t$, and we implement everything in
 
 Three features of our evidence guide the design of the strategy. First, the
 predictability that survives out of sample is in \emph{local-currency}
-returns, while the dollar signal is far weaker (\Cref{sec:res-phase3}). We
+returns (\Cref{sec:res-phase3}). We
 therefore run the strategy for a \emph{currency-hedged} global investor (GCF)
 and analyse the unhedged US-dollar investor (FXGCF) separately in
 \Cref{sec:strat-fx}.
@@ -31,7 +29,7 @@ local money market, are the standard representation of an FX-risk-hedged
 international bond portfolio and are equivalent to managing the currency
 exposure with FX forwards \citep{randl2025}. Second, the global cycle factor
 is a single time series, so it carries no information about which country to
-favour and can only time \emph{aggregate} bond exposure. The investable asset
+favour and can only time aggregate bond exposure. The investable asset
 is accordingly a single GDP-weighted, ten-year global government-bond
 portfolio, whose one-year excess return is the weighted average of the
 national returns. Third, the signal must be usable in real
@@ -39,8 +37,7 @@ time, so both the factor and the forecasting regression respect time~$t$.
 
 Each month, the investor forms a real-time forecast of the portfolio's
 twelve-month excess return from the recursive regression
-$\rx_{t+12}=a+b\,\GCF^{\mathrm{oos}}_{t}+\varepsilon$, estimated only on
-outcomes realised by~$t$, and sets a mean--variance exposure
+$\rx_{t+12}=a+b\,\GCF^{\mathrm{oos}}_{t}+\varepsilon$, and sets a mean--variance exposure
 \begin{equation}
   w_{t} \;=\; \frac{1}{\gamma}\,
               \frac{\widehat{\E}_{t}\!\left[\rx_{t+12}\right]}
@@ -59,13 +56,12 @@ strategies. This makes the variance penalty comparable.
 \section{Implementation}
 \label{sec:strat-implementation}
 
-In this section, we make the mapping from signal to position explicit. Each
+In this section, we cover the implementation. Each
 month $t$, using only information available at $t$: \emph{(i)} we re-estimate
 the full generated-regressor chain on outcomes realised by $t$ (a twelve-month
 lag), with a sixty-month minimum training history (\Cref{sec:meth-oos}). This
 regards trend inflation \eqref{eq:trendinf}, the yield-cycle decomposition
-\eqref{eq:decomp}, the local-factor regressions \eqref{eq:cf-reg}, and the GDP
-aggregation \eqref{eq:gcf}, \emph{(ii)} we form the forecast
+\eqref{eq:decomp}, the local-factor regressions \eqref{eq:cf-reg}, and the GDP aggregation \eqref{eq:gcf}. \emph{(ii)} We form the forecast
 $\widehat{\E}_{t}[\rx_{t+12}]=\hat a_{t}+\hat b_{t}\,\GCF^{\mathrm{oos}}_{t}$
 from the recursive regression, \emph{(iii)} we estimate the variance
 $\widehat{\sigma}^{2}_{t}$ on an expanding window, \emph{(iv)} we set the
@@ -73,13 +69,6 @@ target weight to the mean-variance exposure \eqref{eq:strat-weight}, truncated
 at zero (long-only) and rescaled to unit average exposure for reporting, and
 \emph{(v)} we rebalance monthly, with one-way turnover $|w_{t}-w_{t-1}|$.
 
-We want to emphasise two implementation details. First, no step involves a
-choice that is fitted to the evaluation sample. The risk-aversion parameter
-enters only through the reported CER, the truncation at zero is imposed a
-priori, and the sixty-month minimum training window is inherited from the
-out-of-sample protocol of \Cref{sec:meth-oos}. Second, we
-deliberately choose the simplest implementation that is consistent with the
-evidence, with one asset, one signal, and one linear forecasting regression.
 Anything the strategy earns is therefore attributable to the real-time
 information content of the global cycle factor.
 
@@ -110,14 +99,10 @@ as the sharper variance penalty offsets the timing gain.
 In \Cref{fig:strat-cumret}, we can see the cumulative wealth of the timed and
 passive portfolios on a monthly, one-month-holding basis.\footnote{The wealth
   and drawdown figures rebalance monthly and hold for one month, using a
-  one-month excess return on the 10Y global bond portfolio built from the yield
-  panel with the standard zero-coupon duration approximation, so the curves are
-  smoother than a coarse annual path. The headline Sharpe and
-  certainty-equivalent numbers above are computed, as elsewhere, from
-  overlapping twelve-month returns.} The timing strategy ends
+  one-month excess return on the 10Y global bond portfolio.} The timing strategy ends
 the period ahead, and most of its outperformance accrues from avoiding the
 worst of the bond-market drawdowns rather than from amplifying the good years.
-\Cref{fig:strat-exposure} makes the mechanism explicit. The global cycle
+\Cref{fig:strat-exposure} demonstrates this well. The global cycle
 factor cuts bond exposure when it signals a low risk premium and restores it
 when the signal turns favourable, whereas the mean-timing investor holds a
 nearly constant position.
@@ -133,8 +118,7 @@ nearly constant position.
 \begin{figure}[t]\centering
   \includegraphics[width=0.85\linewidth]{figures/strat_f2_exposure.pdf}
   \caption[Real-time portfolio exposure]{Real-time portfolio exposure (average normalised to one). The
-    GCF-timed investor varies bond exposure with the global cycle signal; the
-    mean-timing investor is nearly static.}
+    GCF-timed investor varies bond exposure with the global cycle signal.}
   \label{fig:strat-exposure}
 \end{figure}
 
@@ -173,8 +157,7 @@ ratio was lower ($0.93$ against $1.09$). However, the ranking reverses exactly w
 it to. Over 2015--2024, a decade in which the passive portfolio lost money,
 the timed strategy preserves a higher mean and the highest Sharpe ratio, and
 in the 2021--2022 drawdown it has the least negative Sharpe ratio. The full-sample advantage of
-\Cref{tab:strat-perf} is therefore not a uniform edge but a defensive one,
-concentrated in the regime of falling and volatile bond prices. We can observe
+\Cref{tab:strat-perf} is therefore not a uniform edge but a defensive one. It is concentrated in the regime of falling and volatile bond prices. We can observe
 this characterisation in \Cref{fig:strat-rollsr}. In the rolling five-year
 Sharpe ratios, the passive portfolio holds the upper hand in the early,
 high-premium windows, the two series then track each other through the middle
@@ -207,7 +190,7 @@ traded. At $10$ basis points, which is already conservative for ten-year G10
 government bond futures, where quoted half-spreads are of the order of one
 basis point, the Sharpe ratio of the timed strategy falls from $0.41$ to
 $0.39$ and the certainty-equivalent gain over buy-and-hold shrinks by about
-eleven basis points a year. Even at an implausibly punitive $50$ basis points,
+eleven basis points a year. Even at punitive $50$ basis points,
 the timed strategy still matches or beats buy-and-hold on both metrics,
 although at this cost level the near-static mean-timing rule becomes the
 better implementation. Transaction costs therefore qualify the magnitude of
@@ -226,12 +209,11 @@ the economic value but do not overturn its existence.
 
 A US-based investor who holds the global bond portfolio unhedged earns the
 dollar excess return \eqref{eq:rx-usd}, which adds the currency return to the
-local bond return. The natural signal for this investor is the FX-adjusted
+local bond return. The signal for this investor is the FX-adjusted
 global cycle factor $\FXGCF_{t}$, which we built in \Cref{sec:fw-fxgcf} to
 target dollar returns directly. In \Cref{tab:strat-usd}, we run the timing
 rule of \Cref{sec:strat-design} on the dollar portfolio, using the recursive
-$\FXGCF^{\mathrm{oos}}$ signal, and report the unadjusted
-$\GCF^{\mathrm{oos}}$ alongside to isolate the value of the FX adjustment. The
+$\FXGCF^{\mathrm{oos}}$ signal. The
 FX-adjusted signal shares the five-year recursive burn-in of the global
 factor, so we evaluate the dollar strategy over the same out-of-sample window
 (2005--2024) as the hedged strategy of \Cref{sec:strat-performance}.
@@ -260,13 +242,10 @@ This is not a contradiction of Phase~III but a reflection of where the
 FX-adjusted factor's strength lies. Its in-sample recovery
 (\Cref{sec:res-phase3}) and its pooled out-of-sample edge
 (\Cref{ch:robustness}) come from the per-country USD regressions, that is,
-from the cross-section of dollar returns. Aggregating the portfolio before
-forecasting averages away exactly the country-level currency variation the
-factor is built to capture, and what remains is timed at least as well by the
-simpler unadjusted factor. We therefore arrive at a clear conclusion that is
+from the cross-section of dollar returns. We therefore arrive at the conclusion that is
 consistent throughout our thesis. Timing adds value for the dollar investor
 as well, but currency risk, and not a failure of the cycle signal, caps the
-level it can reach; both dollar strategies remain well below the $0.40$ of
+level it can reach. Both dollar strategies remain well below the $0.40$ of
 the currency-hedged investor in \Cref{sec:strat-performance}. The economic
 value of the global cycle factor accrues overwhelmingly to the investor who
 hedges the currency exposure of the international bond position.
