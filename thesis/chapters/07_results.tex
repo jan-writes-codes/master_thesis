@@ -106,7 +106,7 @@ component. In \Cref{fig:s5-gcf}, we can see that it tracks the centre of mass of
 the country-level factors. It correlates most strongly with the large core
 economies (the United States, $0.96$; Germany, $0.94$), but this is not purely a
 weight effect: Sweden and Canada also correlate above $0.89$ despite small
-weights, while Italy is the clear outlier at $0.20$, so the global factor
+weights, while Italy is the clear outlier at $0.21$, so the global factor
 captures common business-cycle co-movement rather than the biggest economies
 mechanically (\Cref{tab:mr-gcf-corr}). In Phase~II, we test integration directly
 through the horse race \eqref{eq:h-horse}--\eqref{eq:h-global}.
@@ -161,8 +161,8 @@ In \Cref{fig:mr-r2-ladder}, we can trace the same conclusion through the $R^{2}$
 ladder. For the eight markets in which the local factor is subsumed, adding
 $\CF^{\perp}$ to the global factor lifts the $R^{2}$ only trivially. For the
 three markets with surviving local content, the increment is material: Italy
-rises from $7.4\%$ on the global factor alone to $31.5\%$ jointly, and the
-Netherlands from $26.3\%$ to $35.0\%$. Furthermore, the joint Wald test rejects
+rises from $7.4\%$ on the global factor alone to $31.3\%$ jointly, and the
+Netherlands from $26.4\%$ to $35.0\%$. Furthermore, the joint Wald test rejects
 in all eleven markets, and the rejections survive the Benjamini--Hochberg
 correction for multiple testing across the panel. This suggests that the
 combined cycle information is priced everywhere. On the pooled G10 panel with
@@ -216,12 +216,12 @@ and \eqref{eq:h-fxgcf}.
 We find that currency risk is a dominant influence on the dollar investor's
 returns and that it sharply weakens the global factor. The cross-country average
 predictive $R^{2}$ of the global factor falls from $25\%$ on local-currency
-returns to $8\%$ on dollar returns, and the factor's HAC $t$-statistic drops
+returns to $9\%$ on dollar returns, and the factor's HAC $t$-statistic drops
 below the conventional threshold for the entire euro-area bloc, Switzerland and
 Japan. Predictability survives currency conversion only where the exchange-rate
 exposure is small or itself cyclical: in the United States, whose dollar return
 mechanically equals its local return because it carries no currency leg
-($R^{2}=33\%$), in Canada ($t=2.9$), and, more marginally, in Sweden and the
+($R^{2}=33\%$), in Canada ($t=2.8$), and, more marginally, in Sweden and the
 United Kingdom ($t\approx 2.0$). In these cases the currency return is either
 absent (the United States carries no currency leg) or tends to move with the
 domestic rate cycle, so that part of it is already captured by the bond factor
@@ -237,14 +237,14 @@ signal in the bond.
 The FX-adjusted factor was designed for exactly this problem, and we find that
 it helps substantially. Across the panel, it raises the dollar-investor
 $R^{2}$ in ten of the eleven markets and lifts the $t$-statistic in nine.
-The cross-country average $R^{2}$ recovers from $8\%$ under the global factor
-to $14\%$ under the FX-adjusted factor, so the adjustment nearly doubles the
+The cross-country average $R^{2}$ recovers from $9\%$ under the global factor
+to $14\%$ under the FX-adjusted factor, a substantial gain in the
 dollar-investor fit. Moreover, markets that were insignificant under
 $\GCF_{t}$ become significant under $\FXGCF_{t}$: the entire euro-area bloc
-moves to $t\approx 2.6$, Switzerland to $t=3.0$, and Japan to $t=2.1$, so
+moves to $t\approx 2.6$, Switzerland to $t=3.0$, and Japan to $t=2.8$, so
 that the factor is significant in ten of eleven markets (the exception is the
 United Kingdom). In \Cref{fig:mr-gcf-fxgcf}, we can see why new
-information can be captured: the FX-adjusted factor correlates $0.78$ with the
+information can be captured: the FX-adjusted factor correlates $0.81$ with the
 unadjusted global factor, so the two series share the global cycle but the
 FX-adjusted factor carries genuinely distinct information about the currency
 leg of the dollar return. This is comparable in spirit to the correlation of
@@ -261,7 +261,7 @@ interpretation in \Cref{ch:discussion}.
   \caption{The global cycle factor $\GCF_{t}$ \eqref{eq:gcf} and the FX-adjusted
     global cycle factor $\FXGCF_{t}$ \eqref{eq:fxgcf} over the common sample.
     The two series share the global cycle but are distinct (correlation
-    $0.78$).}
+    $0.81$).}
   \label{fig:mr-gcf-fxgcf}
 \end{figure}
 
@@ -297,16 +297,16 @@ helps on average, but \emph{when} the two factors carry genuinely different
 information, and why.
 
 \Cref{tab:fxd-properties} collects their properties. The wedge is not a small
-residual: its standard deviation ($0.34$) is as large as that of the
-interest-rate factor itself ($0.34$) and it is highly persistent (first-order
-autocorrelation $0.98$, half-life of three years), so the FX component is a
+residual: its standard deviation ($0.35$) is as large as that of the
+interest-rate factor itself ($0.33$) and it is highly persistent (first-order
+autocorrelation $0.99$, half-life of about five years), so the FX component is a
 slow-moving second factor in its own right. Yet
-the full-sample correlation between the two factors, $0.78$, hides considerable
+the full-sample correlation between the two factors, $0.81$, hides considerable
 time variation. \Cref{fig:fxd-rollcorr} plots the $36$-month rolling
 correlation of $\GCF_{t}$ and $\FXGCF_{t}$. It swings from near zero in the
 early 1990s and around the global financial crisis to essentially one for most
-of the post-2008 decade: split at 2008, the two factors correlate $0.45$ in the
-first half of the sample and $0.96$ in the second. In other words, the FX
+of the post-2008 decade: split at 2008, the two factors correlate $0.54$ in the
+first half of the sample and $0.95$ in the second. In other words, the FX
 adjustment does distinct work in the earlier sample, and almost none in the
 later one.
 
@@ -322,7 +322,7 @@ later one.
   \caption{Dynamics of the two global factors: the $36$-month rolling
     correlation of the interest-rate factor $\GCF_{t}$ \eqref{eq:gcf} and the
     FX-adjusted factor $\FXGCF_{t}$ \eqref{eq:fxgcf}. The dashed line marks the
-    full-sample correlation ($0.78$); the dotted line marks 2008.}
+    full-sample correlation ($0.81$); the dotted line marks 2008.}
   \label{fig:fxd-rollcorr}
 \end{figure}
 
@@ -338,11 +338,11 @@ currency component has little left to say that the bond cycle does not already
 say. \Cref{fig:fxd-regime} shows exactly this pattern: the rolling correlation
 of the two factors falls when the GDP-weighted G10 short rate is high and rises
 as it approaches zero, with the two moving in opposite directions
-(correlation $-0.57$). The regimes in \Cref{tab:fxd-properties} tell the same
+(correlation $-0.42$). The regimes in \Cref{tab:fxd-properties} tell the same
 story in levels: the low-correlation first half of the sample is the high-rate
 regime (mean short rate $3.9\%$, cross-country yield dispersion $1.37$), and
 the near-collinear second half is the low-rate regime (mean short rate $0.9\%$,
-dispersion $0.68$). The brief decoupling at the right edge of
+dispersion $0.71$). The brief decoupling at the right edge of
 \Cref{fig:fxd-regime}, as rates rose again after 2022, fits the same logic.
 
 \begin{figure}[t]\centering
@@ -350,7 +350,7 @@ dispersion $0.68$). The brief decoupling at the right edge of
   \caption{The FX premium decouples in the high-rate regime. Top: the
     $36$-month rolling correlation of $\GCF_{t}$ and $\FXGCF_{t}$. Bottom: the
     GDP-weighted G10 one-year yield ($36$-month mean). The two series correlate
-    $-0.57$: the factors are most distinct when rates are high and
+    $-0.42$: the factors are most distinct when rates are high and
     differentials wide, and collapse onto each other at the synchronised zero
     lower bound.}
   \label{fig:fxd-regime}
@@ -410,7 +410,7 @@ factor, and stress-test the estimation scheme, in \Cref{ch:robustness}.
 \Cref{fig:s8-oos} shows the pooled picture across the four specifications, and we
 arrive at three main messages, one per phase. First, we find that the local
 cycle factor does not survive the transition to real time: its pooled
-$R^{2}_{\mathrm{oos}}$ is $-0.08$, and it beats the prevailing mean in only two
+$R^{2}_{\mathrm{oos}}$ is $-0.07$, and it beats the prevailing mean in only two
 of the eleven markets (the United States and Canada). Second, the global factor is the exception, and a notable
 one. Its pooled $R^{2}_{\mathrm{oos}}$ is $+0.05$ and it is positive in ten of
 the eleven markets, as we can see in \Cref{fig:mr-oos}. Aggregating the eleven
@@ -428,7 +428,7 @@ out-of-sample picture qualifies the strong in-sample finding of Phase~III. The
 recursive $R^{2}_{\mathrm{oos}}$ is clearly negative for the unadjusted global
 factor ($-0.07$), which beats the recursive mean in only two markets. The
 FX-adjusted factor erases this loss: it turns positive at the pooled level
-($+0.019$) and beats the mean in six of the eleven markets. The pooled margin
+($+0.021$) and beats the mean in six of the eleven markets. The pooled margin
 is, however, an order of magnitude smaller than the in-sample gain, and, as
 \Cref{ch:robustness} shows, it is sensitive to the estimation scheme. The FX
 adjustment therefore does what it was designed to do, but the real-time edge
@@ -486,7 +486,7 @@ central message of \citet{dahlquist2013}, now established for the cycle factor
 rather than the forward-rate factor. Third, the global investor's problem is
 currency risk: dollar conversion erodes roughly two-thirds of the global
 factor's predictive power. The bottom-up FX-adjusted factor recovers much of
-it in-sample, nearly doubling the average dollar-investor $R^{2}$ from $8\%$
+it in-sample, substantially raising the average dollar-investor $R^{2}$ from $9\%$
 to $14\%$ and restoring significance in ten of eleven markets.
 
 Fourth, these conclusions survive out of sample and, in one respect, even
@@ -495,7 +495,7 @@ robustly (pooled $R^{2}_{\mathrm{oos}}=+0.05$, positive in ten of eleven
 markets), while the local cycle factor and the \emph{unadjusted} dollar-investor
 factor do not (both negative, positive in only two markets each). The
 FX-adjusted factor sits in between: it turns the unadjusted dollar factor's
-loss into a pooled gain ($+0.019$, positive in six of eleven markets), but
+loss into a pooled gain ($+0.021$, positive in six of eleven markets), but
 this real-time edge is much smaller than its in-sample fit and, as
 \Cref{ch:robustness} shows, sensitive to the estimation scheme. Real-time
 predictability is therefore clearly led by the global cycle factor, with the FX
