@@ -111,20 +111,33 @@ per-country OOS figure (`mr_f5_oos_r2`). The Q-2 restructure already brings the
 are now shown per country across two clean figures, so cramming four bars into
 one chart is unnecessary. The value-labels enhancement was done earlier.
 
-## Deferred (needs R / author input, not yet applied)
-- **R-133 / R-139** — monthly (1-month-holding) versions of `strat_f1_cumret`
-  and `strat_f3_drawdown`. You chose 1-month holding. This is an R change to
-  `strategy.R`/`strategy_ext.R`; the figure captions and the surrounding text
-  still say "non-overlapping annual" and will be updated once the figures are
-  regenerated. **Not yet done.**
-- **R-081** — you want summary stats for the *other* inputs (inflation, FX,
-  GDP), possibly in the appendix. Needs a new R table; not yet built.
-- **R-089** — you asked for a lower-triangle correlation table of GCF with the
-  local CFs (and a note that GCF correlates most with the largest economies by
-  construction). New R exhibit; not yet built.
-- **R-092** — G10-panel (country-FE) row for Table 4.2 (`mr_t2_phase2`). Needs R.
-- **R-122** — add `rx_usd ~ GCF` and `rx_usd ~ FXGCF` OOS bars to Fig 4.7
-  (`mr_f5_oos_r2`). Value labels already added; the extra USD bars need R.
-- **R-167** — v/M sensitivity table (§6.5). New R analysis; not yet built.
-- The figure `figures/s8_r2_oos_local.pdf` is now unused (its role is filled by
-  `mr_f5_oos_r2` in Ch. 4). Harmless; can be deleted from the pipeline later.
+## R-exhibit work — ALL DONE (2026-07-11)
+- **R-092 · DONE** — G10-panel (country-FE) row added to the Phase-II table
+  (`mr_t2_phase2.tex`) + reading sentence; computation in `main_results.R`.
+- **R-089 · DONE** — lower-triangle CF×CF correlation table with corr-to-GCF and
+  GDP weights (`mr_t2b_gcf_corr.tex`, appendix) + discussion in results;
+  computation in `main_results.R`.
+- **R-081 · DONE** — non-yield input summary stats (core inflation, FX return,
+  GDP weight) in `dh_t1b_inputs.tex` (appendix) + pointer in the data chapter;
+  computation in `main_results.R`.
+- **R-167 · DONE** — v/M sensitivity exhibit (`rob_t8_vm_sens.tex`) + paragraph
+  in the construction-sensitivity section; new script `R/sensitivity_vm.R`.
+- **R-133 / R-139 · DONE** — `strat_f1_cumret` and `strat_f3_drawdown`
+  regenerated on a monthly 1-month-holding basis (`strategy.R`/`strategy_ext.R`);
+  captions + drawdown prose updated (max DD 21.7% / 26.3% / 32.8%); a footnote
+  notes the figures use 1-month holding while the headline Sharpe/CER stay on
+  12-month returns.
+- **R-122 · RESOLVED** by the Q-2 move (see above).
+
+### Reproducibility note
+The thesis `.tex` tables carry the verified numbers and the pipeline scripts
+were updated to generate matching output. Regenerating the `main_results.R`
+grob PDFs (references only; the thesis inputs the `.tex`) requires the slow
+recursive `oos.R` run and can be done in a batch when convenient. The figure
+`figures/s8_r2_oos_local.pdf` is now unused (role filled by `mr_f5_oos_r2`);
+harmless, can be pruned later.
+
+### Japan inflation reminder (author todo)
+Japan's core inflation (mean 0.34%, SD 1.11% over the sample) is the lowest in
+the panel — worth a sanity check that the FRED Japanese core-CPI series and the
+consumption-tax episodes are handled as you intend.
