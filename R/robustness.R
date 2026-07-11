@@ -579,9 +579,14 @@ rob_plots$rob_f2_oos_scheme <- scheme_res %>%
   dplyr::mutate(ym = as.integer(format(date, "%Y%m"))) %>%
   tidyr::pivot_longer(-c(date, ym), names_to = "country", values_to = "cpi_chk")
 .gate <- inflation_long %>% dplyr::select(country, ym, cpi) %>%
-  dplyr::inner_join(.infl_chk %>% dplyr::select(country, ym, cpi_chk), by = c("country", "ym"))
+  dplyr::inner_join(.infl_chk %>% dplyr::select(country, ym, cpi_chk), by = c("country", "ym")) %>%
+  # The Japan core-CPI gap (2021-07 onward) is imputed from the LSEG series in
+  # data_preparation.R, so the in-memory `inflation` deliberately holds values
+  # where the raw sheet is still NA. The gate therefore checks only the original
+  # (non-NA) sheet cells -- every one of those must still match exactly.
+  dplyr::filter(!is.na(cpi_chk))
 stopifnot(isTRUE(all.equal(.gate$cpi, .gate$cpi_chk, tolerance = 1e-8)))
-cat(sprintf("core-vs-reg: baseline value gate passed (inflation sheet matches in-memory; %d cells)\n",
+cat(sprintf("core-vs-reg: baseline value gate passed (original inflation cells match in-memory; %d cells)\n",
             nrow(.gate)))
 
 # --- (1) Replicated trend-inflation builder (cp_trend is rm()-ed in data prep).
