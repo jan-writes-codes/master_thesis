@@ -703,6 +703,13 @@ verification notes — already exists at `literature/literature_review.md`.)*
 
 ## 4. Prioritized recommendations — what to actually add
 
+> **Status (integrated).** The six high-priority papers plus Kozicki–Tinsley (2012)
+> and Cochrane (2006) have been added to `references.bib` and cited concisely in the
+> thesis: Joslin–Priebsch–Singleton and Rebonato–Nyholm in §2.1–§2.2, Kessler–Scherer
+> and Sekkel in §2.4, Cejnek–Randl and Iania et al. in §2.5, Kozicki–Tinsley (2012) in
+> §2.3, and Cochrane (2006) in the Discussion. The remaining items below are left as
+> optional.
+
 **Add (high priority — genuinely strengthen the thesis):**
 1. **Sekkel (2011)** — international CP evidence on a ~G10 panel almost identical to the thesis's; the natural benchmark for the local-factor results (§2.2/§2.5).
 2. **Kessler & Scherer (2009)** — international CP extension *with a trading-strategy evaluation*; supports both §2.2/§2.5 and the Ch.8b strategy.
