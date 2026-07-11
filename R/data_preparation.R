@@ -67,6 +67,27 @@ inflation <- read_excel(file_path, sheet = "inflation") %>%
   dplyr::mutate(ym = as.integer(format(date, "%Y%m"))) %>%
   dplyr::arrange(date)
 
+# Japan core-CPI gap fill. The FRED core-CPI series for Japan (sheet
+# "inflation") stops in 2021-06; left as is this drops roughly five years of
+# Japanese observations -- and Japan's ~20% GDP weight -- from the recent panel.
+# We extend Japan with the LSEG core-CPI series (sheet "inflation_dep"), which
+# runs to 2026-01, chained to the FRED index base at the splice month so that
+# year-on-year inflation stays consistent across the join (the two series' YoY
+# rates correlate 0.98 over their 1990-2021 overlap). Only Japan is spliced;
+# every other country's FRED series already runs to 2025-03/04.
+inflation_dep <- read_excel(file_path, sheet = "inflation_dep") %>%
+  dplyr::mutate(ym = as.integer(format(Date, "%Y%m"))) %>%
+  dplyr::select(ym, JP_dep = JP)
+jp_splice_ym <- max(inflation$ym[!is.na(inflation$JP)])          # last FRED month (202106)
+jp_splice_ratio <- inflation$JP[inflation$ym == jp_splice_ym] /
+                   inflation_dep$JP_dep[inflation_dep$ym == jp_splice_ym]
+inflation <- inflation %>%
+  dplyr::left_join(inflation_dep, by = "ym") %>%
+  dplyr::mutate(JP = dplyr::if_else(is.na(JP) & ym > jp_splice_ym & !is.na(JP_dep),
+                                    JP_dep * jp_splice_ratio, JP)) %>%
+  dplyr::select(-JP_dep)
+rm(inflation_dep, jp_splice_ym, jp_splice_ratio)
+
 # GDP (EOY), local currency --------------------------------------------------
 gdp_loc <- read_excel(file_path, sheet = "gdp") %>%
   dplyr::rename(date = year) %>%

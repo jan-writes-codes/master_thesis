@@ -89,13 +89,13 @@ information content of the global cycle factor.
 
 In \Cref{tab:strat-perf}, we report the out-of-sample performance over
 2005--2024, the period for which the fully-recursive factor is available. The
-global bond portfolio itself has an out-of-sample $R^{2}$ of $0.125$ against
+global bond portfolio itself has an out-of-sample $R^{2}$ of $0.127$ against
 the recursive mean. We find that this statistical
 edge translates into economic value. Timing the portfolio with the global
-cycle factor raises the annual Sharpe ratio from $0.31$ for the passive
-position to $0.38$, and from $0.34$ for an investor who times on the recursive
+cycle factor raises the annual Sharpe ratio from $0.34$ for the passive
+position to $0.40$, and from $0.36$ for an investor who times on the recursive
 mean. For a mean--variance investor with risk aversion $\gamma=5$, the
-certainty-equivalent gain is $0.51\%$ per year over buy-and-hold and $0.30\%$
+certainty-equivalent gain is $0.48\%$ per year over buy-and-hold and $0.31\%$
 over the mean-timing benchmark. The global cycle factor also retains the
 highest certainty equivalent at $\gamma=10$.
 
@@ -139,8 +139,8 @@ nearly constant position.
 
 The drawdown profile confirms that the value of the signal is defensive. In
 \Cref{fig:strat-drawdown}, we plot the drawdown from peak of the same monthly
-wealth curves. The maximum drawdown of the timed portfolio is $21.7\%$,
-against $26.3\%$ for the mean-timing investor and $32.8\%$ for buy-and-hold.
+wealth curves. The maximum drawdown of the timed portfolio is $20.3\%$,
+against $24.9\%$ for the mean-timing investor and $30.7\%$ for buy-and-hold.
 The deepest drawdowns fall in the 2022--2023 global hiking cycle, the worst
 bond-market episode in the sample. The timed investor enters it with reduced
 exposure because the global cycle factor had already turned
@@ -198,15 +198,15 @@ of episodes rather than accrued steadily.
 
 The trading intensity of the strategy is modest. Because the global cycle
 factor is highly persistent, the target weight moves slowly. The average
-one-way turnover of the timed portfolio is $9.2\%$ of notional per month
+one-way turnover of the timed portfolio is $9.1\%$ of notional per month
 (mean-timing: $1.3\%$), which corresponds to roughly one full portfolio turn
 per year. In \Cref{tab:strat-costs}, we convert this into net-of-cost
 performance by charging a proportional one-way cost on every unit of notional
 traded. At $10$ basis points, which is already conservative for ten-year G10
 government bond futures, where quoted half-spreads are of the order of one
-basis point, the Sharpe ratio of the timed strategy falls from $0.39$ to
-$0.37$ and the certainty-equivalent gain over buy-and-hold shrinks by about
-ten basis points a year. Even at an implausibly punitive $50$ basis points,
+basis point, the Sharpe ratio of the timed strategy falls from $0.41$ to
+$0.39$ and the certainty-equivalent gain over buy-and-hold shrinks by about
+eleven basis points a year. Even at an implausibly punitive $50$ basis points,
 the timed strategy still matches or beats buy-and-hold on both metrics,
 although at this cost level the near-static mean-timing rule becomes the
 better implementation. Transaction costs therefore qualify the magnitude of
@@ -244,16 +244,16 @@ factor, so we evaluate the dollar strategy over the same out-of-sample window
 
 Two observations help us interpret the result. First, over this sample the
 unhedged dollar bond premium is modest but positive. The passive portfolio
-earns about $1.5\%$ a year in excess return for a Sharpe ratio near $0.20$, as
+earns about $1.4\%$ a year in excess return for a Sharpe ratio near $0.18$, as
 the strength of the dollar through the 2010s offsets much, though not all, of
 the foreign-bond return for a US investor. Second, the two dollar signals
 part ways at the aggregate level. Timing on the unadjusted recursive global
-factor works: the GCF-timed dollar strategy earns a Sharpe ratio of $0.25$
-against the passive $0.20$, with an aggregate-portfolio out-of-sample $R^{2}$
-of $0.073$. The FX-adjusted factor, in contrast, does not time the
+factor works: the GCF-timed dollar strategy earns a Sharpe ratio of $0.24$
+against the passive $0.18$, with an aggregate-portfolio out-of-sample $R^{2}$
+of $0.078$. The FX-adjusted factor, in contrast, does not time the
 \emph{aggregate} dollar portfolio well. Its forecast of the GDP-weighted
 portfolio return has an out-of-sample $R^{2}$ of $-0.01$, and the FXGCF-timed
-strategy earns a Sharpe ratio of $0.19$, no better than buy-and-hold.
+strategy earns a Sharpe ratio of $0.18$, no better than buy-and-hold.
 
 This is not a contradiction of Phase~III but a reflection of where the
 FX-adjusted factor's strength lies. Its in-sample recovery
@@ -265,7 +265,7 @@ factor is built to capture, and what remains is timed at least as well by the
 simpler unadjusted factor. We therefore arrive at a clear conclusion that is
 consistent throughout our thesis. Timing adds value for the dollar investor
 as well, but currency risk, and not a failure of the cycle signal, caps the
-level it can reach; both dollar strategies remain well below the $0.38$ of
+level it can reach; both dollar strategies remain well below the $0.40$ of
 the currency-hedged investor in \Cref{sec:strat-performance}. The economic
 value of the global cycle factor accrues overwhelmingly to the investor who
 hedges the currency exposure of the international bond position.
@@ -276,7 +276,7 @@ hedges the currency exposure of the international bond position.
 
 We read this result as a proof of concept rather than a tradable system, and
 note two limitations. First, the magnitude is modest. The portfolio shows a
-Sharpe-ratio improvement of about $0.07$ and a certainty-equivalent gain below
+Sharpe-ratio improvement of about $0.06$ and a certainty-equivalent gain below
 one percent a year. Its edge is time-sensitive, earned in the poor bond decade
 and the 2021--2022 drawdown rather than in the calm years. Second, the
 forecasts use overlapping twelve-month returns, so the supporting precision is
