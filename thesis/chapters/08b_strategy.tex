@@ -107,7 +107,13 @@ highest certainty equivalent at $\gamma=10$.
 \end{table}
 
 In \Cref{fig:strat-cumret}, we can see the cumulative wealth of the timed and
-passive portfolios on a non-overlapping annual basis. The timing strategy ends
+passive portfolios on a monthly, one-month-holding basis.\footnote{The wealth
+  and drawdown figures rebalance monthly and hold for one month, using a
+  one-month excess return on the 10Y global bond portfolio built from the yield
+  panel with the standard zero-coupon duration approximation, so the curves are
+  smoother than a coarse annual path. The headline Sharpe and
+  certainty-equivalent numbers above are computed, as elsewhere, from
+  non-overlapping twelve-month returns.} The timing strategy ends
 the period ahead, and most of its outperformance accrues from avoiding the
 worst of the bond-market drawdowns rather than from amplifying the good years.
 \Cref{fig:strat-exposure} makes the mechanism explicit. The global cycle
@@ -118,8 +124,8 @@ nearly constant position.
 \begin{figure}[t]\centering
   \includegraphics[width=0.85\linewidth]{figures/strat_f1_cumret.pdf}
   \caption{Cumulative wealth (excess of cash) of the GCF-timed global bond
-    portfolio versus buy-and-hold, non-overlapping annual rebalancing at equal
-    average exposure.}
+    portfolio versus buy-and-hold, monthly rebalancing with a one-month holding
+    period at equal average exposure.}
   \label{fig:strat-cumret}
 \end{figure}
 
@@ -132,12 +138,11 @@ nearly constant position.
 \end{figure}
 
 The drawdown profile confirms that the value of the signal is defensive. In
-\Cref{fig:strat-drawdown}, we plot the drawdown from peak of the same annual
-wealth curves. The maximum drawdown of the timed portfolio is $21.9\%$,
-against $24.2\%$ for the mean-timing investor and $27.3\%$ for buy-and-hold,
-and the worst single twelve-month loss shrinks from $20.9\%$ to $19.1\%$. All
-three troughs occur in the 2021--2022 global hiking cycle, the deepest
-bond-market drawdown in the sample. The timed investor enters it with reduced
+\Cref{fig:strat-drawdown}, we plot the drawdown from peak of the same monthly
+wealth curves. The maximum drawdown of the timed portfolio is $21.7\%$,
+against $26.3\%$ for the mean-timing investor and $32.8\%$ for buy-and-hold.
+The deepest drawdowns fall in the 2022--2023 global hiking cycle, the worst
+bond-market episode in the sample. The timed investor enters it with reduced
 exposure because the global cycle factor had already turned
 (\Cref{fig:strat-exposure}). This is precisely the behaviour we would expect
 from the mechanism, as the factor forecasts low premia when yields sit far
@@ -147,7 +152,7 @@ strategy trades, and what this trading costs, in \Cref{sec:strat-costs}.
 \begin{figure}[t]\centering
   \includegraphics[width=0.85\linewidth]{figures/strat_f3_drawdown.pdf}
   \caption{Drawdown from peak of the GCF-timed and buy-and-hold global bond
-    portfolios, computed on the non-overlapping annual wealth curves of
+    portfolios, computed on the monthly one-month-holding wealth curves of
     \Cref{fig:strat-cumret} at equal average exposure.}
   \label{fig:strat-drawdown}
 \end{figure}

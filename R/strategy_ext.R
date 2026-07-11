@@ -80,28 +80,21 @@ cat(sprintf("\nBuy-and-hold on same rows: mean %.2f%%  Sharpe %.2f  CER %.2f%%\n
             100 * mean(bt$r_bh[keep]), sr(bt$r_bh[keep]), 100 * cer(bt$r_bh[keep], g)))
 
 # -----------------------------------------------------------------------------
-# 3. Maximum drawdown on the annual (non-overlapping) wealth curves.
+# 3. Maximum drawdown on the monthly (1-month-holding) wealth curves
+# (review remark R-133/R-139; the `mon` backtest is built in strategy.R).
 # -----------------------------------------------------------------------------
-# eq_exp over the December subsample so the annual strategies are comparable:
-ann$w_mean_ann <- eq_exp(mv_raw(ann$mu_mean, ann$var_rt, g))
-ann$r_mean     <- ann$w_mean_ann * ann$rx
-
 max_dd <- function(r) { w <- cumprod(1 + r); 100 * min(w / cummax(w) - 1) }
-cat("\n=== Maximum drawdown, annual non-overlapping wealth curves ===\n")
-cat(sprintf("GCF-timed    : %.1f%%\n", max_dd(ann$r_gcf)))
-cat(sprintf("Mean timing  : %.1f%%\n", max_dd(ann$r_mean)))
-cat(sprintf("Buy-and-hold : %.1f%%\n", max_dd(ann$r_bh)))
-cat(sprintf("Worst single year, GCF vs BH: %.1f%% vs %.1f%% (year %s vs %s)\n",
-            100 * min(ann$r_gcf), 100 * min(ann$r_bh),
-            format(ann$date[which.min(ann$r_gcf)], "%Y"),
-            format(ann$date[which.min(ann$r_bh)], "%Y")))
+cat("\n=== Maximum drawdown, monthly 1-month-holding wealth curves ===\n")
+cat(sprintf("GCF-timed    : %.1f%%\n", max_dd(mon$r_gcf)))
+cat(sprintf("Mean timing  : %.1f%%\n", max_dd(mon$r_mean)))
+cat(sprintf("Buy-and-hold : %.1f%%\n", max_dd(mon$r_bh)))
 
-# Underwater (drawdown) figure on the annual curves.
+# Underwater (drawdown) figure on the monthly curves.
 dd_path <- function(r) { w <- cumprod(1 + r); 100 * (w / cummax(w) - 1) }
 dd_df <- tibble::tibble(
-  date = ann$date,
-  `GCF-timed`    = dd_path(ann$r_gcf),
-  `Buy-and-hold` = dd_path(ann$r_bh)) %>%
+  date = mon$date,
+  `GCF-timed`    = dd_path(mon$r_gcf),
+  `Buy-and-hold` = dd_path(mon$r_bh)) %>%
   tidyr::pivot_longer(-date, names_to = "strategy", values_to = "dd")
 strat_plots$strat_f3_drawdown <- ggplot2::ggplot(dd_df,
     ggplot2::aes(date, dd, colour = strategy)) +
@@ -110,7 +103,7 @@ strat_plots$strat_f3_drawdown <- ggplot2::ggplot(dd_df,
   ggplot2::scale_colour_manual(values = c("GCF-timed" = col_pri,
                                           "Buy-and-hold" = col_sec), name = NULL) +
   ggplot2::labs(title = "Drawdown from peak: GCF-timed vs buy-and-hold",
-                subtitle = "Non-overlapping annual wealth curves, equal average exposure",
+                subtitle = "Monthly 1-month-holding wealth curves, equal average exposure",
                 x = NULL, y = "Drawdown (%)") +
   theme_thesis
 
