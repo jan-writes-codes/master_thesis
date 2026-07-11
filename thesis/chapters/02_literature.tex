@@ -52,7 +52,10 @@ variables matter beyond the curve. \citet{ludvigson2009} extract factors
 from a large panel of macro series and show that real-activity and
 inflation factors forecast excess returns over and above forward rates and
 yields. This is the empirical origin of ``unspanned'' macro risk, which is
-predictive information that the current yield curve does not reveal. The
+predictive information that the current yield curve does not reveal.
+\citet{joslin2014} give this idea a no-arbitrage form, with output and
+inflation unspanned by the yield curve yet shaping the prices of level,
+slope, and curvature risk. The
 third position, articulated by \citet{duffee2011}, holds that a
 substantial part of risk-premium variation is hidden from the current
 curve altogether. Such a hidden factor can move expected short rates and term
@@ -96,8 +99,11 @@ that summarise the cross-section of yields, which started the spanning
 debate of \Cref{sec:lit-eh}. Second, it is a reduced-form object, that is,
 a combination of prices that predicts returns on those same prices, with
 no economic mechanism attached. It answers whether premia vary but not why
-they do. This open question is where the macro-anchored literature, and
-ultimately our thesis, comes in. The CP factor nonetheless remains the
+they do. \citet{rebonato2025} trace the factor's predictive power to the
+cointegration among the near-unit-root forward rates rather than to the
+tent shape of the loadings, and connect this mechanism to the cycle factor
+we turn to next. This open question is where the macro-anchored literature,
+and ultimately our thesis, comes in. The CP factor nonetheless remains the
 canonical benchmark. We therefore replicate it in \Cref{ch:replication}
 and compare its global version with the global cycle factor in
 \Cref{ch:robustness}.
@@ -115,7 +121,8 @@ Operationally, trend inflation is a discounted moving average of past
 year-on-year core CPI inflation. This construction goes back to \citet{kozicki2001}, who
 showed that long-rate dynamics are dominated by a shifting perceived
 ``endpoint'' tied to inflation expectations, and that discounting past
-inflation tracks survey measures of these expectations closely.
+inflation tracks survey measures of these expectations closely
+\citep{kozicki2012}.
 Projecting each maturity's yield on this trend yields maturity-specific
 \emph{cycles}. A single \emph{cycle factor}, the fitted combination of
 the short-maturity cycle and the average cycle, then forecasts one-year
@@ -153,9 +160,12 @@ That international bond returns are predictable, and predictable by
 common instruments, has been known since \citet{ilmanen1995}, who
 documents forecastability in six markets with a small set of global
 variables and finds that expected returns are highly correlated across
-countries. The modern factor-based statement of this result is
-\citet{dahlquist2013}, which forms the international backbone of our
-thesis. They construct local CP factors for the United States, Germany,
+countries. The forward-rate factor of \citet{cochrane2005} has itself been
+taken abroad: \citet{kessler2009} and \citet{sekkel2011} find that it
+forecasts excess returns across developed markets, though with more modest
+and more country-specific power than in the United States. The modern
+factor-based statement of this result is \citet{dahlquist2013}, which forms
+the international backbone of our thesis. They construct local CP factors for the United States, Germany,
 Switzerland, and the United Kingdom, aggregate them into a GDP-weighted
 \emph{global} CP factor, and establish two results that define the
 integration agenda. First, the global factor predicts excess returns in
@@ -201,13 +211,19 @@ ten-year window) plus an estimated real-rate trend, they show that adding
 both trends to canonical excess-return regressions delivers notable
 out-of-sample gains in Canada, Germany, Japan, and the United Kingdom.
 Related evidence extends the trend-augmented approach to Chinese
-government bonds \citep{zhang2022}. These papers establish that the macro
+government bonds \citep{zhang2022} and documents, for emerging markets, that
+global factors dominate local ones in explaining bond risk premia
+\citep{iania2021}. These papers establish that the macro
 anchor matters outside the United States. However, they stop short of
 combining the trends into a single macro-anchored factor. They add raw
 trends to yield-based
 regressions market by market rather than constructing the cycle factor
 itself, they cover four markets instead of the G10, and they build
-neither a global aggregate nor a currency-adjusted factor. From an
+neither a global aggregate nor a currency-adjusted factor. Closest in
+spirit, \citet{cejnek2020} aggregate \citet{cochrane2005} bond factors
+across four regions and, in an extension, apply the \citet{cieslak2015}
+decomposition to bond and dividend claims, but they do not construct a
+global cycle factor for government bonds. From an
 asset-pricing perspective, \citet{randl2025} derive a stochastic discount
 factor for currency-hedged developed-market government bond portfolios and
 document that the priced risks of international bonds are distinct from
