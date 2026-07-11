@@ -319,7 +319,16 @@ cycle factor inherits its robustness to them from the nature of the object.
 Trend inflation is a deliberately slow-moving anchor, so moderate changes in the
 decay weight or the window length shift the estimated trend by small amounts and
 leave the cycle, the residual of yields on this trend, and hence the factor
-largely unchanged. The second is the maturity menu used to form the cycle and the
+largely unchanged. We verify this directly. \Cref{tab:rob-vm-sens} rebuilds the
+whole factor chain over a grid of the decay ($v\in\{0.859,0.975,0.987\}$) and
+the window ($M\in\{60,120,180\}$ months). The cross-country mean in-sample
+$R^{2}$ stays within a narrow band (local $0.24$--$0.28$, global $0.24$--$0.31$),
+and every alternative global factor correlates at least $0.85$ with the
+baseline, rising above $0.98$ for the slow-decay specifications closest to it.
+Only the fastest decay ($v=0.859$, a five-month half-life) moves the factor
+materially, and even then it stays highly correlated with the baseline; at that
+decay the window length is immaterial because the weights beyond five years are
+already negligible. The second is the maturity menu used to form the cycle and the
 excess return: the one-, two-, four-, five-, nine-, and ten-year points available
 in the data, summarised by the duration-standardised, maturity-averaged return
 \eqref{eq:rxbar}. In \Cref{sec:res-phase1}, we showed that the predictability
@@ -331,6 +340,13 @@ month over the countries in the panel so that the weights sum to one. Because th
 global factor is dominated by the large core economies whose cycles co-move
 strongly, the aggregate is not sensitive to the precise weighting of the smaller
 markets.
+
+\begin{table}[t]
+  \caption{Sensitivity of the cycle factor to the trend parameters $v$ and $M$}
+  \label{tab:rob-vm-sens}
+  \centering
+  \input{tables/rob_t8_vm_sens}
+\end{table}
 
 \subsection{The Construction of the FX-Adjusted Factor}
 \label{sec:rob-fxgcf-construction}
