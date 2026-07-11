@@ -6,7 +6,7 @@
 \label{ch:replication}
 
 Before we take the macro-anchored cycle factor to the G10, we first have to show
-that our estimation engine is sound. In this appendix, we therefore validate the
+that our pipeline produces comparable results. In this appendix, we therefore validate the
 entire pipeline, namely the trend-inflation construction \eqref{eq:trendinf}, the
 yield--cycle decomposition \eqref{eq:decomp}, the cycle factor \eqref{eq:cf}, the
 forward-rate factor of \citet{cochrane2005}, and the global aggregation
@@ -16,11 +16,9 @@ cycle mechanism. In \Cref{sec:rep-dh}, we reproduce the international evidence o
 \citet{dahlquist2013}, who established the global integration of bond risk premia
 through the forward-rate factor. This exercise is, however, not a mechanical
 re-run, since our data, our sample window, and our inference differ from the
-originals. The relevant test is therefore agreement on signs, magnitudes, and
-explanatory power rather than on every decimal. Where our numbers differ, we
-state the reason. We restrict the United States replication to January
+originals. The relevant test is therefore agreement on signs, magnitudes. We restrict the United States replication to January
 1990--December 2014 ($300$ months) to align with the window of
-\citet{cieslak2015}; inference uses the block bootstrap of
+\citet{cieslak2015}. Inference uses the block bootstrap of
 \Cref{sec:meth-inference} and Newey--West HAC standard errors, with $18$ lags
 for the Cieslak--Povala tables and $12$ lags for the Dahlquist--Hasseltoft
 tables, matching each original specification.
@@ -85,7 +83,7 @@ Read against a simulated expectations-hypothesis null (\Cref{tab:cp-t2b},
 \Cref{sec:meth-ehmc}), whose $95$th percentile reaches $15\%$--$19\%$ at our
 $300$-month window, the realised $27\%$--$46\%$ sits far in the right tail. Our
 Monte Carlo reproduces the shape of the null but not the exact published
-percentiles---a gap we document rather than close.
+percentiles.
 
 \begin{table}[t]
   \caption{Predictive $R^{2}$ under the expectations-hypothesis null (CP Table~2, Panel~B)}
@@ -124,7 +122,7 @@ the ten-year yields are strongly correlated across countries. The latter is the
 data feature that makes a common factor plausible.
 
 \citet{dahlquist2013}, Table~3, documents that the local forward factors
-correlate strongly with the GDP-weighted global factor; in \Cref{tab:dh-t3} we
+correlate strongly with the GDP-weighted global factor. In \Cref{tab:dh-t3} we
 reproduce this, with local--global correlations of $0.76$--$0.97$ (highest for
 the large core markets, lowest for Belgium and Italy).
 
@@ -136,7 +134,7 @@ the large core markets, lowest for Belgium and Italy).
 \end{table}
 
 In \Cref{tab:dh-t4} we reproduce Table~4, contrasting the single forward--spot-spread
-regression of \citet{famabliss1987} with the full Cochrane--Piazzesi factor: the
+regression of \citet{famabliss1987} with the full Cochrane--Piazzesi factor. The
 CP factor dominates in almost every market and maturity (e.g.\ the United States
 at two years, $30\%$ against $8\%$), with the strikingly high Japanese fit
 ($R^{2}$ up to $69\%$) that \citet{dahlquist2013} also note.
@@ -150,8 +148,7 @@ at two years, $30\%$ against $8\%$), with the strikingly high Japanese fit
 
 In \Cref{tab:dh-t6} we reproduce Table~6: the global forward factor is
 significant in every market and maturity, the orthogonalised local factor adds
-little outside Italy and Japan, and the joint test rejects everywhere---the
-integration pattern we re-establish for the cycle factor in \Cref{ch:results}.
+little outside Italy and Japan, and the joint test rejects everywhere.
 
 \begin{table}[t]
   \caption{Local and global Cochrane--Piazzesi regressions (DH Table~6)}
@@ -163,12 +160,12 @@ integration pattern we re-establish for the cycle factor in \Cref{ch:results}.
 \Cref{tab:dh-t7} reproduces Table~7, the US-dollar investor's regressions. The
 unadjusted global forward factor predicts dollar returns only weakly, whereas the
 FX-adjusted global factor, built top-down on the average dollar return, restores
-predictability (HAC $t$ between $2.0$ and $4.4$; the euro at ten years rises from
-$7\%$ to $22\%$). This motivates the FX-adjusted global \emph{cycle} factor of
+predictability (HAC $t$ between $2.0$ and $4.4$. The euro at ten years rises from
+$7\%$ to $22\%$). This motivates the FX-adjusted global cycle factor of
 our thesis. For the cycle family, however, the same top-down adjustment is nearly
 collinear with the unadjusted global cycle factor in the G10, which is why we
 build our FX-adjusted cycle factor bottom-up instead (\Cref{sec:fw-fxgcf},
-\Cref{sec:rob-fxgcf-construction}); we take up this difference in
+\Cref{sec:rob-fxgcf-construction}). We take up this difference in
 \Cref{ch:discussion}.
 
 \begin{table}[t]
@@ -181,8 +178,7 @@ build our FX-adjusted cycle factor bottom-up instead (\Cref{sec:fw-fxgcf},
 Taken together, the two replications establish that our engine reproduces both
 pillars: the macro-anchored cycle mechanism of \citet{cieslak2015} on US data
 and the global-integration evidence of \citet{dahlquist2013} on the G10,
-including the FX-adjusted construction. The differences from the originals---a
-sample beginning in 1990, HAC and bootstrap inference, and the documented
-Monte Carlo level gap---do not disturb the qualitative agreement. With the engine
+including the FX-adjusted construction. The differences from the originals, namely a
+sample beginning in 1990 and HAC and bootstrap inference, do not disturb the qualitative agreement. With the engine
 validated, we turn in \Cref{ch:results} to applying the macro-anchored cycle
 factor, rather than the forward-rate factor, to the international cross-section.
