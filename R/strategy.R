@@ -147,13 +147,48 @@ ann <- bt %>%
   dplyr::mutate(w_gcf = eq_exp(mv_raw(mu_fac, var_rt, 5)))
 ann$r_gcf <- ann$w_gcf * ann$rx
 ann$r_bh  <- ann$rx
-ann_curve <- tibble::tibble(
-  date = c(min(ann$date) - 365, ann$date),
-  `GCF-timed`    = cumprod(c(1, 1 + ann$r_gcf)),
-  `Buy-and-hold` = cumprod(c(1, 1 + ann$r_bh)))
-ann_sr_gcf <- sr(ann$r_gcf); ann_sr_bh <- sr(ann$r_bh)
+# -----------------------------------------------------------------------------
+# Monthly-rebalanced, 1-month-holding wealth path (review remark R-133/R-139).
+# The wealth and drawdown figures use a monthly 1-month-holding excess return on
+# the 10Y global bond portfolio (built from the yield panel with the standard
+# zero-coupon duration approximation) so the curves have monthly rather than
+# coarse annual granularity. The timing signal is unchanged: each month the
+# recursive GCF forecast sets the target exposure, held for one month and
+# re-struck. The headline performance table (12-month returns) is unaffected.
+# -----------------------------------------------------------------------------
+.y10 <- yields_long %>% dplyr::filter(maturity == 10) %>%
+  dplyr::transmute(country, ym, y10 = yield)
+.y1  <- yields_long %>% dplyr::filter(maturity == 1) %>%
+  dplyr::transmute(country, ym, y1 = yield)
+mon_ret <- .y10 %>%
+  dplyr::inner_join(.y1, by = c("country", "ym")) %>%
+  dplyr::inner_join(reg_data %>% dplyr::distinct(country, ym, w), by = c("country", "ym")) %>%
+  dplyr::arrange(country, ym) %>%
+  dplyr::group_by(country) %>%
+  dplyr::mutate(y10_lag = dplyr::lag(y10), y1_lag = dplyr::lag(y1), w_lag = dplyr::lag(w),
+                # 1-month holding excess return on a 10Y zero (log-price roll):
+                r1m = (10 * y10_lag - (10 - 1/12) * y10) / 100 - (y1_lag / 100) / 12) %>%
+  dplyr::ungroup() %>%
+  dplyr::filter(!is.na(r1m), !is.na(w_lag)) %>%
+  dplyr::group_by(ym) %>%
+  dplyr::summarise(r1m = sum(w_lag * r1m) / sum(w_lag), .groups = "drop")
 
-strat_plots$strat_f1_cumret <- ann_curve %>%
+mon <- bt %>%
+  dplyr::arrange(ym) %>%
+  dplyr::mutate(Wg = eq_exp(mv_raw(mu_fac, var_rt, 5)),
+                Wm = eq_exp(mv_raw(mu_mean, var_rt, 5)),
+                Wg_lag = dplyr::lag(Wg), Wm_lag = dplyr::lag(Wm)) %>%
+  dplyr::select(ym, date, Wg_lag, Wm_lag) %>%
+  dplyr::inner_join(mon_ret, by = "ym") %>%
+  dplyr::filter(!is.na(Wg_lag)) %>%
+  dplyr::mutate(r_gcf = Wg_lag * r1m, r_mean = Wm_lag * r1m, r_bh = r1m)
+
+mon_curve <- tibble::tibble(
+  date = c(min(mon$date) - 31, mon$date),
+  `GCF-timed`    = cumprod(c(1, 1 + mon$r_gcf)),
+  `Buy-and-hold` = cumprod(c(1, 1 + mon$r_bh)))
+
+strat_plots$strat_f1_cumret <- mon_curve %>%
   tidyr::pivot_longer(-date, names_to = "strategy", values_to = "wealth") %>%
   ggplot2::ggplot(ggplot2::aes(date, wealth, colour = strategy)) +
   ggplot2::geom_hline(yintercept = 1, linetype = "dashed", colour = "grey60") +
@@ -161,8 +196,7 @@ strat_plots$strat_f1_cumret <- ann_curve %>%
   ggplot2::scale_colour_manual(values = c("GCF-timed" = col_pri, "Buy-and-hold" = col_sec),
                                name = NULL) +
   ggplot2::labs(title = "Growth of $1: GCF-timed global bond portfolio vs buy-and-hold",
-                subtitle = sprintf("Non-overlapping annual rebalancing, equal average exposure. Annual Sharpe %.2f vs %.2f",
-                                   ann_sr_gcf, ann_sr_bh),
+                subtitle = "Monthly rebalancing, 1-month holding, equal average exposure",
                 x = NULL, y = "Cumulative wealth (excess of cash)") +
   theme_thesis
 

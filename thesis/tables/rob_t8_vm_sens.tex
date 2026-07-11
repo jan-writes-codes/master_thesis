@@ -1,0 +1,31 @@
+% rob_t8_vm_sens — sensitivity of the cycle factor to the trend-inflation
+% smoothing parameters (decay v, window M). Numbers computed by sensitivity_vm.R
+% (bu_gdp). Mean IS R^2 is the cross-country average single-factor fit.
+\small
+\begin{tabular}{cc c cc c}
+  \toprule
+  $v$ & $M$ & Half-life & \multicolumn{2}{c}{Mean in-sample $R^{2}$} & $\mathrm{corr}(\GCF,\GCF^{\mathrm{base}})$ \\
+  \cmidrule(lr){4-5}
+      & (months) & (months) & Local & Global & \\
+  \midrule
+  $0.859$ & $60$  & $5$  & $0.276$ & $0.306$ & $0.853$ \\
+  $0.859$ & $120$ & $5$  & $0.276$ & $0.306$ & $0.853$ \\
+  $0.859$ & $180$ & $5$  & $0.276$ & $0.306$ & $0.853$ \\
+  $0.975$ & $60$  & $27$ & $0.262$ & $0.268$ & $0.949$ \\
+  $0.975$ & $120$ & $27$ & $0.253$ & $0.255$ & $0.982$ \\
+  $0.975$ & $180$ & $27$ & $0.249$ & $0.250$ & $0.987$ \\
+  $0.987$ & $60$  & $53$ & $0.259$ & $0.258$ & $0.963$ \\
+  $\mathbf{0.987}$ & $\mathbf{120}$ & $\mathbf{53}$ & $\mathbf{0.247}$ & $\mathbf{0.247}$ & $\mathbf{1.000}$ \\
+  $0.987$ & $180$ & $53$ & $0.238$ & $0.239$ & $0.987$ \\
+  \bottomrule
+\end{tabular}
+\tabnotes{Sensitivity of the cycle factor to the trend-inflation decay $v$ and
+  window $M$ \eqref{eq:trendinf}. For each grid point the trend, the yield
+  cycles, the local factor $\CF$, and the global factor $\GCF$ are rebuilt from
+  scratch. `Mean in-sample $R^{2}$' is the cross-country average of the
+  single-factor fits, local ($\rxbar_{i,t+12}\sim\CF_{i,t}$) and global
+  ($\rxbar_{i,t+12}\sim\GCF_{t}$). The last column reports the correlation of
+  each alternative global factor with the baseline factor
+  ($v=0.987$, $M=120$; row in bold). The half-life is $\ln(0.5)/\ln(v)$. At the
+  fast decay $v=0.859$ the window length is immaterial because weights beyond
+  five years are already negligible.}

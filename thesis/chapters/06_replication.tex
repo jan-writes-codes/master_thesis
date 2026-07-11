@@ -28,19 +28,12 @@ errors and the block bootstrap of \Cref{sec:meth-inference}.
 \label{sec:rep-cp}
 
 The cycle mechanism starts by splitting each yield into a slow trend component,
-driven by trend inflation, and a transitory cycle. In \Cref{tab:cp-t1}, we
-reproduce Table~1 of \citet{cieslak2015}. In Panel~A, we regress each United
-States yield on trend inflation $\tau^{\mathrm{CPI}}_{t}$ \eqref{eq:decomp}. We
-can see that the slope is large and highly significant at every maturity (between
-$1.63$ and $1.88$, with HAC $t$-statistics from $5.8$ at one year to $12.8$ at
-ten) and that the fraction of yield variation explained by trend inflation rises
-monotonically with maturity, from $58\%$ at one year to $84\%$ at ten. This is
-the central premise of the decomposition. The long end of the curve is tied to
-the persistent inflation trend, and the remaining part, the cycle, is the part of
-the yield that carries cyclical, return-relevant information. In
-\Cref{fig:s2-yield-decomp}, we can see this split for the United States, where
-the fitted trend tracks the low-frequency movement of the ten-year yield and the
-cycle oscillates around it.
+driven by trend inflation, and a transitory cycle. In \Cref{tab:cp-t1} we
+reproduce Table~1 of \citet{cieslak2015}. Panel~A regresses each US yield on
+trend inflation \eqref{eq:decomp}: the slope is large and significant at every
+maturity ($1.63$--$1.88$, HAC $t$ from $5.8$ to $12.8$), and the share of yield
+variation the trend explains rises from $58\%$ (one year) to $84\%$ (ten).
+\Cref{fig:s2-yield-decomp} shows the split for the US.
 
 \begin{table}[t]
   \caption{Replication of Cieslak--Povala (2015) Table~1: yields and trend inflation}
@@ -56,28 +49,14 @@ cycle oscillates around it.
   \label{fig:s2-yield-decomp}
 \end{figure}
 
-Panel~B confirms that the cycles share a single factor, exactly as in the
-original study. We can see that the cross-maturity correlations are near unity
-for adjacent points ($0.99$ for the one- and two-year cycles) and decline only
-gradually toward the ends of the curve ($0.74$ between the one- and ten-year
-cycles). Thus, a small number of common components captures the cyclical
-variation across the entire term structure. Furthermore, the cycles are markedly
-less persistent than the yields they come from. The cycle standard deviation
-falls from $1.6\%$ at one year to $0.8\%$ at ten, and the cycle half-life
-shortens from $55$ months at the short end to $10$ months at the long end,
-whereas the yields themselves mean-revert far more slowly (half-lives around
-$46$--$56$ months at every maturity). The decomposition therefore does what it is
-meant to do. It strips out the highly persistent, inflation-driven level and
-isolates a faster-moving, mean-reverting cyclical residual.
+Panel~B confirms a single cycle factor: adjacent-maturity cycle correlations are
+near unity ($0.99$) and fall to $0.74$ between the one- and ten-year cycles, and
+the cycles are far less persistent than the yields (half-life $55\to10$ months
+versus $\sim46$--$56$).
 
-When we collapse the two cycle predictors into a single return-forecasting
-factor, we reproduce the central diagnostic of \citet{cieslak2015}. Their
-Figure~2 shows that the fitted cycle factor $\CF_{t}$ \eqref{eq:cf} is highly
-correlated with the average cycle $\cycbar_{t}$. In our United States sample, the
-correlation is $0.69$, which is close to the $0.61$ they report and, if anything,
-slightly stronger (\Cref{fig:s3-cbar-cf}). The factor is therefore well
-approximated by a single cyclical summary, which is the property that makes a
-one-factor representation of bond risk premia possible.
+The fitted factor $\CF_{t}$ \eqref{eq:cf} correlates $0.69$ with the average
+cycle in our US sample, close to the $0.61$ of \citet{cieslak2015}
+(\Cref{fig:s3-cbar-cf}).
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.7\linewidth]{figures/s3_us_cbar_vs_cf.pdf}
@@ -87,22 +66,11 @@ one-factor representation of bond risk premia possible.
   \label{fig:s3-cbar-cf}
 \end{figure}
 
-In \Cref{tab:cp-t2a}, we reproduce the predictive regressions of Table~2,
-Panel~A, which establish that trend inflation carries information about future
-returns over and above the yield curve. Here, we regress the maturity-averaged
-excess return on five competing predictor sets. We can see that the forward curve
-alone explains $25\%$ of the return variation, while adding trend inflation lifts
-this to $46\%$, with a strongly significant negative loading on the trend
-($t=-3.6$). The persistent inflation component is therefore not redundant with
-the cross-section of yields. The two-predictor cycle representation of
-column~(5), which uses the one-year cycle and the average cycle, recovers $27\%$
-with both loadings significant ($t=-3.6$ on the short cycle and $t=4.1$ on the
-average cycle) and with the opposite-signed structure that defines the mechanism.
-Furthermore, the Bayesian information criterion, expressed as a relative
-posterior probability \citep[][\Cref{sec:meth-inference}]{cieslak2015}, places
-essentially all the weight on the yields-plus-trend specification. This confirms
-that the gain from conditioning on trend inflation is not an artefact of adding
-free parameters.
+In \Cref{tab:cp-t2a} the forward curve alone explains $25\%$ of return variation
+and adding trend inflation lifts this to $46\%$ (trend loading $t=-3.6$); the
+two-predictor cycle representation recovers $27\%$ with the opposite-signed
+loadings that define the mechanism, and the BIC places essentially all posterior
+weight on the yields-plus-trend specification.
 
 \begin{table}[t]
   \caption{Replication of Cieslak--Povala (2015) Table~2, Panel~A: predictive regressions}
@@ -111,24 +79,11 @@ free parameters.
   \input{tables/cp_t2_panelA}
 \end{table}
 
-Because these regressions use overlapping returns and generated regressors, we
-have to read the $R^{2}$ against the distribution it would take under the
-expectations hypothesis. In \Cref{tab:cp-t2b}, we report the Monte Carlo of
-\Cref{sec:meth-ehmc}. Here, we simulate data from a calibrated
-expectations-hypothesis economy in which yields carry no risk-premium
-predictability, and we run the predictive regression on each simulated path. At
-the sample length of the original study, the $95$th percentile of the null
-$R^{2}$ ranges from about $4\%$ to $13\%$ across calibrations. At our shorter
-$300$-month window, the null distribution is mechanically wider, with the $95$th
-percentile reaching $15\%$--$19\%$. Either way, the in-sample $R^{2}$ documented
-above, $27\%$ to $46\%$, sits far in the right tail of this distribution. Thus,
-the predictability is not an artefact of overlapping returns or of projecting
-onto a fitted regressor. We note, consistent with the scope set out in
-\Cref{sec:meth-ehmc}, that our Monte Carlo reproduces the shape and tail
-behaviour of the null but is not calibrated to match the exact percentiles that
-\citet{cieslak2015} report. However, the qualitative conclusion that the observed
-fit is far beyond what the expectations hypothesis can generate is robust to this
-gap, which we document rather than close.
+Read against a simulated expectations-hypothesis null (\Cref{tab:cp-t2b},
+\Cref{sec:meth-ehmc}), whose $95$th percentile reaches $15\%$--$19\%$ at our
+$300$-month window, the realised $27\%$--$46\%$ sits far in the right tail. Our
+Monte Carlo reproduces the shape of the null but not the exact published
+percentiles---a gap we document rather than close.
 
 \begin{table}[t]
   \caption{Predictive $R^{2}$ under the expectations-hypothesis null (CP Table~2, Panel~B)}
@@ -137,21 +92,10 @@ gap, which we document rather than close.
   \input{tables/cp_t2_panelB}
 \end{table}
 
-Finally, in \Cref{tab:cp-t4} we reproduce Table~4, in which the individual excess
-return at each maturity is predicted with the single cycle factor. We can see
-that the factor loads positively and significantly at every maturity, with $0.69$
-at two years ($t=2.5$), $1.37$ at five ($t=3.9$), and $1.42$ at ten ($t=5.1$).
-The loadings rise across the curve, which is the signature of a single
-return-forecasting factor that prices the whole term structure rather than one
-segment. Additionally, the block-bootstrap confidence bands for the HAC
-$t$-statistic \citep{politis1994} exclude zero at every maturity. The
-decomposition in the lower panels confirms the sign structure of the mechanism.
-The one-year cycle enters negatively and the longer cycle positively, and the
-long-maturity return is the most predictable ($R^{2}$ of $32\%$ at ten years).
-Similar to the results of \citet{cieslak2015}, we thus reproduce the United
-States evidence in full: the trend--cycle decomposition, the single-factor
-structure of the cycles, the incremental predictive content of trend inflation,
-and the cycle factor that prices the curve.
+Finally, \Cref{tab:cp-t4} shows the single cycle factor loading positively and
+significantly at every maturity ($0.69$/$1.37$/$1.42$ at two/five/ten years),
+with the opposite-signed cycle structure and the long end most predictable
+($R^{2}=32\%$ at ten years). We thus reproduce the US evidence in its essentials.
 
 \begin{table}[t]
   \caption{Replication of Cieslak--Povala (2015) Table~4: individual returns on the cycle factor}
@@ -177,14 +121,10 @@ highest in Italy and the United States and lowest in Switzerland and Japan, and
 the ten-year yields are strongly correlated across countries. The latter is the
 data feature that makes a common factor plausible.
 
-\citet{dahlquist2013}, Table~3, documents that the local forward-rate factors are
-strongly correlated with the GDP-weighted global factor. In \Cref{tab:dh-t3}, we
-reproduce this result. We can see that each local factor correlates between
-$0.76$ and $0.97$ with the global factor, that the correlation is highest for the
-large core markets (Germany and the Netherlands at $0.92$, the United States at
-$0.97$) and lowest for Japan ($0.82$), and that the pairwise correlations across
-countries are uniformly high. A single global forward factor thus summarises the
-common movement in expected bond returns, exactly as in the original study.
+\citet{dahlquist2013}, Table~3, documents that the local forward factors
+correlate strongly with the GDP-weighted global factor; in \Cref{tab:dh-t3} we
+reproduce this, with local--global correlations of $0.76$--$0.97$ (highest for
+the large core markets, lowest for Japan).
 
 \begin{table}[t]
   \caption{Correlations between local and global Cochrane--Piazzesi factors (DH Table~3)}
@@ -193,16 +133,11 @@ common movement in expected bond returns, exactly as in the original study.
   \input{tables/dh_t3_cp_corr}
 \end{table}
 
-In \Cref{tab:dh-t4}, we reproduce Table~4, which contrasts the single-forward
-Fama--Bliss regression \citep{famabliss1987} with the full Cochrane--Piazzesi
-factor country by country. Similar to the results of \citet{dahlquist2013}, we
-find that the Cochrane--Piazzesi factor dominates. Its predictive $R^{2}$ exceeds
-the Fama--Bliss $R^{2}$ in almost every market and maturity (for the United
-States at two years, $30\%$ against $8\%$; for Italy at ten years, $47\%$ against
-$1\%$), and its loading is significant throughout. We also observe the strikingly
-high fit in Japan ($R^{2}$ up to $69\%$) that they note as well. Therefore, the
-full forward curve, and not just the spread, carries the predictable component of
-returns.
+In \Cref{tab:dh-t4} we reproduce Table~4, contrasting the single forward--spot-spread
+regression of \citet{famabliss1987} with the full Cochrane--Piazzesi factor: the
+CP factor dominates in almost every market and maturity (e.g.\ the United States
+at two years, $30\%$ against $8\%$), with the strikingly high Japanese fit
+($R^{2}$ up to $69\%$) that \citet{dahlquist2013} also note.
 
 \begin{table}[t]
   \caption{Fama--Bliss and Cochrane--Piazzesi regressions by country (DH Table~4)}
@@ -211,18 +146,10 @@ returns.
   \input{tables/dh_t4_fb_cp}
 \end{table}
 
-The integration result itself is documented in Table~6, which we reproduce in
-\Cref{tab:dh-t6}. Here, the local forward factor is compared against the global
-one. We can see that the global factor is significant in every market and at
-every maturity. Once it is included, the orthogonalised local factor adds little
-in most countries. Its incremental loading is small and often insignificant for
-the core European markets, Canada, and the United States, while a residual local
-component survives in Italy and Japan. Furthermore, the joint test rejects the
-no-predictability null everywhere. This is the central message of
-\citet{dahlquist2013}, namely that government-bond risk premia are overwhelmingly
-driven by a common global factor, with limited idiosyncratic local content. This
-is also the very pattern that we re-establish for the cycle factor in
-\Cref{ch:results}.
+In \Cref{tab:dh-t6} we reproduce Table~6: the global forward factor is
+significant in every market and maturity, the orthogonalised local factor adds
+little outside Italy and Japan, and the joint test rejects everywhere---the
+integration pattern we re-establish for the cycle factor in \Cref{ch:results}.
 
 \begin{table}[t]
   \caption{Local and global Cochrane--Piazzesi regressions (DH Table~6)}
@@ -231,26 +158,16 @@ is also the very pattern that we re-establish for the cycle factor in
   \input{tables/dh_t6_local_global}
 \end{table}
 
-Table~7 takes the perspective of a United States investor who holds the foreign
-bonds unhedged and earns the dollar excess return \eqref{eq:rx-usd}. It is the
-table most directly relevant to the novel factor of our thesis, and we reproduce
-it in \Cref{tab:dh-t7}. When the dollar excess returns are regressed on the
-unadjusted global forward factor, they are only weakly predictable. The loading
-is often insignificant at the short maturities and the $R^{2}$ is small, because
-currency risk swamps the bond signal. The FX-adjusted global factor, built
-top-down on the average dollar return as in the original study,
-restores the predictability. Its loading is significant at almost every currency
-and maturity (HAC $t$-statistics between $2.3$ and $4.7$), and the $R^{2}$ rises
-materially, for the euro at ten years from $7\%$ to $17\%$ and for the Canadian
-dollar from $27\%$ to $33\%$. This is the result that motivates the FX-adjusted
-global \emph{cycle} factor of our thesis, and the replication confirms that the
-construction works as intended for the forward factor. In addition to that, it
-sets up a substantive contrast. For the cycle family, the same top-down
-adjustment yields a factor that is nearly collinear with the unadjusted global
-cycle factor in the G10 sample, which is why our thesis builds its FX-adjusted
-cycle factor bottom-up instead (\Cref{sec:fw-fxgcf},
-\Cref{sec:rob-fxgcf-construction}). We take up this difference between the two
-factor families further in \Cref{ch:discussion}.
+\Cref{tab:dh-t7} reproduces Table~7, the US-dollar investor's regressions. The
+unadjusted global forward factor predicts dollar returns only weakly, whereas the
+FX-adjusted global factor, built top-down on the average dollar return, restores
+predictability (HAC $t$ between $2.3$ and $4.7$; the euro at ten years rises from
+$7\%$ to $17\%$). This motivates the FX-adjusted global \emph{cycle} factor of
+our thesis. For the cycle family, however, the same top-down adjustment is nearly
+collinear with the unadjusted global cycle factor in the G10, which is why we
+build our FX-adjusted cycle factor bottom-up instead (\Cref{sec:fw-fxgcf},
+\Cref{sec:rob-fxgcf-construction}); we take up this difference in
+\Cref{ch:discussion}.
 
 \begin{table}[t]
   \caption{US-dollar excess returns on the global and FX-adjusted factors (DH Table~7)}
@@ -260,12 +177,10 @@ factor families further in \Cref{ch:discussion}.
 \end{table}
 
 Taken together, the two replications establish that our engine reproduces both
-pillars of the analysis: the macro-anchored cycle mechanism of \citet{cieslak2015}
-on United States data, and the global-integration evidence of
-\citet{dahlquist2013} on the G10, including the FX-adjusted construction. The
-differences from the originals, namely a sample that begins in 1990 rather than
-in the 1970s, the use of HAC and bootstrap inference, and the documented
-expectations-hypothesis Monte Carlo level gap, do not disturb the qualitative
-agreement. With the engine validated, we turn in \Cref{ch:results} to the
-contribution of our thesis, namely applying the macro-anchored cycle factor,
-rather than the forward-rate factor, to the international cross-section.
+pillars: the macro-anchored cycle mechanism of \citet{cieslak2015} on US data
+and the global-integration evidence of \citet{dahlquist2013} on the G10,
+including the FX-adjusted construction. The differences from the originals---a
+sample beginning in 1990, HAC and bootstrap inference, and the documented
+Monte Carlo level gap---do not disturb the qualitative agreement. With the engine
+validated, we turn in \Cref{ch:results} to applying the macro-anchored cycle
+factor, rather than the forward-rate factor, to the international cross-section.

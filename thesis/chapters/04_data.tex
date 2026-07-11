@@ -41,8 +41,8 @@ We obtain four raw inputs for our analysis, drawn from two data providers:
     \texttt{I22} for the UK, \texttt{I18} for Japan), which we record in the
     workbook's \texttt{curve\_translation} sheet. Yields are continuously
     compounded and quoted in percent per annum.
-  \item[Core CPI (LSEG Refinitiv).] We use monthly seasonally relevant core
-    consumer price indices, one per country (e.g.\ \texttt{aUSCCORF/C} for the
+  \item[Core CPI (FRED).] We use monthly seasonally adjusted core
+    consumer price indices, one per country (e.g.\ \texttt{CPILFESL} for the
     US). The workbook stores the \emph{index level}. We compute year-on-year
     inflation
     $\pi_{i,t}=\big(\mathrm{CPI}_{i,t}/\mathrm{CPI}_{i,t-12}-1\big)\times 100$
@@ -156,11 +156,14 @@ them pairwise in each regression, rather than imputing them.
 \label{sec:data-summary}
 
 In \Cref{tab:dh-t1-summary} we report the mean and standard deviation of yields
-for every country--maturity pair, in the style of \citet{dahlquist2013},
-Table~1. We can note two features that are consistent across countries. First,
-average yield curves slope upward in maturity. Second, short-maturity yields
-are more volatile than long-maturity yields. In \Cref{fig:yield-curve-avg} we
-show the average curve shapes.
+for every country--maturity pair. We can note two features that are consistent
+across countries. First, average yield curves slope upward in maturity. Second,
+volatility is broadly flat across the maturity spectrum. The short end is
+somewhat more volatile in the United States, the United Kingdom, Italy, and
+Japan, whereas in much of the euro area the long end is marginally more
+volatile. In \Cref{fig:yield-curve-avg} we show the average curve shapes.
+Summary statistics for the non-yield inputs (core inflation, the currency
+return, and the GDP weight) are collected in \Cref{tab:dh-t1b-inputs}.
 
 \begin{table}[t]
   \caption{Summary statistics of zero-coupon yields by country and maturity}

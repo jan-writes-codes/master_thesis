@@ -1,0 +1,31 @@
+% dh_t1b_inputs — summary statistics of the non-yield inputs (core inflation,
+% currency return vs USD, GDP weight) by country, over each country's yield
+% sample. Numbers computed by main_results.R (bu_gdp).
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{l cc cc c}
+  \toprule
+  & \multicolumn{2}{c}{Core inflation (\%)} & \multicolumn{2}{c}{FX return vs USD (\%)} & GDP weight \\
+  \cmidrule(lr){2-3}\cmidrule(lr){4-5}
+  Country & Mean & SD & Mean & SD & (\%) \\
+  \midrule
+  Belgium        & $1.96$ & $1.15$ & $-0.36$ & $9.72$  & $1.3$  \\
+  Germany        & $1.50$ & $1.04$ & $-0.36$ & $9.72$  & $9.9$  \\
+  France         & $1.31$ & $0.75$ & $-0.36$ & $9.72$  & $7.0$  \\
+  Italy          & $1.94$ & $1.20$ & $-0.36$ & $9.72$  & $5.6$  \\
+  Netherlands    & $2.10$ & $1.16$ & $-0.36$ & $9.72$  & $2.2$  \\
+  Switzerland    & $0.50$ & $0.69$ & $1.47$  & $8.92$  & $1.6$  \\
+  United Kingdom & $2.01$ & $1.21$ & $-0.67$ & $8.53$  & $7.4$  \\
+  Sweden         & $1.48$ & $2.23$ & $-1.10$ & $11.38$ & $1.3$  \\
+  Canada         & $1.91$ & $0.97$ & $0.03$  & $7.50$  & $3.9$  \\
+  Japan          & $0.34$ & $1.11$ & $1.00$  & $10.55$ & $19.9$ \\
+  United States  & $2.63$ & $1.18$ & --      & --      & $47.7$ \\
+  \bottomrule
+\end{tabular}
+\tabnotes{Summary statistics of the three non-yield inputs, each computed over
+  the same per-country yield sample as \Cref{tab:dh-t1-summary}. Core inflation
+  is the year-on-year change in the core CPI, in percent. The FX return is the
+  twelve-month log change in the US-dollar price of the local currency
+  $s_{i,t}-s_{i,t-12}$, in percent; the five euro-area members share the euro,
+  and the United States is the numeraire (no currency leg). GDP weight is the
+  mean of the time-varying GDP weight $w_{i,t}$ \eqref{eq:gcf}, in percent.}

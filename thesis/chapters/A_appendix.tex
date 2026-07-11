@@ -4,7 +4,7 @@
 
 \section{Additional Tables}
 \label{app:per-country}
-This section collects detailed tables that support the main text: the per-maturity Phase~I estimates, the cross-country yield correlations, the in-sample subsample and inflation-measure estimates, and the Italy crisis decomposition.
+This section collects detailed tables that support the main text: the per-maturity Phase~I estimates, the cross-country yield correlations, the correlations among the cycle factors, and the in-sample subsample and inflation-measure estimates.
 
 \begin{table}[htbp]
   \caption{Phase~I by maturity: predicting individual excess returns with the
@@ -22,17 +22,24 @@ This section collects detailed tables that support the main text: the per-maturi
 \end{table}
 
 \begin{table}[htbp]
+  \caption{Summary statistics of the non-yield inputs}
+  \label{tab:dh-t1b-inputs}
+  \centering
+  \input{tables/dh_t1b_inputs}
+\end{table}
+
+\begin{table}[htbp]
+  \caption{Correlations among the local cycle factors and with the global factor}
+  \label{tab:mr-gcf-corr}
+  \centering
+  \input{tables/mr_t2b_gcf_corr}
+\end{table}
+
+\begin{table}[htbp]
   \caption{In-sample predictability across subsamples}
   \label{tab:rob-sub-is}
   \centering
   \input{tables/rob_t1_sub_is}
-\end{table}
-
-\begin{table}[htbp]
-  \caption{Italy across subsamples}
-  \label{tab:rob-italy}
-  \centering
-  \input{tables/rob_t3_italy}
 \end{table}
 
 \begin{table}[htbp]
@@ -110,29 +117,3 @@ This section collects supporting figures referenced in the main text.
     value closer to one means that the full-sample look-ahead added little.}
   \label{fig:s8-gcf-conv}
 \end{figure}
-
-\section{AI Disclaimer}
-\label{app:ai}
-% Honest account of the AI-assisted tools used in this work. Keep this
-% consistent with the "Statement on the use of generative AI tools" in the
-% Declaration of Authorship.
-
-In the preparation of this work, we used the following AI-assisted language and
-coding models: Claude (Sonnet~4.6 and Opus~4.8, Anthropic) and ChatGPT Codex
-(Codex~5.3 and GPT~5.5, OpenAI).
-
-We used Claude and ChatGPT Codex to support the implementation of the coding
-pipeline, including code generation and debugging, the validation of model
-outputs, the summarisation of results, and the production of charts and
-figures.
-
-Additionally, ChatGPT Codex served as the execution environment for running
-the code pipeline. We also used Claude in a minor supporting capacity during
-the preparation of the presentation slides. However, all slides were conceived,
-structured, and finalised by the human author, and the AI assistance represents
-a negligible share of the final content.
-
-All AI-generated outputs were reviewed, critically assessed, and adapted by the
-author. We performed the data handling and model analysis locally. Model
-training and index construction were implemented via cloud computing
-(Vast.ai and GCP).
