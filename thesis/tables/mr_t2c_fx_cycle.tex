@@ -1,0 +1,32 @@
+% mr_t2c_fx_cycle -- currency return vs the local cycle factor (F-3).
+% Correlation of the 12-month currency return component with the local cycle
+% factor, and the standard deviation of that currency component, over each
+% country's estimation sample. Computed in R/main_results.R (panel: fxret =
+% rx_USD_t12 - rx_t12).
+\small
+\begin{tabular}{l c c}
+  \toprule
+  Country & $\mathrm{corr}(\text{FX ret},\CF)$ & SD of FX ret (\%) \\
+  \midrule
+  Belgium     & $0.03$  & $2.62$ \\
+  Germany     & $0.14$  & $2.62$ \\
+  France      & $0.21$  & $2.61$ \\
+  Italy       & $0.16$  & $2.56$ \\
+  Netherlands & $-0.04$ & $2.62$ \\
+  Switzerland & $0.34$  & $2.41$ \\
+  UK          & $0.17$  & $2.28$ \\
+  Sweden      & $0.20$  & $3.11$ \\
+  Canada      & $0.17$  & $2.03$ \\
+  Japan       & $0.09$  & $2.96$ \\
+  US          & ---     & $0.00$ \\
+  \bottomrule
+\end{tabular}
+\tabnotes{For each country, the twelve-month currency-return component of the
+  US-dollar excess return---$\rx^{\mathrm{USD}}_{i,t+12}-\rx_{i,t+12}$ in the
+  duration-standardized units of \eqref{eq:rx-usd}---is correlated with the
+  local cycle factor $\CF_{i,t}$ over the country's estimation sample. The last
+  column reports the standard deviation of that currency component. The US
+  carries no currency leg, so its currency return is identically zero. The
+  currency return is at most weakly related to the bond cycle in every market
+  (absolute correlation never exceeds $0.34$), so currency conversion adds
+  largely independent noise rather than being absorbed by the bond factor.}
