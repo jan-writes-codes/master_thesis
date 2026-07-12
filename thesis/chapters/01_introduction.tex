@@ -79,14 +79,15 @@ cycle factor of \citet{cieslak2015}, a factor with a strong economic
 rationale, has not yet been taken international. There is no country-level evidence across the G10, no
 GDP-weighted \emph{global} cycle factor analogous to the global CP factor of
 \citet{dahlquist2013}, and no FX-adjusted version of such a factor for the
-dollar investor. \citet{zhang2021} come closest. However, they add raw
+dollar investor. \citet{zhang2021} come closest, but they add raw
 inflation trends to yield-curve regressions in four markets rather than
 constructing the cycle factor itself, and they build no global or
 currency-adjusted aggregate. A second gap is methodological. Generated
 regressors such as the cycle factor are fitted on the very sample over which
 they are evaluated, so in-sample $R^{2}$ can substantially overstate what a
-real-time investor could have exploited. The out-of-sample discipline of
-\citet{campbellthompson2008} is therefore a part of the question itself. Whether macro-anchored bond return
+real-time investor could have exploited. An out-of-sample test in the spirit of
+\citet{campbellthompson2008} is therefore part of the question, not merely a
+check on it. Whether macro-anchored bond return
 predictability is a global phenomenon, and whether it survives in real time,
 is thus still an open question. In our thesis, we aim to answer it.
 
@@ -112,9 +113,10 @@ To sharpen the international dimension, we pose three sub-questions:
     local cycle to a regression that already contains the global factor
     should not raise the predictive power.
 \item \emph{Can an FX-adjusted global cycle factor recover the predictability
-  that currency conversion destroys and what are its dynamics?} For an unhedged US-dollar investor the realised return carries a
-  currency leg, so the
-  plain global factor might lose much of its power on dollar returns. We would also expect new insights in the dynamics of this factor compared to the unadjusted global cycle factor.
+  that currency conversion destroys, and how do its dynamics differ?} For an
+  unhedged US-dollar investor the realised return carries a currency leg, so the
+  plain global factor may lose much of its power on dollar returns. We also ask
+  how the FX-adjusted factor moves relative to the unadjusted global factor.
 \end{enumerate}
 We try to answer these questions in three empirical phases
 (\Cref{sec:fw-hypotheses}). In Phase~I, we test the cycle factor market by
@@ -132,18 +134,18 @@ each month from historically available data only.
 % --- Contribution ----------------------------------------------------------
 
 With our thesis, we contribute a three-factor hierarchy and the evidence to
-evaluate it. At the base sits the \emph{local cycle factor} $\CF_{i,t}$,
-which we construct for each of eleven G10 markets exactly as
+evaluate it. The first factor is the \emph{local cycle factor} $\CF_{i,t}$,
+which we construct for each of eleven G10 markets as
 \citet{cieslak2015} construct it for the United States, on a monthly panel
 of zero-coupon yields, core inflation, exchange rates, and GDP spanning
-1989--2024. One level up, the \emph{global
-cycle factor} $\GCF_{t}$ aggregates the national factors with time-varying
-GDP weights. With this factor, we transplant the integration test of
+1989--2024. The second, the \emph{global
+cycle factor} $\GCF_{t}$, aggregates the national factors with time-varying
+GDP weights; with it we transplant the integration test of
 \citet{dahlquist2013} from the forward-rate family to the macro-anchored
-cycle family. At the top, we create another new factor, the \emph{FX-adjusted global
-cycle factor} $\FXGCF_{t}$. It fits a USD cycle factor per country. The
+cycle. The third is a new \emph{FX-adjusted global
+cycle factor} $\FXGCF_{t}$, which fits a USD cycle factor per country: each
 country's \emph{dollar} excess return is projected on its own cycles and
-aggregated with GDP weights and so it isolates the component of the
+aggregated with GDP weights, isolating the component of the
 cycles that is informative for a US investor's currency-converted returns.
 
 Three features distinguish our evidence from similar factors in previous research. The
@@ -153,11 +155,11 @@ including the euro-area periphery. The second is the
 predictive object. While \citet{zhang2021} add inflation and real-rate
 trends to yield-curve regressions, we carry the cycle-factor construction
 itself abroad, so that the US benchmark and the international evidence are
-directly comparable factor by factor. The third is real-time discipline. We
+directly comparable factor by factor. The third is real-time evaluation. We
 re-estimate all three factors fully recursively and score them with the out-of-sample $R^{2}$. We complement this with a crisis-subsample
 analysis, a horse race against the global forward-rate factor, a
 core-versus-headline-inflation comparison and a market-timing strategy.
-Furthermore, we
+We also
 replicate the published US and international results
 (\Cref{ch:replication}) to validate our data processing pipeline.
 
@@ -197,10 +199,10 @@ The remainder of our thesis is organised as follows. In
 \Cref{ch:literature}, we review the three literatures our thesis draws
 together, namely US bond return predictability, macro-anchored yield
 decompositions, and international bond risk premia, and locate the gap. In
-\Cref{ch:data}, we describe the G10 panel and develop the technical framework,
-which consists of the yield decomposition, the three-factor hierarchy, the
-excess-return definitions for the local and the dollar investor, and the
-predictive specifications. In \Cref{ch:results},
+\Cref{ch:data}, we describe the G10 panel and develop the technical framework:
+the yield decomposition, the factor hierarchy, the return definitions for the
+local and the dollar investor, and the predictive regressions. In
+\Cref{ch:results},
 we present the three-phase main results. In \Cref{ch:strategy}, we convert
 the surviving predictability into a real-time portfolio strategy, and in
 \Cref{ch:robustness}, we stress-test our findings. In \Cref{ch:discussion},
