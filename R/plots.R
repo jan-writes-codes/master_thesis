@@ -567,7 +567,7 @@ plots$s8_oos_is_corr <- cf_compare %>%
   geom_hline(yintercept = c(0, 1), linetype = "dashed", colour = "grey50") +
   coord_flip() +
   scale_y_continuous(limits = c(-0.2, 1.0)) +
-  labs(title = TeX("$\\mathrm{cor}(CF, CF_{\\mathrm{oos}})$ per country"),
+  labs(title = TeX("Correlation of $CF$ and $CF_{oos}$ per country"),
        subtitle = "Values near 1: the recursive local factor already matches the full-sample factor",
        x = NULL, y = "Correlation") +
   theme_thesis
@@ -579,9 +579,9 @@ plots$s8_rx_vs_cf_oos <- reg_data_oos %>%
   geom_point(alpha = 0.3, size = 0.6) +
   geom_smooth(method = "lm", se = FALSE, colour = col_sec, linewidth = 0.5) +
   facet_wrap(~ country, ncol = 3, scales = "free") +
-  labs(title = TeX("Realized 12m excess return vs $CF_{\\mathrm{oos}}$"),
+  labs(title = TeX("Realized 12m excess return vs $CF_{oos}$"),
        subtitle = "Out-of-sample predictive scatter per country",
-       x = TeX("$CF_{\\mathrm{oos}}$"), y = TeX("$rx_{t+12}$")) +
+       x = TeX("$CF_{oos}$"), y = TeX("$rx_{t+12}$")) +
   theme_thesis
 
 # 8f. Campbell-Thompson R^2_oos: local-return predictability per country
@@ -595,9 +595,9 @@ plots$s8_r2_oos_local <- r2_oos_tab %>%
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
   scale_fill_manual(values = c("rx ~ CF_oos" = col_pri,
                                "rx ~ GCF_oos" = col_sec), name = NULL) +
-  labs(title = TeX("Campbell-Thompson $R^2_{\\mathrm{oos}}$: local-currency returns"),
+  labs(title = TeX("Campbell-Thompson $R^2_{oos}$: local-currency returns"),
        subtitle = "Recursive factor forecast vs recursive-mean benchmark (5y min training, 12m horizon)",
-       x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$")) +
+       x = NULL, y = TeX("$R^2_{oos}$")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -613,9 +613,9 @@ plots$s8_r2_oos_usd <- r2_oos_tab %>%
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
   scale_fill_manual(values = c("rx_USD ~ GCF_oos"  = col_pri,
                                "rx_USD ~ FXGCF_oos" = col_sec), name = NULL) +
-  labs(title = TeX("Campbell-Thompson $R^2_{\\mathrm{oos}}$: USD-investor returns"),
+  labs(title = TeX("Campbell-Thompson $R^2_{oos}$: USD-investor returns"),
        subtitle = "GCF_oos vs FX-adjusted FXGCF_oos (recursive-mean benchmark)",
-       x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$")) +
+       x = NULL, y = TeX("$R^2_{oos}$")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -630,9 +630,9 @@ plots$s8_r2_oos_pooled <- r2_oos_pooled %>%
                                "rx ~ GCF_oos"       = col_qua,
                                "rx_USD ~ GCF_oos"   = col_sec,
                                "rx_USD ~ FXGCF_oos" = col_ter)) +
-  labs(title = TeX("Pooled Campbell-Thompson $R^2_{\\mathrm{oos}}$ across G10"),
+  labs(title = TeX("Pooled Campbell-Thompson $R^2_{oos}$ across G10"),
        subtitle = "SS aggregated over countries; each country uses its own recursive-mean benchmark",
-       x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$ (pooled)")) +
+       x = NULL, y = TeX("$R^2_{oos}$ (pooled)")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
 
@@ -816,9 +816,9 @@ plots$s10_r2_oos_compare <- r2_oos_tab %>%
                                "rx ~ CP_oos"  = col_sec,
                                "rx ~ GCF_oos" = col_qua,
                                "rx ~ GCP_oos" = col_ter), name = NULL) +
-  labs(title = TeX("Campbell-Thompson $R^2_{\\mathrm{oos}}$: cycle vs forward factors"),
+  labs(title = TeX("Campbell-Thompson $R^2_{oos}$: cycle vs forward factors"),
        subtitle = "Recursive factor forecast vs recursive-mean benchmark, 5y min training, 12m horizon",
-       x = NULL, y = TeX("$R^2_{\\mathrm{oos}}$")) +
+       x = NULL, y = TeX("$R^2_{oos}$")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
