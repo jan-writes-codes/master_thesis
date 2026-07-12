@@ -7,13 +7,13 @@
 
 In this chapter, we describe the data and develop the methodology of our
 empirical analysis. We first describe the data we use to construct the cycle
-factors and to run the predictive regressions of \Cref{ch:results}: we assemble
+factors and to run the predictive regressions of \Cref{ch:results}. We assemble
 all series in a single workbook (\texttt{data.xlsx}) and process them into a
 monthly country--maturity panel, implemented in \texttt{data\_preparation.R}. We
 begin with the cross-sectional universe and the four raw inputs (yields,
 inflation, GDP, and exchange rates) with their sources and units, then present
 the sample coverage, our cleaning and alignment choices, and summary statistics.
-We then develop the formal apparatus, namely the expectations-hypothesis null,
+We then develop the , namely the expectations-hypothesis null,
 the yield decomposition, the three-factor hierarchy, the excess-return
 definitions, and the predictive specifications, and set out the estimation and
 inference used to evaluate them.
@@ -23,27 +23,26 @@ inference used to evaluate them.
 \label{sec:data-sources}
 
 Our cross-section is the G10 government-bond universe, comprising eleven
-countries: Belgium (BE), Canada (CA), Switzerland (CH), Germany (DE), France
+countries. That is Belgium (BE), Canada (CA), Switzerland (CH), Germany (DE), France
 (FR), the United Kingdom (GB), Italy (IT), Japan (JP), the Netherlands (NL),
 Sweden (SE), and the United States (US). Five of these countries share the euro
 (BE, DE, FR, IT, NL). The remaining currencies are the Canadian dollar (CAD),
 Swiss franc (CHF), pound sterling (GBP), Japanese yen (JPY), Swedish krona
-(SEK), and US dollar (USD), where the US dollar serves as the numeraire for the
+(SEK), and US dollar (USD). The US dollar serves as the home currency for the
 international investor.
 
 We obtain four raw inputs for our analysis, drawn from two data providers:
 
 \begin{description}[leftmargin=1.5em, style=nextline]
   \item[Zero-coupon yields (Bloomberg).] We obtain end-of-month yields from
-    Bloomberg's fitted zero-coupon government curves (the \texttt{BLC2} family),
+    Bloomberg's fitted zero-coupon government curves,
     one curve per country, at maturities of $1,2,4,5,9$ and $10$ years. Each
     country maps to a Bloomberg curve identifier (e.g.\ \texttt{I25} for the US,
     \texttt{I22} for the UK, \texttt{I18} for Japan), which we record in the
     workbook's \texttt{curve\_translation} sheet. Yields are continuously
     compounded and quoted in percent per annum.
   \item[Core CPI (FRED).] We use monthly seasonally adjusted core
-    consumer price indices, one per country (e.g.\ \texttt{CPILFESL} for the
-    US). The workbook stores the \emph{index level}. We compute year-on-year
+    consumer price indices, one per country. The workbook stores the \emph{index level}. We compute year-on-year
     inflation
     $\pi_{i,t}=\big(\mathrm{CPI}_{i,t}/\mathrm{CPI}_{i,t-12}-1\big)\times 100$
     in-sample, and trend inflation $\trendinf_{i,t}$ then follows from the EWMA
@@ -56,7 +55,7 @@ We obtain four raw inputs for our analysis, drawn from two data providers:
     quoted as US dollars per unit of foreign currency (\texttt{EURUSD},
     \texttt{CADUSD}, \texttt{JPYUSD}, \texttt{GBPUSD}, \texttt{SEKUSD},
     \texttt{CHFUSD}), with the USD rate fixed at unity. These series give us the
-    log currency return $s_{i,t+12}-s_{i,t}$ in the dollar-investor excess
+    log currency return in the dollar-investor excess
     return \eqref{eq:rx-usd} and the FX conversion of GDP.
 \end{description}
 
@@ -100,11 +99,7 @@ Our panel is therefore unbalanced. We handle this throughout by computing
 cross-country objects only over the countries that are present at each date.
 The global weights $w_{i,t}$ in \eqref{eq:gcf} are, thus, renormalised each
 month to sum to one over the available panel, and we compute the summary
-correlations below on a pairwise-complete basis. Furthermore, spot exchange
-rates begin in January 1990, so the US-dollar excess returns of
-\eqref{eq:rx-usd} for the early US and Japanese observations (1989) are only
-available once the corresponding currency series start. This affects the
-dollar-investor analysis but not the local-currency results. For the five
+correlations below on a pairwise-complete basis. For the five
 euro-area members we apply the euro rate throughout, including the pre-1999
 years before the single currency, so their pre-1999 dollar-investor currency
 returns reflect a single vendor-backfilled euro series rather than the legacy
@@ -115,7 +110,7 @@ show the resulting 10-year yield series.
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/s1_coverage.pdf}
   \caption[Sample coverage by country and maturity]{Sample coverage by country and maturity. The United States and Japan
-    extend back to 1989; the remaining countries begin in late 1994.}
+    extend back to 1989. The remaining countries begin in late 1994.}
   \label{fig:coverage}
 \end{figure}
 
@@ -125,16 +120,12 @@ show the resulting 10-year yield series.
 
 We align the raw inputs to a common monthly grid keyed on year--month and
 reshape the panel to long form (country $\times$ maturity $\times$ month). Four
-of our construction steps deserve a note, and each is tied to the methodology
-developed later in this chapter:
+of our construction steps deserve a note:
 
 \begin{enumerate}[leftmargin=1.6em]
   \item \textbf{Trend inflation.} We compute year-on-year core inflation from
     the CPI index and smooth it with the backward-looking EWMA
-    \eqref{eq:trendinf} with window $M=120$ months and decay $v=0.987$. Because
-    the CPI history predates the yield sample by decades, trend inflation is
-    fully populated from the first yield observation, and we lose no warm-up
-    observations inside the estimation window.
+    \eqref{eq:trendinf} with window $M=120$ months and decay $v=0.987$.
   \item \textbf{Cycles.} For each country--maturity pair, we project yields on
     trend inflation by OLS \eqref{eq:decomp}. The residual is the cycle
     $\cyc^{(n)}_{i,t}$. The one-year cycle and the average cycle over

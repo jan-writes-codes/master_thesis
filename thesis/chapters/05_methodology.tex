@@ -11,20 +11,11 @@
 
 Having described the data, we now develop the formal apparatus that it feeds.
 Throughout, $i$ indexes countries in the G10 cross-section $\mathcal{G}$, time
-$t$ is measured in months, and bond maturity $n$ in years; the empirical
+$t$ is measured in months, and bond maturity $n$ in years. The empirical
 maturity menu is $N=\{1,2,4,5,9,10\}$ years, and all yields are continuously
 compounded and expressed in percent per annum. We let $y^{(n)}_{t}$ denote the time-$t$
 continuously compounded yield on an $n$-year zero-coupon bond and
-$p^{(n)}_{t}=-n\,y^{(n)}_{t}$ the corresponding log price. Under the
-expectations hypothesis, the long yield equals the average expected future
-short rate, up to a constant term premium:
-\begin{equation}
-  y^{(n)}_{t} \;\approx\; \frac{1}{n}\sum_{i=0}^{n-1}\E_{t}\!\left[y^{(1)}_{t+i}\right].
-  \label{eq:eh}
-\end{equation}
-A direct implication of \eqref{eq:eh} is that bond excess returns are
-unpredictable. In other words, the compensation for holding a longer-maturity
-bond cannot be forecast using time-$t$ information. The one-year
+$p^{(n)}_{t}=-n\,y^{(n)}_{t}$ the corresponding log price. The one-year
 holding-period excess return on an $n$-year bond,
 \begin{equation}
   \rx^{(n)}_{t+12} \;=\; p^{(n-1)}_{t+12}-p^{(n)}_{t}-y^{(1)}_{t}
@@ -33,7 +24,7 @@ holding-period excess return on an $n$-year bond,
 \end{equation}
 should therefore satisfy $\E_{t}\!\left[\rx^{(n)}_{t+12}\right]=\text{const}$,
 i.e.\ the expected excess return is the same at every date.
-However, the empirical bond-pricing literature clearly rejects this
+However, the empirical bond-pricing literature rejects this
 restriction. The remainder of this chapter builds the predictors we use to
 document and interpret this predictability internationally.
 
@@ -41,7 +32,7 @@ document and interpret this predictability internationally.
 \section{Yield Decomposition and Interest-Rate Cycles}
 \label{sec:fw-decomp}
 
-The central premise of \citet{cieslak2015} is that nominal yields are driven by
+The central argument of \citet{cieslak2015} is that nominal yields are driven by
 two forces. The first is a persistent \emph{trend-inflation} component
 $\trendinf_{i,t}$ that anchors the level of interest rates over long horizons,
 and the second consists of transitory \emph{cycles} $\cyc^{(n)}_{i,t}$ that
@@ -111,9 +102,9 @@ Here, $\rxbar_{i,t+12}$ is the duration-standardised, maturity-averaged excess
 return that we define in \Cref{sec:fw-returns}. $\CF_{i,t}$ is, by construction, the component of the cycle
 cross-section that is relevant for predicting returns. Because the factor is a
 fitted value rather than an observed regressor, we treat it throughout as a
-\emph{generated regressor}: it is estimated on the sample over which it is then
+generated regressor. That means it is estimated on the sample over which it is then
 evaluated, which is the reason for the in-sample inference of
-\Cref{sec:meth-inference} and the fully-recursive out-of-sample protocol of
+\Cref{sec:meth-inference} and the fully-recursive out-of-sample tests of
 \Cref{sec:meth-oos}.
 
 % ===========================================================================
@@ -121,7 +112,7 @@ evaluated, which is the reason for the in-sample inference of
 \label{sec:fw-gcf}
 
 If government-bond markets are internationally integrated, investors should be
-compensated for exposure to a \emph{common} source of risk rather than for
+compensated for exposure to a common source of risk rather than for
 country-specific fluctuations \citep{dahlquist2013}. To capture this idea, we
 aggregate the local cycle factors into a single global factor. We use
 time-varying GDP weights so that larger economies contribute proportionally
@@ -139,7 +130,7 @@ by construction even when coverage is not fully available across all countries
 (\Cref{sec:data-coverage}). We convert nominal GDP to US dollars before
 weighting. The global
 factor $\GCF_{t}$ is the international counterpart of the local $\CF_{i,t}$ and
-provides us with a natural test of market integration. Under full integration,
+provides us with a test of market integration. Under full integration,
 the global factor should subsume the predictive content of the local factor
 (\Cref{sec:fw-hypotheses}).
 
@@ -233,11 +224,9 @@ two constructions in \Cref{sec:rob-fxgcf-construction}.
 We map the three-factor hierarchy onto our research questions through a
 sequence of one-year-ahead predictive regressions. Because the data are monthly
 but the forecast horizon is twelve months, all of these regressions use
-\emph{overlapping} returns: consecutive observations share eleven months of the
+\emph{overlapping} returns. Consecutive observations share eleven months of the
 realised return, so the residual is serially correlated by construction as an
-MA(11) process. This overlap is the central econometric complication and the
-reason why ordinary least squares standard errors are badly biased; it dictates
-the HAC inference of \Cref{sec:meth-inference}. We estimate each specification
+MA(11) process. It is central to the HAC inference of \Cref{sec:meth-inference}. We estimate each specification
 by OLS and report the slope point estimate with robust inference.
 
 \paragraph{Phase~I --- Does the cycle factor predict returns locally?}
@@ -299,25 +288,11 @@ we test in \Cref{ch:results} and stress-test in \Cref{ch:robustness}.
 \label{sec:meth-inference}
 
 We estimate every predictive regression by ordinary least squares and tailor
-the inference to the overlapping-return structure. Headline $t$-statistics use
+the inference to the overlapping-return structure. The $t$-statistics use
 heteroskedasticity- and autocorrelation-consistent (HAC) Newey--West standard
-errors \citep{neweywest1987} with $18$ lags, comfortably above the $11$-month
-overlap induced by the twelve-month horizon; because our panel stores only the
-twelve-month returns, we cannot form the exact reverse-regression $t$-values of
-\citet{weiwright2013} that \citet{cieslak2015} report, which can diverge from
-HAC for highly persistent regressors (\Cref{ch:discussion}). For
+errors \citep{neweywest1987} with $18$ lags. For
 multi-regressor specifications we add a joint HAC Wald test that all slopes are
-zero, we compare predictor sets by Bayesian information criteria expressed as
-relative probabilities \citep{cieslak2015}, and, where we report finite-sample
-bands, we use the stationary block bootstrap of \citet{politis1994} with the
-block length matched to the overlap. Two further checks discipline the in-sample
-fit. First, because even the expectations hypothesis produces a non-degenerate
-distribution of predictive $R^{2}$ in a finite sample, we calibrate that null by
-Monte Carlo\label{sec:meth-ehmc}, simulating an EH economy of two AR(1) states
-(trend inflation and a real factor) and comparing the realised $R^{2}$ against
-its simulated $5$/$50$/$95$th percentiles; the band is sensitive to the
-calibration, so we read our $R^{2}$ against our own simulated null and document
-this gap rather than close it (\Cref{ch:discussion}). Second, because the cycle
+zero. Because the cycle
 factors are generated regressors, we re-evaluate them fully
 recursively\label{sec:meth-oos}, rebuilding the entire factor chain
 (decomposition, local regression, and global aggregation) from data available at
@@ -348,14 +323,11 @@ bears on the results.
     returns for $n\in\{2,5,10\}$, the maturities with an observed adjacent
     shorter yield.
   \item \textbf{Sample.} The G10 panel spans 1989/1994--2026
-    (\Cref{sec:data-coverage}), which is shorter than and not contemporaneous
-    with the original US samples, so we expect the replicated levels to differ
+    (\Cref{sec:data-coverage}), which is shorter than with the original US samples, so we expect the replicated levels to differ
     from the published numbers.
   \item \textbf{Inference.} We replace the exact reverse-regression delta method
     with HAC ($18$-lag Newey--West) $t$-statistics, for the identification
     reason given in \Cref{sec:meth-inference}.
-  \item \textbf{Duration convention.} We use $D^{(n)}=n$ (continuous
-    compounding) for the duration-standardisation rather than $n/(1+y^{(n)})$.
   \item \textbf{FX-adjusted factor.} We build $\FXGCF_{t}$ bottom-up, as the
     GDP-weighted average of per-country USD cycle factors, rather than
     top-down or as a projection on $\GCF_{t}$ (\Cref{sec:fw-fxgcf}). We
