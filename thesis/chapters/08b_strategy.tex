@@ -102,7 +102,7 @@ passive portfolios on a monthly, one-month-holding basis.\footnote{The wealth
   one-month excess return on the 10Y global bond portfolio.} The timing strategy ends
 the period ahead, and most of its outperformance accrues from avoiding the
 worst of the bond-market drawdowns rather than from amplifying the good years.
-\Cref{fig:strat-exposure} demonstrates this well. The global cycle
+\Cref{fig:strat-exposure} shows the mechanism. The global cycle
 factor cuts bond exposure when it signals a low risk premium and restores it
 when the signal turns favourable, whereas the mean-timing investor holds a
 nearly constant position.
@@ -129,8 +129,8 @@ against $24.9\%$ for the mean-timing investor and $30.7\%$ for buy-and-hold.
 The deepest drawdowns fall in the 2022--2023 global hiking cycle, the worst
 bond-market episode in the sample. The timed investor enters it with reduced
 exposure because the global cycle factor had already turned
-(\Cref{fig:strat-exposure}). This is precisely the behaviour we would expect
-from the mechanism, as the factor forecasts low premia when yields sit far
+(\Cref{fig:strat-exposure}). This is the behaviour the mechanism predicts.
+The factor forecasts low premia when yields sit far
 below their inflation anchor, as they did in 2021. We quantify where the
 strategy trades, and what this trading costs, in \Cref{sec:strat-costs}.
 
@@ -149,11 +149,11 @@ strategy trades, and what this trading costs, in \Cref{sec:strat-costs}.
 A full-sample Sharpe ratio does not show us in which periods a strategy
 actually generates its performance. In \Cref{tab:strat-sub}, we therefore
 split the evaluation window in half and additionally isolate the 2021--2022
-hiking cycle. The results of this split are revealing. In the strong bond
+hiking cycle. The split separates two very different regimes. In the strong bond
 decade of 2005--2014, timing did not pay off on a risk-adjusted basis. The
 timed portfolio earned a full percentage point a year more than buy-and-hold
 ($6.5\%$ against $5.3\%$) but took proportionally more risk, so its Sharpe
-ratio was lower ($0.93$ against $1.09$). However, the ranking reverses exactly where an investor needs
+ratio was lower ($0.93$ against $1.09$). But the ranking reverses where an investor most needs
 it to. Over 2015--2024, a decade in which the passive portfolio lost money,
 the timed strategy preserves a higher mean and the highest Sharpe ratio, and
 in the 2021--2022 drawdown it has the least negative Sharpe ratio. The full-sample advantage of
@@ -163,8 +163,8 @@ Sharpe ratios, the passive portfolio holds the upper hand in the early,
 high-premium windows, the two series then track each other through the middle
 of the sample, and the timed portfolio pulls ahead only as the hiking cycle
 unfolds. Across all windows, the timed portfolio is not a clear winner.
-The full-sample edge is therefore real, but it is generated in a small number
-of episodes rather than accrued steadily.
+The full-sample edge is therefore real, but it comes from a handful
+of episodes rather than steady accrual.
 
 \begin{table}[t]
   \caption{Subperiod performance of the GCF-timed global bond portfolio}
@@ -226,12 +226,12 @@ factor, so we evaluate the dollar strategy over the same out-of-sample window
   \input{tables/strat_t2_usd}
 \end{table}
 
-Two observations help us interpret the result. First, over this sample the
+The comparison tells us two things. Over this sample the
 unhedged dollar bond premium is modest but positive. The passive portfolio
 earns about $1.4\%$ a year in excess return for a Sharpe ratio near $0.18$, as
 the strength of the dollar through the 2010s offsets much, though not all, of
-the foreign-bond return for a US investor. Second, the two dollar signals
-part ways at the aggregate level. Timing on the unadjusted recursive global
+the foreign-bond return for a US investor. The two dollar signals also
+diverge at the aggregate level. Timing on the unadjusted recursive global
 factor works: the GCF-timed dollar strategy earns a Sharpe ratio of $0.24$
 against the passive $0.18$, with an aggregate-portfolio out-of-sample $R^{2}$
 of $0.078$. The FX-adjusted factor, in contrast, does not time the
@@ -239,12 +239,12 @@ of $0.078$. The FX-adjusted factor, in contrast, does not time the
 portfolio return has an out-of-sample $R^{2}$ of $-0.01$, and the FXGCF-timed
 strategy earns a Sharpe ratio of $0.18$, no better than buy-and-hold.
 
-This is not a contradiction of Phase~III but a reflection of where the
+This does not contradict Phase~III. It reflects where the
 FX-adjusted factor's strength lies. Its in-sample recovery
 (\Cref{sec:res-phase3}) and its pooled out-of-sample edge
 (\Cref{ch:robustness}) come from the per-country USD regressions, that is,
-from the cross-section of dollar returns. We therefore arrive at the conclusion that is
-consistent throughout our thesis. Timing adds value for the dollar investor
+from the cross-section of dollar returns. We therefore reach the same conclusion
+as elsewhere in our thesis. Timing adds value for the dollar investor
 as well, but currency risk, and not a failure of the cycle signal, caps the
 level it can reach. Both dollar strategies remain well below the $0.40$ of
 the currency-hedged investor in \Cref{sec:strat-performance}. The economic
@@ -255,7 +255,7 @@ hedges the currency exposure of the international bond position.
 \section{Caveats}
 \label{sec:strat-caveats}
 
-We read this result as a proof of concept rather than a tradable system, and
+We should read this result as a proof of concept rather than a tradable system, and
 note two limitations. First, the magnitude is modest. The portfolio shows a
 Sharpe-ratio improvement of about $0.06$ and a certainty-equivalent gain below
 one percent a year. Its edge is time-sensitive, earned in the poor bond decade
