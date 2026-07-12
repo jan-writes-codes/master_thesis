@@ -16,9 +16,10 @@ cycle mechanism. In \Cref{sec:rep-dh}, we reproduce the international evidence o
 \citet{dahlquist2013}, who established the global integration of bond risk premia
 through the forward-rate factor. This exercise is, however, not a mechanical
 re-run, since our data, our sample window, and our inference differ from the
-originals. The relevant test is therefore agreement on signs, magnitudes. We restrict the United States replication to January
+originals. The relevant test is therefore agreement on signs, magnitudes. We restrict the United States return regressions to January
 1990--December 2014 ($300$ months) to align with the window of
-\citet{cieslak2015}. Inference uses the block bootstrap of
+\citet{cieslak2015}; the yield--cycle decomposition of \Cref{tab:cp-t1}, which
+needs no returns, uses the full US yield history from March 1989. Inference uses the block bootstrap of
 \Cref{sec:meth-inference} and Newey--West HAC standard errors, with $18$ lags
 for the Cieslak--Povala tables and $12$ lags for the Dahlquist--Hasseltoft
 tables, matching each original specification.
@@ -33,7 +34,8 @@ reproduce Table~1 of \citet{cieslak2015}. Panel~A regresses each US yield on
 trend inflation \eqref{eq:decomp}: the slope is large and significant at every
 maturity ($1.63$--$1.88$, HAC $t$ from $5.8$ to $12.8$), and the share of yield
 variation the trend explains rises from $58\%$ (one year) to $84\%$ (ten).
-\Cref{fig:s2-yield-decomp} shows the split for the US.
+\Cref{fig:s2-yield-decomp} shows the same split for four representative markets
+(Germany, the UK, Japan, and the US).
 
 \begin{table}[t]
   \caption{Replication of Cieslak--Povala (2015) Table~1: yields and trend inflation}
@@ -44,8 +46,11 @@ variation the trend explains rises from $58\%$ (one year) to $84\%$ (ten).
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/s2_yield_decomp.pdf}
-  \caption[Yield--cycle decomposition for the United States]{Yield--cycle decomposition for the United States: the ten-year yield,
-    its trend-inflation component, and the residual cycle \eqref{eq:decomp}.}
+  \caption[Yield--cycle decomposition for four representative markets]{Yield--cycle decomposition for four representative markets (Germany, the
+    UK, Japan, and the US): the ten-year yield, its trend-inflation component,
+    and the residual cycle \eqref{eq:decomp}. Four markets are shown for
+    legibility; the same decomposition is applied to all eleven G10 markets in
+    the analysis that follows.}
   \label{fig:s2-yield-decomp}
 \end{figure}
 

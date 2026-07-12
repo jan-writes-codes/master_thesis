@@ -65,11 +65,15 @@ We obtain four raw inputs for our analysis, drawn from two data providers:
 
 Our panel is monthly and sampled at month-end. Although the raw yield workbook
 extends back to 1980 and the inflation indices to 1955, the usable span is
-governed by the availability of each country's Bloomberg zero-coupon curve. The
-United States and Japan enter the sample first, in March and April 1989
-respectively. The remaining nine countries begin in December 1994, and all
-series run through April 2026. This yields $446$ monthly observations for the
-US, $445$ for Japan, and $377$ for each of the other countries. In
+governed at the early end by the availability of each country's Bloomberg
+zero-coupon curve and at the recent end by the annual GDP weights used for the
+global factor. The United States and Japan enter the sample first, in March and
+April 1989 respectively. The remaining nine countries begin in December 1994,
+and the estimation sample runs through April 2024, although the raw yield curves
+themselves extend to April 2026 (\Cref{fig:yield-ts}). This yields $422$ monthly
+observations for the US, $421$ for Japan, and $353$ for each of the other
+countries. The excess-return regressions use somewhat fewer after the factor
+construction and the twelve-month return horizon. In
 \Cref{tab:data-coverage} we summarise the effective coverage.
 
 \begin{table}[t]\centering
@@ -80,17 +84,17 @@ US, $445$ for Japan, and $377$ for each of the other countries. In
     \toprule
     Country & Code & Currency & Sample & Months\\
     \midrule
-    United States & US & USD & 1989-03 -- 2026-04 & 446\\
-    Japan         & JP & JPY & 1989-04 -- 2026-04 & 445\\
-    Belgium       & BE & EUR & 1994-12 -- 2026-04 & 377\\
-    Canada        & CA & CAD & 1994-12 -- 2026-04 & 377\\
-    Switzerland   & CH & CHF & 1994-12 -- 2026-04 & 377\\
-    Germany       & DE & EUR & 1994-12 -- 2026-04 & 377\\
-    France        & FR & EUR & 1994-12 -- 2026-04 & 377\\
-    United Kingdom& GB & GBP & 1994-12 -- 2026-04 & 377\\
-    Italy         & IT & EUR & 1994-12 -- 2026-04 & 377\\
-    Netherlands   & NL & EUR & 1994-12 -- 2026-04 & 377\\
-    Sweden        & SE & SEK & 1994-12 -- 2026-04 & 377\\
+    United States & US & USD & 1989-03 -- 2024-04 & 422\\
+    Japan         & JP & JPY & 1989-04 -- 2024-04 & 421\\
+    Belgium       & BE & EUR & 1994-12 -- 2024-04 & 353\\
+    Canada        & CA & CAD & 1994-12 -- 2024-04 & 353\\
+    Switzerland   & CH & CHF & 1994-12 -- 2024-04 & 353\\
+    Germany       & DE & EUR & 1994-12 -- 2024-04 & 353\\
+    France        & FR & EUR & 1994-12 -- 2024-04 & 353\\
+    United Kingdom& GB & GBP & 1994-12 -- 2024-04 & 353\\
+    Italy         & IT & EUR & 1994-12 -- 2024-04 & 353\\
+    Netherlands   & NL & EUR & 1994-12 -- 2024-04 & 353\\
+    Sweden        & SE & SEK & 1994-12 -- 2024-04 & 353\\
     \bottomrule
   \end{tabular}
 \end{table}

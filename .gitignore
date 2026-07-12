@@ -26,3 +26,6 @@ final_presentation_bu_gdp/main.pdf
 final_presentation_td_eq/main.log
 final_presentation_td_eq/main.pdf
 thesis/main.pdf
+
+# stray R default plotting device output
+Rplots.pdf
