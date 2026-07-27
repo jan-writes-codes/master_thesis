@@ -3,9 +3,11 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** IN PROGRESS. Done and verified by a clean compile: **G-4, G-5, G-6, X-1.**
-Next up: **STR-1** (Chapter 3 consolidation) and **STR-2** (literature split), then the
-**G-1** `we`→`I` sweep. Work top to bottom; tick items as they are done.
+**Status:** IN PROGRESS. Done and verified by a clean compile:
+**G-4, G-5, G-6, STR-1, STR-2, S-51, X-1.**
+Next up: **STR-3** (appendix split/reorder) and **STR-4** (§5.6), then the **G-1**
+`we`→`I` sweep — do the structural items first so the sweep is not repeated on moved
+text. Work top to bottom; tick items as they are done.
 
 **Build note:** the thesis compiles with `latexmk -pdf main.tex` (0 errors). Two cheap
 regression checks to run after every batch of edits:
@@ -190,7 +192,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 
 ## Part 1 — Structural changes
 
-- [ ] **STR-1 · Consolidate Chapter 3 (Data and Methodology), 13 → ~5 subsections.**
+- [x] **STR-1 · Consolidate Chapter 3 (Data and Methodology), 13 → 5 subsections.** ✅ **DONE**
       *(S-4, p.4)* Several subsections run under half a page. **Confirmed: Chapter 3 has
       exactly 13 sections, the heaviest in the thesis.** It spans two files:
       `04_data.tex` (declares `\chapter{Data and Methodology}` at :4, sections 3.1–3.4) and
@@ -212,28 +214,55 @@ These are the highest-leverage items. Each one is a full-document sweep.
       | 3.12 | Estimation and Inference | `05_methodology.tex:286` |
       | 3.13 | Deviations from the Original Studies | `05_methodology.tex:313` |
 
-      Proposed merge:
-      1. Merge **3.1–3.4** into a single **"Data and Variable Construction"**.
-      2. Merge **3.5 and 3.9** (defining excess returns together with the EH null —
-         this also removes the forward reference from 3.7 to 3.9).
-      3. Merge **3.6–3.8 and 3.10** into one **"Cycle-Factor Hierarchy"** section,
-         with *unnumbered paragraph headings* for the individual factors.
-      4. Keep **3.11** as its own section.
-      5. Fold **3.13 into 3.12**.
-      > **Rule of thumb (his):** a subsection shorter than half a page should be a
-      > paragraph heading, not a numbered unit. — Apply this rule everywhere.
+      ✅ **APPLIED — all five merge steps, verified by compile. New structure:**
 
-- [ ] **STR-2 · Split the literature review into two sections, not five.**
-      *(S-5 p.4; S-36 p.16)* Five subsections is too fine for a four-page review.
-      All in `02_literature.tex`:
-      - **"Bond Return Predictability in the United States"** = current 2.1–2.3
+      | New § | Heading | Merged from |
+      |---|---------|---|
+      | 3.1 | Data and Variable Construction | old 3.1–3.4 |
+      | 3.2 | Excess Returns and the Expectations-Hypothesis Null | old 3.5 + 3.9 |
+      | 3.3 | The Cycle-Factor Hierarchy | old 3.6, 3.7, 3.8, 3.10 |
+      | 3.4 | Hypotheses and Predictive Specifications | old 3.11 (unchanged) |
+      | 3.5 | Estimation and Inference | old 3.12 + 3.13 |
+
+      **His forward-reference point is resolved.** Excess returns are now *defined
+      before* the factors that use them, so the old 3.7→3.9 forward reference is gone:
+      `\Cref{sec:fw-returns}` in the local-cycle-factor passage became
+      `\eqref{eq:rxbar}`, which now points backwards.
+      **Content preserved:** all **17 equation labels identical** before/after
+      (diffed); word count 1944 → 1989, the increase being the new section lead-in and
+      two transition sentences.
+      **Labels:** dropped `sec:fw-decomp`, `sec:fw-localcf`, `sec:fw-gcf` (**0
+      references each** — checked first). Kept `sec:fw-fxgcf` (6 refs),
+      `sec:fw-hypotheses` (4), `sec:meth-inference` (7), `sec:meth-oos`,
+      `sec:data-coverage` (2); these now sit on `\paragraph` headings and, because
+      paragraphs are unnumbered, resolve to the **enclosing section** —
+      verified in the PDF as "Section 3.3" / "Section 3.1", with **no**
+      "Paragraph N" or `??` anywhere.
+      **Also folded in while here:** the Phase headings were restated research
+      questions in bold; they are now short and declarative
+      (*"Phase I: local predictability"*), which is **S-51**.
+      > **Rule of thumb (his):** a subsection shorter than half a page should be a
+      > paragraph heading, not a numbered unit. — Still to apply elsewhere: **STR-4**
+      > (§5.6 Caveats).
+
+- [x] **STR-2 · Split the literature review into two sections, not five.** ✅ **DONE**
+      *(S-5 p.4; S-36 p.16)* Applied exactly as he specified, in `02_literature.tex`:
+      - **2.1 "Bond Return Predictability in the United States"** = old 2.1–2.3
         (EH rejection → forward-rate benchmark → macro-anchored mechanism)
-        → `:22` EH and Bond Return Predictability; `:77` Forward-Rate Predictors:
-          Cochrane and Piazzesi (2005); `:104` The Macro-Anchored Cycle Factor:
-          Cieslak and Povala (2015)
-      - **"International Evidence and the Gap"** = current 2.4–2.5
-        → `:145` Global Integration: Dahlquist and Hasseltoft (2013);
-          `:192` International Macro-Anchored Predictability and the Gap
+      - **2.2 "International Evidence and the Gap"** = old 2.4–2.5
+
+      The five former section titles survive as `\paragraph` headings, so the reading
+      path is unchanged — only the numbering depth drops.
+      ⚠️ **Three cross-references had to be rewritten first.** `sec:lit-cp2005`,
+      `sec:lit-cp2015` and `sec:lit-eh` were referenced *from sibling sections that now
+      merge into 2.1*, so `\Cref` would have rendered a **self-reference** ("Section 2.1"
+      pointing at the section the reader is already in). Replaced with prose —
+      *"the forward-rate view discussed below"*, *"which we turn to below"*,
+      *"the spanning debate described above"*.
+      **Content preserved:** word count 1967 → 1973; citation set identical apart from
+      the three `\citet` keys deliberately added to the new paragraph headings.
+      Verified they expand correctly in the PDF (e.g. *"Forward-rate predictors:
+      Cochrane and Piazzesi (2005)."*) with no hyperref/bookmark warnings.
 
 - [ ] **STR-3 · Two separate appendices, and consider swapping their order.**
       *(S-7, p.5)* Both are already separate `\chapter`s after `\appendix`
@@ -301,8 +330,8 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [ ] **S-1** (p.3) "our" → "this". *(see G-1)*
 - [ ] **S-2** (p.3) "we" → "I". *(G-1)*
 - [ ] **S-3** (p.3) "out of sample" → consistent hyphenation. *(G-2)*
-- [ ] **S-4** (p.4) Chapter 3 fragmentation. *(STR-1)*
-- [ ] **S-5** (p.4) Literature review too finely split. *(STR-2)*
+- [x] **S-4** (p.4) Chapter 3 fragmentation. *(done via STR-1)*
+- [x] **S-5** (p.4) Literature review too finely split. *(done via STR-2)*
 - [ ] **S-6** (p.4) "G10" → **"G10 markets"**.
 - [ ] **S-7** (p.5) Two appendices, own titles, fix refs, consider swapping order. *(STR-3)*
 
@@ -366,7 +395,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [ ] **S-34** (p.15) **Tone down** *"we want to add to"*.
 - [ ] **S-35** (p.16) *"three-phase design of Section 3.11"* — **this is the literature
       part; do not discuss the methodology yet.**
-- [ ] **S-36** (p.16) Literature structure. *(STR-2)*
+- [x] **S-36** (p.16) Literature structure. *(done via STR-2)*
 
 ### Chapter 3 — Data and Methodology
 - [ ] **S-37** (p.17) **Something is missing** — add *", which will be presented in detail
@@ -388,8 +417,13 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [ ] **S-48** (p.23) Rename `FXGCF_t`. *(G-4)*
 - [ ] **S-49** (p.23) Same, and "FX-adjusted" is not Dahlquist–Hasseltoft's term. *(G-4)*
 - [ ] **S-50** (p.23) "USD cycle factor" — adjust italics. *(G-3)*
-- [ ] **S-51** (p.24) **Bold question-headings** for the Phases — make them short and
-      declarative instead. *(STR-6)*
+- [x] **S-51** (p.24) **Bold question-headings** for the Phases — made short and
+      declarative. ✅ **DONE** (alongside STR-1, same file). Was
+      *"Phase I --- Does the cycle factor predict returns locally?"*; now
+      *"Phase I: local predictability"*, *"Phase II: global versus local"*,
+      *"Phase III: currency risk and the dollar-return factor"*
+      (`05_methodology.tex`, §3.4). The questions themselves already appear in the
+      introduction, so restating them as headings was the redundancy he flagged.
 
 ### Chapter 4 — Results
 - [ ] **S-52** (p.26) "In Chapter B" → **"Appendix B"**; state that the validation is

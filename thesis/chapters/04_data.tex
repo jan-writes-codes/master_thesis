@@ -13,15 +13,16 @@ monthly country--maturity panel, implemented in \texttt{data\_preparation.R}. We
 begin with the cross-sectional universe and the four raw inputs (yields,
 inflation, GDP, and exchange rates) with their sources and units, then present
 the sample coverage, our cleaning and alignment choices, and summary statistics.
-We then develop the technical framework. Namely the expectations-hypothesis null,
-the yield decomposition, the three-factor hierarchy, the excess-return
-definitions, and the predictive specifications. We set out the estimation and
+We then develop the technical framework: the excess-return definitions and the
+expectations-hypothesis null they are tested against, the cycle-factor
+hierarchy, and the predictive specifications. We close with the estimation and
 inference used to evaluate them.
 
 % ===========================================================================
-\section{Universe and Sources}
-\label{sec:data-sources}
+\section{Data and Variable Construction}
+\label{sec:data}
 
+\paragraph{Universe and sources.}
 Our cross-section is the G10 government-bond universe, comprising eleven
 countries. That is Belgium (BE), Canada (CA), Switzerland (CH), Germany (DE), France
 (FR), the United Kingdom (GB), Italy (IT), Japan (JP), the Netherlands (NL),
@@ -59,10 +60,8 @@ We obtain four raw inputs for our analysis, drawn from two data providers:
     return \eqref{eq:rx-usd} and the FX conversion of GDP.
 \end{description}
 
-% ===========================================================================
-\section{Sample and Coverage}
+\paragraph{Sample and coverage.}
 \label{sec:data-coverage}
-
 Our panel is monthly and sampled at month-end. Although the raw yield workbook
 extends back to 1980 and the inflation indices to 1955, the usable span is
 governed at the early end by the availability of each country's Bloomberg
@@ -118,10 +117,7 @@ show the resulting 10-year yield series.
   \label{fig:coverage}
 \end{figure}
 
-% ===========================================================================
-\section{Cleaning and Variable Construction}
-\label{sec:data-cleaning}
-
+\paragraph{Cleaning and alignment.}
 We align the raw inputs to a common monthly grid keyed on year--month and
 reshape the panel to long form (country $\times$ maturity $\times$ month). Four
 steps in our construction need spelling out:
@@ -150,10 +146,7 @@ Missing values arise from the unbalanced panel and from the twelve-month leads
 and lags in the return construction. We propagate them as \texttt{NA} and drop
 them pairwise in each regression, rather than imputing them.
 
-% ===========================================================================
-\section{Summary Statistics}
-\label{sec:data-summary}
-
+\paragraph{Summary statistics.}
 In \Cref{tab:dh-t1-summary} we report the mean and standard deviation of yields
 for every country--maturity pair. We can note two features that are consistent
 across countries. First, average yield curves slope upward in maturity. Second,
