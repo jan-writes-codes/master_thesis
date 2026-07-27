@@ -4,8 +4,8 @@
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
 **Status:** IN PROGRESS. Done and verified by a clean compile:
-**G-4, G-5, G-6, STR-1, STR-2, S-51, X-1.**
-Next up: **STR-3** (appendix split/reorder) and **STR-4** (§5.6), then the **G-1**
+**G-4, G-5, G-6, STR-1, STR-2, STR-3, S-4, S-5, S-7, S-36, S-51, X-1.**
+Next up: **STR-4** (§5.6) and **STR-5** (research-question presentation), then the **G-1**
 `we`→`I` sweep — do the structural items first so the sweep is not repeated on moved
 text. Work top to bottom; tick items as they are done.
 
@@ -113,9 +113,13 @@ These are the highest-leverage items. Each one is a full-document sweep.
       `\appendix`, the report class still called it a "chapter".
       **Fix:** `\crefalias{chapter}{appendix}` after `\appendix` (`main.tex`) plus
       `\crefname`/`\Crefname` definitions (`preamble.tex`). One change, all five sites.
-      **Verified in the rebuilt PDF:** `"Chapter B"` → **0 occurrences**,
-      `"Appendix B"` → **8**. Appendix *sections* now also read "Appendix B.1 / B.2".
-      Main-text chapters still correctly read "Chapter 8".
+      **Verified in the rebuilt PDF:** `"Chapter B"` → **0 occurrences**; the word
+      "Chapter" no longer appears before any appendix. Main-text chapters still
+      correctly read "Chapter 8".
+      📌 **Note after STR-3:** the replication appendix has since been **moved first**,
+      so these five references now render **"Appendix A"** (and its sections
+      "Appendix A.1 / A.2"). The cleveref fix is what made that swap free — no prose
+      edit was needed at any of the five sites.
 
 - [x] **G-6 · Progressive numbering.** ✅ **DONE & VERIFIED BY COMPILE** *(S-39, p.18)*
       `preamble.tex` had **no** `\counterwithin`/`\numberwithin` — the per-chapter
@@ -264,15 +268,30 @@ These are the highest-leverage items. Each one is a full-document sweep.
       Verified they expand correctly in the PDF (e.g. *"Forward-rate predictors:
       Cochrane and Piazzesi (2005)."*) with no hyperref/bookmark warnings.
 
-- [ ] **STR-3 · Two separate appendices, and consider swapping their order.**
-      *(S-7, p.5)* Both are already separate `\chapter`s after `\appendix`
-      (`main.tex:53–55`) — the real defect is the **titles and the ordering**:
-      - `A_appendix.tex:2` is titled generically **`\chapter{Appendix}`** → retitle
-        **"Supplementary Tables and Figures"** (A.1 Tables, A.2 Figures).
-      - `06_replication.tex:5` is already **`\chapter{Replication and Validation}`** ✔
-      - **Consider swapping the `\input` order in `main.tex`** so the replication comes
-        first — it validates the pipeline and is conceptually prior. *(→ Q-4)*
-      - Correct all in-text references (see **G-5** — a cleveref config fix).
+- [x] **STR-3 · Two separate appendices, order swapped.** ✅ **DONE & VERIFIED BY COMPILE**
+      *(S-7, p.5)* Both were already separate `\chapter`s after `\appendix`; the defects
+      were the **generic title** and the **ordering**. Both fixed:
+      - `A_appendix.tex` was titled generically `\chapter{Appendix}` (rendering as
+        "Appendix A / Appendix") → now **`\chapter{Supplementary Tables and Figures}`**.
+      - **Order swapped in `main.tex`** (author-confirmed, **Q-4**): the replication now
+        comes first, since it validates the pipeline and is conceptually prior.
+      - In-text references needed **no** edits — all five use `\Cref{ch:replication}`
+        and followed the swap automatically (**G-5** did the real work here).
+
+      **Resulting front matter, exactly his requested shape:**
+      ```
+      A  Replication and Validation
+         A.1  Cieslak–Povala (2015)
+         A.2  Dahlquist–Hasseltoft (2013)
+      B  Supplementary Tables and Figures
+         B.1  Additional Tables
+         B.2  Additional Figures
+      ```
+      **Exhibits renumbered correctly and automatically:** the 8 replication tables are
+      now **A.1–A.8**, the 7 supplementary tables **B.1–B.7**, figures likewise
+      (A.1–A.2 / B.1–B.7). Every main-text reference to a supplementary exhibit followed
+      to `B.x` — spot-checked seven of them in the PDF.
+      **Verified:** 0 errors, 0 undefined, 0 multiply-defined, no `??`. 81 → 80 pages.
 
 - [ ] **STR-4 · Section 5.6 is too short** (~6 sentences) to be its own numbered
       subsection. *(S-81, p.44)*
@@ -333,7 +352,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-4** (p.4) Chapter 3 fragmentation. *(done via STR-1)*
 - [x] **S-5** (p.4) Literature review too finely split. *(done via STR-2)*
 - [ ] **S-6** (p.4) "G10" → **"G10 markets"**.
-- [ ] **S-7** (p.5) Two appendices, own titles, fix refs, consider swapping order. *(STR-3)*
+- [x] **S-7** (p.5) Two appendices, own titles, refs fixed, order swapped. *(done via STR-3)*
 
 ### Chapter 1 — Introduction
 - [ ] **S-8** (p.8) Insert **"On average,"** at the start of the sentence.
@@ -574,7 +593,7 @@ squarely under his instruction to check cross-references systematically (G-13).
 - [x] **Q-3** ✅ **RESOLVED (author decision, no need to ask him).** G-4 renames the
       **prose only** to **"dollar-return"**; the symbol `FXGCF_t` is **retained** to avoid
       rippling into every exhibit and the R scripts. Applied and compiled.
-- [ ] **Q-4** STR-3: confirm whether to **swap the appendix order** (Replication first).
+- [x] **Q-4** ✅ **RESOLVED (author decision).** Appendix order swapped — Replication is now Appendix A, Supplementary Tables and Figures is Appendix B.
 - [ ] **Q-5** STR-7: confirm the preferred new section title for the dollar-investor section.
 - [ ] **Q-6** Offer a **follow-up meeting**, as he suggested, once the structural items
       (STR-1..4) are drafted.

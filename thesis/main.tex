@@ -59,8 +59,10 @@
 \counterwithin{figure}{chapter}
 \counterwithin{equation}{chapter}
 
-\input{chapters/A_appendix}
-\input{chapters/06_replication}  % Appendix B: Replication and Validation
+% Order per the supervisor: the replication validates the pipeline and is
+% conceptually prior to the supplementary material, so it comes first.
+\input{chapters/06_replication}  % Appendix A: Replication and Validation
+\input{chapters/A_appendix}      % Appendix B: Supplementary Tables and Figures
 
 
 \end{document}
