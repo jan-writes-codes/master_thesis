@@ -48,7 +48,7 @@ baseline of \Cref{tab:rob-sub-oos} exactly, which serves as a check on the
 rebuilt machinery.
 
 The length of the training minimum matters little for the global cycle factor
-and much more for the FX-adjusted one. The global factor delivers essentially
+and much more for the dollar-return one. The global factor delivers essentially
 the same out-of-sample $R^{2}_{\mathrm{oos}}$ under a three-, five-, or
 seven-year minimum, namely $+0.05$. It
 is positive in ten of eleven markets in every case. For the headline result,
@@ -56,13 +56,13 @@ the sixty-month choice is therefore representative rather than a tuned
 parameter. A seven-year minimum also lifts the local cycle factor to
 approximately zero ($-0.002$) and the unadjusted dollar-investor factor from
 $-0.07$ to $-0.01$, because more training history stabilises each recursive
-coefficient before it is used. The FX-adjusted factor, however, is the most
+coefficient before it is used. The dollar-return factor, however, is the most
 sensitive of the four to this choice. Its pooled gain of $+0.021$ holds under
 the baseline five-year minimum but turns negative under both a three-year
 ($-0.12$) and a seven-year ($-0.10$) minimum. Its eleven per-country USD
 regressions have less stable recursive coefficients than the single global
 aggregate, and shifting the training minimum shifts which early forecasts
-enter the evaluation window. We read this as a caution. The FX-adjusted
+enter the evaluation window. We read this as a caution. The dollar-return
 factor's real-time edge exists at the baseline but is not a robust feature of
 every reasonable scheme.
 
@@ -70,7 +70,7 @@ The window shape, by contrast, matters. The out-of-sample advantage of every
 specification comes from the expanding window choice. The global cycle factor's $R^{2}_{\mathrm{oos}}$ falls from
 $+0.05$ to $-0.10$ under a ten-year rolling window and to $-0.04$ under a
 fifteen-year one, and it is positive in zero of eleven markets in both cases. The
-FX-adjusted factor is negative under the ten-year rolling window ($-0.07$) and
+dollar-return factor is negative under the ten-year rolling window ($-0.07$) and
 approximately flat under the fifteen-year one ($+0.01$). However, we see
 this result as economically coherent rather than troubling. The cycle factors are
 anchored to slowly-moving trend inflation and their predictive loadings are
@@ -81,7 +81,7 @@ prevailing mean it is judged against becomes more adaptive and
 harder to beat. The factors' real-time advantage is therefore a property of
 expanding-window estimation, which benefits from a long, accumulated
 macro history, and it is not a generic feature of any real-time scheme.
-Across the five schemes the rankings are largely stable. Under all three expanding-window minimums the global cycle factor is the strongest specification and is positive, while the local and unadjusted dollar-investor factors are negative throughout. The FX-adjusted factor is the least stable of the four. It is positive only under the baseline five-year expanding minimum and, marginally, the fifteen-year rolling window, so we read its real-time edge as conditional on the estimation scheme. Under the rolling windows no specification retains a reliable edge.
+Across the five schemes the rankings are largely stable. Under all three expanding-window minimums the global cycle factor is the strongest specification and is positive, while the local and unadjusted dollar-investor factors are negative throughout. The dollar-return factor is the least stable of the four. It is positive only under the baseline five-year expanding minimum and, marginally, the fifteen-year rolling window, so we read its real-time edge as conditional on the estimation scheme. Under the rolling windows no specification retains a reliable edge.
 
 \begin{table}[t]
   \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ under alternative estimation schemes}
@@ -132,7 +132,7 @@ risk premia as markets integrate further.
 
 The dollar-investor story is more regime-dependent, and the subsample split
 reveals a vulnerability that the full sample hides. In the pre-crisis window, the
-dollar-investor predictability was in fact strong. The FX-adjusted factor
+dollar-investor predictability was in fact strong. The dollar-return factor
 delivered a mean $R^{2}$ of $0.29$, significant in nine of eleven markets, and
 the unadjusted global factor $0.12$ in eleven of eleven. However, this
 predictability erodes through both crises and disappears after 2013, where the
@@ -142,7 +142,7 @@ full-sample dollar-investor fit that we document in \Cref{sec:res-phase3} is
 therefore largely a pre-2008 phenomenon. Once the post-crisis currency regime
 of near-zero rate differentials and synchronised monetary policy sets in
 (\Cref{sec:res-phase3}), the cyclical signal in dollar returns disappears. This is most likely a
-limitation of the FX-adjusted factor rather than a firm conclusion, and the
+limitation of the dollar-return factor rather than a firm conclusion, and the
 subsample evidence states it more sharply than the pooled regression can.
 
 \begin{table}[t]
@@ -171,7 +171,7 @@ factor to forecast the panic-driven repricing of 2008. The local cycle factor,
 by contrast, fails out of sample in every window, most severely in the financial
 crisis ($-0.40$). The two dollar-investor factors split the sample between them.
 The unadjusted global factor is positive only in the pre-crisis window
-($+0.13$) and negative through both crises and after. The FX-adjusted factor is
+($+0.13$) and negative through both crises and after. The dollar-return factor is
 close to the opposite. It is the only specification that stays positive
 through the financial crisis ($+0.08$), when the flight into the dollar moved
 currency and bond returns together and the per-country USD regressions had
@@ -267,7 +267,7 @@ headline). In \Cref{tab:rob-core-headline} and \Cref{fig:rob-core-headline}, we
 can see that the gap is concentrated where the energy pass-through in the data is
 largest. The United States, whose local $R^{2}$ falls from $0.33$ to $0.23$,
 accounts for much of the average, whereas a handful of markets (Belgium, France,
-Japan, Sweden) fit marginally better on headline. The FX-adjusted factor tells
+Japan, Sweden) fit marginally better on headline. The dollar-return factor tells
 the same story ($R^{2}$ of $0.139$ on core versus $0.126$ on headline).
 
 
@@ -283,7 +283,7 @@ important, and it supports our baseline choice. The
 global cycle factor's real-time advantage, which is the central finding of
 \Cref{sec:res-oos}, survives on core CPI ($R^{2}_{\mathrm{oos}}=+0.05$) but
 disappears on headline CPI ($-0.02$). The local factor remains negative under
-both, while the FX-adjusted factor is the exception. It is slightly
+both, while the dollar-return factor is the exception. It is slightly
 \emph{better} on headline ($+0.035$ versus $+0.021$). We could argue that the
 energy-price component that contaminates the headline trend also moves
 exchange rates \citep{ferraro2015} and is therefore not pure noise for a
@@ -336,10 +336,10 @@ markets.
   \input{tables/rob_t8_vm_sens}
 \end{table}
 
-\subsection*{The Construction of the FX-Adjusted Factor}
+\subsection*{The Construction of the Dollar-Return Factor}
 \label{sec:rob-fxgcf-construction}
 
-A fourth construction choice concerns the FX-adjusted factor itself, and we
+A fourth construction choice concerns the dollar-return factor itself, and we
 examine it separately because its construction is not uniquely defined in
 previous research. The
 $\FXGCF_{t}$ of \Cref{sec:fw-fxgcf} admits a two-by-two design. The factor can
@@ -350,7 +350,7 @@ predictors), and the aggregation can use GDP or equal ($1/n$) weights. In
 identical pipeline.
 
 \begin{table}[t]
-  \caption{The FX-adjusted factor under alternative constructions}
+  \caption{The dollar-return factor under alternative constructions}
   \label{tab:rob-fxgcf-construction}
   \centering
   \input{tables/rob_t7_fxgcf_construction}
@@ -375,13 +375,13 @@ clearly. We adopt the bottom-up GDP-weighted variant as our baseline because it 
 the construction of $\GCF_{t}$ exactly, carries genuinely distinct
 information, and is the strongest in-sample specification. The choice of
 construction does not, however, change the real-time conclusion that the
-FX-adjusted factor's out-of-sample edge is small.
+dollar-return factor's out-of-sample edge is small.
 
 We want to also state what is fragile. The local cycle
 factor's in-sample predictability does not survive real-time evaluation
 (\Cref{sec:res-oos}). The dollar-investor predictability is regime-dependent and
 concentrated before 2008 (\Cref{sec:rob-subsample}). The
-FX-adjusted factor's strong in-sample recovery also translates into only a small
+dollar-return factor's strong in-sample recovery also translates into only a small
 and scheme-sensitive real-time edge, earned mainly in the 2008 window. What survives every
 test in this chapter is the same single object. The GDP-weighted global cycle
 factor predicts international bond returns in-sample and out-of-sample, across

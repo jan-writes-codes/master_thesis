@@ -173,16 +173,16 @@ $s_{i,t+12}-s_{i,t}$ is the one-year log currency return. We apply the same
 duration-standardisation and maturity-averaging as in \eqref{eq:rxbar} to
 \eqref{eq:rx-usd} and obtain $\rxbar^{\,\mathrm{USD}}_{i,t+12}$. This dollar
 return is the object of interest for the international investor and the input
-to the FX-adjusted factor below.
+to the dollar-return factor below.
 
 % ===========================================================================
-\section{The FX-Adjusted Global Cycle Factor}
+\section{The Dollar-Return Global Cycle Factor}
 \label{sec:fw-fxgcf}
 
 A global factor built from local-currency returns ignores the currency risk
 that an international investor bears. Because of this, we construct an
-\emph{FX-adjusted global cycle factor} $\FXGCF_{t}$ that targets dollar
-returns directly, in analogy to the FX-adjusted global factor (FXGCP) of
+\emph{dollar-return global cycle factor} $\FXGCF_{t}$ that targets dollar
+returns directly, in analogy to the dollar-return global factor (FXGCP) of
 \citet{dahlquist2013}. We build the factor bottom-up, exactly as the global
 factor in \eqref{eq:gcf}, but from country-level factors that are fitted to
 dollar returns. For each country, we first estimate the \emph{USD cycle
@@ -261,7 +261,7 @@ content. Adding $\CF^{\perp}_{i,t}$ to \eqref{eq:h-global} should not raise the
 predictive power under integration, i.e.\ $\beta_{i}=0$.
 
 \paragraph{Phase~III --- Does currency risk break the model, and does the
-FX-adjusted factor restore it?}
+dollar-return factor restore it?}
 For the dollar investor, we estimate
 \begin{align}
   \rxbar^{\,\mathrm{USD}}_{i,t+12}
@@ -277,7 +277,7 @@ For the dollar investor, we estimate
 With specifications \eqref{eq:h-usd-local}--\eqref{eq:h-usd-global}, we ask
 whether the local-currency factors retain their predictive power once currency
 risk is introduced. With \eqref{eq:h-fxgcf}, we ask whether the purpose-built
-FX-adjusted factor $\FXGCF_{t}$ recovers the predictability that an unadjusted
+dollar-return factor $\FXGCF_{t}$ recovers the predictability that an unadjusted
 global factor loses on currency-converted returns. Together,
 \eqref{eq:h-local}--\eqref{eq:h-fxgcf} constitute the empirical programme that
 we test in \Cref{ch:results} and stress-test in \Cref{ch:robustness}.
@@ -327,7 +327,7 @@ bears on the results.
   \item \textbf{Inference.} We replace the exact reverse-regression delta method
     with HAC ($18$-lag Newey--West) $t$-statistics, for the identification
     reason given in \Cref{sec:meth-inference}.
-  \item \textbf{FX-adjusted factor.} We build $\FXGCF_{t}$ bottom-up, as the
+  \item \textbf{dollar-return factor.} We build $\FXGCF_{t}$ bottom-up, as the
     GDP-weighted average of per-country USD cycle factors, rather than
     top-down or as a projection on $\GCF_{t}$ (\Cref{sec:fw-fxgcf}). We
     compare the constructions in \Cref{sec:rob-fxgcf-construction}.

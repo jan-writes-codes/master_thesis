@@ -68,7 +68,7 @@ government-bond risk premia are internationally integrated. They also
 address a problem that is central to the international setting. An unhedged
 US-dollar investor earns the foreign bond return plus a currency
 return. Because this currency component erodes predictability,
-\citet{dahlquist2013} build an FX-adjusted global factor to recover it. On
+\citet{dahlquist2013} build an dollar-return global factor to recover it. On
 the macro side,
 \citet{zhang2021} document that the falling-stars trends improve return
 forecasts in four markets outside the United States, and related evidence
@@ -78,7 +78,7 @@ When we place these strands side by side, we can identify a clear gap. The
 cycle factor of \citet{cieslak2015}, a factor with a strong economic
 rationale, has not yet been taken international. There is no country-level evidence across the G10, no
 GDP-weighted \emph{global} cycle factor analogous to the global CP factor of
-\citet{dahlquist2013}, and no FX-adjusted version of such a factor for the
+\citet{dahlquist2013}, and no dollar-return version of such a factor for the
 dollar investor. \citet{zhang2021} come closest. However, they add raw
 inflation trends to yield-curve regressions in four markets rather than
 constructing the cycle factor itself, and they build no global or
@@ -112,7 +112,7 @@ To sharpen the international dimension, we pose three sub-questions:
     compensated for global rather than local risk. In this case, adding the
     local cycle to a regression that already contains the global factor
     should not raise the predictive power.
-\item \emph{Can an FX-adjusted global cycle factor recover the predictability
+\item \emph{Can an dollar-return global cycle factor recover the predictability
   that currency conversion destroys and what are its dynamics?} For an unhedged US-dollar investor the realised return carries a
   currency leg, so the
   plain global factor might lose much of its power on dollar returns. We would also expect new insights in the dynamics of this factor compared to the unadjusted global cycle factor.
@@ -123,7 +123,7 @@ market across the G10. In Phase~II, we run the horse race between the global
 and the local factors. In Phase~III, we adopt the perspective of an unhedged
 US-dollar investor, for whom currency risk intervenes between the foreign
 bond and the realised dollar return, and we ask whether a purpose-built
-FX-adjusted global cycle factor can restore the predictability that currency
+dollar-return global cycle factor can restore the predictability that currency
 conversion destroys. Because the cycle factors are generated regressors, we
 evaluate every phase both in-sample and under a fully-recursive
 out-of-sample protocol, in which the entire construction, that is the trend,
@@ -141,7 +141,7 @@ of zero-coupon yields, core inflation, exchange rates, and GDP spanning
 cycle factor} $\GCF_{t}$, aggregates the national factors with time-varying
 GDP weights. With this factor, we transplant the integration test of
 \citet{dahlquist2013} from the forward-rate family to the macro-anchored
-cycle. The third is a new \emph{FX-adjusted global
+cycle. The third is a new \emph{dollar-return global
 cycle factor} $\FXGCF_{t}$, which fits a USD cycle factor per country. Each
 country's \emph{dollar} excess return is projected on its own cycles and
 aggregated with GDP weights, isolating the component of the
@@ -177,7 +177,7 @@ Once it is included, genuinely local content survives in only three markets
 although it weakens under severe sovereign stress. Third, we find that
 currency risk is a considerable obstacle for the dollar investor. Dollar
 conversion erodes roughly two-thirds of the global factor's predictive
-power. The FX-adjusted factor recovers much of it in sample, substantially raising
+power. The dollar-return factor recovers much of it in sample, substantially raising
 the average dollar-investor $R^{2}$ from $9\%$ to $14\%$ and restoring
 significance in ten of eleven markets, provided it is built bottom-up from
 the country-level USD regressions. The two factors are distinct only in the high-rate regime. They correlate $0.54$ before 2008 but

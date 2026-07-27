@@ -3,8 +3,9 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** IN PROGRESS. **G-5 and G-6 are done and verified by a clean compile.**
-Work top to bottom; tick items as they are done.
+**Status:** IN PROGRESS. Done and verified by a clean compile: **G-4, G-5, G-6, X-1.**
+Next up: **STR-1** (Chapter 3 consolidation) and **STR-2** (literature split), then the
+**G-1** `we`→`I` sweep. Work top to bottom; tick items as they are done.
 
 **Build note:** the thesis compiles with `latexmk -pdf main.tex` (0 errors). Two cheap
 regression checks to run after every batch of edits:
@@ -67,26 +68,40 @@ These are the highest-leverage items. Each one is a full-document sweep.
       italicised research questions in the introduction, **no** italicised "dollar".
       *(S-30 p.14; S-16 p.10; S-50 p.23; S-10 p.9)*
 
-- [ ] **G-4 · Rename the FX-adjusted factor.** "FX-adjusted" is easily misread as
-      **"FX-hedged", which is the opposite** of what is meant. Rename to
-      **"dollar-return global cycle factor"** or **"USD global cycle factor"**.
-      He also notes the term "FX-adjusted" does **not** appear in Dahlquist–Hasseltoft.
-      *(S-48, S-49, p.23)*
-      → **Scope: 80 occurrences** of "FX-adjusted" — `07_results.tex` 19,
-      `08_robustness.tex` 14, `01_introduction.tex` 6, `05_methodology.tex` 6,
-      `06_replication.tex` 5, `08b_strategy.tex` 5, `10_conclusion.tex` 4,
-      `02_literature.tex` 4, `00_abstract.tex` 3, `09_discussion.tex` 2, `tables/` 10,
-      `preamble.tex` 1 — *this last one is only a code comment* on
-      `\newcommand{\FXGCF}{\mathit{FXGCF}}` (`preamble.tex:61`).
-      → **Two separate decisions**, don't conflate them:
-      **(a) the prose name** ("FX-adjusted global cycle factor" → his preferred wording)
-      and **(b) the symbol** `FXGCF_t` itself. He objected to the *words*; renaming the
-      **symbol** would ripple into every table, figure and the R scripts that generate
-      them. Cheapest defensible option: **change the prose, keep the symbol**, and gloss
-      it once at first use. Worth confirming with him. *(→ Q-3)*
-      → If the symbol does change, the macro is defined at `preamble.tex:61` (and
-      `\FXCF` at `:62`), so the LaTeX side is a one-line edit — but the exhibit column
-      headers come from the R scripts and would need regenerating.
+- [x] **G-4 · Rename the FX-adjusted factor.** ✅ **DONE & VERIFIED BY COMPILE**
+      **Decision (author-confirmed):** rename the **prose only**, keep the **symbol**
+      `FXGCF_t`. Chosen wording: **"dollar-return"** (his first suggestion).
+      **Applied:** all **84** occurrences — 80 lowercase `FX-adjusted` → `dollar-return`,
+      plus 4 title-case `FX-Adjusted` → `Dollar-Return` in section headings.
+      Diff is a symmetric 89/89 pure substitution; the one pre-existing "dollar-return"
+      in `08_robustness.tex` accounts for the 81st lowercase hit.
+      **Verified in the rebuilt PDF:** `FX-adjusted` **0**, `dollar-return` **85**,
+      symbol `FXGCF` intact at **54** occurrences, 0 errors, 82 pages.
+      Renamed headings now read: *The Dollar-Return Global Cycle Factor* (3.10),
+      *The Global Investor and the Dollar-Return Factor*, *The US-Dollar Investor and
+      the Dollar-Return Factor*, *The Construction of the Dollar-Return Factor*.
+      ⚠️ **Two sites the rename broke, both fixed:**
+      - `07_results.tex:20` read *"the **adjusted** and unadjusted global factors"* —
+        "adjusted" was shorthand for "FX-adjusted" and was left dangling →
+        *"the dollar-return and unadjusted global factors"*.
+      - `strat_t2_usd.tex:17` (table note) → *"the recursive dollar-return and
+        **local-currency** global factors"*.
+      📌 **Open question deliberately NOT swept — see Q-7:** the antonym **"unadjusted"**
+      (28 occurrences) was left alone. It now has no explicit counterpart in the text,
+      and arguably carries the *same* defect he flagged: a reader can misread
+      "unadjusted" as "**unhedged**", which is backwards ($\GCF_t$ is the hedged,
+      local-currency factor). A blanket swap to "local-currency" is **not** safe,
+      though — phrases like *"the unadjusted dollar-investor factor"*
+      (`08_robustness.tex:57,84`; `07_results.tex:480,482`) would become
+      "local-currency dollar-investor factor", which is self-contradictory.
+
+      *(original comments: S-48, S-49, p.23 — "FX-adjusted" is easily misread as
+      "FX-hedged", the opposite of what is meant; he also notes the term does not
+      appear in Dahlquist–Hasseltoft at all.)*
+      📎 **Follow-on still to do:** now that the prose name has changed, **gloss the
+      symbol once at first use** — e.g. *"the dollar-return global cycle factor,
+      denoted $\FXGCF_t$"* — so the retained `FX` in the symbol is explained rather
+      than left as a loose end. Natural home: `05_methodology.tex:179` (§3.10).
 
 - [x] **G-5 · "Chapter B" → "Appendix B".** ✅ **DONE & VERIFIED BY COMPILE**
       *(S-7 p.5; S-22, S-26 strikeouts p.10–11; S-52 p.26)*
@@ -192,7 +207,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       | 3.7 | The Local Cycle Factor | `05_methodology.tex:78` |
       | 3.8 | The Global Cycle Factor and GDP Weights | `05_methodology.tex:111` |
       | 3.9 | Excess Returns: Local and US-Dollar Investor | `05_methodology.tex:138` |
-      | 3.10 | The FX-Adjusted Global Cycle Factor | `05_methodology.tex:179` |
+      | 3.10 | The Dollar-Return Global Cycle Factor *(renamed, G-4)* | `05_methodology.tex:179` |
       | 3.11 | Hypotheses and Predictive Specifications | `05_methodology.tex:221` |
       | 3.12 | Estimation and Inference | `05_methodology.tex:286` |
       | 3.13 | Deviations from the Original Studies | `05_methodology.tex:313` |
@@ -258,13 +273,15 @@ These are the highest-leverage items. Each one is a full-document sweep.
         research questions.
 
 - [ ] **STR-7 · Rename the "Global Investor" section.** *(S-66, p.30)*
-      → `07_results.tex:183` — `\section{The Global Investor and the FX-Adjusted Factor}`
-      (note it also carries the G-4 rename).
+      → `07_results.tex:183` — now reads
+      `\section{The Global Investor and the Dollar-Return Factor}` after the G-4 rename.
+      **Only "Global Investor" is still outstanding.**
       💡 **The thesis already answers this itself:** the parallel section in Chapter 5 is
-      `08b_strategy.tex:208` — **`\section{The US-Dollar Investor and the FX-Adjusted
-      Factor}`**. Chapter 5 uses the right framing, Chapter 4 does not. Align Chapter 4
-      to Chapter 5 rather than inventing a third wording — which is also the cheapest
-      way to satisfy his objection. The heading
+      `08b_strategy.tex:208` — **`\section{The US-Dollar Investor and the Dollar-Return
+      Factor}`**. Chapter 5 uses the right framing, Chapter 4 does not. Post-G-4 the two
+      headings are now **identical except for the investor**, so this is reduced to a
+      one-word fix: **"Global Investor" → "US-Dollar Investor"** in `07_results.tex:183`.
+      Align to Chapter 5 rather than inventing a third wording. The heading
       "Global Investor" ≠ the "dollar investor" of the body text. Frame it as the shift
       from a **local investor** to a **US investor investing internationally**.
       His suggestions:
@@ -316,7 +333,11 @@ These are the highest-leverage items. Each one is a full-document sweep.
       misleads and "the evidence to evaluate it" is vague. His model sentence:
       *"Our contribution is a family of three nested cycle factors — local, global, and
       FX-adjusted — together with in-sample and fully recursive out-of-sample evidence on
-      each across the G10."* (adjust the factor name per G-4)
+      each across the G10."*
+      ⚠️ **Use "dollar-return", not his "FX-adjusted"**, when adopting this sentence —
+      he wrote it before making the G-4 renaming request, so the two comments conflict.
+      Also recast to first person per G-1: *"I contribute a family of three nested cycle
+      factors — local, global, and dollar-return — together with…"*
 - [ ] **S-21** (p.10) **"transplant"** — check the word is accurate.
 - [ ] **S-22** (p.10) **Strike** "(Chapter B)". *(G-5)*
 - [ ] **S-23** (p.10) *"We arrive at four main findings"* — **"arrive" is not academic**.
@@ -480,14 +501,19 @@ squarely under his instruction to check cross-references systematically (G-13).
       "Monte Carlo" appears in the body only at `06_replication.tex:90`. The references
       point to a methodology section that was planned but never written (see
       `REVIEW_EDITS.md:642`, which introduced the reference).
-      → **Decide:** either (a) write the missing subsection describing the simulated
-      expectations-hypothesis null — calibration, 5,000 simulations, 300-month window —
-      most likely inside `05_methodology.tex`, or (b) repoint the three references and
-      inline the calibration detail into the replication appendix.
-      Option (a) is stronger: the appendix currently asserts a gap is *"documented in ??"*,
-      so the documentation genuinely is missing, not merely mislabelled.
-      → After fixing, **grep the compiled PDF for `??` again** — this is the cheap check
-      that should be part of G-13.
+      ✅ **RESOLVED — author chose not to write the Monte Carlo section**, so the three
+      references were repointed instead. The table note already carried the full
+      calibration ($\lambda=0$, 5,000 simulations, $T=470$, the $\phi_\tau$/$\phi_r$
+      grids), so it was self-contained and the section references were redundant:
+      - `06_replication.tex:88` — dropped the dangling ref, leaving `(\Cref{tab:cp-t2b})`
+      - `cp_t2_panelB.tex:23` — *"the calibrated economy of ??"* → *"a calibrated
+        expectations-hypothesis economy in which risk premia are constant"*
+      - `cp_t2_panelB.tex:33` — *"a gap documented in ?? rather than closed"* →
+        *"a gap that this note documents rather than closes"* (phrased in the third
+        person so the G-1 `we`→`I` sweep does not have to touch it again)
+      **Verified by compile:** `??` in the PDF **3 → 0**, undefined-reference warnings
+      **4 → 0**.
+      → Keep **`grep "??"` on the extracted PDF** as a standing check under G-13.
 
 ---
 
@@ -511,12 +537,24 @@ squarely under his instruction to check cross-references systematically (G-13).
       alternatives**.
 - [ ] **Q-2** S-84: confirm whether **dropping the local factor from the contribution
       statement** is intentional.
-- [ ] **Q-3** G-4: confirm the preferred replacement name — **"dollar-return global cycle
-      factor"** vs **"USD global cycle factor"** — before the global rename.
+- [x] **Q-3** ✅ **RESOLVED (author decision, no need to ask him).** G-4 renames the
+      **prose only** to **"dollar-return"**; the symbol `FXGCF_t` is **retained** to avoid
+      rippling into every exhibit and the R scripts. Applied and compiled.
 - [ ] **Q-4** STR-3: confirm whether to **swap the appendix order** (Replication first).
 - [ ] **Q-5** STR-7: confirm the preferred new section title for the dollar-investor section.
 - [ ] **Q-6** Offer a **follow-up meeting**, as he suggested, once the structural items
       (STR-1..4) are drafted.
+- [ ] **Q-7** *(follow-on from G-4 — decide locally first, only ask him if unsure)*
+      Should the antonym **"unadjusted"** (28 occurrences) also be renamed?
+      Now that "FX-adjusted" is gone it has no stated counterpart, and it plausibly
+      carries the mirror of the defect he flagged: a reader may take "unadjusted" to
+      mean "**unhedged**", when $\GCF_t$ is in fact the **hedged / local-currency**
+      factor. **A blanket swap to "local-currency" is unsafe** — *"the unadjusted
+      dollar-investor factor"* (`08_robustness.tex:57,84`; `07_results.tex:480,482`)
+      would turn into "local-currency dollar-investor factor", a contradiction.
+      Suggested resolution: keep "unadjusted" as the standing term but **gloss it once**
+      at first use (`07_results.tex:272` already does this well — *"The unadjusted factor
+      $\GCF_t$ prices the hedged, local-currency return"*), and move that gloss earlier.
 
 ---
 
