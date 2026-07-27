@@ -3,7 +3,13 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** OPEN — not yet started. Work top to bottom; tick items as they are done.
+**Status:** IN PROGRESS. **G-5 and G-6 are done and verified by a clean compile.**
+Work top to bottom; tick items as they are done.
+
+**Build note:** the thesis compiles with `latexmk -pdf main.tex` (0 errors). Two cheap
+regression checks to run after every batch of edits:
+`grep -c "??"` on the extracted PDF text (see **X-1**) and a scan of `main.log` for
+`undefined` / `multiply defined`.
 
 **Overall verdict (email):** *"The thesis is well executed and the analyses are
 sophisticated and comprehensive, but in some places the writing can be made clearer
@@ -82,24 +88,31 @@ These are the highest-leverage items. Each one is a full-document sweep.
       `\FXCF` at `:62`), so the LaTeX side is a one-line edit — but the exhibit column
       headers come from the R scripts and would need regenerating.
 
-- [ ] **G-5 · "Chapter B" → "Appendix B".** *(S-7 p.5; S-22, S-26 strikeouts p.10–11;
-      S-52 p.26)*
-      ⚠️ **Root cause is `cleveref`, not the prose.** All five references already use
+- [x] **G-5 · "Chapter B" → "Appendix B".** ✅ **DONE & VERIFIED BY COMPILE**
+      *(S-7 p.5; S-22, S-26 strikeouts p.10–11; S-52 p.26)*
+      **Root cause was `cleveref`, not the prose.** All five references already used
       `\Cref{ch:replication}` — `01_introduction.tex:163,209`, `02_literature.tex:99`,
       `07_results.tex:8`, `10_conclusion.tex:19`. Because the chapter sits after
-      `\appendix`, cleveref still renders the *word* "Chapter". **Fix it once in
-      `preamble.tex`** (e.g. `\crefalias{chapter}{appendix}` after `\appendix`, or the
-      `\appendixname` route) rather than hard-coding "Appendix B" at five call sites.
-      Then re-check the compiled PDF.
+      `\appendix`, the report class still called it a "chapter".
+      **Fix:** `\crefalias{chapter}{appendix}` after `\appendix` (`main.tex`) plus
+      `\crefname`/`\Crefname` definitions (`preamble.tex`). One change, all five sites.
+      **Verified in the rebuilt PDF:** `"Chapter B"` → **0 occurrences**,
+      `"Appendix B"` → **8**. Appendix *sections* now also read "Appendix B.1 / B.2".
+      Main-text chapters still correctly read "Chapter 8".
 
-- [ ] **G-6 · Progressive numbering.** Do **not** number by chapter (Table 3.1).
-      Number **Table 1, Table 2, …** from 1 onward, and the **same for figures and
-      equations**. *(S-39, p.18)*
-      ⚠️ `preamble.tex` has **no** `\counterwithin` / `\numberwithin` — the per-chapter
-      numbering is the **`report` class default**. So this is an *addition*, not a
-      removal: add `\counterwithout{table}{chapter}`, likewise `figure` and `equation`
-      (package `chngcntr`), keeping the appendix numbering (A.1/B.1) intact if desired.
-      Do this **early** — it moves every number in the text, then let LaTeX resolve refs.
+- [x] **G-6 · Progressive numbering.** ✅ **DONE & VERIFIED BY COMPILE** *(S-39, p.18)*
+      `preamble.tex` had **no** `\counterwithin`/`\numberwithin` — the per-chapter
+      numbering was the **`report` class default**, so this was an *addition*:
+      `\counterwithout{table|figure|equation}{chapter}` via `chngcntr`.
+      **Checked first:** no exhibit or section number is hard-coded in prose anywhere —
+      all **247** cross-references use `\Cref` (177) or `\eqref` (70), so the renumbering
+      resolved automatically.
+      **Verified in the rebuilt PDF:** main text now reads **Table 1, 2, 3 …** and
+      equations **(1), (2), (3) …**; appendix exhibits retain **A.1 / B.1**
+      (`main.tex` restores `\counterwithin` after `\appendix` — author-confirmed as the
+      intended behaviour, matching finance-journal convention).
+      Build is clean: **0 LaTeX errors, 0 multiply-defined labels**, page count unchanged
+      at 82.
 
 - [ ] **G-7 · Spell out forward references.** A bare "(3.9)" is ambiguous when both
       *Section* 3.9 and *Equation* (3.9) exist. Write "the dollar-investor excess
@@ -439,6 +452,42 @@ These are the highest-leverage items. Each one is a full-document sweep.
       → Fix: brace each proper noun — `{Brazil}`, `{China}`, `{Treasury}`,
       `{Cochrane}--{Piazzesi}`. Then **read the rendered bibliography end to end.**
 - [ ] **S-86** (p.74) **Incomplete text** in the appendix.
+      ✅ **Diagnosed** — `06_replication.tex:19`:
+      > *"The relevant test is therefore agreement on signs, magnitudes."*
+      The list is truncated — it needs its final item and a conjunction, e.g.
+      *"…agreement on signs, magnitudes, **and statistical significance**."*
+
+---
+
+## Part 2b — Found by compiling (NOT flagged by the supervisor)
+
+These were not in his 86 comments but **are visible in the PDF he read**. They fall
+squarely under his instruction to check cross-references systematically (G-13).
+
+- [ ] **X-1 · Three broken cross-references render as `??` in the PDF.** 🔴 **HIGH**
+      The label **`sec:meth-ehmc` is referenced three times but never defined anywhere
+      in the thesis**:
+      - `chapters/06_replication.tex:88` → renders on **p.75**:
+        *"(Table B.3, **??**), whose 95th percentile…"*
+      - `tables/cp_t2_panelB.tex:23` → renders on **p.78**:
+        *"…calibrated expectations-hypothesis economy of **??**, in which risk premia
+        are constant…"*
+      - `tables/cp_t2_panelB.tex:33` → renders on **p.78**:
+        *"…a gap documented in **??** rather than closed."*
+      ⚠️ **Confirmed present in the supervisor's own annotated PDF** (pp. 75 and 78) —
+      he simply did not catch them, consistent with having read the back matter quickly.
+      ⚠️ **Root cause:** there is **no section describing the EH Monte Carlo anywhere**.
+      "Monte Carlo" appears in the body only at `06_replication.tex:90`. The references
+      point to a methodology section that was planned but never written (see
+      `REVIEW_EDITS.md:642`, which introduced the reference).
+      → **Decide:** either (a) write the missing subsection describing the simulated
+      expectations-hypothesis null — calibration, 5,000 simulations, 300-month window —
+      most likely inside `05_methodology.tex`, or (b) repoint the three references and
+      inline the calibration detail into the replication appendix.
+      Option (a) is stronger: the appendix currently asserts a gap is *"documented in ??"*,
+      so the documentation genuinely is missing, not merely mislabelled.
+      → After fixing, **grep the compiled PDF for `??` again** — this is the cheap check
+      that should be part of G-13.
 
 ---
 
