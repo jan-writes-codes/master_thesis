@@ -22,6 +22,16 @@
 \usepackage{pdfpages}      % include the external "list of aids" form PDF
 \graphicspath{{figures/}{tables/}}
 
+% Number tables, figures and equations progressively from 1 across the whole
+% main text (Table 1, Table 2, ...) rather than per chapter (Table 3.1), which
+% is the report-class default. Journal convention in finance, and the
+% supervisor's request. main.tex restores chapter-based numbering after
+% \appendix so appendix exhibits read A.1, B.1, ... in the usual way.
+\usepackage{chngcntr}
+\counterwithout{table}{chapter}
+\counterwithout{figure}{chapter}
+\counterwithout{equation}{chapter}
+
 % JFE-style table headings: "Table N" and a bold title, each on its own line,
 % set above the table; notes go below via \tabnotes.
 \captionsetup[table]{position=above, labelfont=bf, textfont=bf,
@@ -48,6 +58,15 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
 \usepackage[capitalise, noabbrev]{cleveref}
+
+% After \appendix the report class still calls its top-level units "chapters",
+% so \Cref{ch:replication} rendered as "Chapter B" instead of "Appendix B".
+% main.tex issues \crefalias{chapter}{appendix} right after \appendix, which
+% switches every subsequent chapter reference to the names defined here. Both
+% appendices are \input after that point, so all five in-text references
+% (introduction, literature, results, conclusion) are corrected at once.
+\crefname{appendix}{Appendix}{Appendices}
+\Crefname{appendix}{Appendix}{Appendices}
 
 % --- Notation macros (keep text consistent with the R implementation) -------
 \newcommand{\E}{\mathbb{E}}                      % expectation

@@ -15,7 +15,7 @@ consistency pass.
 and may have overlooked others. Every `G-` item below must therefore be swept
 **systematically across the whole thesis**, not only at the flagged locations.
 
-**Also:** he read **Chapter 8 (Robustness) more quickly** than the rest due to time,
+**Also:** he read **Chapter 6 (Robustness) more quickly** than the rest due to time,
 and offered a follow-up meeting. See `Q-` items at the end.
 
 ---
@@ -35,11 +35,17 @@ These are the highest-leverage items. Each one is a full-document sweep.
 
 - [ ] **G-1 · First-person singular.** Replace **"we/our/us" with "I/my/me"** throughout.
       Single-author thesis; no "we". *(email; S-1 "our"→"this", S-2, p.3)*
-      → **Scope: ~296 occurrences** (`we` 191, `We` 105) across `chapters/`.
+      → **Scope: ~387 occurrences** across `chapters/`, verified by count:
+      **`we` 191 + `We` 105 = 296**, plus **`our` 77 + `Our` 14 = 91**.
       Per file (we/We): results 35/14, robustness 28/9, intro 27/6, methodology 21/24,
       strategy 19/10, data 14/21, conclusion 14/4, replication 13/3, discussion 11/5,
       literature 8/6, abstract 1/3. Also sweep table notes and figure captions.
-      ⚠️ Not a blind find-replace — verb agreement ("we are" → "I am") and possessives.
+      ⚠️ **Not a blind find-replace.** Three traps:
+      (a) verb agreement — "we are/were/have" → "I am/was/have";
+      (b) **not every "we" is authorial** — "we can see", "we know that" is the reader-
+      inclusive *we*, which some supervisors accept but he asked for consistency, so
+      prefer recasting ("the figure shows") over "I can see";
+      (c) `\emph`/citation contexts and any "we" inside quoted material must stay.
 
 - [ ] **G-2 · "out-of-sample" hyphenation.** *(S-3, p.3)*
       **Scope: 13 unhyphenated vs 53 hyphenated.** Note that **most unhyphenated uses are
@@ -64,10 +70,17 @@ These are the highest-leverage items. Each one is a full-document sweep.
       `08_robustness.tex` 14, `01_introduction.tex` 6, `05_methodology.tex` 6,
       `06_replication.tex` 5, `08b_strategy.tex` 5, `10_conclusion.tex` 4,
       `02_literature.tex` 4, `00_abstract.tex` 3, `09_discussion.tex` 2, `tables/` 10,
-      `preamble.tex` 1 (likely a macro — change it there first).
-      → Decide the new name once (**Q-3**), then sweep prose, the symbol `FXGCF_t`,
-      section headings (`sec:fw-fxgcf`, `07_results.tex:183`), table/figure captions and
-      notes, and the R scripts' exhibit labels.
+      `preamble.tex` 1 — *this last one is only a code comment* on
+      `\newcommand{\FXGCF}{\mathit{FXGCF}}` (`preamble.tex:61`).
+      → **Two separate decisions**, don't conflate them:
+      **(a) the prose name** ("FX-adjusted global cycle factor" → his preferred wording)
+      and **(b) the symbol** `FXGCF_t` itself. He objected to the *words*; renaming the
+      **symbol** would ripple into every table, figure and the R scripts that generate
+      them. Cheapest defensible option: **change the prose, keep the symbol**, and gloss
+      it once at first use. Worth confirming with him. *(→ Q-3)*
+      → If the symbol does change, the macro is defined at `preamble.tex:61` (and
+      `\FXCF` at `:62`), so the LaTeX side is a one-line edit — but the exhibit column
+      headers come from the R scripts and would need regenerating.
 
 - [ ] **G-5 · "Chapter B" → "Appendix B".** *(S-7 p.5; S-22, S-26 strikeouts p.10–11;
       S-52 p.26)*
@@ -92,14 +105,29 @@ These are the highest-leverage items. Each one is a full-document sweep.
       *Section* 3.9 and *Equation* (3.9) exist. Write "the dollar-investor excess
       return defined in **Equation (3.9)** below" or "…defined in **Section 3.9**".
       *(S-40 p.18; S-58 p.28)*
+      📌 **G-6 partly solves this for free:** once equations number (1), (2), … they can
+      no longer collide with section numbers like 3.9, so the specific ambiguity he
+      caught disappears. **The rest of his point stands** — the 70 `\eqref` calls still
+      render a bare "(9)" with no noun. Wrap them as "Equation~\eqref{…}" where the
+      reference is a forward one or the reader may lose the thread.
 
 - [ ] **G-8 · Introduce every exhibit before discussing it.** On first mention, state
       briefly what the table/figure reports, *then* discuss. Model sentence:
       *"Figure X plots the GDP-weighted global cycle factor over 1990–2024, together
       with the eleven country-level local factors. We can see…"* *(S-59, p.28)*
 
-- [ ] **G-9 · Notes for ALL tables and figures.** Required for every exhibit in the
-      thesis, appendices included. Double-check completeness. *(email; S-38, p.18)*
+- [ ] **G-9 · Notes for ALL tables and figures.** *(email; S-38, p.18)*
+      ✅ **Audited — tables are already fine:** all **32** files in `tables/` carry a
+      `\tabnotes{…}` block. Nothing to do there.
+      ⚠️ **The gap is figures — all 26 of them.** There is **no figure-notes mechanism at
+      all**: no `\fignotes` macro in `preamble.tex`, and every figure carries only a
+      `\caption{}`. The captions *are* descriptive (they name the series and the
+      equation), but they are captions, not notes — which is what he asked for.
+      Count by file: `07_results.tex` 9, `A_appendix.tex` 7, `08b_strategy.tex` 4,
+      `08_robustness.tex` 3, `06_replication.tex` 2, `04_data.tex` 1.
+      → Suggested fix: define a `\fignotes` macro mirroring `\tabnotes`
+      (`preamble.tex:30`) so the styling matches, then add sample/estimation/source
+      detail to each of the 26. This is the single biggest mechanical item on the list.
 
 - [ ] **G-10 · "After X" → "The table format follows X".** The *"After Dahlquist and
       Hasseltoft (2013), Table 1"* convention is legitimate but risks being read as a
@@ -218,7 +246,12 @@ These are the highest-leverage items. Each one is a full-document sweep.
 
 - [ ] **STR-7 · Rename the "Global Investor" section.** *(S-66, p.30)*
       → `07_results.tex:183` — `\section{The Global Investor and the FX-Adjusted Factor}`
-      (note it also carries the G-4 rename). The heading
+      (note it also carries the G-4 rename).
+      💡 **The thesis already answers this itself:** the parallel section in Chapter 5 is
+      `08b_strategy.tex:208` — **`\section{The US-Dollar Investor and the FX-Adjusted
+      Factor}`**. Chapter 5 uses the right framing, Chapter 4 does not. Align Chapter 4
+      to Chapter 5 rather than inventing a third wording — which is also the cheapest
+      way to satisfy his objection. The heading
       "Global Investor" ≠ the "dollar investor" of the body text. Frame it as the shift
       from a **local investor** to a **US investor investing internationally**.
       His suggestions:
@@ -423,7 +456,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 
 ## Part 4 — Questions back to the supervisor
 
-- [ ] **Q-1** He read **Chapter 8 (Robustness)** more quickly and offered to look at anything
+- [ ] **Q-1** He read **Chapter 6 (Robustness)** more quickly and offered to look at anything
       more closely. → Decide what to send back: candidates are the **OOS estimation-scheme
       stress test**, the **core-vs-regional CPI variants**, and the **FXGCF construction
       alternatives**.

@@ -51,6 +51,14 @@
 \bibliography{references}
 
 \appendix
+% Make \Cref render appendix chapters as "Appendix A/B", not "Chapter A/B".
+\crefalias{chapter}{appendix}
+% Restore chapter-based numbering inside the appendices (Table A.1, B.1, ...);
+% the main text numbers progressively from 1 (see preamble.tex).
+\counterwithin{table}{chapter}
+\counterwithin{figure}{chapter}
+\counterwithin{equation}{chapter}
+
 \input{chapters/A_appendix}
 \input{chapters/06_replication}  % Appendix B: Replication and Validation
 
