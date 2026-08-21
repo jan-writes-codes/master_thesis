@@ -3,16 +3,16 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** IN PROGRESS — **53 of 126 items done.** All structural work (STR-1…STR-8)
-is complete, as are **G-1, G-2, G-3, G-4, G-5, G-6, G-8, G-9 and G-10**.
+**Status:** IN PROGRESS — **58 of 126 items done.** All structural work (STR-1…STR-8)
+is complete, as are **G-1 through G-11 except G-12**.
 Everything below is verified by a clean compile.
 
 Next up, in this order:
 1. 🔴 **X-2** — decide how to fix the two tables that disagree with the R output.
    This one needs the author.
-2. **G-11** (OLS consistency) — a small mechanical sweep.
-3. **G-12** (tone), **G-7** (spell out forward references), **G-13** (consistency),
-   **G-14** (table layout).
+2. **G-12** (tone — the remaining overclaiming), **G-13** (internal consistency
+   sweep), **G-14** (table layout), **G-15** (full proofread).
+3. The remaining `S-` line edits, and the `NUM-` checks **which need the author**.
 Then the remaining `S-` line edits, the `NUM-` checks **which need the author**, and
 finally **G-15** (full proofread).
 
@@ -226,15 +226,33 @@ These are the highest-leverage items. Each one is a full-document sweep.
       Build is clean: **0 LaTeX errors, 0 multiply-defined labels**, page count unchanged
       at 82.
 
-- [ ] **G-7 · Spell out forward references.** A bare "(3.9)" is ambiguous when both
-      *Section* 3.9 and *Equation* (3.9) exist. Write "the dollar-investor excess
-      return defined in **Equation (3.9)** below" or "…defined in **Section 3.9**".
+- [x] **G-7 · Spell out forward references.** ✅ **DONE & VERIFIED BY COMPILE**
       *(S-40 p.18; S-58 p.28)*
-      📌 **G-6 partly solves this for free:** once equations number (1), (2), … they can
-      no longer collide with section numbers like 3.9, so the specific ambiguity he
-      caught disappears. **The rest of his point stands** — the 70 `\eqref` calls still
-      render a bare "(9)" with no noun. Wrap them as "Equation~\eqref{…}" where the
-      reference is a forward one or the reader may lose the thread.
+      **Scoped it properly rather than blanket-prefixing all 70 `\eqref` calls.** His
+      objection was to *forward* references — *"For forward references to material not
+      yet introduced, spell them out"* — so a backward, appositive citation like
+      *"the cycle factor (12)"* is fine and prefixing it would only add noise.
+      **Found the forward ones by computation**, comparing the document position of
+      every `\eqref` against the position of the `\label` it points at:
+      **exactly 12 references precede their own equation**, and every one was bare.
+      **11 of the 12 sit in `04_data.tex`** — §3.1 describes the construction while the
+      equations are only defined in §3.2 and §3.3 — plus one in a methodology footnote.
+      All now read **"Equation~(N)"**, with *"below"* added at the three first-encounter
+      sites. Each was reworded individually rather than prefixed, since
+      *"by ordinary least squares (OLS) (4)"* needed *"…(OLS), as in Equation~(4)"*
+      to read properly.
+      **Verified by re-running the detector: 12 forward references spelled out, 0 bare.**
+      📌 G-6 had already removed the ambiguity he actually spotted, since equations now
+      number (1), (2), … and can no longer collide with a section number like 3.9.
+      This item closes the second half of his point, the missing noun.
+
+- [x] **G-11 · OLS consistency.** ✅ **DONE** *(S-46, p.21)*
+      The convention was **backwards**. `OLS` was used unexplained from Chapter 3
+      onward, and the phrase was then spelled out in Chapter 4, after five prior uses
+      of the abbreviation.
+      Now defined once at its genuine first occurrence — *"by ordinary least squares
+      (OLS)"* in the data chapter's construction list — and abbreviated at all **7**
+      later uses.
 
 - [x] **G-8 · Introduce every exhibit before discussing it.** ✅ **DONE** *(S-59, p.28)*
       **Coverage checked mechanically:** every one of the 31 tables and 26 figures is
@@ -296,11 +314,6 @@ These are the highest-leverage items. Each one is a full-document sweep.
       *plotted* series.
       **Verified:** 26/26 figures carry `\fignotes`, 0 errors, 0 undefined,
       **0 overfull/underfull boxes — identical to the baseline**. 80 → 83 pages.
-
-- [ ] **G-11 · OLS consistency.** Sometimes "OLS", sometimes "ordinary least squares".
-      Define once at first use, then use the abbreviation. *(S-46, p.21)*
-      → Spelled-out form at `05_methodology.tex:51`, `05_methodology.tex:289`,
-      `07_results.tex:26`.
 
 - [ ] **G-12 · Tone down the overclaiming.** A recurring theme across the review:
       the "**no …, no …, no …**" enumerations sound categorical; state the gap clearly
@@ -596,7 +609,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       in Section …"*.
 - [ ] **S-38** (p.18) Notes required for all tables and figures. *(G-9)*
 - [ ] **S-39** (p.18) Progressive numbering. *(G-6)*
-- [ ] **S-40** (p.18) Ambiguous bare "(3.9)". *(G-7)*
+- [x] **S-40** (p.18) Ambiguous bare "(3.9)". *(G-7)*
 - [ ] **S-41** (p.19) "net" → **"net out"**.
 - [ ] **S-42** (p.20) "collected" → **"reported"**.
 - [x] **S-43** (p.20) "After Dahlquist and Hasseltoft (2013), Table 1" → *"The table format
@@ -604,7 +617,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [ ] **S-44** (p.20) **"menu"** — change the word.
 - [ ] **S-45** (p.21) `rx^(n)_{t+12}` — **should it not carry the country subscript `i`**,
       as mentioned above it?
-- [ ] **S-46** (p.21) OLS vs "ordinary least squares". *(G-11)*
+- [x] **S-46** (p.21) OLS vs "ordinary least squares". *(G-11)*
 - [ ] **S-47** (p.22) **`N` is overloaded:** defined as the maturity menu {1,2,4,5,9,10} in
       3.5, used correctly in (3.4) as N\{1}, then **silently redefined** as the averaging
       set {2,5,10} in (3.8) with K = |N|. **Give the averaging set its own symbol.**
@@ -630,7 +643,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       sentence, e.g. *"Specifically, I regress…"*.
 - [ ] **S-56** (p.28) **"unqiue"** → "specific" *(typo)*.
 - [ ] **S-57** (p.28) Remove the hyphen ("…-bond…").
-- [ ] **S-58** (p.28) "of (3.7)" → *", as defined in Eq. (3.7),"* or similar. *(G-7)*
+- [x] **S-58** (p.28) "of (3.7)" → *", as defined in Eq. (3.7),"* or similar. *(G-7)*
 - [x] **S-59** (p.28) Introduce every exhibit before discussing it. *(G-8)*
 - [ ] **S-60** (p.29) "named" → **"previously described"**.
 - [ ] **S-61** (p.29) **"ladder"** is not standard terminology — check it is correct here.

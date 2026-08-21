@@ -56,17 +56,17 @@ I obtain four raw inputs for my analysis, drawn from two data providers:
     inflation
     $\pi_{i,t}=\big(\mathrm{CPI}_{i,t}/\mathrm{CPI}_{i,t-12}-1\big)\times 100$
     in-sample, and trend inflation $\trendinf_{i,t}$ then follows from the EWMA
-    in \eqref{eq:trendinf}.
+    in Equation~\eqref{eq:trendinf} below.
   \item[Nominal GDP (LSEG Refinitiv).] I use annual nominal GDP in local
     currency (e.g.\ \texttt{aUSWDALB5A}) to form the time-varying global weights
-    $w_{i,t}$ of \eqref{eq:gcf}. Before weighting, I convert GDP to a common
+    $w_{i,t}$ of Equation~\eqref{eq:gcf} below. Before weighting, I convert GDP to a common
     US-dollar basis using year-end exchange rates.
   \item[Spot exchange rates (Bloomberg).] I obtain end-of-month spot rates
     quoted as US dollars per unit of foreign currency (\texttt{EURUSD},
     \texttt{CADUSD}, \texttt{JPYUSD}, \texttt{GBPUSD}, \texttt{SEKUSD},
     \texttt{CHFUSD}), with the USD rate fixed at unity. These series give the
     log currency return in the dollar-investor excess
-    return \eqref{eq:rx-usd} and the FX conversion of GDP.
+    return of Equation~\eqref{eq:rx-usd} below and the FX conversion of GDP.
 \end{description}
 
 \paragraph{Sample and coverage.}
@@ -109,7 +109,7 @@ construction and the twelve-month return horizon. In
 
 My panel is therefore unbalanced. I handle this throughout by computing
 cross-country objects only over the countries that are present at each date.
-The global weights $w_{i,t}$ in \eqref{eq:gcf} are, thus, renormalised each
+The global weights $w_{i,t}$ in Equation~\eqref{eq:gcf} are, thus, renormalised each
 month to sum to one over the available panel, and I compute the summary
 correlations below on a pairwise-complete basis. For the five
 euro-area members I apply the euro rate throughout, including the pre-1999
@@ -131,7 +131,7 @@ show the resulting yield series.
   Yields are end-of-month Bloomberg fitted zero-coupon government curves. The
   panel is unbalanced, so all cross-country objects are computed only over the
   countries present at each date, and the GDP weights $w_{i,t}$ in
-  \eqref{eq:gcf} are renormalised each month over that set.}
+  Equation~\eqref{eq:gcf} are renormalised each month over that set.}
 \end{figure}
 
 \paragraph{Cleaning and alignment.}
@@ -142,17 +142,20 @@ steps in my construction need spelling out:
 \begin{enumerate}[leftmargin=1.6em]
   \item \textbf{Trend inflation.} I compute year-on-year core inflation from
     the CPI index and smooth it with the backward-looking EWMA
-    \eqref{eq:trendinf} with window $M=120$ months and decay $v=0.987$.
+    of Equation~\eqref{eq:trendinf}, with window $M=120$ months and decay $v=0.987$.
   \item \textbf{Cycles.} For each country--maturity pair, I project yields on
-    trend inflation by OLS \eqref{eq:decomp}. The residual is the cycle
+    trend inflation by ordinary least squares (OLS), as in
+    Equation~\eqref{eq:decomp}. The residual is the cycle
     $\cyc^{(n)}_{i,t}$. The one-year cycle and the average cycle over
-    $\{2,4,5,9,10\}$ years \eqref{eq:cbar} are the inputs to the cycle factor.
+    $\{2,4,5,9,10\}$ years, Equation~\eqref{eq:cbar}, are the inputs to the cycle
+    factor.
   \item \textbf{Excess returns.} I form one-year holding-period excess returns
-    \eqref{eq:rx} for $n\in\{2,5,10\}$ (the maturities for which the adjacent
+    from Equation~\eqref{eq:rx} for $n\in\{2,5,10\}$ (the maturities for which the adjacent
     shorter yield $y^{(n-1)}$ is observed), standardise them by duration
-    $D^{(n)}=n$, and average them \eqref{eq:rxbar}. For the dollar investor, I
-    add the realised currency return and net the US short rate
-    \eqref{eq:rx-usd}.
+    $D^{(n)}=n$, and average them as in
+    Equation~\eqref{eq:rxbar}. For the dollar investor, I
+    add the realised currency return and net the US short rate,
+    Equation~\eqref{eq:rx-usd}.
   \item \textbf{GDP weights.} I convert annual nominal GDP to US dollars at
     the year-end exchange rate and divide it by the cross-sectional total to
     obtain $w_{i,t}$. I hold the weights constant within a calendar year and
