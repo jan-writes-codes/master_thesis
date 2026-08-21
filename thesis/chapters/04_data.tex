@@ -5,17 +5,17 @@
 \label{ch:data}
 \label{ch:methodology}
 
-In this chapter, we describe the data and develop the methodology of our
-empirical analysis. We first describe the data we use to construct the cycle
-factors and to run the predictive regressions of \Cref{ch:results}. We assemble
+In this chapter, I describe the data and develop the methodology of my
+empirical analysis. I first describe the data I use to construct the cycle
+factors and to run the predictive regressions of \Cref{ch:results}. I assemble
 all series in a single workbook (\texttt{data.xlsx}) and process them into a
-monthly country--maturity panel, implemented in \texttt{data\_preparation.R}. We
+monthly country--maturity panel, implemented in \texttt{data\_preparation.R}. I
 begin with the cross-sectional universe and the four raw inputs (yields,
 inflation, GDP, and exchange rates) with their sources and units, then present
-the sample coverage, our cleaning and alignment choices, and summary statistics.
-We then develop the technical framework: the excess-return definitions and the
-expectations-hypothesis null they are tested against, the cycle-factor
-hierarchy, and the predictive specifications. We close with the estimation and
+the sample coverage, my cleaning and alignment choices, and summary statistics.
+I then develop the technical framework, which covers the excess-return
+definitions and the expectations-hypothesis null they are tested against, the
+cycle-factor hierarchy, and the predictive specifications. I close with the estimation and
 inference used to evaluate them.
 
 % ===========================================================================
@@ -23,7 +23,7 @@ inference used to evaluate them.
 \label{sec:data}
 
 \paragraph{Universe and sources.}
-Our cross-section is the G10 government-bond universe, comprising eleven
+My cross-section is the G10 government bond universe, comprising eleven
 countries. That is Belgium (BE), Canada (CA), Switzerland (CH), Germany (DE), France
 (FR), the United Kingdom (GB), Italy (IT), Japan (JP), the Netherlands (NL),
 Sweden (SE), and the United States (US). Five of these countries share the euro
@@ -32,37 +32,46 @@ Swiss franc (CHF), pound sterling (GBP), Japanese yen (JPY), Swedish krona
 (SEK), and US dollar (USD). The US dollar serves as the home currency for the
 international investor.
 
-We obtain four raw inputs for our analysis, drawn from two data providers:
+I obtain four raw inputs for my analysis, drawn from two data providers:
 
 \begin{description}[leftmargin=1.5em, style=nextline]
-  \item[Zero-coupon yields (Bloomberg).] We obtain end-of-month yields from
+  \item[Zero-coupon yields (Bloomberg).] I obtain end-of-month yields from
     Bloomberg's fitted zero-coupon government curves,
     one curve per country, at maturities of $1,2,4,5,9$ and $10$ years. Each
     country maps to a Bloomberg curve identifier (e.g.\ \texttt{I25} for the US,
-    \texttt{I22} for the UK, \texttt{I18} for Japan), which we record in the
+    \texttt{I22} for the UK, \texttt{I18} for Japan), which I record in the
     workbook's \texttt{curve\_translation} sheet. Yields are continuously
     compounded and quoted in percent per annum.
-  \item[Core CPI (FRED).] We use monthly seasonally adjusted core
-    consumer price indices, one per country. The workbook stores the \emph{index level}. We compute year-on-year
+  \item[Core CPI (FRED).] I use monthly seasonally adjusted core
+    consumer price indices, one per country. The workbook stores the \emph{index level}.
+    Japan is the one exception and I treat it explicitly. Its FRED core-CPI series
+    ends in June 2021, and leaving it there would drop every Japanese observation
+    after that date, and with them a market carrying roughly a fifth of the GDP
+    weight, from the last three years of the estimation sample. I therefore extend the Japanese series after
+    June 2021 with the LSEG core-CPI index, multiplied by the ratio of the two index
+    levels in the splice month so that the level matches the FRED base and
+    year-on-year inflation is continuous across the join. Over their common
+    1990--2021 span the two series' year-on-year rates correlate $0.98$. No other
+    country is spliced. I compute year-on-year
     inflation
     $\pi_{i,t}=\big(\mathrm{CPI}_{i,t}/\mathrm{CPI}_{i,t-12}-1\big)\times 100$
     in-sample, and trend inflation $\trendinf_{i,t}$ then follows from the EWMA
-    in \eqref{eq:trendinf}.
-  \item[Nominal GDP (LSEG Refinitiv).] We use annual nominal GDP in local
+    in Equation~\eqref{eq:trendinf} below.
+  \item[Nominal GDP (LSEG Refinitiv).] I use annual nominal GDP in local
     currency (e.g.\ \texttt{aUSWDALB5A}) to form the time-varying global weights
-    $w_{i,t}$ of \eqref{eq:gcf}. Before weighting, we convert GDP to a common
+    $w_{i,t}$ of Equation~\eqref{eq:gcf} below. Before weighting, I convert GDP to a common
     US-dollar basis using year-end exchange rates.
-  \item[Spot exchange rates (Bloomberg).] We obtain end-of-month spot rates
+  \item[Spot exchange rates (Bloomberg).] I obtain end-of-month spot rates
     quoted as US dollars per unit of foreign currency (\texttt{EURUSD},
     \texttt{CADUSD}, \texttt{JPYUSD}, \texttt{GBPUSD}, \texttt{SEKUSD},
-    \texttt{CHFUSD}), with the USD rate fixed at unity. These series give us the
+    \texttt{CHFUSD}), with the USD rate fixed at unity. These series give the
     log currency return in the dollar-investor excess
-    return \eqref{eq:rx-usd} and the FX conversion of GDP.
+    return of Equation~\eqref{eq:rx-usd} below and the FX conversion of GDP.
 \end{description}
 
 \paragraph{Sample and coverage.}
 \label{sec:data-coverage}
-Our panel is monthly and sampled at month-end. Although the raw yield workbook
+My panel is monthly and sampled at month-end. Although the raw yield workbook
 extends back to 1980 and the inflation indices to 1955, the usable span is
 governed at the early end by the availability of each country's Bloomberg
 zero-coupon curve and at the recent end by the annual GDP weights used for the
@@ -73,7 +82,7 @@ themselves extend to April 2026 (\Cref{fig:yield-ts}). This yields $422$ monthly
 observations for the US, $421$ for Japan, and $353$ for each of the other
 countries. The excess-return regressions use somewhat fewer after the factor
 construction and the twelve-month return horizon. In
-\Cref{tab:data-coverage} we summarise the effective coverage.
+\Cref{tab:data-coverage} I summarise the effective coverage.
 
 \begin{table}[t]\centering
   \caption{Effective monthly coverage of the yield panel, by country.}
@@ -98,64 +107,76 @@ construction and the twelve-month return horizon. In
   \end{tabular}
 \end{table}
 
-Our panel is therefore unbalanced. We handle this throughout by computing
+My panel is therefore unbalanced. I handle this throughout by computing
 cross-country objects only over the countries that are present at each date.
-The global weights $w_{i,t}$ in \eqref{eq:gcf} are, thus, renormalised each
-month to sum to one over the available panel, and we compute the summary
+The global weights $w_{i,t}$ in Equation~\eqref{eq:gcf} are, thus, renormalised each
+month to sum to one over the available panel, and I compute the summary
 correlations below on a pairwise-complete basis. For the five
-euro-area members we apply the euro rate throughout, including the pre-1999
+euro-area members I apply the euro rate throughout, including the pre-1999
 years before the single currency, so their pre-1999 dollar-investor currency
 returns reflect a single vendor-backfilled euro series rather than the legacy
 national currencies. In
-\Cref{fig:coverage} we visualise the coverage, and in \Cref{fig:yield-ts} we
-show the resulting 10-year yield series.
+\Cref{fig:coverage} I visualise the coverage, and in \Cref{fig:yield-ts} I
+show the resulting yield series.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/s1_coverage.pdf}
   \caption[Sample coverage by country and maturity]{Sample coverage by country and maturity. The United States and Japan
     extend back to 1989. The remaining countries begin in late 1994.}
   \label{fig:coverage}
+  \fignotes{Each cell shows, for one country in one month, the share of the six
+  maturities $\{1,2,4,5,9,10\}$ for which a yield is observed, shading from white
+  (none) through to solid (all six). The horizontal axis starts at the first month
+  in which any maturity is available, so the empty pre-1989 margin is suppressed.
+  Yields are end-of-month Bloomberg fitted zero-coupon government curves. The
+  panel is unbalanced, so all cross-country objects are computed only over the
+  countries present at each date, and the GDP weights $w_{i,t}$ in
+  Equation~\eqref{eq:gcf} are renormalised each month over that set.}
 \end{figure}
 
 \paragraph{Cleaning and alignment.}
-We align the raw inputs to a common monthly grid keyed on year--month and
+I align the raw inputs to a common monthly grid keyed on year--month and
 reshape the panel to long form (country $\times$ maturity $\times$ month). Four
-steps in our construction need spelling out:
+steps in my construction need spelling out:
 
 \begin{enumerate}[leftmargin=1.6em]
-  \item \textbf{Trend inflation.} We compute year-on-year core inflation from
+  \item \textbf{Trend inflation.} I compute year-on-year core inflation from
     the CPI index and smooth it with the backward-looking EWMA
-    \eqref{eq:trendinf} with window $M=120$ months and decay $v=0.987$.
-  \item \textbf{Cycles.} For each country--maturity pair, we project yields on
-    trend inflation by OLS \eqref{eq:decomp}. The residual is the cycle
+    of Equation~\eqref{eq:trendinf}, with window $M=120$ months and decay $v=0.987$.
+  \item \textbf{Cycles.} For each country--maturity pair, I project yields on
+    trend inflation by ordinary least squares (OLS), as in
+    Equation~\eqref{eq:decomp}. The residual is the cycle
     $\cyc^{(n)}_{i,t}$. The one-year cycle and the average cycle over
-    $\{2,4,5,9,10\}$ years \eqref{eq:cbar} are the inputs to the cycle factor.
-  \item \textbf{Excess returns.} We form one-year holding-period excess returns
-    \eqref{eq:rx} for $n\in\{2,5,10\}$ (the maturities for which the adjacent
+    $\{2,4,5,9,10\}$ years, Equation~\eqref{eq:cbar}, are the inputs to the cycle
+    factor.
+  \item \textbf{Excess returns.} I form one-year holding-period excess returns
+    from Equation~\eqref{eq:rx} for $n\in\{2,5,10\}$ (the maturities for which the adjacent
     shorter yield $y^{(n-1)}$ is observed), standardise them by duration
-    $D^{(n)}=n$, and average them \eqref{eq:rxbar}. For the dollar investor, we
-    add the realised currency return and net the US short rate
-    \eqref{eq:rx-usd}.
-  \item \textbf{GDP weights.} We convert annual nominal GDP to US dollars at
+    $D^{(n)}=n$, and average them as in
+    Equation~\eqref{eq:rxbar}. For the dollar investor, I
+    add the realised currency return and net out the US short rate,
+    Equation~\eqref{eq:rx-usd}.
+  \item \textbf{GDP weights.} I convert annual nominal GDP to US dollars at
     the year-end exchange rate and divide it by the cross-sectional total to
-    obtain $w_{i,t}$. We hold the weights constant within a calendar year and
+    obtain $w_{i,t}$. I hold the weights constant within a calendar year and
     renormalise them over the available panel.
 \end{enumerate}
 
 Missing values arise from the unbalanced panel and from the twelve-month leads
-and lags in the return construction. We propagate them as \texttt{NA} and drop
-them pairwise in each regression, rather than imputing them.
+and lags in the return construction. I propagate them as \texttt{NA} and drop
+them pairwise in each regression. The Japanese core-CPI splice described above is
+the only place where I fill a gap rather than drop it.
 
 \paragraph{Summary statistics.}
-In \Cref{tab:dh-t1-summary} we report the mean and standard deviation of yields
-for every country--maturity pair. We can note two features that are consistent
+In \Cref{tab:dh-t1-summary} I report the mean and standard deviation of yields
+for every country--maturity pair. Two features are consistent
 across countries. First, average yield curves slope upward in maturity. Second,
 volatility is broadly flat across the maturity spectrum. The short end is
 somewhat more volatile in the United States, the United Kingdom, Italy, and
 Japan, whereas in much of the euro area the long end is marginally more
-volatile. In \Cref{fig:yield-curve-avg} we show the average curve shapes.
+volatile. In \Cref{fig:yield-curve-avg} I show the average curve shapes.
 Summary statistics for the non-yield inputs (core inflation, the currency
-return, and the GDP weight) are collected in \Cref{tab:dh-t1b-inputs}.
+return, and the GDP weight) are reported in \Cref{tab:dh-t1b-inputs}.
 
 \begin{table}[t]
   \caption{Summary statistics of zero-coupon yields by country and maturity}
@@ -165,12 +186,12 @@ return, and the GDP weight) are collected in \Cref{tab:dh-t1b-inputs}.
 \end{table}
 
 
-In \Cref{tab:dh-t1-corr} we report the cross-country correlation matrix of the
-ten-year yield, computed pairwise-complete over the full per-country sample. We
-can see that yields co-move strongly internationally. The correlations are
+In \Cref{tab:dh-t1-corr} I report the cross-country correlation matrix of the
+ten-year yield, computed pairwise-complete over the full per-country sample.
+Yields co-move strongly internationally. The correlations are
 uniformly high and are tightest within the euro-area bloc (BE, DE, FR, IT, NL).
-This co-movement is what motivates a \emph{global} cycle
+This co-movement is what motivates a global cycle
 factor. If the levels of long yields share a common component across countries,
 it seems plausible that the predictable component of their returns does so as
-well. We examine this integration hypothesis in \Cref{ch:results}.
+well. I examine this integration hypothesis in \Cref{ch:results}.
 
