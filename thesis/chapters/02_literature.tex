@@ -19,7 +19,10 @@ definitions, and the predictive regressions) is developed in
 \Cref{ch:methodology}.
 
 % ===========================================================================
-\section{The Expectations Hypothesis and Bond Return Predictability}
+\section{Bond Return Predictability in the United States}
+\label{sec:lit-us}
+
+\paragraph{The expectations hypothesis and its rejection.}
 \label{sec:lit-eh}
 
 The expectations hypothesis holds that long yields are averages of expected
@@ -40,8 +43,8 @@ countercyclical, rising in recessions and falling in booms.
 Once predictability is accepted, the next question is which variable
 forecasts returns. We can distinguish three positions. The first position holds
 that the information is contained in the yield curve itself and can be
-distilled into a single combination of forward rates
-(\Cref{sec:lit-cp2005}). The second position holds that macroeconomic
+distilled into a single combination of forward rates, the forward-rate view
+discussed below. The second position holds that macroeconomic
 variables matter beyond the curve. \citet{ludvigson2009} extract factors
 from a large panel of macro series and show that real-activity and
 inflation factors forecast excess returns over and above forward rates and
@@ -55,7 +58,7 @@ substantial part of risk-premium variation is hidden from the current
 curve altogether. Such a hidden factor can move expected short rates and term
 premia in offsetting directions, leaving the yield curve nearly unchanged.
 The change in term premia can still be used to forecast returns. The macro-anchored cycle factor at the centre
-of our thesis (\Cref{sec:lit-cp2015}) can be seen as a sharpened version
+of our thesis, which we turn to below, can be seen as a sharpened version
 of the second position, since it relies on one specific, economically
 interpretable macro variable, namely trend inflation.
 
@@ -73,8 +76,7 @@ estimated regressor in an overlapping twelve-month regression. The
 methodological choices we make in \Cref{ch:methodology} are, therefore,
 in large part a response to this.
 
-% ===========================================================================
-\section{Forward-Rate Predictors: Cochrane and Piazzesi (2005)}
+\paragraph{Forward-rate predictors: \citet{cochrane2005}.}
 \label{sec:lit-cp2005}
 
 \citet{cochrane2005} transformed the predictability literature by showing
@@ -89,7 +91,7 @@ return-forecasting factor rather than maturity-specific premia. For the
 research that followed, two features of the CP factor stand out. It is largely
 orthogonal to the level, slope, and curvature factors
 that summarise the cross-section of yields, which started the spanning
-debate of \Cref{sec:lit-eh}. It is a reduced-form object, that is,
+debate described above. It is a reduced-form object, that is,
 a combination of prices that predicts returns on those same prices, with
 no economic mechanism attached. It tells us that premia vary, without
 saying why. \citet{rebonato2025} trace the factor's predictive power to the
@@ -100,8 +102,7 @@ and ultimately our thesis, comes in. The CP factor nonetheless remains the bench
 and compare its global version with the global cycle factor in
 \Cref{ch:robustness}.
 
-% ===========================================================================
-\section{The Macro-Anchored Cycle Factor: Cieslak and Povala (2015)}
+\paragraph{The macro-anchored cycle factor: \citet{cieslak2015}.}
 \label{sec:lit-cp2015}
 
 \citet{cieslak2015} provide the economic mechanism behind this
@@ -142,7 +143,10 @@ character that leads to the testable international prediction we make use of
 in this thesis. If the mechanism is fundamental, it should not be unique to the US.
 
 % ===========================================================================
-\section{Global Integration: Dahlquist and Hasseltoft (2013)}
+\section{International Evidence and the Gap}
+\label{sec:lit-international}
+
+\paragraph{Global integration: \citet{dahlquist2013}.}
 \label{sec:lit-dh2013}
 
 That international bond returns are predictable, and predictable by
@@ -181,15 +185,14 @@ global bond investor the risk-minimising currency position is close to a
 full hedge, and \citet{lustig2019} show that the currency carry premium
 shrinks as foreign bond maturity lengthens, so that long-maturity
 unhedged positions earn little compensation for their currency risk.
-Against this background, \citet{dahlquist2013} construct an
-\emph{FX-adjusted} global factor, which is a version of the global factor
+Against this background, \citet{dahlquist2013} construct a
+\emph{dollar-return} global factor, which is a version of the global factor
 fitted to dollar-denominated returns, and show that it recovers much of
-the predictability that the currency conversion destroys, while remaining
-only moderately correlated with the unadjusted factor. The FX-adjusted
+the predictability that the currency conversion erodes, while remaining
+only moderately correlated with the unadjusted factor. The dollar-return
 cycle factor we build is the direct analogue of this construction.
 
-% ===========================================================================
-\section{International Macro-Anchored Predictability and the Gap}
+\paragraph{International macro-anchored predictability and the gap.}
 \label{sec:lit-gap}
 
 The two research areas described above, macro-anchored
@@ -216,13 +219,11 @@ global cycle factor for government bonds.
 From this review, we can identify a specific gap in the literature. To
 our knowledge, no study takes the \citet{cieslak2015} cycle factor itself
 across the G10, no study builds a GDP-weighted \emph{global cycle factor}
-in the manner of \citet{dahlquist2013}, and no study constructs an
-FX-adjusted global cycle factor for the unhedged dollar investor.
-The existing international macro-anchored evidence has also not
-been subjected to the full out-of-sample discipline that the
-methodological literature demands. Because of this gap, we want to add to
-the field by constructing the local, global, and FX-adjusted global cycle
-factors for eleven G10 markets and by evaluating them in the three-phase
-design of \Cref{sec:fw-hypotheses}. We hold every result to the real-time
-standard, i.e. estimating it out-of-sample
+in the manner of \citet{dahlquist2013}, and no study constructs a
+dollar-return global cycle factor for the unhedged dollar investor.
+The existing international macro-anchored evidence has also seen
+limited out-of-sample evaluation of the kind the methodological literature
+calls for. This thesis addresses that gap by constructing the local, global,
+and dollar-return global cycle factors for eleven G10 markets and by holding
+every result to a real-time, out-of-sample standard
 \citep{campbellthompson2008}.
