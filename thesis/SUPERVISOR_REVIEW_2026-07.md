@@ -8,12 +8,10 @@ is complete, as are **G-1, G-4, G-5 and G-6**, the four largest global rules.
 Everything below is verified by a clean compile.
 
 Next up, in this order:
-1. **G-9** figure notes — the biggest remaining job: all 26 figures, and a `\fignotes`
-   macro has to be written first. (Tables already all carry `\tabnotes`.)
-2. **G-3** italics discipline — partly done already, since STR-5 and G-1 removed the
+1. **G-3** italics discipline — partly done already, since STR-5 and G-1 removed the
    italicised research questions.
-3. **G-2** (out-of-sample hyphenation), **G-8** (introduce every exhibit — partly done
-   by the G-1 recasts), **G-10**, **G-11**.
+2. **G-8** (introduce every exhibit — partly done by the G-1 recasts), **G-2**
+   (out-of-sample hyphenation), **G-10**, **G-11**.
 Then the remaining `S-` line edits, the `NUM-` checks **which need the author**, and
 finally **G-15** (full proofread).
 
@@ -198,18 +196,28 @@ These are the highest-leverage items. Each one is a full-document sweep.
       *"Figure X plots the GDP-weighted global cycle factor over 1990–2024, together
       with the eleven country-level local factors. We can see…"* *(S-59, p.28)*
 
-- [ ] **G-9 · Notes for ALL tables and figures.** *(email; S-38, p.18)*
-      ✅ **Audited — tables are already fine:** all **32** files in `tables/` carry a
-      `\tabnotes{…}` block. Nothing to do there.
-      ⚠️ **The gap is figures — all 26 of them.** There is **no figure-notes mechanism at
-      all**: no `\fignotes` macro in `preamble.tex`, and every figure carries only a
-      `\caption{}`. The captions *are* descriptive (they name the series and the
-      equation), but they are captions, not notes — which is what he asked for.
-      Count by file: `07_results.tex` 9, `A_appendix.tex` 7, `08b_strategy.tex` 4,
-      `08_robustness.tex` 3, `06_replication.tex` 2, `04_data.tex` 1.
-      → Suggested fix: define a `\fignotes` macro mirroring `\tabnotes`
-      (`preamble.tex:30`) so the styling matches, then add sample/estimation/source
-      detail to each of the 26. This is the single biggest mechanical item on the list.
+- [x] **G-9 · Notes for ALL tables and figures.** ✅ **DONE & VERIFIED BY COMPILE**
+      *(email; S-38, p.18)*
+      **Tables were already complete** — all 32 files in `tables/` carry `\tabnotes`.
+      **The gap was figures, and it was total**: there was no figure-notes mechanism
+      at all, only `\caption`. Added a **`\fignotes` macro** to `preamble.tex`
+      mirroring `\tabnotes` (same `\footnotesize\singlespacing` minipage, slightly
+      tighter leading since it follows a caption rather than a tabular), then wrote
+      notes for **all 26 figures**: 9 in results, 7 in the supplementary appendix,
+      4 in strategy, 3 in robustness, 2 in replication, 1 in data.
+      **Division of labour between caption and notes**, kept consistent throughout —
+      the caption says what the exhibit *is*, the notes give construction, sample,
+      source and how to read it. Notes reference the defining equation, name the data
+      provider where relevant (Bloomberg curves, FRED core CPI, LSEG Refinitiv GDP),
+      and state estimation detail such as the 18-lag HAC inference, the recursive
+      protocol, or that the panel is unbalanced.
+      **Where a figure could mislead, the note says so**, e.g. the rolling-Sharpe
+      figure now states that overlapping twelve-month returns make it descriptive
+      rather than a basis for inference, and the regime figure states that the
+      reported $-0.42$ is between the two *plotted* series, not the underlying factors.
+      **Verified:** 26/26 figures carry `\fignotes`, 0 errors, 0 undefined,
+      **0 overfull/underfull boxes — identical to the baseline**, so the added notes
+      cost no layout quality. 80 → 83 pages.
 
 - [ ] **G-10 · "After X" → "The table format follows X".** The *"After Dahlquist and
       Hasseltoft (2013), Table 1"* convention is legitimate but risks being read as a

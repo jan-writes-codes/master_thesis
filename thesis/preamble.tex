@@ -41,6 +41,13 @@
   \begin{minipage}{\linewidth}%
     \footnotesize\singlespacing\noindent #1\par
   \end{minipage}}
+% Figure counterpart of \tabnotes, so notes under a figure match those under a
+% table. Place after \caption and \label; the caption says what the exhibit is,
+% the notes give sample, construction and reading detail.
+\newcommand{\fignotes}[1]{\par\vspace{0.4em}%
+  \begin{minipage}{\linewidth}%
+    \footnotesize\singlespacing\noindent #1\par
+  \end{minipage}}
 \newcommand{\panel}[2]{\multicolumn{#1}{@{}l}{\textit{#2}}}
 
 % --- Layout -----------------------------------------------------------------

@@ -97,6 +97,14 @@ Across the five schemes the rankings are largely stable. Under all three expandi
     expanding-window minimums but not under either rolling window. The baseline
     is the expanding-window, five-year-minimum scheme.}
   \label{fig:rob-oos-scheme}
+  \fignotes{Each group reports the pooled out-of-sample $R^{2}_{\mathrm{oos}}$
+  \eqref{eq:meth-ctr2} under a different recursive estimation scheme. The
+  expanding-window schemes differ in the minimum training history required before
+  the first forecast, and the rolling windows re-estimate on a fixed-length
+  trailing sample. Every scheme rebuilds the whole factor chain at each date, so
+  the trend, the cycles, the coefficients and the GDP weights respect time~$t$.
+  The baseline used throughout the thesis is the expanding window with a five-year
+  minimum.}
 \end{figure}
 
 % ===========================================================================
@@ -159,6 +167,12 @@ subsample evidence states it more sharply than the pooled regression can.
     values). The global cycle factor is above zero in every window except the
     financial crisis itself.}
   \label{fig:rob-oos-sub}
+  \fignotes{Each group reports the pooled out-of-sample $R^{2}_{\mathrm{oos}}$
+  \eqref{eq:meth-ctr2} computed on the subsample named on the horizontal axis,
+  with the factor built recursively as in the baseline. The pre-crisis window is
+  omitted because it is too short for a stable recursive estimate, and
+  \Cref{tab:rob-sub-oos} reports its values. Subsample dating follows
+  \Cref{tab:rob-sub-is}.}
 \end{figure}
 
 The out-of-sample subsample evidence (\Cref{tab:rob-sub-oos},
@@ -235,6 +249,12 @@ G10 with the macro-anchored cycle.
     the recursive prevailing mean. Only the global cycle factor is reliably
     positive.}
   \label{fig:s10-oos}
+  \fignotes{Bars report the country-level out-of-sample $R^{2}_{\mathrm{oos}}$
+  \eqref{eq:meth-ctr2} of the two cycle factors against the two forward-rate
+  factors of \citet{cochrane2005} and \citet{dahlquist2013}. All four are rebuilt
+  fully recursively and scored against each country's own recursive prevailing
+  mean, so the comparison holds the real-time protocol fixed and varies only the
+  predictor.}
 \end{figure}
 
 % ===========================================================================

@@ -116,6 +116,12 @@ through the horse race \eqref{eq:h-horse}--\eqref{eq:h-global}.
     line) against the eleven country-level local cycle factors $\CF_{i,t}$
     (light lines).}
   \label{fig:s5-gcf}
+  \fignotes{The global factor $\GCF_{t}$ is the GDP-weighted average of the eleven local
+  cycle factors \eqref{eq:gcf}, with weights renormalised each month over the
+  countries present in the panel. Each local factor $\CF_{i,t}$ is the fitted value
+  of \eqref{eq:cf}. Nominal GDP is from LSEG Refinitiv, converted to US dollars at
+  year-end exchange rates and held constant within a calendar year. Monthly,
+  end-of-month observations over the G10 sample.}
 \end{figure}
 
 Under full integration, the global factor should drive out the local factor, so
@@ -140,6 +146,13 @@ $\rxbar_{i,t+12}=\alpha_i+\beta_i\,\CF^{\perp}_{i,t}+\gamma_i\,\GCF_{t}
     orthogonalised local factor $\CF^{\perp}$ and the global factor $\GCF$ in the
     joint regression \eqref{eq:h-horse}. Dashed lines mark $\pm1.96$.}
   \label{fig:mr-hr-tstats}
+  \fignotes{Each pair of bars reports the Newey--West HAC $t$-statistics with $18$ lags on
+  the orthogonalised local factor $\CF^{\perp}_{i,t}$ and on the global factor
+  $\GCF_{t}$ in the joint regression \eqref{eq:h-horse}. The orthogonalised local
+  factor is the residual of $\CF_{i,t}$ on $\GCF_{t}$ \eqref{eq:cf-perp}, so its
+  coefficient measures incremental local content. Returns are the
+  duration-standardised, maturity-averaged local-currency excess returns
+  \eqref{eq:rxbar}, and the twelve-month horizon makes the residuals overlapping.}
 \end{figure}
 
 I find that the evidence favours a strong but incomplete form of integration.
@@ -212,6 +225,12 @@ the same returns.
     global factor \eqref{eq:h-usd-global} versus the dollar-return global factor
     \eqref{eq:h-fxgcf}.}
   \label{fig:mr-usd-r2}
+  \fignotes{Bars report the in-sample $R^{2}$ of the two Phase~III regressions on the
+  US-dollar excess return $\rxbar^{\,\mathrm{USD}}_{i,t+12}$ \eqref{eq:rx-usd},
+  the unadjusted global factor \eqref{eq:h-usd-global} against the dollar-return
+  global factor \eqref{eq:h-fxgcf}. The United States carries no currency leg, so
+  its dollar return coincides with its local-currency return. Spot exchange rates
+  are end-of-month Bloomberg quotes in US dollars per unit of foreign currency.}
 \end{figure}
 
 I find that currency risk is a dominant influence on the dollar investor's
@@ -258,6 +277,12 @@ interpretation in \Cref{ch:discussion}.
     The two series share the global cycle but are distinct (correlation
     $0.81$).}
   \label{fig:mr-gcf-fxgcf}
+  \fignotes{$\GCF_{t}$ is the GDP-weighted global factor built from local-currency returns
+  \eqref{eq:gcf}, and $\FXGCF_{t}$ is its dollar-return counterpart, built
+  bottom-up as the GDP-weighted average of the per-country USD cycle factors
+  \eqref{eq:fxgcf}. Both use the same weights, so any difference between the two
+  series is attributable to the return currency alone. The common sample is the
+  span over which both factors are defined.}
 \end{figure}
 
 My answer to the third research question is therefore twofold. Currency risk
@@ -316,6 +341,12 @@ later one.
     dollar-return factor $\FXGCF_{t}$ \eqref{eq:fxgcf}. The dashed line marks the
     full-sample correlation ($0.81$); the dotted line marks 2008.}
   \label{fig:fxd-rollcorr}
+  \fignotes{The solid line is the correlation between $\GCF_{t}$ \eqref{eq:gcf} and
+  $\FXGCF_{t}$ \eqref{eq:fxgcf} over a rolling $36$-month window, so the first
+  plotted value uses the first $36$ months of the common sample. The dashed line
+  marks the full-sample correlation of $0.81$. Values below the dashed line are
+  periods in which the currency leg moves the dollar-return factor away from the
+  interest-rate factor.}
 \end{figure}
 
 The currency leg carries
@@ -346,6 +377,11 @@ dispersion $0.71$). The brief decoupling at the right edge of
     differentials wide, and collapse onto each other at the synchronised zero
     lower bound.}
   \label{fig:fxd-regime}
+  \fignotes{The upper panel repeats the $36$-month rolling correlation of $\GCF_{t}$ and
+  $\FXGCF_{t}$. The lower panel plots the GDP-weighted G10 one-year yield, smoothed
+  with a $36$-month moving average so that it is measured over the same window as
+  the correlation above it. The reported $-0.42$ is the correlation between the two
+  plotted series, not between the underlying factors.}
 \end{figure}
 
 This dynamic reconciles two facts. It
@@ -396,6 +432,13 @@ factor, and stress-test the estimation scheme, in \Cref{ch:robustness}.
     each country is scored against its own recursive mean. Only the global cycle
     factor and, marginally, the dollar-return factor are above zero.}
   \label{fig:s8-oos}
+  \fignotes{Bars report the pooled out-of-sample $R^{2}_{\mathrm{oos}}$ of
+  \citet{campbellthompson2008}, defined in \eqref{eq:meth-ctr2}, against the
+  recursive prevailing mean. Every factor is rebuilt fully recursively at each
+  date, so the trend, the cycles, the predictive coefficients and the GDP weights
+  all respect time~$t$. Squared errors are aggregated across the G10 so that each
+  country competes against its own recursive mean. Positive values indicate that
+  the factor forecast beats the mean.}
 \end{figure}
 
 \Cref{fig:s8-oos} shows the pooled picture across the four specifications, and I
@@ -431,6 +474,12 @@ in-sample fit suggests.
     prevailing mean; the global factor is positive in ten of eleven markets, the
     local factor in only two.}
   \label{fig:mr-oos}
+  \fignotes{Bars report the country-level out-of-sample $R^{2}_{\mathrm{oos}}$
+  \eqref{eq:meth-ctr2} of the local and global cycle factors against each
+  country's own recursive prevailing mean. Both factors are rebuilt fully
+  recursively from data available at each date, with the minimum training history
+  described in \Cref{sec:meth-oos}. Negative bars indicate that the factor
+  forecast is worse than the recursive mean.}
 \end{figure}
 
 The recursive factors themselves show the mechanism behind this divergence.
@@ -454,6 +503,12 @@ of the currency-converted predictability in real time.
     investor, unadjusted global factor \eqref{eq:h-usd-global} versus the
     dollar-return global factor \eqref{eq:h-fxgcf}.}
   \label{fig:s8-oos-usd}
+  \fignotes{Bars report the country-level out-of-sample $R^{2}_{\mathrm{oos}}$
+  \eqref{eq:meth-ctr2} on the US-dollar excess return \eqref{eq:rx-usd}, for the
+  unadjusted global factor \eqref{eq:h-usd-global} against the dollar-return
+  global factor \eqref{eq:h-fxgcf}. Both factors are recursive, and each country
+  competes against its own recursive prevailing mean. The United States carries no
+  currency leg.}
 \end{figure}
 
 % ---------------------------------------------------------------------------

@@ -113,6 +113,13 @@ nearly constant position.
     portfolio versus buy-and-hold, monthly rebalancing with a one-month holding
     period at equal average exposure.}
   \label{fig:strat-cumret}
+  \fignotes{Wealth is cumulated from monthly excess returns on the GDP-weighted ten-year
+  global government-bond portfolio, rebalanced monthly with a one-month holding
+  period. The timed portfolio sets its exposure from the mean--variance rule
+  \eqref{eq:strat-weight} using the recursive factor $\GCF^{\mathrm{oos}}_{t}$ and
+  a forecast that respects time~$t$. Both portfolios are scaled to equal average
+  exposure, so the comparison reflects timing rather than leverage. The evaluation
+  window is the period over which the fully-recursive factor is available.}
 \end{figure}
 
 \begin{figure}[t]\centering
@@ -120,6 +127,11 @@ nearly constant position.
   \caption[Real-time portfolio exposure]{Real-time portfolio exposure (average normalised to one). The
     GCF-timed investor varies bond exposure with the global cycle signal.}
   \label{fig:strat-exposure}
+  \fignotes{Exposure is the target weight $w_{t}$ of \eqref{eq:strat-weight}, truncated at
+  zero for a long-only investor and rescaled so that average exposure equals one.
+  The mean-timing benchmark replaces the factor forecast with the recursive
+  prevailing mean and is otherwise identical. Weights are formed from information
+  available at time~$t$ only.}
 \end{figure}
 
 The drawdown profile confirms that the value of the signal is defensive. In
@@ -140,6 +152,10 @@ strategy trades, and what this trading costs, in \Cref{sec:strat-costs}.
     portfolios, computed on the monthly one-month-holding wealth curves of
     \Cref{fig:strat-cumret} at equal average exposure.}
   \label{fig:strat-drawdown}
+  \fignotes{Drawdown is measured from the running peak of the monthly wealth curves plotted
+  in \Cref{fig:strat-cumret}, at equal average exposure. Because the underlying
+  returns are one-month holding-period returns, the drawdowns are comparable
+  across the three portfolios.}
 \end{figure}
 
 % ===========================================================================
@@ -178,6 +194,10 @@ of episodes rather than steady accrual.
   \caption[Rolling five-year Sharpe ratio]{Rolling five-year Sharpe ratio of the GCF-timed and buy-and-hold
     portfolios (overlapping twelve-month returns; descriptive).}
   \label{fig:strat-rollsr}
+  \fignotes{The rolling Sharpe ratio is computed on overlapping twelve-month excess returns
+  within a five-year window, so successive values share observations and the
+  series is descriptive rather than a basis for inference. Both portfolios are at
+  equal average exposure.}
 \end{figure}
 
 The trading intensity of the strategy is modest. Because the global cycle
