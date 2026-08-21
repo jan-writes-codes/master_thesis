@@ -89,46 +89,37 @@ real-time investor could have exploited. An out-of-sample test in the spirit of
 \citet{campbellthompson2008} is therefore part of the question. 
 Whether macro-anchored bond return
 predictability is a global phenomenon, and whether it survives in real time,
-is thus still an open question. In our thesis, we aim to answer it.
+is thus still an open question.
 
 % --- Research question -----------------------------------------------------
 
-In our thesis, we ask one main question:
-\begin{quote}
-  \emph{Does the \citet{cieslak2015} cycle factor apply to international
-  government bonds?}
-\end{quote}
-If the trend--cycle mechanism is a fundamental property of bond pricing
-rather than a US idiosyncrasy, it should predict excess returns in other
-developed markets with the same sign structure and a comparable magnitude.
-To sharpen the international dimension, we pose three sub-questions:
-\begin{enumerate}
-  \item \emph{What is the role of the local cycle factor relative to a
-    GDP-weighted global cycle factor?} Integrated bond markets suggest a
-    shared risk factor across countries \citep{dahlquist2013}, and a
-    GDP-weighted average of the national cycle factors could be the summary of such a factor.
-  \item \emph{Does the global cycle factor subsume the predictive power of
-    the local cycle factors?} If markets are integrated, investors are
-    compensated for global rather than local risk. In this case, adding the
-    local cycle to a regression that already contains the global factor
-    should not raise the predictive power.
-\item \emph{Can a dollar-return global cycle factor recover the predictability
-  that currency conversion destroys and what are its dynamics?} For an unhedged US-dollar investor the realised return carries a
-  currency leg, so the
-  plain global factor might lose much of its power on dollar returns. We would also expect new insights in the dynamics of this factor compared to the unadjusted global cycle factor.
-\end{enumerate}
-We try to answer these questions in three empirical phases
-(\Cref{sec:fw-hypotheses}). In Phase~I, we test the cycle factor market by
-market across the G10. In Phase~II, we run the horse race between the global
-and the local factors. In Phase~III, we adopt the perspective of an unhedged
-US-dollar investor, for whom currency risk intervenes between the foreign
-bond and the realised dollar return, and we ask whether a purpose-built
-dollar-return global cycle factor can restore the predictability that currency
-conversion destroys. Because the cycle factors are generated regressors, we
-evaluate every phase both in-sample and under a fully-recursive
-out-of-sample protocol, in which the entire construction, that is the trend,
-the cycles, the predictive coefficients, and the global weights, is rebuilt
-each month from historically available data only.
+The main question of this thesis is whether the cycle factor of
+\citet{cieslak2015} applies to international government bonds. If the
+trend--cycle mechanism is a fundamental property of bond pricing rather than a
+US idiosyncrasy, it should predict excess returns in other developed markets
+with the same sign structure and a comparable magnitude.
+
+We answer this question in three steps. First, we test the local cycle factor
+market by market across the G10, constructing it for each country as
+\citet{cieslak2015} construct it for the United States. Second, we ask what
+the local factor still contributes once a GDP-weighted global cycle factor is
+available. Integrated bond markets suggest a shared risk factor across
+countries \citep{dahlquist2013}, and a GDP-weighted average of the national
+cycle factors is a natural summary of it. If investors are compensated for
+global rather than local risk, adding the local cycle to a regression that
+already contains the global factor should not raise the predictive power, so
+we run a horse race between the two. Third, we adopt the perspective of an
+unhedged US-dollar investor, for whom currency risk intervenes between the
+foreign bond and the realised dollar return. The plain global factor may lose
+much of its power on dollar returns, and we ask whether a purpose-built
+dollar-return global cycle factor recovers what currency conversion erodes,
+and how its dynamics differ from those of the unadjusted global factor.
+
+Because the cycle factors are generated regressors, we evaluate every step
+both in-sample and under a fully-recursive out-of-sample protocol, in which
+the entire construction, that is the trend, the cycles, the predictive
+coefficients, and the global weights, is rebuilt each month from historically
+available data only.
 
 % --- Contribution ----------------------------------------------------------
 

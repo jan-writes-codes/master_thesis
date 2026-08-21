@@ -3,11 +3,17 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** IN PROGRESS. Done and verified by a clean compile:
-**G-4, G-5, G-6, STR-1, STR-2, STR-3, S-4, S-5, S-7, S-36, S-51, X-1.**
-Next up: **STR-4** (§5.6) and **STR-5** (research-question presentation), then the **G-1**
-`we`→`I` sweep — do the structural items first so the sweep is not repeated on moved
-text. Work top to bottom; tick items as they are done.
+**Status:** IN PROGRESS. **All structural work (STR-1…STR-8) is complete**, along with
+G-4, G-5 and G-6. Done and verified by a clean compile:
+**G-4, G-5, G-6, STR-1…STR-8, S-4, S-5, S-7, S-10, S-15, S-18, S-19, S-33, S-34, S-35,
+S-36, S-51, S-65, S-66, S-68, S-81, X-1.**
+
+Next up, in this order — the three big sweeps:
+1. **G-1** `we`→`I` (~387 occurrences) — largest, and now safe to run since no more
+   text will move.
+2. **G-9** figure notes — all 26 figures, and a `\fignotes` macro has to be written first.
+3. **G-3** italics discipline.
+Then the remaining `S-` line edits, and finally **G-15** (full proofread).
 
 **Build note:** the thesis compiles with `latexmk -pdf main.tex` (0 errors). Two cheap
 regression checks to run after every batch of edits:
@@ -79,9 +85,11 @@ These are the highest-leverage items. Each one is a full-document sweep.
       in `08_robustness.tex` accounts for the 81st lowercase hit.
       **Verified in the rebuilt PDF:** `FX-adjusted` **0**, `dollar-return` **85**,
       symbol `FXGCF` intact at **54** occurrences, 0 errors, 82 pages.
-      Renamed headings now read: *The Dollar-Return Global Cycle Factor* (3.10),
-      *The Global Investor and the Dollar-Return Factor*, *The US-Dollar Investor and
-      the Dollar-Return Factor*, *The Construction of the Dollar-Return Factor*.
+      Renamed headings now read: *The Dollar-Return Global Cycle Factor*,
+      *The US-Dollar Investor and the Dollar-Return Factor*, and *The Construction of
+      the Dollar-Return Factor*. (The fourth, then *The Global Investor and the
+      Dollar-Return Factor*, was renamed again under **STR-7** and is now
+      *The US-Dollar Investor: Currency Risk and the Dollar-Return Factor*.)
       ⚠️ **Two sites the rename broke, both fixed:**
       - `07_results.tex:20` read *"the **adjusted** and unadjusted global factors"* —
         "adjusted" was shorthand for "FX-adjusted" and was left dangling →
@@ -293,13 +301,32 @@ These are the highest-leverage items. Each one is a full-document sweep.
       to `B.x` — spot-checked seven of them in the PDF.
       **Verified:** 0 errors, 0 undefined, 0 multiply-defined, no `??`. 81 → 80 pages.
 
-- [ ] **STR-4 · Section 5.6 is too short** (~6 sentences) to be its own numbered
-      subsection. *(S-81, p.44)*
-      → It is **`\section{Caveats}` at `08b_strategy.tex:255`** (`sec:strat-caveats`),
-      the 6th section of Chapter 5 (Portfolio Construction). Fold it concisely into the
-      preceding material — and check whether anything `\ref`s that label.
+- [x] **STR-4 · Section 5.6 folded in.** ✅ **DONE** *(S-81, p.44)*
+      `\section{Caveats}` in `08b_strategy.tex` became **`\paragraph{Caveats.}`**, so the
+      material stays but is no longer a numbered unit. Checked first: **nothing
+      referenced `sec:strat-caveats`**, so the label was kept without risk.
+      Chapter 5 is now **5 sections instead of 6**, ending at
+      *5.5 The US-Dollar Investor and the Dollar-Return Factor*.
 
-- [ ] **STR-5 · Rewrite the research-question presentation.** *(S-10, p.9)*
+- [x] **STR-5 · Research-question presentation rewritten.** ✅ **DONE** *(S-10, p.9)*
+      The displayed italic question and the numbered `enumerate` of italic
+      sub-questions are gone. It now opens declaratively — *"The main question of this
+      thesis is whether the cycle factor of \citet{cieslak2015} applies to
+      international government bonds."* — and the sub-questions are folded into one
+      **First / Second / Third** paragraph.
+      **The redundancy he flagged is removed:** *"In our thesis, we aim to answer it.
+      In our thesis, we ask one main question:"* — the first sentence is deleted and
+      the second replaced.
+      💡 **The two lists were largely duplicates.** The three italic sub-questions and
+      the following "three empirical phases" paragraph covered the same ground twice;
+      merging them into a single First/Second/Third paragraph removed the repetition
+      rather than just reformatting it.
+      **Also cleared by this rewrite:** **S-15** (no section cross-reference in the
+      intro — `\Cref{sec:fw-hypotheses}` is gone; the intro now has **zero**
+      `\Cref{sec:...}`), part of **G-3** (the italics are gone), and **S-18**
+      (*"destroys"* → *"erodes"*, in the intro and the one further instance in
+      `02_literature.tex:191`).
+      *(original guidance below)*
       Do **not** display it in italics with numbered sub-questions — *"this reads like
       a proposal, not a thesis."* Instead:
       - State the main question **declaratively in running text**.
@@ -308,8 +335,14 @@ These are the highest-leverage items. Each one is a full-document sweep.
       - Remove the repetition: *"In our thesis, we aim to answer it. In our thesis,
         we ask one main question:"*
 
-- [ ] **STR-6 · Keep "Phase I/II/III" out of the introduction.** *(S-19 p.10; S-35 p.16;
-      S-51 p.24)*
+- [x] **STR-6 · "Phase I/II/III" removed from the introduction.** ✅ **DONE**
+      *(S-19 p.10; S-35 p.16; S-51 p.24)*
+      Verified: the word "Phase" **no longer appears anywhere in
+      `01_introduction.tex`**. The intro now reads *"We answer this question in three
+      steps. First… Second… Third…"*, his suggested wording. The labels survive as the
+      organising device from Chapter 3 onward, introduced where he wanted them — in the
+      hypotheses section — and the headings themselves were shortened under **S-51**.
+      *(original guidance below)*
       - In the intro, use plain prose: *"We answer these questions in three steps.
         First, we test the cycle factor market by market across the G10. Second, we run
         the horse race between the global and local factors. Third, we adopt the
@@ -320,7 +353,19 @@ These are the highest-leverage items. Each one is a full-document sweep.
         declarative** ("Phase I: local predictability"), not bold restatements of the
         research questions.
 
-- [ ] **STR-7 · Rename the "Global Investor" section.** *(S-66, p.30)*
+- [x] **STR-7 · "Global Investor" section renamed.** ✅ **DONE** *(S-66, p.30)*
+      §4.3 is now **"The US-Dollar Investor: Currency Risk and the Dollar-Return
+      Factor"** — his first suggested title.
+      ⚠️ **Not** the Chapter 5 wording after all: aligning it exactly to
+      `08b_strategy.tex:208` would have produced **two identically titled sections**
+      (4.3 and 5.5) in the ToC. His alternative keeps the US-dollar-investor framing he
+      asked for while staying distinct from the strategy chapter's treatment.
+      **Also done here:** the stranded *"Throughout, ``dollar'' refers to the US
+      dollar"* is deleted from the results chapter and the gloss now sits **once**, in
+      the methodology where the dollar investor is introduced — exactly as he asked.
+      And **S-65**: the second question was a 30-word relative clause, now split into
+      two sentences.
+      *(original guidance below)*
       → `07_results.tex:183` — now reads
       `\section{The Global Investor and the Dollar-Return Factor}` after the G-4 rename.
       **Only "Global Investor" is still outstanding.**
@@ -337,9 +382,15 @@ These are the highest-leverage items. Each one is a full-document sweep.
       - *"The US-Dollar Investor and the Global Cycle Factor"*
       Also **delete the stranded** *"'dollar' refers to the US dollar"* (define once, in 3.9).
 
-- [ ] **STR-8 · Guide the reader through the dense tables.** *(S-68, p.30)*
-      The table is dense; say **which columns to look at**, and **consider numbering the
-      columns** (standard practice in papers). *"Otherwise it is easy to get lost."*
+- [x] **STR-8 · Reader guidance for the dense Phase III table.** ✅ **DONE** *(S-68, p.30)*
+      `tables/mr_t3_phase3.tex` now carries a **numbered column row (1)–(8)** beneath the
+      header, as he suggested. Both the table note and the body text name the columns
+      that matter: *"the comparison that answers both questions is column~(4) … against
+      column~(7), the two $R^{2}$ values measured on the same dependent variable."*
+      📌 **Other dense tables may want the same treatment** — this fixes the one he
+      flagged. Candidates on the same pattern: `mr_t1b_maturity` (9 cols),
+      `rob_t1_sub_is` (9), `rob_t5_core_vs_reg` (8), `dh_t7_usd` (7). Worth a pass
+      under **G-14** (table layout).
 
 ---
 
@@ -360,7 +411,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       announces.** Add "(+ constant term premium)" as in Cochrane, *Asset Pricing*, Ch. 19,
       and **fix footnote 1** accordingly (its one-period relation also lacks it).
       Then **"≈" can become "="** — the log form is exact for zero-coupon bonds.
-- [ ] **S-10** (p.9) Research-question block. *(STR-5)*
+- [x] **S-10** (p.9) Research-question block. *(done via STR-5)*
 - [ ] **S-11** (p.9) Do not start a sentence with **"However"** — rephrase.
 - [ ] **S-12** (p.9) *"cast doubt on the economic interpretation"* is **too broad** —
       failure abroad speaks to generality, not to the mechanism. Use:
@@ -370,12 +421,14 @@ These are the highest-leverage items. Each one is a full-document sweep.
       clear gap: despite its strong economic rationale, the cycle factor of Cieslak and
       Povala (2015) has not yet been tested outside the United States."*
 - [ ] **S-14** (p.9) "no …, no …, no …" sounds categorical — soften. *(G-12)*
-- [ ] **S-15** (p.10) **Remove the section cross-reference** ("(Section 3.11)") — no need
-      to reference sections in the introduction.
+- [x] **S-15** (p.10) **Remove the section cross-reference** ("(Section 3.11)") — no need
+      to reference sections in the introduction. ✅ **DONE** via STR-5; verified the
+      introduction now contains **zero** `\Cref{sec:...}`.
 - [ ] **S-16** (p.10) "dollar" — **no italics**. *(G-3)*
 - [ ] **S-17** (p.10) "conversion" → **"risk"**.
-- [ ] **S-18** (p.10) **"destroys"** — too strong.
-- [ ] **S-19** (p.10) "In Phase I, …" — plain prose in the intro. *(STR-6)*
+- [x] **S-18** (p.10) **"destroys"** — too strong. ✅ **DONE** — now *"erodes"*, at both
+      sites (`01_introduction.tex`, rewritten under STR-5; `02_literature.tex:191`).
+- [x] **S-19** (p.10) "In Phase I, …" — plain prose in the intro. *(done via STR-6)*
 - [ ] **S-20** (p.10) **Unclear topic sentence.** *"With our thesis, we contribute a
       three-factor hierarchy and the evidence to evaluate it."* — "three-factor hierarchy"
       misleads and "the evidence to evaluate it" is vague. His model sentence:
@@ -412,8 +465,14 @@ These are the highest-leverage items. Each one is a full-document sweep.
       factor for the unhedged dollar investor. The existing international evidence has also
       not been subjected to the full out-of-sample discipline…").
 - [ ] **S-34** (p.15) **Tone down** *"we want to add to"*.
-- [ ] **S-35** (p.16) *"three-phase design of Section 3.11"* — **this is the literature
-      part; do not discuss the methodology yet.**
+- [x] **S-35** (p.16) *"three-phase design of Section 3.11"* — **this is the literature
+      part; do not discuss the methodology yet.** ✅ **DONE** — the forward reference to
+      `\Cref{sec:fw-hypotheses}` is deleted from `02_literature.tex`.
+      **S-33 and S-34 (tone) were the same two sentences, so they are done too:**
+      *"has also not been subjected to the full out-of-sample discipline that the
+      methodological literature demands"* → *"has also seen limited out-of-sample
+      evaluation of the kind the methodological literature calls for"*, and
+      *"we want to add to the field"* → *"This thesis addresses that gap"*.
 - [x] **S-36** (p.16) Literature structure. *(done via STR-2)*
 
 ### Chapter 3 — Data and Methodology
@@ -463,12 +522,14 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [ ] **S-63** (p.30) The sentence ending *"…that of Dahlquist and Hasseltoft (2013)."*
       **reads unfinished**.
 - [ ] **S-64** (p.30) "adopted" → **present simple**.
-- [ ] **S-65** (p.30) **The second question is hard to parse** — a 30-word relative clause.
+- [x] **S-65** (p.30) **The second question is hard to parse** — a 30-word relative clause.
+      ✅ **DONE** — split in two, with the bottom-up construction moved into its own
+      sentence (`07_results.tex`).
       Simplify.
-- [ ] **S-66** (p.30) Heading + stranded definition. *(STR-7)*
+- [x] **S-66** (p.30) Heading + stranded definition. *(done via STR-7)*
 - [ ] **S-67** (p.30) *"…to 9% on dollar returns"* — **the 9% looks like Sweden only**,
       not a general figure. *(→ NUM-4)*
-- [ ] **S-68** (p.30) Dense table needs reader guidance / numbered columns. *(STR-8)*
+- [x] **S-68** (p.30) Dense table needs reader guidance / numbered columns. *(done via STR-8)*
 - [ ] **S-69** (p.31) "panel," — **singular or plural?**
 - [ ] **S-70** (p.32) Rephrase, his wording: *"The unadjusted factor GCF_t is, by
       construction, built from local-currency returns, which can be interpreted as
@@ -495,7 +556,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       `08b_strategy.tex:151`, `:159`, `:262`, and `tables/strat_t4_subperiod.tex:18`, `:26`.
       → Fix line 129 (or decide 2022–23 is right and change the other five). *(→ NUM-1)*
 - [ ] **S-80** (p.44) "1.4%" → **1.5**. *(→ NUM-2)*
-- [ ] **S-81** (p.44) §5.6 too short for its own subsection. *(STR-4)*
+- [x] **S-81** (p.44) §5.6 too short for its own subsection. *(done via STR-4)*
 
 ### Chapter 6 — Robustness *(read more quickly — see Q-1)*
 - [ ] **S-82** (p.51) **Does not read well:** *"At face value, this is not in the cycle
