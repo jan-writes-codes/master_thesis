@@ -704,9 +704,10 @@ These are the highest-leverage items. Each one is a full-document sweep.
       the stale artefact. `dh_t1_corr10y`, `dh_t1_summary`, `mr_t4_oos`,
       `rob_t1_sub_is`, `rob_t5_core_vs_reg`, `rob_t6_core_vs_reg_oos` and
       `strat_t2_usd` **match exactly**.
-      → **Decide:** re-run the pipeline and re-transcribe `mr_t1b_maturity`, or
-      confirm the committed PDF is authoritative and transcribe from it directly.
-      Also worth re-checking any prose that quotes Japan's two-year figures.
+      📄 **Full cell-by-cell write-up in `EXHIBIT_DATA_DISCREPANCIES.md`**, including
+      the effect on the surrounding prose (checked sentence by sentence — almost
+      nothing changes) and the two options for fixing it. **No reported number has
+      been changed**; that is the author's call.
 
 - [ ] **X-3 · Two table files are never included.** `tables/rob_t3_italy.tex` (Italy
       across subsamples) and `tables/strat_t3_example.tex` (a mid-2022 worked example)
