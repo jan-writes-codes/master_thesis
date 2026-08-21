@@ -3,14 +3,14 @@
 \chapter{Portfolio Construction}
 \label{ch:strategy}
 
-In \Cref{sec:res-oos} we established the one statistical result that matters
+In \Cref{sec:res-oos} I established the one statistical result that matters
 for an investor is the global cycle factor. A positive out-of-sample $R^{2}$ is
 the condition under which a real-time investor can convert
-predictability into utility \citep{campbellthompson2008}. In this chapter, we
+predictability into utility \citep{campbellthompson2008}. In this chapter, I
 ask whether this conversion is economically meaningful. To answer this
-question, we build a fully out-of-sample market-timing strategy around the
-global cycle factor and compare it against a passive benchmark. We keep this
-exercise self-contained. We use only the recursive factor and
+question, I build a fully out-of-sample market-timing strategy around the
+global cycle factor and compare it against a passive benchmark. I keep this
+exercise self-contained. I use only the recursive factor and
 forecasts of \Cref{sec:meth-oos}, entering positions with information known
 only at time~$t$.
 
@@ -18,9 +18,9 @@ only at time~$t$.
 \section{Strategy Design}
 \label{sec:strat-design}
 
-Three features of our evidence guide the design of the strategy. First, the
+Three features of my evidence guide the design of the strategy. First, the
 predictability that survives out of sample is in \emph{local-currency}
-returns (\Cref{sec:res-phase3}). We
+returns (\Cref{sec:res-phase3}). I
 therefore run the strategy for a \emph{currency-hedged} global investor (GCF)
 and analyse the unhedged US-dollar investor (FXGCF) separately in
 \Cref{sec:strat-fx}.
@@ -45,29 +45,29 @@ $\rx_{t+12}=a+b\,\GCF^{\mathrm{oos}}_{t}+\varepsilon$, and sets a mean--variance
   \label{eq:strat-weight}
 \end{equation}
 where $\widehat{\sigma}^{2}_{t}$ is the recursive return variance and $\gamma$
-the risk aversion. As benchmarks, we use the same
+the risk aversion. As benchmarks, I use the same
 investor with the recursive prevailing-mean forecast, and a passive
 buy-and-hold position. The Sharpe ratio is invariant to a constant rescaling
-of $w_{t}$, so we report it directly. The certainty-equivalent (CER) return is
-not scale-invariant, so we report it at equal average exposure across
+of $w_{t}$, so I report it directly. The certainty-equivalent (CER) return is
+not scale-invariant, so I report it at equal average exposure across
 strategies. This makes the variance penalty comparable.
 
 % ===========================================================================
 \section{Implementation}
 \label{sec:strat-implementation}
 
-In this section, we cover the implementation. Each
-month $t$, using only information available at $t$: \emph{(i)} we re-estimate
+In this section, I cover the implementation. Each
+month $t$, using only information available at $t$: \emph{(i)} I re-estimate
 the full generated-regressor chain on outcomes realised by $t$ (a twelve-month
 lag), with a sixty-month minimum training history (\Cref{sec:meth-oos}). This
 regards trend inflation \eqref{eq:trendinf}, the yield-cycle decomposition
-\eqref{eq:decomp}, the local-factor regressions \eqref{eq:cf-reg}, and the GDP aggregation \eqref{eq:gcf}. \emph{(ii)} We form the forecast
+\eqref{eq:decomp}, the local-factor regressions \eqref{eq:cf-reg}, and the GDP aggregation \eqref{eq:gcf}. \emph{(ii)} I form the forecast
 $\widehat{\E}_{t}[\rx_{t+12}]=\hat a_{t}+\hat b_{t}\,\GCF^{\mathrm{oos}}_{t}$
-from the recursive regression, \emph{(iii)} we estimate the variance
-$\widehat{\sigma}^{2}_{t}$ on an expanding window, \emph{(iv)} we set the
+from the recursive regression, \emph{(iii)} I estimate the variance
+$\widehat{\sigma}^{2}_{t}$ on an expanding window, \emph{(iv)} I set the
 target weight to the mean-variance exposure \eqref{eq:strat-weight}, truncated
 at zero (long-only) and rescaled to unit average exposure for reporting, and
-\emph{(v)} we rebalance monthly, with one-way turnover $|w_{t}-w_{t-1}|$.
+\emph{(v)} I rebalance monthly, with one-way turnover $|w_{t}-w_{t-1}|$.
 
 Anything the strategy earns is therefore attributable to the real-time
 information content of the global cycle factor.
@@ -76,10 +76,10 @@ information content of the global cycle factor.
 \section{Performance}
 \label{sec:strat-performance}
 
-In \Cref{tab:strat-perf}, we report the out-of-sample performance over
+In \Cref{tab:strat-perf}, I report the out-of-sample performance over
 2005--2024, the period for which the fully-recursive factor is available. The
 global bond portfolio itself has an out-of-sample $R^{2}$ of $0.127$ against
-the recursive mean. We find that this statistical
+the recursive mean. I find that this statistical
 edge translates into economic value. Timing the portfolio with the global
 cycle factor raises the annual Sharpe ratio from $0.34$ for the passive
 position to $0.40$, and from $0.36$ for an investor who times on the recursive
@@ -96,7 +96,7 @@ as the sharper variance penalty offsets the timing gain.
   \input{tables/strat_t1_performance}
 \end{table}
 
-In \Cref{fig:strat-cumret}, we can see the cumulative wealth of the timed and
+\Cref{fig:strat-cumret} plots the cumulative wealth of the timed and
 passive portfolios on a monthly, one-month-holding basis.\footnote{The wealth
   and drawdown figures rebalance monthly and hold for one month, using a
   one-month excess return on the 10Y global bond portfolio.} The timing strategy ends
@@ -123,7 +123,7 @@ nearly constant position.
 \end{figure}
 
 The drawdown profile confirms that the value of the signal is defensive. In
-\Cref{fig:strat-drawdown}, we plot the drawdown from peak of the same monthly
+\Cref{fig:strat-drawdown}, I plot the drawdown from peak of the same monthly
 wealth curves. The maximum drawdown of the timed portfolio is $20.3\%$,
 against $24.9\%$ for the mean-timing investor and $30.7\%$ for buy-and-hold.
 The deepest drawdowns fall in the 2022--2023 global hiking cycle, the worst
@@ -131,7 +131,7 @@ bond-market episode in the sample. The timed investor enters it with reduced
 exposure because the global cycle factor had already turned
 (\Cref{fig:strat-exposure}). This is the behaviour the mechanism predicts.
 The factor forecasts low premia when yields sit far
-below their inflation anchor, as they did in 2021. We quantify where the
+below their inflation anchor, as they did in 2021. I quantify where the
 strategy trades, and what this trading costs, in \Cref{sec:strat-costs}.
 
 \begin{figure}[t]\centering
@@ -146,8 +146,8 @@ strategy trades, and what this trading costs, in \Cref{sec:strat-costs}.
 \section{Subperiods, Turnover, and Transaction Costs}
 \label{sec:strat-costs}
 
-A full-sample Sharpe ratio does not show us in which periods a strategy
-actually generates its performance. In \Cref{tab:strat-sub}, we therefore
+A full-sample Sharpe ratio does not reveal in which periods a strategy
+actually generates its performance. In \Cref{tab:strat-sub}, I therefore
 split the evaluation window in half and additionally isolate the 2021--2022
 hiking cycle. The split separates two very different regimes. In the strong bond
 decade of 2005--2014, timing did not pay off on a risk-adjusted basis. The
@@ -157,8 +157,8 @@ ratio was lower ($0.93$ against $1.09$). But the ranking reverses where an inves
 it to. Over 2015--2024, a decade in which the passive portfolio lost money,
 the timed strategy preserves a higher mean and the highest Sharpe ratio, and
 in the 2021--2022 drawdown it has the least negative Sharpe ratio. The full-sample advantage of
-\Cref{tab:strat-perf} is therefore not a uniform edge but a defensive one. It is concentrated in the regime of falling and volatile bond prices. We can observe
-this characterisation in \Cref{fig:strat-rollsr}. In the rolling five-year
+\Cref{tab:strat-perf} is therefore not a uniform edge but a defensive one. It is concentrated in the regime of falling and volatile bond prices.
+\Cref{fig:strat-rollsr} shows this characterisation. In the rolling five-year
 Sharpe ratios, the passive portfolio holds the upper hand in the early,
 high-premium windows, the two series then track each other through the middle
 of the sample, and the timed portfolio pulls ahead only as the hiking cycle
@@ -184,7 +184,7 @@ The trading intensity of the strategy is modest. Because the global cycle
 factor is highly persistent, the target weight moves slowly. The average
 one-way turnover of the timed portfolio is $9.1\%$ of notional per month
 (mean-timing: $1.3\%$), which corresponds to roughly one full portfolio turn
-per year. In \Cref{tab:strat-costs}, we convert this into net-of-cost
+per year. In \Cref{tab:strat-costs}, I convert this into net-of-cost
 performance by charging a proportional one-way cost on every unit of notional
 traded. At $10$ basis points, which is already conservative for ten-year G10
 government bond futures, where quoted half-spreads on the underlying market are
@@ -211,12 +211,12 @@ the economic value but do not overturn its existence.
 A US-based investor who holds the global bond portfolio unhedged earns the
 dollar excess return \eqref{eq:rx-usd}, which adds the currency return to the
 local bond return. The signal for this investor is the dollar-return
-global cycle factor $\FXGCF_{t}$, which we built in \Cref{sec:fw-fxgcf} to
-target dollar returns directly. In \Cref{tab:strat-usd}, we run the timing
+global cycle factor $\FXGCF_{t}$, which I built in \Cref{sec:fw-fxgcf} to
+target dollar returns directly. In \Cref{tab:strat-usd}, I run the timing
 rule of \Cref{sec:strat-design} on the dollar portfolio, using the recursive
 $\FXGCF^{\mathrm{oos}}$ signal. The
 dollar-return signal shares the five-year recursive burn-in of the global
-factor, so we evaluate the dollar strategy over the same out-of-sample window
+factor, so I evaluate the dollar strategy over the same out-of-sample window
 (2005--2024) as the hedged strategy of \Cref{sec:strat-performance}.
 
 \begin{table}[t]
@@ -226,7 +226,7 @@ factor, so we evaluate the dollar strategy over the same out-of-sample window
   \input{tables/strat_t2_usd}
 \end{table}
 
-The comparison tells us two things. Over this sample the
+The comparison shows two things. Over this sample the
 unhedged dollar bond premium is modest but positive. The passive portfolio
 earns about $1.4\%$ a year in excess return for a Sharpe ratio near $0.18$, as
 the strength of the dollar through the 2010s offsets much, though not all, of
@@ -243,8 +243,8 @@ This does not contradict Phase~III. It reflects where the
 dollar-return factor's strength lies. Its in-sample recovery
 (\Cref{sec:res-phase3}) and its pooled out-of-sample edge
 (\Cref{ch:robustness}) come from the per-country USD regressions, that is,
-from the cross-section of dollar returns. We therefore reach the same conclusion
-as elsewhere in our thesis. Timing adds value for the dollar investor
+from the cross-section of dollar returns. I therefore reach the same conclusion
+as elsewhere in this thesis. Timing adds value for the dollar investor
 as well, but currency risk, and not a failure of the cycle signal, caps the
 level it can reach. Both dollar strategies remain well below the $0.40$ of
 the currency-hedged investor in \Cref{sec:strat-performance}. The economic
@@ -253,7 +253,7 @@ hedges the currency exposure of the international bond position.
 
 \paragraph{Caveats.}
 \label{sec:strat-caveats}
-We should read this result as a proof of concept rather than a tradable system, and
+I should read this result as a proof of concept rather than a tradable system, and
 note two limitations. First, the magnitude is modest. The portfolio shows a
 Sharpe-ratio improvement of about $0.06$ and a certainty-equivalent gain below
 one percent a year. Its edge is time-sensitive, earned in the poor bond decade
@@ -262,5 +262,5 @@ forecasts use overlapping twelve-month returns, so the supporting precision is
 overstated and the subperiod statistics are descriptive. Transaction costs
 (\Cref{tab:strat-costs}) erode but do not eliminate the advantage. With these
 caveats, the predictability of \Cref{ch:results} carries genuine, if moderate,
-economic value for a currency-hedged global bond investor. We take up the
+economic value for a currency-hedged global bond investor. I take up the
 broader interpretation in \Cref{ch:discussion}.

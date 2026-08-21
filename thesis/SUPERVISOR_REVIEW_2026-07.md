@@ -3,17 +3,19 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** IN PROGRESS. **All structural work (STR-1…STR-8) is complete**, along with
-G-4, G-5 and G-6. Done and verified by a clean compile:
-**G-4, G-5, G-6, STR-1…STR-8, S-4, S-5, S-7, S-10, S-15, S-18, S-19, S-33, S-34, S-35,
-S-36, S-51, S-65, S-66, S-68, S-81, X-1.**
+**Status:** IN PROGRESS — **39 of 122 items done.** All structural work (STR-1…STR-8)
+is complete, as are **G-1, G-4, G-5 and G-6**, the four largest global rules.
+Everything below is verified by a clean compile.
 
-Next up, in this order — the three big sweeps:
-1. **G-1** `we`→`I` (~387 occurrences) — largest, and now safe to run since no more
-   text will move.
-2. **G-9** figure notes — all 26 figures, and a `\fignotes` macro has to be written first.
-3. **G-3** italics discipline.
-Then the remaining `S-` line edits, and finally **G-15** (full proofread).
+Next up, in this order:
+1. **G-9** figure notes — the biggest remaining job: all 26 figures, and a `\fignotes`
+   macro has to be written first. (Tables already all carry `\tabnotes`.)
+2. **G-3** italics discipline — partly done already, since STR-5 and G-1 removed the
+   italicised research questions.
+3. **G-2** (out-of-sample hyphenation), **G-8** (introduce every exhibit — partly done
+   by the G-1 recasts), **G-10**, **G-11**.
+Then the remaining `S-` line edits, the `NUM-` checks **which need the author**, and
+finally **G-15** (full proofread).
 
 **Build note:** the thesis compiles with `latexmk -pdf main.tex` (0 errors). Two cheap
 regression checks to run after every batch of edits:
@@ -48,19 +50,46 @@ and offered a follow-up meeting. See `Q-` items at the end.
 
 These are the highest-leverage items. Each one is a full-document sweep.
 
-- [ ] **G-1 · First-person singular.** Replace **"we/our/us" with "I/my/me"** throughout.
-      Single-author thesis; no "we". *(email; S-1 "our"→"this", S-2, p.3)*
-      → **Scope: ~387 occurrences** across `chapters/`, verified by count:
-      **`we` 191 + `We` 105 = 296**, plus **`our` 77 + `Our` 14 = 91**.
-      Per file (we/We): results 35/14, robustness 28/9, intro 27/6, methodology 21/24,
-      strategy 19/10, data 14/21, conclusion 14/4, replication 13/3, discussion 11/5,
-      literature 8/6, abstract 1/3. Also sweep table notes and figure captions.
-      ⚠️ **Not a blind find-replace.** Three traps:
-      (a) verb agreement — "we are/were/have" → "I am/was/have";
-      (b) **not every "we" is authorial** — "we can see", "we know that" is the reader-
-      inclusive *we*, which some supervisors accept but he asked for consistency, so
-      prefer recasting ("the figure shows") over "I can see";
-      (c) `\emph`/citation contexts and any "we" inside quoted material must stay.
+- [x] **G-1 · First-person singular.** ✅ **DONE & VERIFIED BY COMPILE**
+      *(email; S-1 "our"→"this", S-2, p.3)*
+      **Result: `we`, `our` and `us` now appear ZERO times in the rendered PDF.**
+      (`sec:lit-us` survives as a label identifier only, which is correct.)
+      **Order of operations mattered — the mechanical sweep was done last:**
+      1. **Checked for verb agreement first** — searched every file for
+         `we are/were/have/had`. **There were none**, so `we`→`I` was safe as a
+         substitution. Had any existed they would have needed `I am/was/have`.
+      2. **Recast the 13 reader-inclusive uses before sweeping**, so none became the
+         absurd "I can see": *"In Figure X, we can see that…"* → *"Figure X shows
+         that…"*, *"We can note two features"* → *"Two features are…"*, and so on.
+         **Three of these spanned a line break** (`we can\nsee`) and were invisible to
+         a single-line grep — caught with a multiline search.
+         🎁 Side benefit: these recasts are exactly the *"Figure X plots …"* opening
+         he asked for in **G-8**, so that item is now partly done in Chapters 4–6.
+      3. **`our thesis` → `this thesis`**, not "my thesis" — his S-1 annotation
+         literally suggests "this". Other possessives → `my`, except where a neutral
+         article read better (*"my data processing pipeline"* → *"the …"*).
+      4. Only then the mechanical `we`→`I`, `our`→`my`, `us`→`me` pass.
+      ⚠️ **Two classes of damage the sweep caused, both found and fixed:**
+      - **An identifier was corrupted.** `\label{sec:lit-us}` → `\label{sec:lit-me}`,
+        because `-` is a word boundary so `\bus\b` matched inside the label. Fixed, and
+        then **every `\label`/`\Cref`/`\eqref`/`\input`/`\includegraphics` in all 42
+        files was diffed against `HEAD`** to prove nothing else moved. The only other
+        difference is the deliberate roadmap deletion (**S-26/S-27**).
+      - **14 awkward constructions**, mostly `us`→`me` in object position:
+        *"It tells me that premia vary"*, *"provides me with a test"*, *"These series
+        give me the log currency return"*, *"does not show me in which periods"*, plus
+        six *"I can/could …"* that had been reader-inclusive *"we can"*
+        (*"I can distinguish three positions"* → *"Three positions can be
+        distinguished"*; *"I could argue that"* → *"A plausible reading is that"*).
+        All rewritten.
+      **Also cleared in the same pass** (same sentences): **S-11** (no sentence-initial
+      "However"), **S-13** (his exact rephrasing of the gap sentence), **S-14** (the
+      categorical "no…, no…, no…" enumeration softened), **S-20** (his suggested
+      contribution sentence, with "dollar-return" per G-4), **S-23** (*"We arrive at
+      four main findings"* → *"Four main findings emerge"*), and **S-26/S-27/S-28**
+      (the roadmap now ends *"; \Cref{ch:conclusion} concludes."* and the replication
+      sentence is struck, as he marked).
+      **Verified:** 0 errors, 0 undefined, 0 multiply-defined, no `??`, 80 pages.
 
 - [ ] **G-2 · "out-of-sample" hyphenation.** *(S-3, p.3)*
       **Scope: 13 unhyphenated vs 53 hyphenated.** Note that **most unhyphenated uses are
@@ -397,8 +426,8 @@ These are the highest-leverage items. Each one is a full-document sweep.
 ## Part 2 — Item-by-item (by PDF page)
 
 ### Front matter & Table of Contents
-- [ ] **S-1** (p.3) "our" → "this". *(see G-1)*
-- [ ] **S-2** (p.3) "we" → "I". *(G-1)*
+- [x] **S-1** (p.3) "our" → "this". *(see G-1)*
+- [x] **S-2** (p.3) "we" → "I". *(G-1)*
 - [ ] **S-3** (p.3) "out of sample" → consistent hyphenation. *(G-2)*
 - [x] **S-4** (p.4) Chapter 3 fragmentation. *(done via STR-1)*
 - [x] **S-5** (p.4) Literature review too finely split. *(done via STR-2)*
@@ -412,15 +441,15 @@ These are the highest-leverage items. Each one is a full-document sweep.
       and **fix footnote 1** accordingly (its one-period relation also lacks it).
       Then **"≈" can become "="** — the log form is exact for zero-coupon bonds.
 - [x] **S-10** (p.9) Research-question block. *(done via STR-5)*
-- [ ] **S-11** (p.9) Do not start a sentence with **"However"** — rephrase.
+- [x] **S-11** (p.9) Do not start a sentence with **"However"** — rephrase.
 - [ ] **S-12** (p.9) *"cast doubt on the economic interpretation"* is **too broad** —
       failure abroad speaks to generality, not to the mechanism. Use:
       *"…and a failure to find it there would cast doubt on its **generalisability**."*
       (This also fixes *"a failure to do so"*, which lacks a referent.)
-- [ ] **S-13** (p.9) Rephrase, his wording: *"Placed side by side, these strands reveal a
+- [x] **S-13** (p.9) Rephrase, his wording: *"Placed side by side, these strands reveal a
       clear gap: despite its strong economic rationale, the cycle factor of Cieslak and
       Povala (2015) has not yet been tested outside the United States."*
-- [ ] **S-14** (p.9) "no …, no …, no …" sounds categorical — soften. *(G-12)*
+- [x] **S-14** (p.9) "no …, no …, no …" sounds categorical — soften. *(G-12)*
 - [x] **S-15** (p.10) **Remove the section cross-reference** ("(Section 3.11)") — no need
       to reference sections in the introduction. ✅ **DONE** via STR-5; verified the
       introduction now contains **zero** `\Cref{sec:...}`.
@@ -429,7 +458,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-18** (p.10) **"destroys"** — too strong. ✅ **DONE** — now *"erodes"*, at both
       sites (`01_introduction.tex`, rewritten under STR-5; `02_literature.tex:191`).
 - [x] **S-19** (p.10) "In Phase I, …" — plain prose in the intro. *(done via STR-6)*
-- [ ] **S-20** (p.10) **Unclear topic sentence.** *"With our thesis, we contribute a
+- [x] **S-20** (p.10) **Unclear topic sentence.** *"With our thesis, we contribute a
       three-factor hierarchy and the evidence to evaluate it."* — "three-factor hierarchy"
       misleads and "the evidence to evaluate it" is vague. His model sentence:
       *"Our contribution is a family of three nested cycle factors — local, global, and
@@ -441,16 +470,16 @@ These are the highest-leverage items. Each one is a full-document sweep.
       factors — local, global, and dollar-return — together with…"*
 - [ ] **S-21** (p.10) **"transplant"** — check the word is accurate.
 - [ ] **S-22** (p.10) **Strike** "(Chapter B)". *(G-5)*
-- [ ] **S-23** (p.10) *"We arrive at four main findings"* — **"arrive" is not academic**.
+- [x] **S-23** (p.10) *"We arrive at four main findings"* — **"arrive" is not academic**.
       Use *"Four main findings emerge"* or *"The analysis yields four main findings"*.
 - [ ] **S-24** (p.11) **"genuinely local content"** — does this mean local indices? local
       information? Rephrase.
 - [ ] **S-25** (p.11) **"Integration is therefore the rule"** — unclear.
-- [ ] **S-26** (p.11) **Strike** the sentence *"In Chapter B, we validate our empirical
+- [x] **S-26** (p.11) **Strike** the sentence *"In Chapter B, we validate our empirical
       engine against the published results of Cieslak and Povala (2015) and Dahlquist and
       Hasseltoft (2013)."* *(G-5, STR-3)*
-- [ ] **S-27** (p.11) That material **belongs to the Appendix** — no need to explain it here.
-- [ ] **S-28** (p.11) End the roadmap with **"; Chapter 8 concludes."**
+- [x] **S-27** (p.11) That material **belongs to the Appendix** — no need to explain it here.
+- [x] **S-28** (p.11) End the roadmap with **"; Chapter 8 concludes."**
 
 ### Chapter 2 — Literature Review
 - [ ] **S-29** (p.13) "transformed" → **present simple**.
