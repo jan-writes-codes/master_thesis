@@ -16,7 +16,7 @@
 Having described the data, I now develop the formal apparatus that it feeds.
 Throughout, $i$ indexes countries in the G10 cross-section $\mathcal{G}$, time
 $t$ is measured in months, and bond maturity $n$ in years. The empirical
-maturity grid is $N=\{1,2,4,5,9,10\}$ years, and all yields are continuously
+maturity set is $N=\{1,2,4,5,9,10\}$ years, and all yields are continuously
 compounded and expressed in percent per annum. I let $y^{(n)}_{i,t}$ denote the time-$t$
 continuously compounded yield on an $n$-year zero-coupon bond in market $i$ and
 $p^{(n)}_{i,t}=-n\,y^{(n)}_{i,t}$ the corresponding log price. The one-year
@@ -44,8 +44,7 @@ across the maturity set to obtain a single, scale-comparable return series:
 \end{equation}
 The duration weight $D^{(n)}=n$ is the Macaulay duration of a continuously
 compounded zero-coupon bond. For the construction, I use the averaging set
-$\mathcal{A}=\{2,5,10\}\subset N$ years, written with a distinct symbol so that it
-is not confused with the full maturity grid $N$. These are the maturities for which a clean
+$\mathcal{A}=\{2,5,10\}\subset N$ years. These are the maturities for which a clean
 one-year-ahead excess return is identified given the available maturities, since each
 requires the adjacent shorter yield $y^{(n-1)}$, i.e.\
 $y^{(1)},y^{(4)},y^{(9)}$, which are all available.
@@ -312,7 +311,7 @@ head-to-head evidence of \Cref{ch:robustness}.
 
 \paragraph{Deviations from the original studies.}
 \label{sec:meth-deviations}
-For transparency, I collect the substantive departures from \citet{cieslak2015}
+I collect the departures from \citet{cieslak2015}
 and \citet{dahlquist2013} here. I revisit each of them where it
 bears on the results.
 \begin{itemize}[leftmargin=1.4em]
