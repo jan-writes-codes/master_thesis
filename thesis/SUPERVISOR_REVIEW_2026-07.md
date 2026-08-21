@@ -8,10 +8,11 @@ is complete, as are **G-1, G-4, G-5 and G-6**, the four largest global rules.
 Everything below is verified by a clean compile.
 
 Next up, in this order:
-1. **G-3** italics discipline — partly done already, since STR-5 and G-1 removed the
+1. 🔴 **X-2** — decide how to fix the two tables that disagree with the R output.
+   This one needs the author.
+2. **G-3** italics discipline — partly done already, since STR-5 and G-1 removed the
    italicised research questions.
-2. **G-8** (introduce every exhibit — partly done by the G-1 recasts), **G-2**
-   (out-of-sample hyphenation), **G-10**, **G-11**.
+3. **G-2** (out-of-sample hyphenation), **G-10**, **G-11**, **G-13**, **G-14**.
 Then the remaining `S-` line edits, the `NUM-` checks **which need the author**, and
 finally **G-15** (full proofread).
 
@@ -191,10 +192,18 @@ These are the highest-leverage items. Each one is a full-document sweep.
       render a bare "(9)" with no noun. Wrap them as "Equation~\eqref{…}" where the
       reference is a forward one or the reader may lose the thread.
 
-- [ ] **G-8 · Introduce every exhibit before discussing it.** On first mention, state
-      briefly what the table/figure reports, *then* discuss. Model sentence:
-      *"Figure X plots the GDP-weighted global cycle factor over 1990–2024, together
-      with the eleven country-level local factors. We can see…"* *(S-59, p.28)*
+- [x] **G-8 · Introduce every exhibit before discussing it.** ✅ **DONE** *(S-59, p.28)*
+      **Coverage checked mechanically:** every one of the 31 tables and 26 figures is
+      referenced in prose — **no orphan exhibits**. First mentions were then read one
+      by one and **twelve were rewritten** because they cited the exhibit
+      parenthetically or after the finding rather than introducing it. Examples:
+      *"…never exceeds $0.34$ in absolute value (Table X)"* became *"Table X reports,
+      for each country, the correlation … The correlation never exceeds $0.34$"*, and
+      *"Out of sample the verdict reverses (Figure Y)"* became *"…reverses. Figure Y
+      reports the recursive $R^{2}_{\mathrm{oos}}$ of all four factors by country."*
+      **S-73 folded in** — *"\Cref{tab:fxd-properties} collects their properties"* is
+      now *"presents the results"*, with a sentence naming what the table reports.
+      The **G-1** recasts had already fixed roughly nine sites, so those needed nothing.
 
 - [x] **G-9 · Notes for ALL tables and figures.** ✅ **DONE & VERIFIED BY COMPILE**
       *(email; S-38, p.18)*
@@ -588,7 +597,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [ ] **S-56** (p.28) **"unqiue"** → "specific" *(typo)*.
 - [ ] **S-57** (p.28) Remove the hyphen ("…-bond…").
 - [ ] **S-58** (p.28) "of (3.7)" → *", as defined in Eq. (3.7),"* or similar. *(G-7)*
-- [ ] **S-59** (p.28) Introduce every exhibit before discussing it. *(G-8)*
+- [x] **S-59** (p.28) Introduce every exhibit before discussing it. *(G-8)*
 - [ ] **S-60** (p.29) "named" → **"previously described"**.
 - [ ] **S-61** (p.29) **"ladder"** is not standard terminology — check it is correct here.
 - [ ] **S-62** (p.29) "everywhere" → **"in all the markets analysed"**.
@@ -610,7 +619,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       its main driver."*
 - [ ] **S-71** (p.32) "duration" → **"term premium"**.
 - [ ] **S-72** (p.32) The "wedge" reading — **soften** to *"primarily related to"* or similar.
-- [ ] **S-73** (p.32) *"Table 4.4 collects their properties"* → **"presents the results"**.
+- [x] **S-73** (p.32) *"Table 4.4 collects their properties"* → **"presents the results"**.
 - [ ] **S-74** (p.34) The last sentence (*"We compare the cycle factor against the
       forward-rate factor … in Chapter 6"*) **reads as a continuation** of the R²_oos-vs-mean
       explanation, but it is a **different comparison**. Separate it into its own
@@ -668,6 +677,43 @@ These are the highest-leverage items. Each one is a full-document sweep.
 ---
 
 ## Part 2b — Found by compiling (NOT flagged by the supervisor)
+
+- [ ] **X-2 · Two exhibit tables disagree with the R output in the repo.** 🔴 **HIGH —
+      needs the author, cannot be settled without re-running the pipeline**
+      The `.tex` tables are hand-transcribed from R-generated PDFs that are committed
+      alongside them (`thesis/tables/*.pdf`). Comparing the decimal values in each
+      `.tex` against its `.pdf` shows **two genuine mismatches**, both traceable to the
+      commit **`57e223f` "Propagate Japan imputation to all exhibit tables"**
+      (2026-07-11):
+      - 🔴 **`mr_t1b_maturity` — Table B.1, "Phase I by maturity".** That commit
+        regenerated the **PDF** but never updated the **`.tex`**, which was last
+        touched on 2026-06-11 in a commit labelled *"conversion in progress"*. **The
+        propagation missed this table.** Japan's two-year row reads
+        **$0.57$ / $(1.97)$ / $0.126$** in the thesis against
+        **$0.56$ / $(2.32)$ / $0.173$** in the current R output, and the pooled row
+        differs in the last digit ($14.32$ vs $14.33$, $0.253$ vs $0.254$,
+        $15.44$ vs $15.56$).
+      - ⚠️ **`mr_t2_phase2` — Table 5, Phase II.** Both sides were touched by the same
+        commit, yet Switzerland's two $p$-value cells read **$0.012$** in the thesis
+        and **$0.010$** in the R output. Looks like a transcription slip. Neither
+        value changes any significance statement, but the number is wrong.
+      **Not defects — checked and cleared:** `dh_t3_cp_corr`, `dh_t4_fb_cp`,
+      `dh_t6_local_global` and `dh_t7_usd` also differ, but in the **opposite
+      direction** — their `.tex` was updated by `57e223f` while their `.pdf` has not
+      been regenerated since 2026-06-08. There the thesis is current and the PDF is
+      the stale artefact. `dh_t1_corr10y`, `dh_t1_summary`, `mr_t4_oos`,
+      `rob_t1_sub_is`, `rob_t5_core_vs_reg`, `rob_t6_core_vs_reg_oos` and
+      `strat_t2_usd` **match exactly**.
+      → **Decide:** re-run the pipeline and re-transcribe `mr_t1b_maturity`, or
+      confirm the committed PDF is authoritative and transcribe from it directly.
+      Also worth re-checking any prose that quotes Japan's two-year figures.
+
+- [ ] **X-3 · Two table files are never included.** `tables/rob_t3_italy.tex` (Italy
+      across subsamples) and `tables/strat_t3_example.tex` (a mid-2022 worked example)
+      are **not `\input` by any chapter and not referenced in any prose**. They are
+      dead files rather than missing exhibits — no text discusses Italy's subsample
+      behaviour or a worked example. Either drop them or wire them in if they were
+      meant to support the robustness and strategy chapters.
 
 These were not in his 86 comments but **are visible in the PDF he read**. They fall
 squarely under his instruction to check cross-references systematically (G-13).

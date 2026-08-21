@@ -107,7 +107,9 @@ economies (the United States, $0.96$; Germany, $0.94$), but this is not purely a
 weight effect. Sweden and Canada also correlate strongly ($0.94$ and $0.89$) despite small
 weights, while Italy is the outlier at $0.21$, so the global factor
 captures common business-cycle co-movement rather than the biggest economies
-mechanically (\Cref{tab:mr-gcf-corr}). In Phase~II, I test integration directly
+mechanically. \Cref{tab:mr-gcf-corr} reports the full correlation matrix of the
+eleven local factors together with their correlation with the global factor. In
+Phase~II, I test integration directly
 through the horse race \eqref{eq:h-horse}--\eqref{eq:h-global}.
 
 \begin{figure}[t]\centering
@@ -242,8 +244,10 @@ Japan. Predictability survives currency conversion in the United States, whose d
 return mechanically equals its local return because it carries no currency leg
 ($R^{2}=33\%$), in Canada ($t=2.8$), and, more marginally, in Sweden and the
 United Kingdom ($t\approx 2.0$). The currency return is at most weakly related
-to the bond cycle in every market: its correlation with the local cycle factor
-never exceeds $0.34$ in absolute value (\Cref{tab:fx-cycle}). Currency
+to the bond cycle in every market. \Cref{tab:fx-cycle} reports, for each country,
+the correlation between the twelve-month currency return and the local cycle
+factor together with the volatility of that currency return. The correlation
+never exceeds $0.34$ in absolute value. Currency
 conversion therefore adds largely independent noise across the board rather than
 being absorbed by the bond factor, and the signal survives only where that noise
 is smallest relative to the underlying predictability. This collapse is visible
@@ -262,8 +266,8 @@ dollar-investor fit. Markets that were insignificant under
 $\GCF_{t}$ also become significant under $\FXGCF_{t}$. The euro-area core
 moves to $t\approx 2.6$ (Italy to $t=2.0$), Switzerland to $t=3.0$, and Japan to $t=2.8$, so
 that the factor is significant in ten of eleven markets (the exception is the
-United Kingdom). \Cref{fig:mr-gcf-fxgcf} shows why new
-information can be captured. The dollar-return factor correlates $0.81$ with the
+United Kingdom). \Cref{fig:mr-gcf-fxgcf} plots the two global factors over their common sample and
+shows why new information can be captured. The dollar-return factor correlates $0.81$ with the
 unadjusted global factor, so the two series share the global cycle but the
 dollar-return factor carries distinct information about the currency
 leg of the dollar return. I compare the
@@ -314,7 +318,9 @@ and the wedge as the FX factor lets me ask not just whether the FX adjustment
 helps on average, but \emph{when} the two factors carry different
 information, and why.
 
-\Cref{tab:fxd-properties} collects their properties. The wedge's standard deviation ($0.35$) is as large as that of the
+\Cref{tab:fxd-properties} presents the results, reporting the mean, standard
+deviation, persistence and half-life of the two global factors and of the wedge
+between them, together with a pre- and post-crisis split. The wedge's standard deviation ($0.35$) is as large as that of the
 interest-rate factor itself ($0.33$) and it is highly persistent (first-order
 autocorrelation $0.99$, half-life of about five years), so the FX component is a
 slow-moving second factor in its own right. Yet
@@ -358,7 +364,8 @@ When rates are high and spread apart, differentials are wide, the carry
 channel is active and the currency component moves on its own. When rates
 converge to a synchronised zero lower bound, differentials compress and the
 currency component adds little that the bond cycle does not already
-capture. \Cref{fig:fxd-regime} shows this pattern. The rolling correlation
+capture. \Cref{fig:fxd-regime} shows this pattern, plotting the rolling correlation above
+the smoothed level of G10 short rates. The rolling correlation
 of the two factors falls when the GDP-weighted G10 short rate is high and rises
 as it approaches zero, with the two moving in opposite directions
 (correlation $-0.42$). The regimes in \Cref{tab:fxd-properties} tell the same
@@ -447,7 +454,8 @@ cycle factor does not survive the transition to real time. Its pooled
 $R^{2}_{\mathrm{oos}}$ is $-0.07$, and it beats the prevailing mean in only two
 of the eleven markets (the United States and Canada). Second, the global factor is the exception, and a notable
 one. Its pooled $R^{2}_{\mathrm{oos}}$ is $+0.05$ and it is positive in ten of
-the eleven markets, as \Cref{fig:mr-oos} shows. Aggregating the eleven
+the eleven markets, as \Cref{fig:mr-oos} shows, which plots the recursive $R^{2}_{\mathrm{oos}}$ of the
+local and global factors side by side for each market. Aggregating the eleven
 national cycles into one GDP-weighted factor averages away the country-specific
 estimation noise that causes the local factor to fail, so the global factor
 predicts out of sample where the local factor cannot. I consider this strong

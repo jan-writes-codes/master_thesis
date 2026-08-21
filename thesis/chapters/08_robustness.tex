@@ -215,17 +215,20 @@ $\GCP_{t}$ exactly as $\GCF_{t}$ is built from $\CF_{i,t}$, so that the two fact
 families differ only in their predictor set: macro-anchored cycles versus
 forward rates.
 
-The two local factors carry overlapping but distinct information. They correlate
-$0.69$ on average across the G10 (right panel of \Cref{fig:s10-is}), and the two global factors correlate
-$0.74$. In sample, the forward factor actually performs better. Its cross-country
+\Cref{fig:s10-is} compares the two families, with in-sample $R^{2}$ by country in
+the left panel and the per-country correlation between the local cycle and
+forward factors in the right panel. The two local factors carry overlapping but
+distinct information. They correlate $0.69$ on average across the G10, and the
+two global factors correlate $0.74$. In sample, the forward factor actually performs better. Its cross-country
 mean $R^{2}$ is $0.38$ for the local and $0.35$ for the global version, against
 $0.25$ for both cycle factors (\Cref{fig:s10-is}). At face value, this is not in
 the cycle factor's favour. However, because the
 forward factor uses six predictors compared to the cycle factor's two and
 therefore has far more scope to over-fit a fixed sample.
 
-Out of sample, however, the verdict reverses
-(\Cref{fig:s10-oos}). The global cycle factor is the only one of the four
+Out of sample, however, the verdict reverses. \Cref{fig:s10-oos} reports the
+recursive $R^{2}_{\mathrm{oos}}$ of all four factors by country. The global cycle
+factor is the only one of the four
 that beats the recursive prevailing mean, with a pooled
 $R^{2}_{\mathrm{oos}}=+0.05$ and positive forecasts in ten of eleven markets. The
 global forward factor, despite its higher in-sample fit, fails out of
@@ -307,7 +310,9 @@ both, while the dollar-return factor is the exception. It is slightly
 \emph{better} on headline ($+0.035$ versus $+0.021$). A plausible reading is
 that the energy-price component that contaminates the headline trend also moves
 exchange rates \citep{ferraro2015} and is therefore not pure noise for a
-dollar-return factor (\Cref{tab:rob-core-headline-oos}). For the local-currency factors, the
+dollar-return factor. \Cref{tab:rob-core-headline-oos} reports the out-of-sample
+counterpart, the recursive $R^{2}_{\mathrm{oos}}$ under each inflation measure.
+For the local-currency factors, the
 asymmetry makes economic sense.
 The recursive estimator re-fits both the trend and the predictive coefficients on
 data available only up to each date, so it is far more exposed to the
