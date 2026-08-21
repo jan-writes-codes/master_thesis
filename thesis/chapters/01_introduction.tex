@@ -6,19 +6,23 @@
 \chapter{Introduction}
 \label{ch:intro}
 
-Investors
+On average, investors
 earn more on long-term government bonds than on rolling over short-term
 bills, and this compensation varies predictably over time. According to
 classical theory, this should not be the case. Under the expectations
 hypothesis (EH), the yield on an $n$-year bond is the average of expected
 future short rates plus at most a constant term premium,%
 \footnote{This is the log-linearised expectations hypothesis. Iterating the
-  one-period relation $p^{(n)}_{t}=\E_{t}\!\left[p^{(n-1)}_{t+1}\right]-y^{(1)}_{t}$
-  under a constant term premium and using $y^{(n)}_{t}=-p^{(n)}_{t}/n$ gives the
-  average-expected-short-rate expression.}
+  one-period relation
+  $p^{(n)}_{t}=\E_{t}\!\left[p^{(n-1)}_{t+1}\right]-y^{(1)}_{t}+\phi^{(1)}$,
+  in which $\phi^{(1)}$ is the constant one-period term premium, and using
+  $y^{(n)}_{t}=-p^{(n)}_{t}/n$ gives the expression above with
+  $\phi^{(n)}$ the corresponding maturity-$n$ constant. The relation is exact
+  for zero-coupon bonds in logs, so it is written as an equality. See
+  \citet{cochrane2005book}, Chapter~19.}
 \begin{equation*}
-  y^{(n)}_{t} \;\approx\; \frac{1}{n}\sum_{i=0}^{n-1}
-  \E_{t}\!\left[y^{(1)}_{t+i}\right],
+  y^{(n)}_{t} \;=\; \frac{1}{n}\sum_{i=0}^{n-1}
+  \E_{t}\!\left[y^{(1)}_{t+i}\right] \;+\; \phi^{(n)},
 \end{equation*}
 so excess returns from holding longer maturities should not be forecastable,
 because whatever is known today about future short rates is already priced
@@ -55,9 +59,9 @@ view is the ``falling stars'' evidence of \citet{bauer2020}. Once the slow
 drift in the long-run inflation and real-rate anchors is accounted for, the predictable component of returns remains.
 
 However, this macro-anchored evidence is almost exclusively evidence about
-the United States. If the trend--cycle mechanism exists, the same
-mechanism should also operate in other developed bond markets, and a failure
-to do so would cast doubt on the economic interpretation. The international
+the United States. If the trend--cycle mechanism is fundamental, the same
+mechanism should also operate in other developed bond markets, and a failure to
+find it there would cast doubt on its generalisability. The international
 literature is encouraging, though it has pursued different predictors.
 \citet{dahlquist2013} take
 the forward-rate factor abroad. They construct local CP factors for four
@@ -112,7 +116,7 @@ I run a horse race between the two. Third, I adopt the perspective of an
 unhedged US-dollar investor, for whom currency risk intervenes between the
 foreign bond and the realised dollar return. The plain global factor may lose
 much of its power on dollar returns, and I ask whether a purpose-built
-dollar-return global cycle factor recovers what currency conversion erodes,
+dollar-return global cycle factor recovers what currency risk erodes,
 and how its dynamics differ from those of the unadjusted global factor.
 
 Because the cycle factors are generated regressors, I evaluate every step
@@ -131,8 +135,8 @@ $\CF_{i,t}$, which I construct for each of eleven G10 markets as
 of zero-coupon yields, core inflation, exchange rates, and GDP spanning
 1989--2024. The second, the \emph{global
 cycle factor} $\GCF_{t}$, aggregates the national factors with time-varying
-GDP weights. With this factor, I transplant the integration test of
-\citet{dahlquist2013} from the forward-rate family to the macro-anchored
+GDP weights. With this factor, I carry the integration test of
+\citet{dahlquist2013} over from the forward-rate family to the macro-anchored
 cycle. The third is a new \emph{dollar-return global
 cycle factor} $\FXGCF_{t}$, which fits a USD cycle factor per country. Each
 country's dollar excess return is projected on its own cycles and
@@ -151,8 +155,8 @@ re-estimate all three factors fully recursively and score them with the out-of-s
 analysis, a horse race against the global forward-rate factor, a
 core-versus-headline-inflation comparison and a market-timing strategy.
 I also
-replicate the published US and international results
-(\Cref{ch:replication}) to validate the data processing pipeline.
+replicate the published US and international results to validate the data
+processing pipeline.
 
 % --- Preview of findings & roadmap -----------------------------------------
 
@@ -164,9 +168,10 @@ ten, with an average in-sample $R^{2}$ of $25\%$ and uniform loadings across the
 Second, I find that the predictability is overwhelmingly global. The
 GDP-weighted global cycle factor is significant in every market and matches
 the explanatory power of the eleven separately estimated local factors.
-Once it is included, genuinely local content survives in only three markets
-(Italy, the Netherlands, Belgium). Integration is therefore the rule,
-although it weakens under severe sovereign stress. Third, I find that
+Once it is included, genuinely local predictive information survives in only
+three markets
+(Italy, the Netherlands, Belgium). The evidence therefore points to integrated
+markets, although that integration weakens under severe sovereign stress. Third, I find that
 currency risk is a considerable obstacle for the dollar investor. Dollar
 conversion erodes roughly two-thirds of the global factor's predictive
 power. The dollar-return factor recovers much of it in sample, substantially raising

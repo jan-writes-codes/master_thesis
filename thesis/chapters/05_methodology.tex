@@ -16,17 +16,17 @@
 Having described the data, I now develop the formal apparatus that it feeds.
 Throughout, $i$ indexes countries in the G10 cross-section $\mathcal{G}$, time
 $t$ is measured in months, and bond maturity $n$ in years. The empirical
-maturity menu is $N=\{1,2,4,5,9,10\}$ years, and all yields are continuously
-compounded and expressed in percent per annum. I let $y^{(n)}_{t}$ denote the time-$t$
-continuously compounded yield on an $n$-year zero-coupon bond and
-$p^{(n)}_{t}=-n\,y^{(n)}_{t}$ the corresponding log price. The one-year
+maturity grid is $N=\{1,2,4,5,9,10\}$ years, and all yields are continuously
+compounded and expressed in percent per annum. I let $y^{(n)}_{i,t}$ denote the time-$t$
+continuously compounded yield on an $n$-year zero-coupon bond in market $i$ and
+$p^{(n)}_{i,t}=-n\,y^{(n)}_{i,t}$ the corresponding log price. The one-year
 holding-period excess return on an $n$-year bond,
 \begin{equation}
-  \rx^{(n)}_{t+12} \;=\; p^{(n-1)}_{t+12}-p^{(n)}_{t}-y^{(1)}_{t}
-                  \;=\; n\,y^{(n)}_{t}-(n-1)\,y^{(n-1)}_{t+12}-y^{(1)}_{t},
+  \rx^{(n)}_{i,t+12} \;=\; p^{(n-1)}_{i,t+12}-p^{(n)}_{i,t}-y^{(1)}_{i,t}
+                  \;=\; n\,y^{(n)}_{i,t}-(n-1)\,y^{(n-1)}_{i,t+12}-y^{(1)}_{i,t},
   \label{eq:rx}
 \end{equation}
-should therefore satisfy $\E_{t}\!\left[\rx^{(n)}_{t+12}\right]=\text{const}$,
+should therefore satisfy $\E_{t}\!\left[\rx^{(n)}_{i,t+12}\right]=\text{const}$,
 i.e.\ the expected excess return is the same at every date. The empirical
 bond-pricing literature, however, rejects this restriction.
 
@@ -37,15 +37,16 @@ follow \citet{cieslak2015} and work with \emph{duration-standardised} returns,
 $\widetilde{\rx}^{(n)}_{i,t+12}=\rx^{(n)}_{i,t+12}/D^{(n)}$, and then average
 across the maturity set to obtain a single, scale-comparable return series:
 \begin{equation}
-  \rxbar_{i,t+12} \;=\; \frac{1}{K}\sum_{n\in\mathcal{N}}
+  \rxbar_{i,t+12} \;=\; \frac{1}{K}\sum_{n\in\mathcal{A}}
                         \frac{\rx^{(n)}_{i,t+12}}{D^{(n)}},
-  \qquad K=|\mathcal{N}|,\quad D^{(n)}=n.
+  \qquad K=|\mathcal{A}|,\quad D^{(n)}=n.
   \label{eq:rxbar}
 \end{equation}
 The duration weight $D^{(n)}=n$ is the Macaulay duration of a continuously
 compounded zero-coupon bond. For the construction, I use the averaging set
-$\mathcal{N}=\{2,5,10\}$ years. These are the maturities for which a clean
-one-year-ahead excess return is identified given the data menu, since each
+$\mathcal{A}=\{2,5,10\}\subset N$ years, written with a distinct symbol so that it
+is not confused with the full maturity grid $N$. These are the maturities for which a clean
+one-year-ahead excess return is identified given the available maturities, since each
 requires the adjacent shorter yield $y^{(n-1)}$, i.e.\
 $y^{(1)},y^{(4)},y^{(9)}$, which are all available.
 
@@ -315,7 +316,7 @@ For transparency, I collect the substantive departures from \citet{cieslak2015}
 and \citet{dahlquist2013} here. I revisit each of them where it
 bears on the results.
 \begin{itemize}[leftmargin=1.4em]
-  \item \textbf{Maturity menu.} Yields are available at $\{1,2,4,5,9,10\}$ years
+  \item \textbf{Maturity grid.} Yields are available at $\{1,2,4,5,9,10\}$ years
     rather than the finer grid of the original papers. I form individual excess
     returns for $n\in\{2,5,10\}$, the maturities with an observed adjacent
     shorter yield.

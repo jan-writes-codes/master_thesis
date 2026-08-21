@@ -3,7 +3,7 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** IN PROGRESS — **58 of 126 items done.** All structural work (STR-1…STR-8)
+**Status:** IN PROGRESS — **86 of 126 items done.** All structural work (STR-1…STR-8)
 is complete, as are **G-1 through G-11 except G-12**.
 Everything below is verified by a clean compile.
 
@@ -531,18 +531,18 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-3** (p.3) "out of sample" → consistent hyphenation. *(G-2)*
 - [x] **S-4** (p.4) Chapter 3 fragmentation. *(done via STR-1)*
 - [x] **S-5** (p.4) Literature review too finely split. *(done via STR-2)*
-- [ ] **S-6** (p.4) "G10" → **"G10 markets"**.
+- [x] **S-6** (p.4) "G10" → **"G10 markets"**.
 - [x] **S-7** (p.5) Two appendices, own titles, refs fixed, order swapped. *(done via STR-3)*
 
 ### Chapter 1 — Introduction
-- [ ] **S-8** (p.8) Insert **"On average,"** at the start of the sentence.
-- [ ] **S-9** (p.8) **The equation omits the constant term premium the sentence
+- [x] **S-8** (p.8) Insert **"On average,"** at the start of the sentence.
+- [x] **S-9** (p.8) **The equation omits the constant term premium the sentence
       announces.** Add "(+ constant term premium)" as in Cochrane, *Asset Pricing*, Ch. 19,
       and **fix footnote 1** accordingly (its one-period relation also lacks it).
       Then **"≈" can become "="** — the log form is exact for zero-coupon bonds.
 - [x] **S-10** (p.9) Research-question block. *(done via STR-5)*
 - [x] **S-11** (p.9) Do not start a sentence with **"However"** — rephrase.
-- [ ] **S-12** (p.9) *"cast doubt on the economic interpretation"* is **too broad** —
+- [x] **S-12** (p.9) *"cast doubt on the economic interpretation"* is **too broad** —
       failure abroad speaks to generality, not to the mechanism. Use:
       *"…and a failure to find it there would cast doubt on its **generalisability**."*
       (This also fixes *"a failure to do so"*, which lacks a referent.)
@@ -554,7 +554,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       to reference sections in the introduction. ✅ **DONE** via STR-5; verified the
       introduction now contains **zero** `\Cref{sec:...}`.
 - [x] **S-16** (p.10) "dollar" — **no italics**. *(G-3)*
-- [ ] **S-17** (p.10) "conversion" → **"risk"**.
+- [x] **S-17** (p.10) "conversion" → **"risk"**.
 - [x] **S-18** (p.10) **"destroys"** — too strong. ✅ **DONE** — now *"erodes"*, at both
       sites (`01_introduction.tex`, rewritten under STR-5; `02_literature.tex:191`).
 - [x] **S-19** (p.10) "In Phase I, …" — plain prose in the intro. *(done via STR-6)*
@@ -568,13 +568,13 @@ These are the highest-leverage items. Each one is a full-document sweep.
       he wrote it before making the G-4 renaming request, so the two comments conflict.
       Also recast to first person per G-1: *"I contribute a family of three nested cycle
       factors — local, global, and dollar-return — together with…"*
-- [ ] **S-21** (p.10) **"transplant"** — check the word is accurate.
-- [ ] **S-22** (p.10) **Strike** "(Chapter B)". *(G-5)*
+- [x] **S-21** (p.10) **"transplant"** — check the word is accurate.
+- [x] **S-22** (p.10) **Strike** "(Chapter B)". *(G-5)*
 - [x] **S-23** (p.10) *"We arrive at four main findings"* — **"arrive" is not academic**.
       Use *"Four main findings emerge"* or *"The analysis yields four main findings"*.
-- [ ] **S-24** (p.11) **"genuinely local content"** — does this mean local indices? local
+- [x] **S-24** (p.11) **"genuinely local content"** — does this mean local indices? local
       information? Rephrase.
-- [ ] **S-25** (p.11) **"Integration is therefore the rule"** — unclear.
+- [x] **S-25** (p.11) **"Integration is therefore the rule"** — unclear.
 - [x] **S-26** (p.11) **Strike** the sentence *"In Chapter B, we validate our empirical
       engine against the published results of Cieslak and Povala (2015) and Dahlquist and
       Hasseltoft (2013)."* *(G-5, STR-3)*
@@ -582,14 +582,14 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-28** (p.11) End the roadmap with **"; Chapter 8 concludes."**
 
 ### Chapter 2 — Literature Review
-- [ ] **S-29** (p.13) "transformed" → **present simple**.
+- [x] **S-29** (p.13) "transformed" → **present simple**.
 - [x] **S-30** (p.14) Italics convention. *(G-3)*
-- [ ] **S-31** (p.15) **Imprecise:** *"carry premium shrinks as foreign bond maturity
+- [x] **S-31** (p.15) **Imprecise:** *"carry premium shrinks as foreign bond maturity
       lengthens"*. It does not shrink — the unhedged bond return is the **currency risk
       premium + the local-currency term premium**, and for long-maturity bonds these two
       components move in **opposite directions**, so the overall carry-trade return is low.
       Rewrite accordingly.
-- [ ] **S-32** (p.15) "no …" enumeration. *(G-12)*
+- [x] **S-32** (p.15) "no …" enumeration. *(G-12)*
 - [ ] **S-33** (p.15) **Tone down** the gap claim ("…constructs an FX-adjusted global cycle
       factor for the unhedged dollar investor. The existing international evidence has also
       not been subjected to the full out-of-sample discipline…").
@@ -605,20 +605,20 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-36** (p.16) Literature structure. *(done via STR-2)*
 
 ### Chapter 3 — Data and Methodology
-- [ ] **S-37** (p.17) **Something is missing** — add *", which will be presented in detail
+- [x] **S-37** (p.17) **Something is missing** — add *", which will be presented in detail
       in Section …"*.
 - [ ] **S-38** (p.18) Notes required for all tables and figures. *(G-9)*
 - [ ] **S-39** (p.18) Progressive numbering. *(G-6)*
 - [x] **S-40** (p.18) Ambiguous bare "(3.9)". *(G-7)*
-- [ ] **S-41** (p.19) "net" → **"net out"**.
-- [ ] **S-42** (p.20) "collected" → **"reported"**.
+- [x] **S-41** (p.19) "net" → **"net out"**.
+- [x] **S-42** (p.20) "collected" → **"reported"**.
 - [x] **S-43** (p.20) "After Dahlquist and Hasseltoft (2013), Table 1" → *"The table format
       follows Dahlquist and Hasseltoft (2013), Table 1."* *(G-10)*
-- [ ] **S-44** (p.20) **"menu"** — change the word.
-- [ ] **S-45** (p.21) `rx^(n)_{t+12}` — **should it not carry the country subscript `i`**,
+- [x] **S-44** (p.20) **"menu"** — change the word.
+- [x] **S-45** (p.21) `rx^(n)_{t+12}` — **should it not carry the country subscript `i`**,
       as mentioned above it?
 - [x] **S-46** (p.21) OLS vs "ordinary least squares". *(G-11)*
-- [ ] **S-47** (p.22) **`N` is overloaded:** defined as the maturity menu {1,2,4,5,9,10} in
+- [x] **S-47** (p.22) **`N` is overloaded:** defined as the maturity menu {1,2,4,5,9,10} in
       3.5, used correctly in (3.4) as N\{1}, then **silently redefined** as the averaging
       set {2,5,10} in (3.8) with K = |N|. **Give the averaging set its own symbol.**
 - [ ] **S-48** (p.23) Rename `FXGCF_t`. *(G-4)*
@@ -633,24 +633,24 @@ These are the highest-leverage items. Each one is a full-document sweep.
       introduction, so restating them as headings was the redundancy he flagged.
 
 ### Chapter 4 — Results
-- [ ] **S-52** (p.26) "In Chapter B" → **"Appendix B"**; state that the validation is
+- [x] **S-52** (p.26) "In Chapter B" → **"Appendix B"**; state that the validation is
       presented in detail in Appendix B, then **move directly to the core analysis**. *(G-5)*
-- [ ] **S-53** (p.26) "was" → **"is"**.
+- [x] **S-53** (p.26) "was" → **"is"**.
 - [ ] **S-54** (p.26) **Move the algebraic preamble** (why the regression on CF has slope
       identically one and R² equal to the underlying fit) **into a footnote**, and open with
       *"Table X shows the results from the predictive regression…"*.
 - [ ] **S-55** (p.27) Make clear that **Table 4.1 is for the G10**; connect it to the next
       sentence, e.g. *"Specifically, I regress…"*.
-- [ ] **S-56** (p.28) **"unqiue"** → "specific" *(typo)*.
+- [x] **S-56** (p.28) **"unqiue"** → "specific" *(typo)*.
 - [ ] **S-57** (p.28) Remove the hyphen ("…-bond…").
 - [x] **S-58** (p.28) "of (3.7)" → *", as defined in Eq. (3.7),"* or similar. *(G-7)*
 - [x] **S-59** (p.28) Introduce every exhibit before discussing it. *(G-8)*
-- [ ] **S-60** (p.29) "named" → **"previously described"**.
+- [x] **S-60** (p.29) "named" → **"previously described"**.
 - [ ] **S-61** (p.29) **"ladder"** is not standard terminology — check it is correct here.
-- [ ] **S-62** (p.29) "everywhere" → **"in all the markets analysed"**.
+- [x] **S-62** (p.29) "everywhere" → **"in all the markets analysed"**.
 - [ ] **S-63** (p.30) The sentence ending *"…that of Dahlquist and Hasseltoft (2013)."*
       **reads unfinished**.
-- [ ] **S-64** (p.30) "adopted" → **present simple**.
+- [x] **S-64** (p.30) "adopted" → **present simple**.
 - [x] **S-65** (p.30) **The second question is hard to parse** — a 30-word relative clause.
       ✅ **DONE** — split in two, with the bottom-up construction moved into its own
       sentence (`07_results.tex`).
@@ -675,11 +675,11 @@ These are the highest-leverage items. Each one is a full-document sweep.
       comparable (different benchmarks) — not only in the table note.
 - [ ] **S-76** (p.34) Should the factors in the table carry the **OOS subscript**, for
       consistency with the rest of the notation?
-- [ ] **S-77** (p.36) "G10." → **"G10 markets."**
+- [x] **S-77** (p.36) "G10." → **"G10 markets."**
 - [ ] **S-78** (p.36) "government-bond" → **no hyphen**.
 
 ### Chapter 5 — Portfolio Construction / Strategy
-- [ ] **S-79** (p.42) **Hiking-cycle dates inconsistent.** ✅ *Confirmed and isolated:*
+- [x] **S-79** (p.42) **Hiking-cycle dates inconsistent.** ✅ *Confirmed and isolated:*
       **`08b_strategy.tex:129` is the sole outlier** ("2022--2023 global hiking cycle");
       the same event is called **"2021--2022"** in five places —
       `08b_strategy.tex:151`, `:159`, `:262`, and `tables/strat_t4_subperiod.tex:18`, `:26`.
@@ -699,7 +699,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       there a specific reason? *(→ Q-2)*
 
 ### Bibliography & Appendices
-- [ ] **S-85** (p.65) **BibTeX has eaten capitalisations.** ✅ *Confirmed — cause is
+- [x] **S-85** (p.65) **BibTeX has eaten capitalisations.** ✅ *Confirmed — cause is
       `\bibliographystyle{chicago}` (`main.tex:50`), which lowercases titles, and
       **no title field in `references.bib` is brace-protected**.*
       He spotted three; the sweep found **more**:
@@ -715,7 +715,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       `:319` "Dog That Did Not Bark".
       → Fix: brace each proper noun — `{Brazil}`, `{China}`, `{Treasury}`,
       `{Cochrane}--{Piazzesi}`. Then **read the rendered bibliography end to end.**
-- [ ] **S-86** (p.74) **Incomplete text** in the appendix.
+- [x] **S-86** (p.74) **Incomplete text** in the appendix.
       ✅ **Diagnosed** — `06_replication.tex:19`:
       > *"The relevant test is therefore agreement on signs, magnitudes."*
       The list is truncated — it needs its final item and a conjunction, e.g.
