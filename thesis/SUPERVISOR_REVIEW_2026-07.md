@@ -538,7 +538,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 These were not in his 86 comments but **are visible in the PDF he read**. They fall
 squarely under his instruction to check cross-references systematically (G-13).
 
-- [ ] **X-1 · Three broken cross-references render as `??` in the PDF.** 🔴 **HIGH**
+- [x] **X-1 · Three broken cross-references render as `??` in the PDF.** ✅ **FIXED**
       The label **`sec:meth-ehmc` is referenced three times but never defined anywhere
       in the thesis**:
       - `chapters/06_replication.tex:88` → renders on **p.75**:
