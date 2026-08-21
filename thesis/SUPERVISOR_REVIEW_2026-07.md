@@ -3,25 +3,23 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** **119 of 126 items done.** All structural work (STR-1…STR-8)
-is complete, as are **G-1 through G-11 except G-12**.
-Everything below is verified by a clean compile.
+**Status:** **119 of 126 items done.** All 86 of the supervisor's annotations and all
+four email-level requests are addressed, except where a decision is the author's to
+make. Every `G-` and `STR-` item is complete. Verified by a clean rebuild from
+scratch — 0 errors, 0 undefined references, 0 multiply-defined labels, 0 overfull
+boxes, no `??`, and zero occurrences of `we`, `our`, `us`, `FX-adjusted` or
+`Chapter A/B`.
 
-**Every item that can be settled without the author is settled.** What remains needs
-a decision or a conversation, not an edit:
-1. 🔴 **X-2** — **three** tables disagree with the R output. Re-run the pipeline, or
-   transcribe from the committed PDFs? Full write-up in
-   `EXHIBIT_DATA_DISCREPANCIES.md`.
-2. **X-3** — two table files no chapter includes. Drop them or wire them in.
-3. **Q-1, Q-2, Q-6, Q-7** — questions for the supervisor, including the offer to
-   re-read the robustness chapter and whether the Japan splice needs its own
-   robustness check.
-4. **S-84** — folded into **Q-2**.
-2. **G-12** (tone — the remaining overclaiming), **G-13** (internal consistency
-   sweep), **G-14** (table layout), **G-15** (full proofread).
-3. The remaining `S-` line edits, and the `NUM-` checks **which need the author**.
-Then the remaining `S-` line edits, the `NUM-` checks **which need the author**, and
-finally **G-15** (full proofread).
+**The 7 open items all need the author or the supervisor, not an edit:**
+1. 🔴 **X-2** — **three** tables disagree with the R output, all traceable to the
+   commit that propagated the Japan imputation. Re-run the pipeline, or transcribe
+   from the committed PDFs? Full write-up in `EXHIBIT_DATA_DISCREPANCIES.md`.
+2. **X-3** — two table files that no chapter includes. Drop them or wire them in.
+3. **S-84 / Q-2** — whether the contribution statement deliberately omits the local
+   factor.
+4. **Q-1, Q-6, Q-7** — for the supervisor: what to send him from the robustness
+   chapter he read quickly, the follow-up meeting he offered, and whether the
+   Japanese core-CPI splice warrants a robustness check of its own.
 
 **Build note:** the thesis compiles with `latexmk -pdf main.tex` (0 errors). Two cheap
 regression checks to run after every batch of edits:
