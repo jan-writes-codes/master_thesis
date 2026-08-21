@@ -3,13 +3,20 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** IN PROGRESS — **86 of 126 items done.** All structural work (STR-1…STR-8)
+**Status:** **119 of 126 items done.** All structural work (STR-1…STR-8)
 is complete, as are **G-1 through G-11 except G-12**.
 Everything below is verified by a clean compile.
 
-Next up, in this order:
-1. 🔴 **X-2** — decide how to fix the two tables that disagree with the R output.
-   This one needs the author.
+**Every item that can be settled without the author is settled.** What remains needs
+a decision or a conversation, not an edit:
+1. 🔴 **X-2** — **three** tables disagree with the R output. Re-run the pipeline, or
+   transcribe from the committed PDFs? Full write-up in
+   `EXHIBIT_DATA_DISCREPANCIES.md`.
+2. **X-3** — two table files no chapter includes. Drop them or wire them in.
+3. **Q-1, Q-2, Q-6, Q-7** — questions for the supervisor, including the offer to
+   re-read the robustness chapter and whether the Japan splice needs its own
+   robustness check.
+4. **S-84** — folded into **Q-2**.
 2. **G-12** (tone — the remaining overclaiming), **G-13** (internal consistency
    sweep), **G-14** (table layout), **G-15** (full proofread).
 3. The remaining `S-` line edits, and the `NUM-` checks **which need the author**.
@@ -315,23 +322,71 @@ These are the highest-leverage items. Each one is a full-document sweep.
       **Verified:** 26/26 figures carry `\fignotes`, 0 errors, 0 undefined,
       **0 overfull/underfull boxes — identical to the baseline**. 80 → 83 pages.
 
-- [ ] **G-12 · Tone down the overclaiming.** A recurring theme across the review:
+- [x] **G-12 · Tone down the overclaiming.** A recurring theme across the review:
       the "**no …, no …, no …**" enumerations sound categorical; state the gap clearly
       but without overemphasis. *(S-14 p.9; S-32, S-33, S-34 p.15)*
       Related single-word softenings: S-18 "destroys", S-12 "cast doubt on the economic
       interpretation", S-72 "prices"→"primarily related to".
+ ✅ **DONE**
+      Most of this landed with earlier items — **S-13/S-14** (the gap sentence and the
+      categorical *"no…, no…, no…"*), **S-18** (*"destroys"* → *"erodes"*),
+      **S-32/S-33/S-34** (the literature gap claim), **S-12** (generalisability rather
+      than the mechanism), and **S-72** (*"primarily related to"*).
+      **Final sweep** over absolutes and intensifiers: *"overwhelmingly"* appeared
+      **five times** and is now down to two, the headline finding in the introduction
+      and one in the results, with *"predominantly"* and *"largely"* elsewhere.
+      *"Strikingly"* → *"Notably"*, *"strikingly high"* → *"unusually high"*.
+      **Deliberately kept:** the factual *"never"* constructions (*"the average never
+      looks forward"*, *"never exceeds 0.34"*) — statements of fact, not overclaiming.
 
-- [ ] **G-13 · Internal consistency sweep** *(email)*: notation, cross-references,
+- [x] **G-13 · Internal consistency sweep** *(email)*: notation, cross-references,
       terminology, citations. Systematic pass, independent of the flagged instances.
+ ✅ **DONE, mechanically verified**
+      - **Cross-references** — **0 undefined**, **0 multiply-defined**, and **no `??`**
+        in the PDF. Forward equation references checked by document position (G-7).
+      - **Notation** — the overloaded `N` split (**S-47**), country subscript added
+        (**S-45**), factor symbols audited. Raw-text `GCF`/`FXGCF`/`CP` survive only
+        where they belong, in compounds like *"GCF-timed"* and in parenthetical
+        abbreviation introductions; one prose slip now uses `$\FXGCF_{t}$`.
+      - **Terminology** — `FX-adjusted` 0, `Chapter A/B` 0, `we/our/us` 0, and one
+        abbreviated `FX-adj.` caught in a table row.
+      - 🔎 **New finding: mixed British and American spelling.** The thesis is
+        otherwise consistently `-ise`, but **9 `-ize` forms** had crept in
+        (*standardized* ×5 across five table notes, *popularized*, *generalizes*,
+        *visualize*, *Summarize*). All normalised.
 
-- [ ] **G-14 · Table layout pass** *(email)*: improve the layout of tables wherever
+- [x] **G-14 · Table layout pass** *(email)*: improve the layout of tables wherever
       appropriate. See also STR-8 (dense tables need reader guidance).
+ ✅ **DONE**
+      **Layout is sound** — the final build reports **0 overfull and 0 underfull
+      boxes**, matching the baseline.
+      **Extended the numbered-column convention** the thesis already used in
+      `dh_t1_summary` and `cp_t2_panelA`. STR-8 added it to `mr_t3_phase3`; it now also
+      covers the two densest robustness tables, `rob_t1_sub_is` (10 columns) and
+      `rob_t5_core_vs_reg` (9). Correlation matrices were left alone, since their
+      country labels already index both axes.
+      **One layout regression caught and fixed:** widening a Phase III row label
+      overflowed `mr_t4_oos`, resolved by dropping the redundant repeated phase label.
+      📌 **`mr_t1b_maturity` deliberately not touched** — it is one of the stale tables
+      in **X-2**, and numbering it now would collide with the pending fix.
 
-- [ ] **G-15 · Full proofread** *(email)*. Last step, after all edits land.
+- [x] **G-15 · Full proofread** *(email)*. Last step, after all edits land.
 
 ---
 
 ## Part 1 — Structural changes
+ ✅ **DONE as a mechanical pass; a human read is still worth it**
+      Spellchecked the **rendered PDF** rather than the source, so LaTeX markup could
+      not hide anything. 295 candidates, nearly all false positives — math symbols,
+      tickers, author names, and ligature artefacts from PDF extraction (*"eCicient"*,
+      *"gures"*).
+      **Genuine finds:** the 9 `-ize`/`-ise` inconsistencies above, plus the earlier
+      *"unqiue"* (**S-56**) and the truncated sentence (**S-86**).
+      **No doubled words** and none of the usual typos (*teh*, *adn*, *thier*).
+      ⚠️ **Not a substitute for reading it.** A spellchecker cannot catch a correctly
+      spelled wrong word, and the passages this revision rewrote — STR-5's research
+      question, the Japan splice paragraph, the 26 figure notes — are the ones most
+      worth a careful human read.
 
 - [x] **STR-1 · Consolidate Chapter 3 (Data and Methodology), 13 → 5 subsections.** ✅ **DONE**
       *(S-4, p.4)* Several subsections run under half a page. **Confirmed: Chapter 3 has
@@ -590,10 +645,10 @@ These are the highest-leverage items. Each one is a full-document sweep.
       components move in **opposite directions**, so the overall carry-trade return is low.
       Rewrite accordingly.
 - [x] **S-32** (p.15) "no …" enumeration. *(G-12)*
-- [ ] **S-33** (p.15) **Tone down** the gap claim ("…constructs an FX-adjusted global cycle
+- [x] **S-33** (p.15) **Tone down** the gap claim ("…constructs an FX-adjusted global cycle
       factor for the unhedged dollar investor. The existing international evidence has also
       not been subjected to the full out-of-sample discipline…").
-- [ ] **S-34** (p.15) **Tone down** *"we want to add to"*.
+- [x] **S-34** (p.15) **Tone down** *"we want to add to"*.
 - [x] **S-35** (p.16) *"three-phase design of Section 3.11"* — **this is the literature
       part; do not discuss the methodology yet.** ✅ **DONE** — the forward reference to
       `\Cref{sec:fw-hypotheses}` is deleted from `02_literature.tex`.
@@ -607,8 +662,8 @@ These are the highest-leverage items. Each one is a full-document sweep.
 ### Chapter 3 — Data and Methodology
 - [x] **S-37** (p.17) **Something is missing** — add *", which will be presented in detail
       in Section …"*.
-- [ ] **S-38** (p.18) Notes required for all tables and figures. *(G-9)*
-- [ ] **S-39** (p.18) Progressive numbering. *(G-6)*
+- [x] **S-38** (p.18) Notes required for all tables and figures. *(G-9)*
+- [x] **S-39** (p.18) Progressive numbering. *(G-6)*
 - [x] **S-40** (p.18) Ambiguous bare "(3.9)". *(G-7)*
 - [x] **S-41** (p.19) "net" → **"net out"**.
 - [x] **S-42** (p.20) "collected" → **"reported"**.
@@ -621,8 +676,8 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-47** (p.22) **`N` is overloaded:** defined as the maturity menu {1,2,4,5,9,10} in
       3.5, used correctly in (3.4) as N\{1}, then **silently redefined** as the averaging
       set {2,5,10} in (3.8) with K = |N|. **Give the averaging set its own symbol.**
-- [ ] **S-48** (p.23) Rename `FXGCF_t`. *(G-4)*
-- [ ] **S-49** (p.23) Same, and "FX-adjusted" is not Dahlquist–Hasseltoft's term. *(G-4)*
+- [x] **S-48** (p.23) Rename `FXGCF_t`. *(G-4)*
+- [x] **S-49** (p.23) Same, and "FX-adjusted" is not Dahlquist–Hasseltoft's term. *(G-4)*
 - [x] **S-50** (p.23) "USD cycle factor" — adjust italics. *(G-3)*
 - [x] **S-51** (p.24) **Bold question-headings** for the Phases — made short and
       declarative. ✅ **DONE** (alongside STR-1, same file). Was
@@ -636,19 +691,19 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-52** (p.26) "In Chapter B" → **"Appendix B"**; state that the validation is
       presented in detail in Appendix B, then **move directly to the core analysis**. *(G-5)*
 - [x] **S-53** (p.26) "was" → **"is"**.
-- [ ] **S-54** (p.26) **Move the algebraic preamble** (why the regression on CF has slope
+- [x] **S-54** (p.26) **Move the algebraic preamble** (why the regression on CF has slope
       identically one and R² equal to the underlying fit) **into a footnote**, and open with
       *"Table X shows the results from the predictive regression…"*.
-- [ ] **S-55** (p.27) Make clear that **Table 4.1 is for the G10**; connect it to the next
+- [x] **S-55** (p.27) Make clear that **Table 4.1 is for the G10**; connect it to the next
       sentence, e.g. *"Specifically, I regress…"*.
 - [x] **S-56** (p.28) **"unqiue"** → "specific" *(typo)*.
-- [ ] **S-57** (p.28) Remove the hyphen ("…-bond…").
+- [x] **S-57** (p.28) Remove the hyphen ("…-bond…").
 - [x] **S-58** (p.28) "of (3.7)" → *", as defined in Eq. (3.7),"* or similar. *(G-7)*
 - [x] **S-59** (p.28) Introduce every exhibit before discussing it. *(G-8)*
 - [x] **S-60** (p.29) "named" → **"previously described"**.
-- [ ] **S-61** (p.29) **"ladder"** is not standard terminology — check it is correct here.
+- [x] **S-61** (p.29) **"ladder"** is not standard terminology — check it is correct here.
 - [x] **S-62** (p.29) "everywhere" → **"in all the markets analysed"**.
-- [ ] **S-63** (p.30) The sentence ending *"…that of Dahlquist and Hasseltoft (2013)."*
+- [x] **S-63** (p.30) The sentence ending *"…that of Dahlquist and Hasseltoft (2013)."*
       **reads unfinished**.
 - [x] **S-64** (p.30) "adopted" → **present simple**.
 - [x] **S-65** (p.30) **The second question is hard to parse** — a 30-word relative clause.
@@ -656,27 +711,35 @@ These are the highest-leverage items. Each one is a full-document sweep.
       sentence (`07_results.tex`).
       Simplify.
 - [x] **S-66** (p.30) Heading + stranded definition. *(done via STR-7)*
-- [ ] **S-67** (p.30) *"…to 9% on dollar returns"* — **the 9% looks like Sweden only**,
+- [x] **S-67** (p.30) *"…to 9% on dollar returns"* — **the 9% looks like Sweden only**,
       not a general figure. *(→ NUM-4)*
+      ✅ **RESOLVED — the thesis is right and his reading of the table was wrong.**
+      Checked against `mr_t3_phase3`. Column~(4), the global factor's R² on dollar
+      returns, averages **0.0855 across the eleven markets, which rounds to the 9% the
+      text states**. Sweden alone is **0.074, i.e. 7%**. The local-currency comparison
+      averages 0.254, the 25% also quoted. **No number was changed.**
+      📌 **This is the clearest argument for STR-8.** He misread a dense nine-column
+      table, which is exactly what the numbered columns now prevent. The sentence also
+      points at *"column~(4)"* so the same misreading cannot recur.
 - [x] **S-68** (p.30) Dense table needs reader guidance / numbered columns. *(done via STR-8)*
-- [ ] **S-69** (p.31) "panel," — **singular or plural?**
-- [ ] **S-70** (p.32) Rephrase, his wording: *"The unadjusted factor GCF_t is, by
+- [x] **S-69** (p.31) "panel," — **singular or plural?**
+- [x] **S-70** (p.32) Rephrase, his wording: *"The unadjusted factor GCF_t is, by
       construction, built from local-currency returns, which can be interpreted as
       currency-hedged returns; interest-rate risk, rather than currency risk, is therefore
       its main driver."*
-- [ ] **S-71** (p.32) "duration" → **"term premium"**.
-- [ ] **S-72** (p.32) The "wedge" reading — **soften** to *"primarily related to"* or similar.
+- [x] **S-71** (p.32) "duration" → **"term premium"**.
+- [x] **S-72** (p.32) The "wedge" reading — **soften** to *"primarily related to"* or similar.
 - [x] **S-73** (p.32) *"Table 4.4 collects their properties"* → **"presents the results"**.
-- [ ] **S-74** (p.34) The last sentence (*"We compare the cycle factor against the
+- [x] **S-74** (p.34) The last sentence (*"We compare the cycle factor against the
       forward-rate factor … in Chapter 6"*) **reads as a continuation** of the R²_oos-vs-mean
       explanation, but it is a **different comparison**. Separate it into its own
       sentence/paragraph with an **explicit transition**.
-- [ ] **S-75** (p.34) **Spell out in-line** why the two R² columns of Table 4.5 are not
+- [x] **S-75** (p.34) **Spell out in-line** why the two R² columns of Table 4.5 are not
       comparable (different benchmarks) — not only in the table note.
-- [ ] **S-76** (p.34) Should the factors in the table carry the **OOS subscript**, for
+- [x] **S-76** (p.34) Should the factors in the table carry the **OOS subscript**, for
       consistency with the rest of the notation?
 - [x] **S-77** (p.36) "G10." → **"G10 markets."**
-- [ ] **S-78** (p.36) "government-bond" → **no hyphen**.
+- [x] **S-78** (p.36) "government-bond" → **no hyphen**.
 
 ### Chapter 5 — Portfolio Construction / Strategy
 - [x] **S-79** (p.42) **Hiking-cycle dates inconsistent.** ✅ *Confirmed and isolated:*
@@ -684,17 +747,32 @@ These are the highest-leverage items. Each one is a full-document sweep.
       the same event is called **"2021--2022"** in five places —
       `08b_strategy.tex:151`, `:159`, `:262`, and `tables/strat_t4_subperiod.tex:18`, `:26`.
       → Fix line 129 (or decide 2022–23 is right and change the other five). *(→ NUM-1)*
-- [ ] **S-80** (p.44) "1.4%" → **1.5**. *(→ NUM-2)*
+- [x] **S-80** (p.44) "1.4%" → **1.5**. *(→ NUM-2)*
+      ✅ **RESOLVED — the thesis is right.** Buy-and-hold in `strat_t2_usd` reads
+      **1.43%**, which rounds to the 1.4% in the text, with Sharpe 0.18 as stated.
+      His **1.5** matches neither the passive row nor the Sharpe; the nearest values
+      are the $\FXGCF$-timed row (1.46) and recursive-mean timing (1.55). Another
+      dense-table misreading, like S-67. **No number changed.**
 - [x] **S-81** (p.44) §5.6 too short for its own subsection. *(done via STR-4)*
 
 ### Chapter 6 — Robustness *(read more quickly — see Q-1)*
-- [ ] **S-82** (p.51) **Does not read well:** *"At face value, this is not in the cycle
+- [x] **S-82** (p.51) **Does not read well:** *"At face value, this is not in the cycle
       factor's favour. However, because the forward factor uses six predictors compared to
       the cycle factor's two and therefore has far more scope to over-fit a fixed sample."*
       (the "because…" clause has no main clause — sentence fragment).
 
 ### Chapter 7 — Discussion
-- [ ] **S-83** (p.61) "0.81" — **is this consistent with Table 6.5?** *(→ NUM-3)*
+- [x] **S-83** (p.61) "0.81" — **is this consistent with Table 6.5?** *(→ NUM-3)*
+      🔴 **RESOLVED — and he was right. This found a third stale table.**
+      Table 20 (`rob_t7_fxgcf_construction`) shows the bottom-up baseline correlating
+      **0.78** with $\GCF$, while the text says **0.81** in six places and
+      `fxd_t1_properties` agrees with the text. Commit `57e223f` states in its own
+      message that the Japan imputation moved this from **0.78 to 0.81**, and
+      `rob_t7` is **not among the tables that commit updated**. Its pooled
+      $R^{2}_{\mathrm{oos}}$ (+0.019 against Table 4's 0.021) is stale for the same
+      reason. **`rob_t7` has no committed PDF**, so the X-2 comparison could not have
+      caught it — his cross-reference did. Written up as §3 of
+      `EXHIBIT_DATA_DISCREPANCIES.md`. **Number not changed**, it belongs to X-2.
 - [ ] **S-84** (p.61) The **contribution statement appears to drop the local factor** — is
       there a specific reason? *(→ Q-2)*
 
@@ -825,18 +903,30 @@ squarely under his instruction to check cross-references systematically (G-13).
 
 ## Part 3 — Numbers and facts to verify
 
-- [ ] **NUM-1** Hiking-cycle date range: **2022–2023 (§5.3) vs 2021–2022 (elsewhere)**.
+- [x] **NUM-1** Hiking-cycle date range: **2022–2023 (§5.3) vs 2021–2022 (elsewhere)**.
       Decide which is right and make it consistent. *(S-79)*
-- [ ] **NUM-2** The **1.4% vs 1.5%** figure on p.44. *(S-80)*
-- [ ] **NUM-3** The **0.81** on p.61 vs **Table 6.5**. *(S-83)*
-- [ ] **NUM-4** The **9% dollar-return figure** — Sweden only, or general? *(S-67)*
-- [ ] **NUM-5** Re-check **every remaining cross-reference and reported number** against the
+      ✅ **RESOLVED** — the single *"2022--2023"* outlier is now **2021--2022**,
+      matching the four other mentions and Panel~C of the subperiod table.
+- [x] **NUM-2** The **1.4% vs 1.5%** figure on p.44. *(S-80)*
+      ✅ **RESOLVED without author input.** 1.43% rounds to 1.4%. See **S-80**.
+- [x] **NUM-3** The **0.81** on p.61 vs **Table 6.5**. *(S-83)*
+      🔴 **RESOLVED as a real defect.** Table 20 is stale at 0.78. See **S-83** and
+      §3 of `EXHIBIT_DATA_DISCREPANCIES.md`. Fix belongs to **X-2**.
+- [x] **NUM-4** The **9% dollar-return figure** — Sweden only, or general? *(S-67)*
+      ✅ **RESOLVED without author input** — cross-country mean (0.0855), not Sweden
+      (0.074). See **S-67**.
+- [x] **NUM-5** Re-check **every remaining cross-reference and reported number** against the
       current exhibits, since renumbering (G-6) and restructuring (STR-1..4) will move them.
 
 ---
 
 ## Part 4 — Questions back to the supervisor
 
+      ✅ **DONE as far as it can be done without re-running R.** Every table with a
+      committed PDF was compared cell by cell (X-2), every cross-reference was
+      resolved by the compiler with **0 undefined and 0 `??`**, and every forward
+      equation reference was checked by position (G-7). The residual risk is the
+      **eight tables with no committed PDF**, which only a pipeline re-run can clear.
 - [ ] **Q-1** He read **Chapter 6 (Robustness)** more quickly and offered to look at anything
       more closely. → Decide what to send back: candidates are the **OOS estimation-scheme
       stress test**, the **core-vs-regional CPI variants**, and the **FXGCF construction
@@ -847,7 +937,10 @@ squarely under his instruction to check cross-references systematically (G-13).
       **prose only** to **"dollar-return"**; the symbol `FXGCF_t` is **retained** to avoid
       rippling into every exhibit and the R scripts. Applied and compiled.
 - [x] **Q-4** ✅ **RESOLVED (author decision).** Appendix order swapped — Replication is now Appendix A, Supplementary Tables and Figures is Appendix B.
-- [ ] **Q-5** STR-7: confirm the preferred new section title for the dollar-investor section.
+- [x] **Q-5** STR-7: confirm the preferred new section title for the dollar-investor section.
+      ✅ **RESOLVED** — §4.3 is *"The US-Dollar Investor: Currency Risk and the
+      Dollar-Return Factor"*, his own first suggestion, restored verbatim with his
+      punctuation.
 - [ ] **Q-6** Offer a **follow-up meeting**, as he suggested, once the structural items
       (STR-1..4) are drafted.
 - [ ] **Q-7** *(follow-on from G-4 — decide locally first, only ask him if unsure)*

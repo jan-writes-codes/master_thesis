@@ -11,8 +11,11 @@ PDF committed beside it (each `.tex` header says so, e.g. *"Numbers transcribed 
 Every decimal value in each `.tex` was extracted and compared against the same
 table's `.pdf`. 25 of the 32 table files have a committed PDF to check against.
 
-**Result: 2 tables in the thesis disagree with the R output.** Both trace to one
-commit, `57e223f` *"Propagate Japan imputation to all exhibit tables"* (2026-07-11).
+**Result: 3 tables in the thesis disagree with the R output** (two found by this
+comparison, one found by the supervisor's own cross-reference question). All three
+involve the same commit, `57e223f` *"Propagate Japan imputation to all exhibit
+tables"* (2026-07-11) — **two tables it missed entirely**, and one it updated but
+where a value was mistranscribed.
 
 > **Note on direction.** A `.tex`/`.pdf` mismatch does *not* by itself mean the
 > thesis is wrong — for four tables it is the **PDF** that is stale. What matters is
@@ -76,7 +79,33 @@ statement — both are below 0.05 — but the printed number is wrong.
 
 ---
 
-## 3. Checked and cleared — no action needed
+## 3. `rob_t7_fxgcf_construction` → **Table 20**, "The dollar-return factor under alternative constructions" 🔴
+
+**Found by the supervisor, not by the PDF comparison.** His annotation on page 61
+asks *"0.81 — is this consistent with Table 6.5?"*. It is not.
+
+| Cell | Table (`.tex`) | Everywhere else in the thesis |
+|---|---|---|
+| Bottom-up baseline, `Corr(·, GCF)` | **0.78** | **0.81** |
+| Bottom-up baseline, pooled `R²_oos` | **+0.019** | **0.021** (Table 4) |
+
+**Same root cause, third table.** Commit `57e223f` states in its own message that the
+Japan imputation moved `cor(GCF,FXGCF)` **from 0.78 to 0.81** — and
+`rob_t7_fxgcf_construction` is **not in the list of tables that commit updated**, nor
+was it touched by it. It still carries the pre-imputation values. Its mean in-sample
+R² (0.143) and its OOS+ count (6/11) do match Table 4, so only the two cells above
+are stale.
+
+⚠️ **This table has no committed PDF**, so the comparison in §1 could not have caught
+it. It is exactly the blind spot flagged at the end of this document, and it is now a
+demonstrated one rather than a hypothetical: **two of the three stale tables were
+missed by the same commit, and one of them was invisible to the automated check.**
+That strengthens the case for re-running the pipeline over transcribing from the
+committed PDFs.
+
+---
+
+## 4. Checked and cleared — no action needed
 
 **Four tables where the PDF is the stale side.** Their `.tex` was updated by
 `57e223f` while their `.pdf` has not been regenerated since 2026-06-08
@@ -95,11 +124,12 @@ have no effect on the document:
 
 - `rob_t3_italy` · `strat_t3_example`
 
-**Seven tables with no committed PDF to check against**, so they could not be
-verified this way:
+**Nine tables with no committed PDF to check against**, so they could not be verified
+this way. One of them, `rob_t7_fxgcf_construction`, **turned out to be stale** (§3),
+which is why the remaining eight matter:
 
 - `cp_t1` · `dh_t1b_inputs` · `fxd_t1_properties` · `mr_t2b_gcf_corr`
-- `mr_t2c_fx_cycle` · `rob_t7_fxgcf_construction` · `rob_t8_vm_sens`
+- `mr_t2c_fx_cycle` · `rob_t8_vm_sens` · ~~`rob_t7_fxgcf_construction`~~ **(stale, §3)**
 - `strat_t4_subperiod` · `strat_t5_costs`
 
 ---
@@ -117,10 +147,15 @@ verified this way:
 `.tex` and the PDF disagrees for a reason.
 
 **Worth considering either way:** the same commit was supposed to propagate the Japan
-imputation to *all* exhibit tables and demonstrably missed one. The nine tables with
-no committed PDF cannot be checked by this method, so if the imputation touched any
-of them, the same class of error could be sitting there unseen. Re-running the
-pipeline is the only way to rule that out.
+imputation to *all* exhibit tables and demonstrably missed **two**, one of which
+(`rob_t7`) has **no committed PDF** and so was invisible to this check — it surfaced
+only because the supervisor happened to cross-reference a number. The remaining eight
+tables with no committed PDF cannot be checked by either route. **Re-running the
+pipeline is the only way to rule that out**, and the evidence now says the risk is
+real rather than theoretical.
+
+**Third fix needed:** `rob_t7_fxgcf_construction`, two cells, 0.78 → 0.81 and
++0.019 → 0.021, subject to the same re-run-or-transcribe decision.
 
 I have deliberately **not** changed any reported number. That is a call about your
 results, not a copy-edit.
