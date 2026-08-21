@@ -325,6 +325,12 @@ bears on the results.
   \item \textbf{Inference.} I replace the exact reverse-regression delta method
     with HAC ($18$-lag Newey--West) $t$-statistics, for the identification
     reason given in \Cref{sec:meth-inference}.
+  \item \textbf{Japanese inflation series.} Japan's FRED core-CPI series ends in
+    June 2021, so I splice the LSEG core-CPI index onto it, rescaled at the splice
+    month (\Cref{sec:data}). Neither original study meets this problem, since both
+    samples end before the gap opens. Without the splice Japan leaves the panel
+    from mid-2021 and the global factor loses roughly a fifth of its GDP weight
+    over the final years of the sample.
   \item \textbf{Dollar-return factor.} I build $\FXGCF_{t}$ bottom-up, as the
     GDP-weighted average of per-country USD cycle factors, rather than
     top-down or as a projection on $\GCF_{t}$ (\Cref{sec:fw-fxgcf}). I

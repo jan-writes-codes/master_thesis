@@ -3,7 +3,7 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** IN PROGRESS — **52 of 125 items done.** All structural work (STR-1…STR-8)
+**Status:** IN PROGRESS — **53 of 126 items done.** All structural work (STR-1…STR-8)
 is complete, as are **G-1, G-2, G-3, G-4, G-5, G-6, G-8, G-9 and G-10**.
 Everything below is verified by a clean compile.
 
@@ -742,6 +742,31 @@ These are the highest-leverage items. Each one is a full-document sweep.
       the effect on the surrounding prose (checked sentence by sentence — almost
       nothing changes) and the two options for fixing it. **No reported number has
       been changed**; that is the author's call.
+
+- [x] **X-4 · The Japanese core-CPI splice was undocumented, and the thesis said the
+      opposite.** ✅ **DOCUMENTED** *(found while investigating X-2)*
+      `data_preparation.R:70` splices Japan's core CPI from **June 2021 onward** with
+      the LSEG index, rescaled to the FRED base at the splice month. The data chapter
+      meanwhile stated *"I propagate them as `NA` and drop them pairwise in each
+      regression, **rather than imputing them**"* — a direct contradiction of what the
+      pipeline does, and about a market carrying roughly a fifth of the GDP weight.
+      Commit `57e223f` records the effect on published numbers, `cor(GCF,FXGCF)`
+      $0.78 \to 0.81$ and the strategy Sharpe $0.31 \to 0.34$.
+      **Now stated in the three places it belongs:**
+      1. **The Core CPI source bullet** (`04_data.tex`) — why the gap exists, that the
+         LSEG index is rescaled by the ratio of the two index levels at the splice
+         month so year-on-year inflation is continuous, that the two series' YoY rates
+         correlate $0.98$ over their common 1990–2021 span, and that no other country
+         is spliced.
+      2. **The missing-values paragraph** (`04_data.tex`) — the contradiction is
+         removed. It now ends *"The Japanese core-CPI splice described above is the
+         only place where I fill a gap rather than drop it."*
+      3. **Deviations from the original studies** (`05_methodology.tex`, §3.5) — a new
+         bullet, since neither original study meets this problem, both samples ending
+         before the gap opens.
+      📌 **Still open for the supervisor**, not a writing matter: whether a vendor
+      splice on a 20%-weight market deserves a robustness check of its own. Worth
+      raising at the follow-up meeting (**Q-6**).
 
 - [ ] **X-3 · Two table files are never included.** `tables/rob_t3_italy.tex` (Italy
       across subsamples) and `tables/strat_t3_example.tex` (a mid-2022 worked example)

@@ -43,7 +43,16 @@ I obtain four raw inputs for my analysis, drawn from two data providers:
     workbook's \texttt{curve\_translation} sheet. Yields are continuously
     compounded and quoted in percent per annum.
   \item[Core CPI (FRED).] I use monthly seasonally adjusted core
-    consumer price indices, one per country. The workbook stores the \emph{index level}. I compute year-on-year
+    consumer price indices, one per country. The workbook stores the \emph{index level}.
+    Japan is the one exception and I treat it explicitly. Its FRED core-CPI series
+    ends in June 2021, and leaving it there would drop every Japanese observation
+    after that date, and with them a market carrying roughly a fifth of the GDP
+    weight, from the last three years of the estimation sample. I therefore extend the Japanese series after
+    June 2021 with the LSEG core-CPI index, multiplied by the ratio of the two index
+    levels in the splice month so that the level matches the FRED base and
+    year-on-year inflation is continuous across the join. Over their common
+    1990--2021 span the two series' year-on-year rates correlate $0.98$. No other
+    country is spliced. I compute year-on-year
     inflation
     $\pi_{i,t}=\big(\mathrm{CPI}_{i,t}/\mathrm{CPI}_{i,t-12}-1\big)\times 100$
     in-sample, and trend inflation $\trendinf_{i,t}$ then follows from the EWMA
@@ -152,7 +161,8 @@ steps in my construction need spelling out:
 
 Missing values arise from the unbalanced panel and from the twelve-month leads
 and lags in the return construction. I propagate them as \texttt{NA} and drop
-them pairwise in each regression, rather than imputing them.
+them pairwise in each regression. The Japanese core-CPI splice described above is
+the only place where I fill a gap rather than drop it.
 
 \paragraph{Summary statistics.}
 In \Cref{tab:dh-t1-summary} I report the mean and standard deviation of yields
