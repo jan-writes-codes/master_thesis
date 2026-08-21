@@ -3,16 +3,16 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** IN PROGRESS — **48 of 125 items done.** All structural work (STR-1…STR-8)
-is complete, as are **G-1, G-3, G-4, G-5, G-6, G-8 and G-9**.
+**Status:** IN PROGRESS — **52 of 125 items done.** All structural work (STR-1…STR-8)
+is complete, as are **G-1, G-2, G-3, G-4, G-5, G-6, G-8, G-9 and G-10**.
 Everything below is verified by a clean compile.
 
 Next up, in this order:
 1. 🔴 **X-2** — decide how to fix the two tables that disagree with the R output.
    This one needs the author.
-2. **G-2** (out-of-sample hyphenation), **G-10** ("After X" → "The table format
-   follows X"), **G-11** (OLS consistency) — three small mechanical sweeps.
-3. **G-12** (tone), **G-13** (consistency), **G-14** (table layout).
+2. **G-11** (OLS consistency) — a small mechanical sweep.
+3. **G-12** (tone), **G-7** (spell out forward references), **G-13** (consistency),
+   **G-14** (table layout).
 Then the remaining `S-` line edits, the `NUM-` checks **which need the author**, and
 finally **G-15** (full proofread).
 
@@ -101,13 +101,38 @@ These are the highest-leverage items. Each one is a full-document sweep.
       sentence is struck, as he marked).
       **Verified:** 0 errors, 0 undefined, 0 multiply-defined, no `??`, 80 pages.
 
-- [ ] **G-2 · "out-of-sample" hyphenation.** *(S-3, p.3)*
-      **Scope: 13 unhyphenated vs 53 hyphenated.** Note that **most unhyphenated uses are
-      adverbial and therefore correct** ("predicts out of sample") — the rule is hyphenate
-      the *adjective*, not the adverb. Check each: `00_abstract.tex:25`;
-      `02_literature.tex:169,171`; `07_results.tex:368,408,413,478`;
-      `08_robustness.tex:171,388`; `08b_strategy.tex:22`; `09_discussion.tex:106,170`;
-      `tables/mr_t4_oos.tex:24`.
+- [x] **G-2 · "out-of-sample" hyphenation.** ✅ **DONE & VERIFIED BY COMPILE** *(S-3, p.3)*
+      He asked for consistency. The consistent thing is **a rule, not uniformity**, and
+      the rule is the standard one — **hyphenate the compound adjective, leave the
+      adverb open**. *"an out-of-sample $R^{2}$"* but *"predicts out of sample"*.
+      **Checked both directions**, which mattered, because the errors were **not**
+      where the count suggested:
+      - **All 13 unhyphenated uses were already correct** — every one adverbial
+        (*"survives out of sample"*, *"fails out of sample"*) or predicative
+        (*"the forecasts are doubly out of sample"*). Nothing to change.
+      - **The real errors were 8 wrongly hyphenated uses**, all adverbial or
+        predicative: *"restores this predictability in-sample, raising…"*,
+        *"The evidence so far is in-sample."*, *"predicts international bond returns
+        in-sample and out-of-sample"*, *"both in-sample and out-of-sample"* (abstract,
+        introduction, conclusion), *"as windows of their own, in-sample and
+        out-of-sample"*. All opened up.
+      **Final state: 120 hyphenated, all adjectival; 30 open, all adverbial or
+      predicative.** The one remaining hyphenated-before-*and* case,
+      `01_introduction.tex:127`, is correct — both compounds modify *"evidence"*.
+      📌 If he wanted literal uniformity rather than the grammatical rule, this is the
+      item to revisit. The rule is standard academic usage and is now applied without
+      exception, which is the stronger reading of *"be consistent"*.
+
+- [x] **G-10 · "After X" → "The table format follows X".** ✅ **DONE** *(S-43, p.20)*
+      **Exactly the 2 instances he flagged** — `dh_t1_corr10y` and `dh_t1_summary` —
+      now read *"The table format follows \citet{dahlquist2013}, Table~1."*
+      ✅ **The other 7 replication tables were checked and deliberately left alone.**
+      They say *"The table replicates \citet{…}, Table~N"*, which is correct because
+      they genuinely reproduce a published table. The two he flagged do **not**
+      replicate anything — they present this thesis's own G10 summary statistics in
+      Dahlquist–Hasseltoft's layout, which is precisely why *"After X"* was misleading.
+      **The two phrasings are now semantically distinct and used consistently**, 2
+      "format follows" against 7 "replicates".
 
 - [x] **G-3 · Italics discipline.** ✅ **DONE & VERIFIED BY COMPILE**
       *(S-30 p.14; S-16 p.10; S-50 p.23; S-10 p.9)*
@@ -271,16 +296,6 @@ These are the highest-leverage items. Each one is a full-document sweep.
       *plotted* series.
       **Verified:** 26/26 figures carry `\fignotes`, 0 errors, 0 undefined,
       **0 overfull/underfull boxes — identical to the baseline**. 80 → 83 pages.
-
-- [ ] **G-10 · "After X" → "The table format follows X".** The *"After Dahlquist and
-      Hasseltoft (2013), Table 1"* convention is legitimate but risks being read as a
-      **data source**. State it explicitly. *(S-43, p.20)*
-      → Exactly **2 instances**: `tables/dh_t1_corr10y.tex:26` and
-      `tables/dh_t1_summary.tex:31`. **Bonus finding:** the other seven replication tables
-      already use a *different* phrasing — *"The table replicates \citet{…}, Table N"*
-      (`cp_t1.tex:31`, `cp_t2_panelA.tex:45`, `cp_t4.tex:39`, `dh_t3_cp_corr.tex:27`,
-      `dh_t4_fb_cp.tex:63`, `dh_t6_local_global.tex:71`, `dh_t7_usd.tex:44`).
-      **Unify all nine**, and keep "replicates" vs "format follows" semantically distinct.
 
 - [ ] **G-11 · OLS consistency.** Sometimes "OLS", sometimes "ordinary least squares".
       Define once at first use, then use the abbreviation. *(S-46, p.21)*
@@ -500,7 +515,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 ### Front matter & Table of Contents
 - [x] **S-1** (p.3) "our" → "this". *(see G-1)*
 - [x] **S-2** (p.3) "we" → "I". *(G-1)*
-- [ ] **S-3** (p.3) "out of sample" → consistent hyphenation. *(G-2)*
+- [x] **S-3** (p.3) "out of sample" → consistent hyphenation. *(G-2)*
 - [x] **S-4** (p.4) Chapter 3 fragmentation. *(done via STR-1)*
 - [x] **S-5** (p.4) Literature review too finely split. *(done via STR-2)*
 - [ ] **S-6** (p.4) "G10" → **"G10 markets"**.
@@ -584,7 +599,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [ ] **S-40** (p.18) Ambiguous bare "(3.9)". *(G-7)*
 - [ ] **S-41** (p.19) "net" → **"net out"**.
 - [ ] **S-42** (p.20) "collected" → **"reported"**.
-- [ ] **S-43** (p.20) "After Dahlquist and Hasseltoft (2013), Table 1" → *"The table format
+- [x] **S-43** (p.20) "After Dahlquist and Hasseltoft (2013), Table 1" → *"The table format
       follows Dahlquist and Hasseltoft (2013), Table 1."* *(G-10)*
 - [ ] **S-44** (p.20) **"menu"** — change the word.
 - [ ] **S-45** (p.21) `rx^(n)_{t+12}` — **should it not carry the country subscript `i`**,
