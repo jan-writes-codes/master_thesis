@@ -300,11 +300,11 @@ what decides whether the FX adjustment can matter at all.
 
 The global factor and its dollar-return counterpart summarise the same
 cross-section of cycles, measured in two different currencies.
-The unadjusted factor $\GCF_{t}$ prices the \emph{hedged}, local-currency
+The unadjusted factor $\GCF_{t}$ prices the hedged, local-currency
 return, so it is a summary of \emph{interest-rate-cycle risk}, the compensation
 for holding duration when yields sit far from their macro anchor. The
-dollar-return factor $\FXGCF_{t}$ prices the \emph{unhedged} dollar return, so it
-carries that same duration signal \emph{plus} the currency leg that a dollar
+dollar-return factor $\FXGCF_{t}$ prices the unhedged dollar return, so it
+carries that same duration signal plus the currency leg that a dollar
 investor cannot avoid. Because the two are built identically except for the
 currency of the return \eqref{eq:fxcf-reg}--\eqref{eq:fxgcf}, their difference
 isolates the currency component,
@@ -315,7 +315,7 @@ isolates the currency component,
 \end{equation}
 which I call the \emph{wedge}. Reading $\GCF_{t}$ as the interest-rate factor
 and the wedge as the FX factor lets me ask not just whether the FX adjustment
-helps on average, but \emph{when} the two factors carry different
+helps on average, but when the two factors carry different
 information, and why.
 
 \Cref{tab:fxd-properties} presents the results, reporting the mean, standard
@@ -494,7 +494,7 @@ The recursive factors themselves show the mechanism behind this divergence.
 In \Cref{fig:s8-gcf-conv}, I overlay the global factor with its
 fully-recursive counterpart $\GCF^{\mathrm{oos}}_{t}$. The recursive series
 converges to the full-sample factor and tracks it closely, which is
-the expected behaviour of a stable real-time estimator. The recursive \emph{local} factors
+the expected behaviour of a stable real-time estimator. The recursive local factors
 converge far less cleanly. Their period-by-period correlation with the
 full-sample local factor is materially below one for several markets (right
 panel of \Cref{fig:s8-gcf-conv}), which is why their out-of-sample
@@ -542,7 +542,7 @@ to $14\%$ and restoring significance in ten of eleven markets.
 
 Fourth, these conclusions survive out of sample and, in one respect, even
 strengthen. The global cycle factor beats the recursive prevailing mean robustly (pooled $R^{2}_{\mathrm{oos}}=+0.05$, positive in ten of eleven
-markets), while the local cycle factor and the \emph{unadjusted} dollar-investor
+markets), while the local cycle factor and the unadjusted dollar-investor
 factor do not (both negative, positive in only two markets each). The
 dollar-return factor sits in between. It turns the unadjusted dollar factor's
 loss into a pooled gain ($+0.021$, positive in six of eleven markets), but

@@ -3,16 +3,16 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** IN PROGRESS — **39 of 122 items done.** All structural work (STR-1…STR-8)
-is complete, as are **G-1, G-4, G-5 and G-6**, the four largest global rules.
+**Status:** IN PROGRESS — **48 of 125 items done.** All structural work (STR-1…STR-8)
+is complete, as are **G-1, G-3, G-4, G-5, G-6, G-8 and G-9**.
 Everything below is verified by a clean compile.
 
 Next up, in this order:
 1. 🔴 **X-2** — decide how to fix the two tables that disagree with the R output.
    This one needs the author.
-2. **G-3** italics discipline — partly done already, since STR-5 and G-1 removed the
-   italicised research questions.
-3. **G-2** (out-of-sample hyphenation), **G-10**, **G-11**, **G-13**, **G-14**.
+2. **G-2** (out-of-sample hyphenation), **G-10** ("After X" → "The table format
+   follows X"), **G-11** (OLS consistency) — three small mechanical sweeps.
+3. **G-12** (tone), **G-13** (consistency), **G-14** (table layout).
 Then the remaining `S-` line edits, the `NUM-` checks **which need the author**, and
 finally **G-15** (full proofread).
 
@@ -109,11 +109,30 @@ These are the highest-leverage items. Each one is a full-document sweep.
       `08_robustness.tex:171,388`; `08b_strategy.tex:22`; `09_discussion.tex:106,170`;
       `tables/mr_t4_oos.tex:24`.
 
-- [ ] **G-3 · Italics discipline.** Follow the Cieslak–Povala (2015) convention:
-      italics **only** for mathematical symbols/variables (`CF_t`, `GCF_t`, `y_t^(n)`)
-      and sparing emphasis. **No** italics for "cycle" / "cycle factor" (§2.3), **no**
-      italicised research questions in the introduction, **no** italicised "dollar".
+- [x] **G-3 · Italics discipline.** ✅ **DONE & VERIFIED BY COMPILE**
       *(S-30 p.14; S-16 p.10; S-50 p.23; S-10 p.9)*
+      Inventoried every `\emph` and `\textit` in the thesis — **34 and 2** — and read
+      each in context rather than sweeping blindly, because the rule he gave
+      (*"italics only for variables and sparing emphasis"*) turns on **why** a word is
+      italicised, not on the word itself.
+      **Removed 20**, all of them plain word-emphasis:
+      - the four he named directly — *cycles*, *cycle factor* (S-30, §2.3),
+        *global cycle factor*, and *dollar* (S-16)
+      - emphasis on factor scope or type — *global* ×3, *local* ×2, *unadjusted*,
+        *dollar-return*, *local-currency*, *currency-hedged*, *hedged*, *unhedged*,
+        *aggregate*, *regular*
+      - stressed function words — *plus*, *when*, *better*
+      **Kept 12**, which fall inside "sparing emphasis" rather than outside it:
+      - **five terms italicised at their definition**, the standard academic use —
+        *duration-standardised*, *overlapping*, *index level*,
+        *interest-rate-cycle risk*, and *wedge* (which the text explicitly coins,
+        *"which I call the wedge"*)
+      - **two panel labels** and **five roman-numeral list markers**, both structural
+        rather than emphatic
+      **Already handled earlier:** the italicised research questions (S-10) went with
+      the STR-5 rewrite, and the italicised *USD cycle factor* (S-50) went with the
+      STR-1 restructure, so nothing was left at either site.
+      **Verified:** 0 errors, 0 undefined, 0 overfull boxes, 84 pages.
 
 - [x] **G-4 · Rename the FX-adjusted factor.** ✅ **DONE & VERIFIED BY COMPILE**
       **Decision (author-confirmed):** rename the **prose only**, keep the **symbol**
@@ -506,7 +525,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-15** (p.10) **Remove the section cross-reference** ("(Section 3.11)") — no need
       to reference sections in the introduction. ✅ **DONE** via STR-5; verified the
       introduction now contains **zero** `\Cref{sec:...}`.
-- [ ] **S-16** (p.10) "dollar" — **no italics**. *(G-3)*
+- [x] **S-16** (p.10) "dollar" — **no italics**. *(G-3)*
 - [ ] **S-17** (p.10) "conversion" → **"risk"**.
 - [x] **S-18** (p.10) **"destroys"** — too strong. ✅ **DONE** — now *"erodes"*, at both
       sites (`01_introduction.tex`, rewritten under STR-5; `02_literature.tex:191`).
@@ -536,7 +555,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 
 ### Chapter 2 — Literature Review
 - [ ] **S-29** (p.13) "transformed" → **present simple**.
-- [ ] **S-30** (p.14) Italics convention. *(G-3)*
+- [x] **S-30** (p.14) Italics convention. *(G-3)*
 - [ ] **S-31** (p.15) **Imprecise:** *"carry premium shrinks as foreign bond maturity
       lengthens"*. It does not shrink — the unhedged bond return is the **currency risk
       premium + the local-currency term premium**, and for long-maturity bonds these two
@@ -576,7 +595,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       set {2,5,10} in (3.8) with K = |N|. **Give the averaging set its own symbol.**
 - [ ] **S-48** (p.23) Rename `FXGCF_t`. *(G-4)*
 - [ ] **S-49** (p.23) Same, and "FX-adjusted" is not Dahlquist–Hasseltoft's term. *(G-4)*
-- [ ] **S-50** (p.23) "USD cycle factor" — adjust italics. *(G-3)*
+- [x] **S-50** (p.23) "USD cycle factor" — adjust italics. *(G-3)*
 - [x] **S-51** (p.24) **Bold question-headings** for the Phases — made short and
       declarative. ✅ **DONE** (alongside STR-1, same file). Was
       *"Phase I --- Does the cycle factor predict returns locally?"*; now
