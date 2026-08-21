@@ -44,9 +44,10 @@ and offered a follow-up meeting. See `Q-` items at the end.
 > stop, or restructure the sentence. Applies to headings too — use an em-dash
 > (`---`) where a colon would be conventional, as in *"Phase~I --- local
 > predictability"*.
-> Punctuation **already in the thesis** is out of scope; this rule is about what
-> the revision adds. It **overrides the supervisor's own wording** where the two
-> conflict — see the note under **Q-8**.
+> **Two exceptions.** Punctuation **already in the thesis** is out of scope — the
+> rule is about what the revision *adds*. And where the supervisor's own suggested
+> wording carries a colon or semicolon, **his punctuation is kept verbatim**
+> (author's decision). See **Q-8** for the list.
 
 
 - `p.N` = page of the annotated PDF; `S-NN` = annotation number (1–86), 1:1 with the PDF.
@@ -708,21 +709,17 @@ squarely under his instruction to check cross-references systematically (G-13).
       Suggested resolution: keep "unadjusted" as the standing term but **gloss it once**
       at first use (`07_results.tex:272` already does this well — *"The unadjusted factor
       $\GCF_t$ prices the hedged, local-currency return"*), and move that gloss earlier.
-- [ ] **Q-8** *(flag to the supervisor if he asks why his wording was not followed
-      verbatim)* The author's no-colon/no-semicolon rule conflicts with **six
-      suggestions he made in his own punctuation**, all now rendered without it:
-      - **S-13** — his rephrasing was *"…reveal a clear gap: despite its strong
-        economic rationale…"*; now a full stop.
-      - **S-28** — he wrote *"; Chapter 8 concludes."*; now *". \Cref{ch:conclusion}
-        concludes."*
-      - **S-51** — he suggested *"Phase I: local predictability"*; now
-        *"Phase~I --- local predictability"*.
-      - **S-66** — his first suggested title was *"The US-Dollar Investor: Currency
-        Risk and the Dollar-Return Factor"*; the section is now
-        **"The US-Dollar Investor and Currency Risk"**, which also avoids duplicating
-        the Chapter 5 heading.
-      The substance of every one of his points is preserved; only the punctuation
-      differs.
+- [x] **Q-8** ✅ **RESOLVED (author decision): keep the supervisor's punctuation.**
+      Four of his suggestions carry a colon or semicolon in his own wording. The
+      author's no-colon rule does **not** override these — they are reproduced verbatim:
+      - **S-13** *"…reveal a clear gap: despite its strong economic rationale…"*
+      - **S-28** *"…state their limitations; \Cref{ch:conclusion} concludes."*
+      - **S-51** *"Phase~I: local predictability"* (and II, III)
+      - **S-66** *"The US-Dollar Investor: Currency Risk and the Dollar-Return Factor"*
+      The no-colon rule still governs everything the revision writes in its own voice;
+      nine such colons/semicolons were removed and stay removed, including the three
+      literature paragraph headings, whose colons came from the **author's** original
+      section titles rather than from him.
 
 ---
 
