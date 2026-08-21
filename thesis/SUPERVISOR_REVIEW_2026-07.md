@@ -39,6 +39,16 @@ and offered a follow-up meeting. See `Q-` items at the end.
 
 ## How to use this file
 
+> ### ✋ Author's standing style rule
+> **Do not introduce semicolons (`;`) or colons (`:`) into the prose.** Use a full
+> stop, or restructure the sentence. Applies to headings too — use an em-dash
+> (`---`) where a colon would be conventional, as in *"Phase~I --- local
+> predictability"*.
+> Punctuation **already in the thesis** is out of scope; this rule is about what
+> the revision adds. It **overrides the supervisor's own wording** where the two
+> conflict — see the note under **Q-8**.
+
+
 - `p.N` = page of the annotated PDF; `S-NN` = annotation number (1–86), 1:1 with the PDF.
 - `G-` = global rule, applies throughout; `STR-` = structural change; `NUM-` = number/fact
   to verify; `Q-` = question to put back to the supervisor.
@@ -698,6 +708,21 @@ squarely under his instruction to check cross-references systematically (G-13).
       Suggested resolution: keep "unadjusted" as the standing term but **gloss it once**
       at first use (`07_results.tex:272` already does this well — *"The unadjusted factor
       $\GCF_t$ prices the hedged, local-currency return"*), and move that gloss earlier.
+- [ ] **Q-8** *(flag to the supervisor if he asks why his wording was not followed
+      verbatim)* The author's no-colon/no-semicolon rule conflicts with **six
+      suggestions he made in his own punctuation**, all now rendered without it:
+      - **S-13** — his rephrasing was *"…reveal a clear gap: despite its strong
+        economic rationale…"*; now a full stop.
+      - **S-28** — he wrote *"; Chapter 8 concludes."*; now *". \Cref{ch:conclusion}
+        concludes."*
+      - **S-51** — he suggested *"Phase I: local predictability"*; now
+        *"Phase~I --- local predictability"*.
+      - **S-66** — his first suggested title was *"The US-Dollar Investor: Currency
+        Risk and the Dollar-Return Factor"*; the section is now
+        **"The US-Dollar Investor and Currency Risk"**, which also avoids duplicating
+        the Chapter 5 heading.
+      The substance of every one of his points is preserved; only the punctuation
+      differs.
 
 ---
 

@@ -76,9 +76,9 @@ internationally.
 \section{The Cycle-Factor Hierarchy}
 \label{sec:fw-hierarchy}
 
-This section develops the three nested factors used throughout the thesis: the
-local cycle factor, its GDP-weighted global aggregate, and the dollar-return
-counterpart built for the US-dollar investor. All three rest on the same
+This section develops the three nested factors used throughout the thesis.
+These are the local cycle factor, its GDP-weighted global aggregate, and the
+dollar-return counterpart built for the US-dollar investor. All three rest on the same
 yield decomposition, which I set out first.
 
 \paragraph{Yield decomposition and interest-rate cycles.}
@@ -230,7 +230,7 @@ realised return, so the residual is serially correlated by construction as an
 MA(11) process. It is central to the HAC inference of \Cref{sec:meth-inference}. I estimate each specification
 by OLS and report the slope point estimate with robust inference.
 
-\paragraph{Phase~I: local predictability.}
+\paragraph{Phase~I --- local predictability.}
 For each country, I estimate
 \begin{equation}
   \rxbar_{i,t+12} = \alpha_{i} + \beta_{i}\,\CF_{i,t} + \varepsilon_{i,t+12},
@@ -240,7 +240,7 @@ and test $H_{0}\!:\beta_{i}=0$. A rejection of this null establishes that the
 macro-anchored cycle mechanism of \citet{cieslak2015} also operates outside the
 United States.
 
-\paragraph{Phase~II: global versus local.}
+\paragraph{Phase~II --- global versus local.}
 I run the horse race
 \begin{align}
   \rxbar_{i,t+12} &= \alpha_{i} + \beta_{i}\,\CF^{\perp}_{i,t}
@@ -261,7 +261,7 @@ so that $\beta_{i}$ in \eqref{eq:h-horse} measures the incremental local
 content. Adding $\CF^{\perp}_{i,t}$ to \eqref{eq:h-global} should not raise the
 predictive power under integration, i.e.\ $\beta_{i}=0$.
 
-\paragraph{Phase~III: currency risk and the dollar-return factor.}
+\paragraph{Phase~III --- currency risk and the dollar-return factor.}
 For the dollar investor, I estimate
 \begin{align}
   \rxbar^{\,\mathrm{USD}}_{i,t+12}
