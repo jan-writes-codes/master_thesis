@@ -215,9 +215,34 @@ These are the highest-leverage items. Each one is a full-document sweep.
       figure now states that overlapping twelve-month returns make it descriptive
       rather than a basis for inference, and the regime figure states that the
       reported $-0.42$ is between the two *plotted* series, not the underlying factors.
+      🔴 **Verified against the R plotting code and the rendered figure PDFs**, at the
+      author's request — and the check was worth running. **Three of the notes as
+      first drafted were wrong**, and correcting them exposed **two pre-existing
+      caption errors and one wrong sentence of prose**:
+      - **`fig:yield-ts`** — the caption read *"Ten-year zero-coupon yields across the
+        G10"*, but `s1_yield_ts.pdf` plots **all six maturities**
+        $\{1,2,4,5,9,10\}$, one panel per country, with a maturity legend. The
+        prose in `04_data.tex` also said *"the resulting 10-year yield series"*.
+        **Caption, prose and note all corrected.** This one was in the PDF he read.
+      - **`fig:s2-yield-decomp`** — the caption promised *"the ten-year yield, its
+        trend-inflation component, and the residual cycle"*, i.e. three series.
+        `s2_yield_decomp.pdf` draws **two**, the nominal yield and the fitted trend
+        $\alpha+\beta\trendinf$, and the figure's own subtitle says the cycle is the
+        **vertical gap**. Caption and note corrected.
+      - **`fig:coverage`** — my note called it a bar chart. It is a **tile heatmap**
+        whose shading is the *share of the six maturities observed* in that
+        country-month (legend "none / half / all"), starting at first availability.
+      - **`fig:s3-cbar-cf`** — my note implied two time series. It is a **scatter**
+        of $\cycbar$ against $\CF$ with an OLS fit and confidence band, on US data
+        through December 2014.
+      Also added, where a sorted bar chart could mislead, that countries are ordered
+      by the plotted value rather than alphabetically (three figures).
+      The other **22 notes verified correct** against the code, including every claim
+      about the recursive protocol, the 36-month rolling windows, the equal-average-
+      exposure scaling, and the $-0.42$ being the correlation between the two
+      *plotted* series.
       **Verified:** 26/26 figures carry `\fignotes`, 0 errors, 0 undefined,
-      **0 overfull/underfull boxes — identical to the baseline**, so the added notes
-      cost no layout quality. 80 → 83 pages.
+      **0 overfull/underfull boxes — identical to the baseline**. 80 → 83 pages.
 
 - [ ] **G-10 · "After X" → "The table format follows X".** The *"After Dahlquist and
       Hasseltoft (2013), Table 1"* convention is legitimate but risks being read as a
