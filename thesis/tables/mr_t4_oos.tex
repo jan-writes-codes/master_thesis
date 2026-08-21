@@ -7,8 +7,8 @@
   \midrule
   I --- local          & $\rxbar \sim \CF$ & $0.254$ & $-0.073$ & $2/11$ \\
   II --- global        & $\rxbar \sim \GCF$ & $0.254$ & $0.048$  & $10/11$ \\
-  III --- USD, global  & $\rxbar^{\,\mathrm{USD}} \sim \GCF$ & $0.086$ & $-0.070$ & $2/11$ \\
-  III --- USD, FX-adj. & $\rxbar^{\,\mathrm{USD}} \sim \FXGCF$ & $0.143$ & $0.021$ & $6/11$ \\
+  III --- USD          & $\rxbar^{\,\mathrm{USD}} \sim \GCF$ & $0.086$ & $-0.070$ & $2/11$ \\
+                       & $\rxbar^{\,\mathrm{USD}} \sim \FXGCF$ & $0.143$ & $0.021$ & $6/11$ \\
   \bottomrule
 \end{tabular}
 \tabnotes{The in-sample $R^{2}$ is the cross-country mean of the single-factor
@@ -21,6 +21,10 @@
   against its own recursive mean before forming the ratio, and ``Markets
   OOS$+$'' counts the markets with a positive $R^{2}_{\mathrm{oos}}$. Both the
   factor construction and the forecasting regression respect time-$t$
-  information, so the forecasts are doubly out of sample. The two $R^{2}$
+  information, so the forecasts are doubly out of sample. The specification
+  column names the factor generically because each row spans both columns. The
+  in-sample column uses the full-sample factor and the out-of-sample column its
+  fully recursive counterpart, $\CF^{\mathrm{oos}}$, $\GCF^{\mathrm{oos}}$ and
+  $\FXGCF^{\mathrm{oos}}$. The two $R^{2}$
   columns use different benchmarks and are not comparable in level.
   Per-country detail is developed in \Cref{ch:robustness}.}
