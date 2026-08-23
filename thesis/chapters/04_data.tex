@@ -77,7 +77,7 @@ zero-coupon curve and at the recent end by the annual GDP weights used for the
 global factor. The United States and Japan enter the sample first, in March and
 April 1989 respectively. The remaining nine countries begin in December 1994,
 and the estimation sample runs through April 2024, although the raw yield curves
-themselves extend to April 2026 (\Cref{fig:yield-ts}). This yields $422$ monthly
+themselves extend to April 2026. This yields $422$ monthly
 observations for the US, $421$ for Japan, and $353$ for each of the other
 countries. The excess-return regressions use somewhat fewer after the factor
 construction and the twelve-month return horizon. In
@@ -104,6 +104,13 @@ construction and the twelve-month return horizon. In
     Sweden        & SE & SEK & 1994-12 -- 2024-04 & 353\\
     \bottomrule
   \end{tabular}
+  \tabnotes{The sample column gives the first and last month for which that
+    country's zero-coupon curve enters the estimation panel, and the months
+    column counts them. Coverage is governed at the early end by the
+    availability of each Bloomberg curve and at the recent end by the annual
+    GDP weights used for the global factor. The excess-return regressions use
+    somewhat fewer observations after the factor construction and the
+    twelve-month return horizon.}
 \end{table}
 
 My panel is therefore unbalanced. I handle this throughout by computing
@@ -120,17 +127,9 @@ show the resulting yield series.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/s1_coverage.pdf}
-  \caption[Sample coverage by country and maturity]{Sample coverage by country and maturity. The United States and Japan
-    extend back to 1989. The remaining countries begin in late 1994.}
+  \caption{Sample coverage by country and maturity}
   \label{fig:coverage}
-  \fignotes{Each cell shows, for one country in one month, the share of the six
-  maturities $\{1,2,4,5,9,10\}$ for which a yield is observed, shading from white
-  (none) through to solid (all six). The horizontal axis starts at the first month
-  in which any maturity is available, so the empty pre-1989 margin is suppressed.
-  Yields are end-of-month Bloomberg fitted zero-coupon government curves. The
-  panel is unbalanced, so all cross-country objects are computed only over the
-  countries present at each date, and the GDP weights $w_{i,t}$ in
-  Equation~\eqref{eq:gcf} are renormalised each month over that set.}
+  \fignotes{Each cell shows, for one country in one month, the share of the six maturities $\{1,2,4,5,9,10\}$ for which a yield is observed, shading from white (none) through to solid (all six). The United States and Japan extend back to 1989 and the remaining countries begin in late 1994, so the horizontal axis starts at first availability and the empty pre-1989 margin is suppressed. Yields are end-of-month Bloomberg fitted zero-coupon government curves. The panel is unbalanced, so all cross-country objects are computed only over the countries present at each date, and the GDP weights $w_{i,t}$ in Equation~\eqref{eq:gcf} are renormalised each month over that set.}
 \end{figure}
 
 \paragraph{Cleaning and alignment.}

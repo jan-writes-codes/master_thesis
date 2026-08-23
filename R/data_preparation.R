@@ -380,7 +380,7 @@ gcp <- reg_data %>%
   arrange(date)
 
 
-# FX-adjusted Global Cycle Factor (FXGCF) ------------------------------------
+# Dollar-Return Global Cycle Factor (FXGCF) ------------------------------------
 # Following Dahlquist-Hasseltoft (2013) FXGCP. The construction is selected by
 # .FXGCF_METHOD (set at the top of this file from the FXGCF_METHOD env var):
 #   td_gdp / td_eq : TOP-DOWN -- FXGCF is the FITTED VALUE of the (GDP- or

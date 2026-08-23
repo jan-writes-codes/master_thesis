@@ -91,19 +91,9 @@ Across the five schemes the rankings are largely stable. Under all three expandi
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.85\linewidth]{figures/rob_f2_oos_scheme.pdf}
-  \caption[Out-of-sample $R^{2}_{\mathrm{oos}}$ by estimation scheme]{Out-of-sample $R^{2}_{\mathrm{oos}}$ by estimation scheme and
-    specification. The global cycle factor (red) is above zero under all three
-    expanding-window minimums but not under either rolling window. The baseline
-    is the expanding-window, five-year-minimum scheme.}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by estimation scheme}
   \label{fig:rob-oos-scheme}
-  \fignotes{Each group reports the pooled out-of-sample $R^{2}_{\mathrm{oos}}$
-  \eqref{eq:meth-ctr2} under a different recursive estimation scheme. The
-  expanding-window schemes differ in the minimum training history required before
-  the first forecast, and the rolling windows re-estimate on a fixed-length
-  trailing sample. Every scheme rebuilds the whole factor chain at each date, so
-  the trend, the cycles, the coefficients and the GDP weights respect time~$t$.
-  The baseline used throughout the thesis is the expanding window with a five-year
-  minimum.}
+  \fignotes{Each group reports the pooled out-of-sample $R^{2}_{\mathrm{oos}}$ \eqref{eq:meth-ctr2} under a different recursive estimation scheme and specification. The expanding-window schemes differ in the minimum training history required before the first forecast, and the rolling windows re-estimate on a fixed-length trailing sample. Every scheme rebuilds the whole factor chain at each date, so the trend, the cycles, the coefficients and the GDP weights respect time~$t$. The baseline used throughout the thesis is the expanding window with a five-year minimum.}
 \end{figure}
 
 % ===========================================================================
@@ -161,21 +151,14 @@ subsample evidence states it more sharply than the pooled regression can.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.85\linewidth]{figures/rob_f1_oos_sub.pdf}
-  \caption[Out-of-sample $R^{2}_{\mathrm{oos}}$ by subsample]{Out-of-sample $R^{2}_{\mathrm{oos}}$ by subsample and specification
-    (the short pre-crisis window is omitted; \Cref{tab:rob-sub-oos} reports its
-    values). The global cycle factor is above zero in every window except the
-    financial crisis itself.}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by subsample}
   \label{fig:rob-oos-sub}
-  \fignotes{Each group reports the pooled out-of-sample $R^{2}_{\mathrm{oos}}$
-  \eqref{eq:meth-ctr2} computed on the subsample named on the horizontal axis,
-  with the factor built recursively as in the baseline. The pre-crisis window is
-  omitted because it is too short for a stable recursive estimate, and
-  \Cref{tab:rob-sub-oos} reports its values. Subsample dating follows
-  \Cref{tab:rob-sub-is}.}
+  \fignotes{Each group reports the pooled out-of-sample $R^{2}_{\mathrm{oos}}$ \eqref{eq:meth-ctr2} computed on the subsample named on the horizontal axis, with the factor built recursively as in the baseline. The short pre-crisis window is omitted because it is too short for a stable recursive estimate, and \Cref{tab:rob-sub-oos} reports its values. Subsample dating follows \Cref{tab:rob-sub-is}.}
 \end{figure}
 
 The out-of-sample subsample evidence (\Cref{tab:rob-sub-oos},
-\Cref{fig:rob-oos-sub}) is the more demanding test, and the global cycle factor
+\Cref{fig:rob-oos-sub}), which report the pooled recursive $R^{2}_{\mathrm{oos}}$
+subsample by subsample, is the more demanding test, and the global cycle factor
 passes it almost everywhere. Its recursive $R^{2}_{\mathrm{oos}}$ is positive in
 the pre-crisis window ($+0.09$), the euro-area crisis ($+0.01$), and the
 post-crisis window ($+0.09$), and it only turns negative in the financial
@@ -246,17 +229,9 @@ G10 with the macro-anchored cycle.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/s10_r2_oos_compare.pdf}
-  \caption[Out-of-sample $R^{2}_{\mathrm{oos}}$: cycle versus forward-rate factors]{Out-of-sample $R^{2}_{\mathrm{oos}}$ by country for the cycle factors
-    (CF, GCF) against the forward-rate factors (CP, GCP), fully recursive against
-    the recursive prevailing mean. Only the global cycle factor is reliably
-    positive.}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$: cycle versus forward-rate factors}
   \label{fig:s10-oos}
-  \fignotes{Bars report the country-level out-of-sample $R^{2}_{\mathrm{oos}}$
-  \eqref{eq:meth-ctr2} of the two cycle factors against the two forward-rate
-  factors of \citet{cochrane2005} and \citet{dahlquist2013}. All four are rebuilt
-  fully recursively and scored against each country's own recursive prevailing
-  mean, so the comparison holds the real-time protocol fixed and varies only the
-  predictor.}
+  \fignotes{Bars report the country-level out-of-sample $R^{2}_{\mathrm{oos}}$ \eqref{eq:meth-ctr2} of the two cycle factors against the two forward-rate factors of \citet{cochrane2005} and \citet{dahlquist2013}. All four are rebuilt fully recursively and scored against each country's own recursive prevailing mean, so the comparison holds the real-time protocol fixed and varies only the predictor.}
 \end{figure}
 
 % ===========================================================================

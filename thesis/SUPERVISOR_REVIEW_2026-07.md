@@ -17,8 +17,8 @@ boxes, no `??`, and zero occurrences of `we`, `our`, `us`, `FX-adjusted` or
 2. **X-3** — two table files that no chapter includes. Drop them or wire them in.
 3. **S-84 / Q-2** — whether the contribution statement deliberately omits the local
    factor.
-4. **Q-1, Q-6, Q-7** — for the supervisor: what to send him from the robustness
-   chapter he read quickly, the follow-up meeting he offered, and whether the
+4. **Q-1, Q-6, Q-7** — for the supervisor: what to send her from the robustness
+   chapter she read quickly, the follow-up meeting she offered, and whether the
    Japanese core-CPI splice warrants a robustness check of its own.
 
 **Build note:** the thesis compiles with `latexmk -pdf main.tex` (0 errors). Two cheap
@@ -32,11 +32,11 @@ and more academic. I also suggested some minor changes in the structure, especia
 for the appendices."* No re-analysis is required — this is a writing, structure and
 consistency pass.
 
-**Caveat from the supervisor:** he flagged issues *where he happened to notice them*
+**Caveat from the supervisor:** she flagged issues *where she happened to notice them*
 and may have overlooked others. Every `G-` item below must therefore be swept
 **systematically across the whole thesis**, not only at the flagged locations.
 
-**Also:** he read **Chapter 6 (Robustness) more quickly** than the rest due to time,
+**Also:** she read **Chapter 6 (Robustness) more quickly** than the rest due to time,
 and offered a follow-up meeting. See `Q-` items at the end.
 
 ---
@@ -50,7 +50,7 @@ and offered a follow-up meeting. See `Q-` items at the end.
 > predictability"*.
 > **Two exceptions.** Punctuation **already in the thesis** is out of scope — the
 > rule is about what the revision *adds*. And where the supervisor's own suggested
-> wording carries a colon or semicolon, **his punctuation is kept verbatim**
+> wording carries a colon or semicolon, **her punctuation is kept verbatim**
 > (author's decision). See **Q-8** for the list.
 
 
@@ -79,8 +79,8 @@ These are the highest-leverage items. Each one is a full-document sweep.
          **Three of these spanned a line break** (`we can\nsee`) and were invisible to
          a single-line grep — caught with a multiline search.
          🎁 Side benefit: these recasts are exactly the *"Figure X plots …"* opening
-         he asked for in **G-8**, so that item is now partly done in Chapters 4–6.
-      3. **`our thesis` → `this thesis`**, not "my thesis" — his S-1 annotation
+         she asked for in **G-8**, so that item is now partly done in Chapters 4–6.
+      3. **`our thesis` → `this thesis`**, not "my thesis" — her S-1 annotation
          literally suggests "this". Other possessives → `my`, except where a neutral
          article read better (*"my data processing pipeline"* → *"the …"*).
       4. Only then the mechanical `we`→`I`, `our`→`my`, `us`→`me` pass.
@@ -98,16 +98,16 @@ These are the highest-leverage items. Each one is a full-document sweep.
         distinguished"*; *"I could argue that"* → *"A plausible reading is that"*).
         All rewritten.
       **Also cleared in the same pass** (same sentences): **S-11** (no sentence-initial
-      "However"), **S-13** (his exact rephrasing of the gap sentence), **S-14** (the
-      categorical "no…, no…, no…" enumeration softened), **S-20** (his suggested
+      "However"), **S-13** (her exact rephrasing of the gap sentence), **S-14** (the
+      categorical "no…, no…, no…" enumeration softened), **S-20** (her suggested
       contribution sentence, with "dollar-return" per G-4), **S-23** (*"We arrive at
       four main findings"* → *"Four main findings emerge"*), and **S-26/S-27/S-28**
       (the roadmap now ends *"; \Cref{ch:conclusion} concludes."* and the replication
-      sentence is struck, as he marked).
+      sentence is struck, as she marked).
       **Verified:** 0 errors, 0 undefined, 0 multiply-defined, no `??`, 80 pages.
 
 - [x] **G-2 · "out-of-sample" hyphenation.** ✅ **DONE & VERIFIED BY COMPILE** *(S-3, p.3)*
-      He asked for consistency. The consistent thing is **a rule, not uniformity**, and
+      She asked for consistency. The consistent thing is **a rule, not uniformity**, and
       the rule is the standard one — **hyphenate the compound adjective, leave the
       adverb open**. *"an out-of-sample $R^{2}$"* but *"predicts out of sample"*.
       **Checked both directions**, which mattered, because the errors were **not**
@@ -124,16 +124,16 @@ These are the highest-leverage items. Each one is a full-document sweep.
       **Final state: 120 hyphenated, all adjectival; 30 open, all adverbial or
       predicative.** The one remaining hyphenated-before-*and* case,
       `01_introduction.tex:127`, is correct — both compounds modify *"evidence"*.
-      📌 If he wanted literal uniformity rather than the grammatical rule, this is the
+      📌 If she wanted literal uniformity rather than the grammatical rule, this is the
       item to revisit. The rule is standard academic usage and is now applied without
       exception, which is the stronger reading of *"be consistent"*.
 
 - [x] **G-10 · "After X" → "The table format follows X".** ✅ **DONE** *(S-43, p.20)*
-      **Exactly the 2 instances he flagged** — `dh_t1_corr10y` and `dh_t1_summary` —
+      **Exactly the 2 instances she flagged** — `dh_t1_corr10y` and `dh_t1_summary` —
       now read *"The table format follows \citet{dahlquist2013}, Table~1."*
       ✅ **The other 7 replication tables were checked and deliberately left alone.**
       They say *"The table replicates \citet{…}, Table~N"*, which is correct because
-      they genuinely reproduce a published table. The two he flagged do **not**
+      they genuinely reproduce a published table. The two she flagged do **not**
       replicate anything — they present this thesis's own G10 summary statistics in
       Dahlquist–Hasseltoft's layout, which is precisely why *"After X"* was misleading.
       **The two phrasings are now semantically distinct and used consistently**, 2
@@ -142,11 +142,11 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **G-3 · Italics discipline.** ✅ **DONE & VERIFIED BY COMPILE**
       *(S-30 p.14; S-16 p.10; S-50 p.23; S-10 p.9)*
       Inventoried every `\emph` and `\textit` in the thesis — **34 and 2** — and read
-      each in context rather than sweeping blindly, because the rule he gave
+      each in context rather than sweeping blindly, because the rule she gave
       (*"italics only for variables and sparing emphasis"*) turns on **why** a word is
       italicised, not on the word itself.
       **Removed 20**, all of them plain word-emphasis:
-      - the four he named directly — *cycles*, *cycle factor* (S-30, §2.3),
+      - the four she named directly — *cycles*, *cycle factor* (S-30, §2.3),
         *global cycle factor*, and *dollar* (S-16)
       - emphasis on factor scope or type — *global* ×3, *local* ×2, *unadjusted*,
         *dollar-return*, *local-currency*, *currency-hedged*, *hedged*, *unhedged*,
@@ -166,7 +166,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 
 - [x] **G-4 · Rename the FX-adjusted factor.** ✅ **DONE & VERIFIED BY COMPILE**
       **Decision (author-confirmed):** rename the **prose only**, keep the **symbol**
-      `FXGCF_t`. Chosen wording: **"dollar-return"** (his first suggestion).
+      `FXGCF_t`. Chosen wording: **"dollar-return"** (her first suggestion).
       **Applied:** all **84** occurrences — 80 lowercase `FX-adjusted` → `dollar-return`,
       plus 4 title-case `FX-Adjusted` → `Dollar-Return` in section headings.
       Diff is a symmetric 89/89 pure substitution; the one pre-existing "dollar-return"
@@ -186,7 +186,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
         **local-currency** global factors"*.
       📌 **Open question deliberately NOT swept — see Q-7:** the antonym **"unadjusted"**
       (28 occurrences) was left alone. It now has no explicit counterpart in the text,
-      and arguably carries the *same* defect he flagged: a reader can misread
+      and arguably carries the *same* defect she flagged: a reader can misread
       "unadjusted" as "**unhedged**", which is backwards ($\GCF_t$ is the hedged,
       local-currency factor). A blanket swap to "local-currency" is **not** safe,
       though — phrases like *"the unadjusted dollar-investor factor"*
@@ -194,7 +194,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       "local-currency dollar-investor factor", which is self-contradictory.
 
       *(original comments: S-48, S-49, p.23 — "FX-adjusted" is easily misread as
-      "FX-hedged", the opposite of what is meant; he also notes the term does not
+      "FX-hedged", the opposite of what is meant; she also notes the term does not
       appear in Dahlquist–Hasseltoft at all.)*
       📎 **Follow-on still to do:** now that the prose name has changed, **gloss the
       symbol once at first use** — e.g. *"the dollar-return global cycle factor,
@@ -233,7 +233,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 
 - [x] **G-7 · Spell out forward references.** ✅ **DONE & VERIFIED BY COMPILE**
       *(S-40 p.18; S-58 p.28)*
-      **Scoped it properly rather than blanket-prefixing all 70 `\eqref` calls.** His
+      **Scoped it properly rather than blanket-prefixing all 70 `\eqref` calls.** Her
       objection was to *forward* references — *"For forward references to material not
       yet introduced, spell them out"* — so a backward, appositive citation like
       *"the cycle factor (12)"* is fine and prefixing it would only add noise.
@@ -247,9 +247,9 @@ These are the highest-leverage items. Each one is a full-document sweep.
       *"by ordinary least squares (OLS) (4)"* needed *"…(OLS), as in Equation~(4)"*
       to read properly.
       **Verified by re-running the detector: 12 forward references spelled out, 0 bare.**
-      📌 G-6 had already removed the ambiguity he actually spotted, since equations now
+      📌 G-6 had already removed the ambiguity she actually spotted, since equations now
       number (1), (2), … and can no longer collide with a section number like 3.9.
-      This item closes the second half of his point, the missing noun.
+      This item closes the second half of her point, the missing noun.
 
 - [x] **G-11 · OLS consistency.** ✅ **DONE** *(S-46, p.21)*
       The convention was **backwards**. `OLS` was used unexplained from Chapter 3
@@ -299,7 +299,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
         G10"*, but `s1_yield_ts.pdf` plots **all six maturities**
         $\{1,2,4,5,9,10\}$, one panel per country, with a maturity legend. The
         prose in `04_data.tex` also said *"the resulting 10-year yield series"*.
-        **Caption, prose and note all corrected.** This one was in the PDF he read.
+        **Caption, prose and note all corrected.** This one was in the PDF she read.
       - **`fig:s2-yield-decomp`** — the caption promised *"the ten-year yield, its
         trend-inflation component, and the residual cycle"*, i.e. three series.
         `s2_yield_decomp.pdf` draws **two**, the nominal yield and the fitted trend
@@ -418,7 +418,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       | 3.4 | Hypotheses and Predictive Specifications | old 3.11 (unchanged) |
       | 3.5 | Estimation and Inference | old 3.12 + 3.13 |
 
-      **His forward-reference point is resolved.** Excess returns are now *defined
+      **Her forward-reference point is resolved.** Excess returns are now *defined
       before* the factors that use them, so the old 3.7→3.9 forward reference is gone:
       `\Cref{sec:fw-returns}` in the local-cycle-factor passage became
       `\eqref{eq:rxbar}`, which now points backwards.
@@ -435,12 +435,12 @@ These are the highest-leverage items. Each one is a full-document sweep.
       **Also folded in while here:** the Phase headings were restated research
       questions in bold; they are now short and declarative
       (*"Phase I: local predictability"*), which is **S-51**.
-      > **Rule of thumb (his):** a subsection shorter than half a page should be a
+      > **Rule of thumb (her):** a subsection shorter than half a page should be a
       > paragraph heading, not a numbered unit. — Still to apply elsewhere: **STR-4**
       > (§5.6 Caveats).
 
 - [x] **STR-2 · Split the literature review into two sections, not five.** ✅ **DONE**
-      *(S-5 p.4; S-36 p.16)* Applied exactly as he specified, in `02_literature.tex`:
+      *(S-5 p.4; S-36 p.16)* Applied exactly as she specified, in `02_literature.tex`:
       - **2.1 "Bond Return Predictability in the United States"** = old 2.1–2.3
         (EH rejection → forward-rate benchmark → macro-anchored mechanism)
       - **2.2 "International Evidence and the Gap"** = old 2.4–2.5
@@ -468,7 +468,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       - In-text references needed **no** edits — all five use `\Cref{ch:replication}`
         and followed the swap automatically (**G-5** did the real work here).
 
-      **Resulting front matter, exactly his requested shape:**
+      **Resulting front matter, exactly her requested shape:**
       ```
       A  Replication and Validation
          A.1  Cieslak–Povala (2015)
@@ -496,7 +496,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       thesis is whether the cycle factor of \citet{cieslak2015} applies to
       international government bonds."* — and the sub-questions are folded into one
       **First / Second / Third** paragraph.
-      **The redundancy he flagged is removed:** *"In our thesis, we aim to answer it.
+      **The redundancy she flagged is removed:** *"In our thesis, we aim to answer it.
       In our thesis, we ask one main question:"* — the first sentence is deleted and
       the second replaced.
       💡 **The two lists were largely duplicates.** The three italic sub-questions and
@@ -521,8 +521,8 @@ These are the highest-leverage items. Each one is a full-document sweep.
       *(S-19 p.10; S-35 p.16; S-51 p.24)*
       Verified: the word "Phase" **no longer appears anywhere in
       `01_introduction.tex`**. The intro now reads *"We answer this question in three
-      steps. First… Second… Third…"*, his suggested wording. The labels survive as the
-      organising device from Chapter 3 onward, introduced where he wanted them — in the
+      steps. First… Second… Third…"*, her suggested wording. The labels survive as the
+      organising device from Chapter 3 onward, introduced where she wanted them — in the
       hypotheses section — and the headings themselves were shortened under **S-51**.
       *(original guidance below)*
       - In the intro, use plain prose: *"We answer these questions in three steps.
@@ -537,14 +537,14 @@ These are the highest-leverage items. Each one is a full-document sweep.
 
 - [x] **STR-7 · "Global Investor" section renamed.** ✅ **DONE** *(S-66, p.30)*
       §4.3 is now **"The US-Dollar Investor: Currency Risk and the Dollar-Return
-      Factor"** — his first suggested title.
+      Factor"** — her first suggested title.
       ⚠️ **Not** the Chapter 5 wording after all: aligning it exactly to
       `08b_strategy.tex:208` would have produced **two identically titled sections**
-      (4.3 and 5.5) in the ToC. His alternative keeps the US-dollar-investor framing he
+      (4.3 and 5.5) in the ToC. Her alternative keeps the US-dollar-investor framing she
       asked for while staying distinct from the strategy chapter's treatment.
       **Also done here:** the stranded *"Throughout, ``dollar'' refers to the US
       dollar"* is deleted from the results chapter and the gloss now sits **once**, in
-      the methodology where the dollar investor is introduced — exactly as he asked.
+      the methodology where the dollar investor is introduced — exactly as she asked.
       And **S-65**: the second question was a 30-word relative clause, now split into
       two sentences.
       *(original guidance below)*
@@ -559,17 +559,17 @@ These are the highest-leverage items. Each one is a full-document sweep.
       Align to Chapter 5 rather than inventing a third wording. The heading
       "Global Investor" ≠ the "dollar investor" of the body text. Frame it as the shift
       from a **local investor** to a **US investor investing internationally**.
-      His suggestions:
+      Her suggestions:
       - *"The US-Dollar Investor: Currency Risk and the Dollar-Return Factor"*
       - *"The US-Dollar Investor and the Global Cycle Factor"*
       Also **delete the stranded** *"'dollar' refers to the US dollar"* (define once, in 3.9).
 
 - [x] **STR-8 · Reader guidance for the dense Phase III table.** ✅ **DONE** *(S-68, p.30)*
       `tables/mr_t3_phase3.tex` now carries a **numbered column row (1)–(8)** beneath the
-      header, as he suggested. Both the table note and the body text name the columns
+      header, as she suggested. Both the table note and the body text name the columns
       that matter: *"the comparison that answers both questions is column~(4) … against
       column~(7), the two $R^{2}$ values measured on the same dependent variable."*
-      📌 **Other dense tables may want the same treatment** — this fixes the one he
+      📌 **Other dense tables may want the same treatment** — this fixes the one she
       flagged. Candidates on the same pattern: `mr_t1b_maturity` (9 cols),
       `rob_t1_sub_is` (9), `rob_t5_core_vs_reg` (8), `dh_t7_usd` (7). Worth a pass
       under **G-14** (table layout).
@@ -599,7 +599,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       failure abroad speaks to generality, not to the mechanism. Use:
       *"…and a failure to find it there would cast doubt on its **generalisability**."*
       (This also fixes *"a failure to do so"*, which lacks a referent.)
-- [x] **S-13** (p.9) Rephrase, his wording: *"Placed side by side, these strands reveal a
+- [x] **S-13** (p.9) Rephrase, her wording: *"Placed side by side, these strands reveal a
       clear gap: despite its strong economic rationale, the cycle factor of Cieslak and
       Povala (2015) has not yet been tested outside the United States."*
 - [x] **S-14** (p.9) "no …, no …, no …" sounds categorical — soften. *(G-12)*
@@ -613,12 +613,12 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-19** (p.10) "In Phase I, …" — plain prose in the intro. *(done via STR-6)*
 - [x] **S-20** (p.10) **Unclear topic sentence.** *"With our thesis, we contribute a
       three-factor hierarchy and the evidence to evaluate it."* — "three-factor hierarchy"
-      misleads and "the evidence to evaluate it" is vague. His model sentence:
+      misleads and "the evidence to evaluate it" is vague. Her model sentence:
       *"Our contribution is a family of three nested cycle factors — local, global, and
       FX-adjusted — together with in-sample and fully recursive out-of-sample evidence on
       each across the G10."*
-      ⚠️ **Use "dollar-return", not his "FX-adjusted"**, when adopting this sentence —
-      he wrote it before making the G-4 renaming request, so the two comments conflict.
+      ⚠️ **Use "dollar-return", not her "FX-adjusted"**, when adopting this sentence —
+      she wrote it before making the G-4 renaming request, so the two comments conflict.
       Also recast to first person per G-1: *"I contribute a family of three nested cycle
       factors — local, global, and dollar-return — together with…"*
 - [x] **S-21** (p.10) **"transplant"** — check the word is accurate.
@@ -683,7 +683,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       *"Phase I: local predictability"*, *"Phase II: global versus local"*,
       *"Phase III: currency risk and the dollar-return factor"*
       (`05_methodology.tex`, §3.4). The questions themselves already appear in the
-      introduction, so restating them as headings was the redundancy he flagged.
+      introduction, so restating them as headings was the redundancy she flagged.
 
 ### Chapter 4 — Results
 - [x] **S-52** (p.26) "In Chapter B" → **"Appendix B"**; state that the validation is
@@ -711,17 +711,17 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-66** (p.30) Heading + stranded definition. *(done via STR-7)*
 - [x] **S-67** (p.30) *"…to 9% on dollar returns"* — **the 9% looks like Sweden only**,
       not a general figure. *(→ NUM-4)*
-      ✅ **RESOLVED — the thesis is right and his reading of the table was wrong.**
+      ✅ **RESOLVED — the thesis is right and her reading of the table was wrong.**
       Checked against `mr_t3_phase3`. Column~(4), the global factor's R² on dollar
       returns, averages **0.0855 across the eleven markets, which rounds to the 9% the
       text states**. Sweden alone is **0.074, i.e. 7%**. The local-currency comparison
       averages 0.254, the 25% also quoted. **No number was changed.**
-      📌 **This is the clearest argument for STR-8.** He misread a dense nine-column
+      📌 **This is the clearest argument for STR-8.** She misread a dense nine-column
       table, which is exactly what the numbered columns now prevent. The sentence also
       points at *"column~(4)"* so the same misreading cannot recur.
 - [x] **S-68** (p.30) Dense table needs reader guidance / numbered columns. *(done via STR-8)*
 - [x] **S-69** (p.31) "panel," — **singular or plural?**
-- [x] **S-70** (p.32) Rephrase, his wording: *"The unadjusted factor GCF_t is, by
+- [x] **S-70** (p.32) Rephrase, her wording: *"The unadjusted factor GCF_t is, by
       construction, built from local-currency returns, which can be interpreted as
       currency-hedged returns; interest-rate risk, rather than currency risk, is therefore
       its main driver."*
@@ -748,7 +748,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-80** (p.44) "1.4%" → **1.5**. *(→ NUM-2)*
       ✅ **RESOLVED — the thesis is right.** Buy-and-hold in `strat_t2_usd` reads
       **1.43%**, which rounds to the 1.4% in the text, with Sharpe 0.18 as stated.
-      His **1.5** matches neither the passive row nor the Sharpe; the nearest values
+      Her **1.5** matches neither the passive row nor the Sharpe; the nearest values
       are the $\FXGCF$-timed row (1.46) and recursive-mean timing (1.55). Another
       dense-table misreading, like S-67. **No number changed.**
 - [x] **S-81** (p.44) §5.6 too short for its own subsection. *(done via STR-4)*
@@ -761,7 +761,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 
 ### Chapter 7 — Discussion
 - [x] **S-83** (p.61) "0.81" — **is this consistent with Table 6.5?** *(→ NUM-3)*
-      🔴 **RESOLVED — and he was right. This found a third stale table.**
+      🔴 **RESOLVED — and she was right. This found a third stale table.**
       Table 20 (`rob_t7_fxgcf_construction`) shows the bottom-up baseline correlating
       **0.78** with $\GCF$, while the text says **0.81** in six places and
       `fxd_t1_properties` agrees with the text. Commit `57e223f` states in its own
@@ -769,7 +769,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
       `rob_t7` is **not among the tables that commit updated**. Its pooled
       $R^{2}_{\mathrm{oos}}$ (+0.019 against Table 4's 0.021) is stale for the same
       reason. **`rob_t7` has no committed PDF**, so the X-2 comparison could not have
-      caught it — his cross-reference did. Written up as §3 of
+      caught it — her cross-reference did. Written up as §3 of
       `EXHIBIT_DATA_DISCREPANCIES.md`. **Number not changed**, it belongs to X-2.
 - [ ] **S-84** (p.61) The **contribution statement appears to drop the local factor** — is
       there a specific reason? *(→ Q-2)*
@@ -778,7 +778,7 @@ These are the highest-leverage items. Each one is a full-document sweep.
 - [x] **S-85** (p.65) **BibTeX has eaten capitalisations.** ✅ *Confirmed — cause is
       `\bibliographystyle{chicago}` (`main.tex:50`), which lowercases titles, and
       **no title field in `references.bib` is brace-protected**.*
-      He spotted three; the sweep found **more**:
+      She spotted three; the sweep found **more**:
       | Line | Key | Words lowercased |
       |------|-----|------------------|
       | `:297` | `iania2021` | brazil, china, mexico, russia |
@@ -864,8 +864,8 @@ These are the highest-leverage items. Each one is a full-document sweep.
       behaviour or a worked example. Either drop them or wire them in if they were
       meant to support the robustness and strategy chapters.
 
-These were not in his 86 comments but **are visible in the PDF he read**. They fall
-squarely under his instruction to check cross-references systematically (G-13).
+These were not in her 86 comments but **are visible in the PDF she read**. They fall
+squarely under her instruction to check cross-references systematically (G-13).
 
 - [x] **X-1 · Three broken cross-references render as `??` in the PDF.** ✅ **FIXED**
       The label **`sec:meth-ehmc` is referenced three times but never defined anywhere
@@ -878,7 +878,7 @@ squarely under his instruction to check cross-references systematically (G-13).
       - `tables/cp_t2_panelB.tex:33` → renders on **p.78**:
         *"…a gap documented in **??** rather than closed."*
       ⚠️ **Confirmed present in the supervisor's own annotated PDF** (pp. 75 and 78) —
-      he simply did not catch them, consistent with having read the back matter quickly.
+      she simply did not catch them, consistent with having read the back matter quickly.
       ⚠️ **Root cause:** there is **no section describing the EH Monte Carlo anywhere**.
       "Monte Carlo" appears in the body only at `06_replication.tex:90`. The references
       point to a methodology section that was planned but never written (see
@@ -925,26 +925,26 @@ squarely under his instruction to check cross-references systematically (G-13).
       resolved by the compiler with **0 undefined and 0 `??`**, and every forward
       equation reference was checked by position (G-7). The residual risk is the
       **eight tables with no committed PDF**, which only a pipeline re-run can clear.
-- [ ] **Q-1** He read **Chapter 6 (Robustness)** more quickly and offered to look at anything
+- [ ] **Q-1** She read **Chapter 6 (Robustness)** more quickly and offered to look at anything
       more closely. → Decide what to send back: candidates are the **OOS estimation-scheme
       stress test**, the **core-vs-regional CPI variants**, and the **FXGCF construction
       alternatives**.
 - [ ] **Q-2** S-84: confirm whether **dropping the local factor from the contribution
       statement** is intentional.
-- [x] **Q-3** ✅ **RESOLVED (author decision, no need to ask him).** G-4 renames the
+- [x] **Q-3** ✅ **RESOLVED (author decision, no need to ask her).** G-4 renames the
       **prose only** to **"dollar-return"**; the symbol `FXGCF_t` is **retained** to avoid
       rippling into every exhibit and the R scripts. Applied and compiled.
 - [x] **Q-4** ✅ **RESOLVED (author decision).** Appendix order swapped — Replication is now Appendix A, Supplementary Tables and Figures is Appendix B.
 - [x] **Q-5** STR-7: confirm the preferred new section title for the dollar-investor section.
       ✅ **RESOLVED** — §4.3 is *"The US-Dollar Investor: Currency Risk and the
-      Dollar-Return Factor"*, his own first suggestion, restored verbatim with his
+      Dollar-Return Factor"*, her own first suggestion, restored verbatim with her
       punctuation.
-- [ ] **Q-6** Offer a **follow-up meeting**, as he suggested, once the structural items
+- [ ] **Q-6** Offer a **follow-up meeting**, as she suggested, once the structural items
       (STR-1..4) are drafted.
-- [ ] **Q-7** *(follow-on from G-4 — decide locally first, only ask him if unsure)*
+- [ ] **Q-7** *(follow-on from G-4 — decide locally first, only ask her if unsure)*
       Should the antonym **"unadjusted"** (28 occurrences) also be renamed?
       Now that "FX-adjusted" is gone it has no stated counterpart, and it plausibly
-      carries the mirror of the defect he flagged: a reader may take "unadjusted" to
+      carries the mirror of the defect she flagged: a reader may take "unadjusted" to
       mean "**unhedged**", when $\GCF_t$ is in fact the **hedged / local-currency**
       factor. **A blanket swap to "local-currency" is unsafe** — *"the unadjusted
       dollar-investor factor"* (`08_robustness.tex:57,84`; `07_results.tex:480,482`)
@@ -953,7 +953,7 @@ squarely under his instruction to check cross-references systematically (G-13).
       at first use (`07_results.tex:272` already does this well — *"The unadjusted factor
       $\GCF_t$ prices the hedged, local-currency return"*), and move that gloss earlier.
 - [x] **Q-8** ✅ **RESOLVED (author decision): keep the supervisor's punctuation.**
-      Four of his suggestions carry a colon or semicolon in his own wording. The
+      Four of her suggestions carry a colon or semicolon in her own wording. The
       author's no-colon rule does **not** override these — they are reproduced verbatim:
       - **S-13** *"…reveal a clear gap: despite its strong economic rationale…"*
       - **S-28** *"…state their limitations; \Cref{ch:conclusion} concludes."*
@@ -962,7 +962,7 @@ squarely under his instruction to check cross-references systematically (G-13).
       The no-colon rule still governs everything the revision writes in its own voice;
       nine such colons/semicolons were removed and stay removed, including the three
       literature paragraph headings, whose colons came from the **author's** original
-      section titles rather than from him.
+      section titles rather than from her.
 
 ---
 

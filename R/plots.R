@@ -2,7 +2,7 @@
 # =============================================================
 # Figures for the international Cieslak-Povala (2015) bond-return
 # predictability framework (CP 2015 mechanism, DH 2013 global
-# integration, novel FX-adjusted global factor).
+# integration, novel dollar-return global factor).
 #
 # Run from the project root. This sources `oos.R`, which itself sources
 # `data_preparation.R`. After sourcing,
@@ -444,10 +444,10 @@ plots$s5_r2_cf_vs_gcf <- bind_rows(
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # =============================================================
-# 6. Currency / FX-adjusted global factor (novel contribution)
+# 6. Currency / dollar-return global factor (novel contribution)
 # =============================================================
 
-# 6a. GCF vs FX-adjusted GCF over time
+# 6a. GCF vs dollar-return GCF over time
 gcf_fxgcf_rho <- with(fxgcf %>% filter(!is.na(GCF), !is.na(FXGCF)), cor(GCF, FXGCF))
 
 plots$s6_fxgcf_vs_gcf <- fxgcf %>%
@@ -458,7 +458,7 @@ plots$s6_fxgcf_vs_gcf <- fxgcf %>%
   scale_colour_manual(values = c("GCF (eq 7)" = col_pri,
                                  "FXGCF (DH)" = col_sec),
                       name = NULL) +
-  labs(title = "Global cycle factor vs FX-adjusted global cycle factor",
+  labs(title = "Global cycle factor vs dollar-return global cycle factor",
        subtitle = sprintf("Correlation = %.2f (DH-2013 report ~0.50)", gcf_fxgcf_rho),
        y = "Factor value", x = NULL) +
   theme_thesis
@@ -493,8 +493,8 @@ plots$s6_r2_usd_gcf_vs_fxgcf <- bind_rows(
   scale_fill_manual(values = c("rx_USD ~ GCF (eq22)" = col_pri,
                                "rx_USD ~ FXGCF (eq23)" = col_sec),
                     name = NULL) +
-  labs(title = TeX("USD-investor $R^2$: GCF vs FX-adjusted GCF"),
-       subtitle = "Value of the FX adjustment for a USD investor",
+  labs(title = TeX("USD-investor $R^2$: GCF vs dollar-return GCF"),
+       subtitle = "Value of the currency adjustment for a USD investor",
        x = NULL, y = TeX("$R^2$")) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -553,7 +553,7 @@ plots$s8_fxgcf_oos_vs_is <- fxgcf %>%
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   scale_colour_manual(values = c("FXGCF" = col_pri, "FXGCF_oos" = col_sec),
                       name = NULL) +
-  labs(title = "FX-adjusted GCF: full-sample FXGCF vs fully-recursive FXGCF_oos",
+  labs(title = "dollar-return GCF: full-sample FXGCF vs fully-recursive FXGCF_oos",
        x = NULL, y = "Factor value") +
   theme_thesis
 
@@ -614,7 +614,7 @@ plots$s8_r2_oos_usd <- r2_oos_tab %>%
   scale_fill_manual(values = c("rx_USD ~ GCF_oos"  = col_pri,
                                "rx_USD ~ FXGCF_oos" = col_sec), name = NULL) +
   labs(title = bquote("Campbell-Thompson " * R[oos]^2 * ": USD-investor returns"),
-       subtitle = "GCF_oos vs FX-adjusted FXGCF_oos (recursive-mean benchmark)",
+       subtitle = "GCF_oos vs dollar-return FXGCF_oos (recursive-mean benchmark)",
        x = NULL, y = expression(R[oos]^2)) +
   theme_thesis +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))

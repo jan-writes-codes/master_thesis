@@ -170,7 +170,7 @@ rob_tables$rob_t1_sub_is <- table_to_grob(
                  "estimated on the indicated subsample (dated by forecast-origin month). ",
                  "rx = local-currency, rx_USD = US-dollar maturity-averaged 1y excess\n",
                  "return. CF/GCF are the local and global cycle factors; FXGCF the ",
-                 "FX-adjusted global factor. 'Months' is the number of forecast origins\n",
+                 "dollar-return global factor. 'Months' is the number of forecast origins\n",
                  "in the window. Crisis windows are short, so HAC t-stats there are ",
                  "necessarily noisier than in the full sample."),
   base_size = 8, note_lines = 4.5)

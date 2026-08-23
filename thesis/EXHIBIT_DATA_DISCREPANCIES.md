@@ -81,7 +81,7 @@ statement — both are below 0.05 — but the printed number is wrong.
 
 ## 3. `rob_t7_fxgcf_construction` → **Table 20**, "The dollar-return factor under alternative constructions" 🔴
 
-**Found by the supervisor, not by the PDF comparison.** His annotation on page 61
+**Found by the supervisor, not by the PDF comparison.** Her annotation on page 61
 asks *"0.81 — is this consistent with Table 6.5?"*. It is not.
 
 | Cell | Table (`.tex`) | Everywhere else in the thesis |
