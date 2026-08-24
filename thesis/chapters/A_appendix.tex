@@ -64,25 +64,16 @@ This section collects supporting figures referenced in the main text.
 
 \begin{figure}[htbp]\centering
   \includegraphics[width=0.85\linewidth]{figures/mr_f1_r2_phase1.pdf}
-  \caption[In-sample $R^{2}$ of the local regression by country]{In-sample $R^{2}$ of the local predictive regression
-    \eqref{eq:h-local}, $\rxbar_{i,t+12}\sim\CF_{i,t}$, by country.}
+  \caption{In-sample $R^{2}$ of the local regression by country}
   \label{fig:mr-r2-phase1}
-  \fignotes{Bars report the in-sample $R^{2}$ of the country-level Phase~I regression
-  \eqref{eq:h-local} of the duration-standardised, maturity-averaged excess return
-  \eqref{eq:rxbar} on the local cycle factor. Because the factor is the fitted
-  value of \eqref{eq:cf}, this $R^{2}$ equals the fit of the underlying
-  two-predictor forecasting regression reported in \Cref{tab:mr-phase1}. Countries
-  are ordered by $R^{2}$ rather than alphabetically.}
+  \fignotes{Bars report the in-sample $R^{2}$ of the country-level Phase~I regression \eqref{eq:h-local}, $\rxbar_{i,t+12}\sim\CF_{i,t}$, of the duration-standardised, maturity-averaged excess return \eqref{eq:rxbar} on the local cycle factor. Because the factor is the fitted value of Equation~\eqref{eq:cf}, this $R^{2}$ equals the fit of the underlying two-predictor forecasting regression reported in \Cref{tab:mr-phase1}. Countries appear in order of $R^{2}$.}
 \end{figure}
 
 \begin{figure}[htbp]\centering
   \includegraphics[width=0.8\linewidth]{figures/s1_yield_curve_avg.pdf}
   \caption{Average zero-coupon yield curve by country over the sample.}
   \label{fig:yield-curve-avg}
-  \fignotes{Each line is a country's time-series average zero-coupon yield at maturities of
-  $1,2,4,5,9$ and $10$ years, computed over that country's own sample because the
-  panel is unbalanced. Yields are end-of-month Bloomberg fitted zero-coupon
-  government curves, continuously compounded and in percent per annum.}
+  \fignotes{Each line is a country's time-series average zero-coupon yield at maturities of $1,2,4,5,9$ and $10$ years, computed over that country's own sample because the panel is unbalanced. Yields are end-of-month Bloomberg fitted zero-coupon government curves, continuously compounded and in percent per annum.}
 \end{figure}
 
 \begin{figure}[htbp]\centering
@@ -92,60 +83,30 @@ This section collects supporting figures referenced in the main text.
   \begin{minipage}[t]{0.49\linewidth}\centering
     \includegraphics[width=\linewidth]{figures/s10_cf_cp_corr.pdf}
   \end{minipage}
-  \caption[In-sample $R^{2}$ and factor correlations by country]{Left: in-sample $R^{2}$ by country for the cycle factors (CF, GCF)
-    against the forward-rate factors (CP, GCP). Right: per-country correlation
-    between the local cycle factor and the local forward factor.}
+  \caption{In-sample $R^{2}$ and factor correlations by country}
   \label{fig:s10-is}
-  \fignotes{The left panel reports the in-sample $R^{2}$ of the local and global cycle
-  factors against the local and global forward-rate factors, each in a univariate
-  regression on the maturity-averaged excess return \eqref{eq:rxbar}. The right
-  panel reports the per-country correlation between the local cycle factor
-  \eqref{eq:cf} and the local Cochrane--Piazzesi factor. A low correlation with a
-  comparable fit indicates that the two predictors carry different information.
-  In the right panel countries are ordered by correlation rather than
-  alphabetically.}
+  \fignotes{The left panel reports the in-sample $R^{2}$ by country of the local and global cycle factors against the local and global forward-rate factors, each in a univariate regression on the maturity-averaged excess return \eqref{eq:rxbar}. The right panel reports the per-country correlation between the local cycle factor \eqref{eq:cf} and the local Cochrane--Piazzesi factor. A low correlation with a comparable fit indicates that the two predictors carry different information. The right panel orders countries by correlation.}
 \end{figure}
 
 \begin{figure}[htbp]\centering
   \includegraphics[width=0.88\linewidth]{figures/rob_f3_core_vs_reg.pdf}
-  \caption[In-sample $R^{2}$: core versus headline CPI]{In-sample $R^{2}$ of the local predictive regression
-    $\rxbar_{i,t+12}\sim\CF_{i,t}$ by country, with the cycle factor built on core
-    (ex food and energy) versus regular all-items CPI.}
+  \caption{In-sample $R^{2}$: core versus headline CPI}
   \label{fig:rob-core-headline}
-  \fignotes{Bars compare the in-sample $R^{2}$ of \eqref{eq:h-local} when trend inflation
-  \eqref{eq:trendinf} is built on core CPI, excluding food and energy, against
-  all-items CPI. Only the inflation series changes. The window $M=120$ and decay
-  $v=0.987$, the yield--cycle decomposition and the factor construction are held
-  at their baseline values. Core CPI is the baseline used throughout the thesis.}
+  \fignotes{Bars compare the in-sample $R^{2}$ of the local predictive regression \eqref{eq:h-local}, $\rxbar_{i,t+12}\sim\CF_{i,t}$, by country, when trend inflation \eqref{eq:trendinf} is built on core CPI, excluding food and energy, against all-items headline CPI. Only the inflation series changes. The window $M=120$ and decay $v=0.987$, the yield--cycle decomposition and the factor construction are held at their baseline values. Core CPI is the baseline used throughout the thesis.}
 \end{figure}
 
 \begin{figure}[htbp]\centering
   \includegraphics[width=0.9\linewidth]{figures/mr_f2_r2_ladder.pdf}
-  \caption[Phase~II in-sample $R^{2}$ by country and specification]{Phase~II in-sample $R^{2}$ by country for the three nested
-    specifications: the local factor alone
-    \eqref{eq:h-local}, the global factor alone \eqref{eq:h-global}, and the
-    joint horse race \eqref{eq:h-horse}.}
+  \caption{Phase~II in-sample $R^{2}$ by country and specification}
   \label{fig:mr-r2-ladder}
-  \fignotes{For each country the three bars report the in-sample $R^{2}$ of the local factor
-  alone \eqref{eq:h-local}, the global factor alone \eqref{eq:h-global}, and the
-  joint regression \eqref{eq:h-horse} in which the local factor enters
-  orthogonalised. Under full integration the third bar should not exceed the
-  second, since the orthogonalised local factor then adds nothing.}
+  \fignotes{For each country the three bars report the in-sample $R^{2}$ of the three nested Phase~II specifications, the local factor alone \eqref{eq:h-local}, the global factor alone \eqref{eq:h-global}, and the joint horse race \eqref{eq:h-horse} in which the local factor enters orthogonalised. Under full integration the third bar should not exceed the second, since the orthogonalised local factor then adds nothing.}
 \end{figure}
 
 \begin{figure}[htbp]\centering
   \includegraphics[width=0.9\linewidth]{figures/s1_yield_ts.pdf}
-  \caption[Zero-coupon yields across the G10 by country and maturity]{Zero-coupon yields across the G10 by country and maturity,
-    1989--2026. The secular decline in nominal yields and the post-2021 reversal
-    are common across countries and across the curve.}
+  \caption{Zero-coupon yields across the G10 by country and maturity}
   \label{fig:yield-ts}
-  \fignotes{One panel per country, with a line for each of the six maturities
-  $\{1,2,4,5,9,10\}$ years. Yields are end-of-month Bloomberg fitted zero-coupon
-  government curves, continuously compounded and in percent per annum. Vertical
-  scales are free across panels, so levels should be compared within a panel
-  rather than between panels. The series run over the full available history of
-  the raw curves, which extends beyond the April 2024 end of the estimation
-  sample.}
+  \fignotes{One panel per country, with a line for each of the six maturities $\{1,2,4,5,9,10\}$ years, over 1989--2026. The secular decline in nominal yields and the post-2021 reversal are common across countries and across the curve. Yields are end-of-month Bloomberg fitted zero-coupon government curves, continuously compounded and in percent per annum. Vertical scales are free across panels, so levels should be compared within a panel rather than between panels. The series run over the full available history of the raw curves, which extends beyond the April 2024 end of the estimation sample.}
 \end{figure}
 
 \begin{figure}[htbp]\centering
@@ -155,19 +116,7 @@ This section collects supporting figures referenced in the main text.
   \begin{minipage}[t]{0.49\linewidth}\centering
     \includegraphics[width=\linewidth]{figures/s8_oos_is_corr.pdf}
   \end{minipage}
-  \caption[Recursive versus full-sample global cycle factor]{Left: the full-sample global cycle factor $\GCF_{t}$ against the
-    fully-recursive $\GCF^{\mathrm{oos}}_{t}$; convergence after the trend-inflation
-    burn-in signals a stable real-time estimator. Right: per-country correlation
-    between the full-sample and recursive local cycle factors, where a
-    value closer to one means that the full-sample look-ahead added little.}
+  \caption{Recursive versus full-sample global cycle factor}
   \label{fig:s8-gcf-conv}
-  \fignotes{The left panel plots the full-sample global cycle factor $\GCF_{t}$
-  \eqref{eq:gcf} against its fully-recursive counterpart
-  $\GCF^{\mathrm{oos}}_{t}$, which is rebuilt at each date from data available
-  then. The two are expected to differ early in the sample, while the
-  trend-inflation average \eqref{eq:trendinf} is still filling its window. The
-  right panel reports the per-country correlation between the full-sample and
-  recursive local factors, where a value near one means the full-sample estimate
-  added little look-ahead information. In the right panel countries are ordered by
-  correlation rather than alphabetically.}
+  \fignotes{The left panel plots the full-sample global cycle factor $\GCF_{t}$ \eqref{eq:gcf} against its fully-recursive counterpart $\GCF^{\mathrm{oos}}_{t}$, which is rebuilt at each date from data available then. The two are expected to differ early in the sample, while the trend-inflation average \eqref{eq:trendinf} is still filling its window, and convergence after that burn-in signals a stable real-time estimator. The right panel reports the per-country correlation between the full-sample and recursive local cycle factors, where a value closer to one means the full-sample look-ahead added little. Countries are sorted by correlation.}
 \end{figure}

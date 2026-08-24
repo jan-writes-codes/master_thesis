@@ -51,7 +51,7 @@ and much more for the dollar-return one. The global factor delivers essentially
 the same out-of-sample $R^{2}_{\mathrm{oos}}$ under a three-, five-, or
 seven-year minimum, namely $+0.05$. It
 is positive in ten of eleven markets in every case. For the headline result,
-the sixty-month choice is therefore representative rather than a tuned
+the sixty-month choice is therefore representative and not a tuned
 parameter. A seven-year minimum also lifts the local cycle factor to
 approximately zero ($-0.002$) and the unadjusted dollar-investor factor from
 $-0.07$ to $-0.01$, because more training history stabilises each recursive
@@ -91,19 +91,9 @@ Across the five schemes the rankings are largely stable. Under all three expandi
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.85\linewidth]{figures/rob_f2_oos_scheme.pdf}
-  \caption[Out-of-sample $R^{2}_{\mathrm{oos}}$ by estimation scheme]{Out-of-sample $R^{2}_{\mathrm{oos}}$ by estimation scheme and
-    specification. The global cycle factor (red) is above zero under all three
-    expanding-window minimums but not under either rolling window. The baseline
-    is the expanding-window, five-year-minimum scheme.}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by estimation scheme}
   \label{fig:rob-oos-scheme}
-  \fignotes{Each group reports the pooled out-of-sample $R^{2}_{\mathrm{oos}}$
-  \eqref{eq:meth-ctr2} under a different recursive estimation scheme. The
-  expanding-window schemes differ in the minimum training history required before
-  the first forecast, and the rolling windows re-estimate on a fixed-length
-  trailing sample. Every scheme rebuilds the whole factor chain at each date, so
-  the trend, the cycles, the coefficients and the GDP weights respect time~$t$.
-  The baseline used throughout the thesis is the expanding window with a five-year
-  minimum.}
+  \fignotes{Each group reports the pooled out-of-sample $R^{2}_{\mathrm{oos}}$ \eqref{eq:meth-ctr2} under a different recursive estimation scheme and specification. The expanding-window schemes differ in the minimum training history required before the first forecast, and the rolling windows re-estimate on a fixed-length trailing sample. Every scheme rebuilds the whole factor chain at each date, so the trend, the cycles, the coefficients and the GDP weights respect time~$t$. The baseline used throughout the thesis is the expanding window with a five-year minimum.}
 \end{figure}
 
 % ===========================================================================
@@ -129,7 +119,7 @@ markets) and the global factor $0.39$ ($t=2.4$). Bond risk premia are, thus,
 largest and most cyclical when sovereign stress is at its peak, which
 is when the cycle factor has the most to explain. The weakest window is the
 financial crisis itself, with a mean $R^{2}$ of $0.17$ for the local and $0.05$
-for the global factor and pooled $t$-statistics near $1.7$. In this window, the
+for the global factor and pooled $t$-statistics of $1.70$ and $1.91$. In this window, the
 flight-to-quality fall in yields swamps the slow-moving cyclical signal. The
 post-crisis window is the most revealing for my integration thesis. There, the
 global factor strengthens to a mean $R^{2}$ of $0.24$ ($t=11.5$,
@@ -148,7 +138,7 @@ $t$-statistics turn negative ($-2.1$ for FXGCF, $-1.6$ for GCF). The strong
 full-sample dollar-investor fit that I document in \Cref{sec:res-phase3} is
 therefore largely a pre-2008 phenomenon. Once the post-crisis currency regime
 of near-zero rate differentials and synchronised monetary policy sets in
-(\Cref{sec:res-phase3}), the cyclical signal in dollar returns disappears. This is most likely a
+(\Cref{sec:res-phase3}), the cyclical signal in dollar returns disappears. I read this as a
 limitation of the dollar-return factor rather than a firm conclusion, and the
 subsample evidence states it more sharply than the pooled regression can.
 
@@ -161,21 +151,14 @@ subsample evidence states it more sharply than the pooled regression can.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.85\linewidth]{figures/rob_f1_oos_sub.pdf}
-  \caption[Out-of-sample $R^{2}_{\mathrm{oos}}$ by subsample]{Out-of-sample $R^{2}_{\mathrm{oos}}$ by subsample and specification
-    (the short pre-crisis window is omitted; \Cref{tab:rob-sub-oos} reports its
-    values). The global cycle factor is above zero in every window except the
-    financial crisis itself.}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$ by subsample}
   \label{fig:rob-oos-sub}
-  \fignotes{Each group reports the pooled out-of-sample $R^{2}_{\mathrm{oos}}$
-  \eqref{eq:meth-ctr2} computed on the subsample named on the horizontal axis,
-  with the factor built recursively as in the baseline. The pre-crisis window is
-  omitted because it is too short for a stable recursive estimate, and
-  \Cref{tab:rob-sub-oos} reports its values. Subsample dating follows
-  \Cref{tab:rob-sub-is}.}
+  \fignotes{Each group reports the pooled out-of-sample $R^{2}_{\mathrm{oos}}$ \eqref{eq:meth-ctr2} computed on the subsample named on the horizontal axis, with the factor built recursively as in the baseline. The short pre-crisis window is omitted because it is too short for a stable recursive estimate, and \Cref{tab:rob-sub-oos} reports its values. Subsample dating follows \Cref{tab:rob-sub-is}.}
 \end{figure}
 
 The out-of-sample subsample evidence (\Cref{tab:rob-sub-oos},
-\Cref{fig:rob-oos-sub}) is the more demanding test, and the global cycle factor
+\Cref{fig:rob-oos-sub}), which report the pooled recursive $R^{2}_{\mathrm{oos}}$
+subsample by subsample, is the more demanding test, and the global cycle factor
 passes it almost everywhere. Its recursive $R^{2}_{\mathrm{oos}}$ is positive in
 the pre-crisis window ($+0.09$), the euro-area crisis ($+0.01$), and the
 post-crisis window ($+0.09$), and it only turns negative in the financial
@@ -192,7 +175,7 @@ something genuine to forecast, and it remains approximately flat in the
 euro-area crisis and the post-crisis window ($+0.002$ and $+0.006$). It is
 mildly negative pre-crisis ($-0.02$), where its forecasts rest on the shortest
 training histories. Its small full-sample advantage is therefore earned mainly
-in the 2008 repricing rather than built up evenly across regimes. For the headline
+in the 2008 repricing instead of being built up evenly across regimes. For the headline
 factor, the message is unchanged. The global cycle factor's real-time
 advantage does not come from a single benign regime. It is present before,
 between, and after the two crises, and it breaks down only in the financial
@@ -203,7 +186,7 @@ crisis of 2008.
 \label{sec:rob-cf-cp}
 
 A concern is that my results reflect a generic ``global factor'' effect
-rather than anything specific to the macro-anchored cycle. The sharpest test I
+and nothing specific to the macro-anchored cycle. The sharpest test I
 can perform is to compare the cycle factor directly with the
 return-forecasting factor of the literature, the forward-rate factor of
 \citet{cochrane2005}, aggregated to a global forward factor in the manner of
@@ -246,17 +229,9 @@ G10 with the macro-anchored cycle.
 
 \begin{figure}[t]\centering
   \includegraphics[width=0.9\linewidth]{figures/s10_r2_oos_compare.pdf}
-  \caption[Out-of-sample $R^{2}_{\mathrm{oos}}$: cycle versus forward-rate factors]{Out-of-sample $R^{2}_{\mathrm{oos}}$ by country for the cycle factors
-    (CF, GCF) against the forward-rate factors (CP, GCP), fully recursive against
-    the recursive prevailing mean. Only the global cycle factor is reliably
-    positive.}
+  \caption{Out-of-sample $R^{2}_{\mathrm{oos}}$: cycle versus forward-rate factors}
   \label{fig:s10-oos}
-  \fignotes{Bars report the country-level out-of-sample $R^{2}_{\mathrm{oos}}$
-  \eqref{eq:meth-ctr2} of the two cycle factors against the two forward-rate
-  factors of \citet{cochrane2005} and \citet{dahlquist2013}. All four are rebuilt
-  fully recursively and scored against each country's own recursive prevailing
-  mean, so the comparison holds the real-time protocol fixed and varies only the
-  predictor.}
+  \fignotes{The bars set the two cycle factors, scored by out-of-sample $R^{2}_{\mathrm{oos}}$ \eqref{eq:meth-ctr2}, against against the two forward-rate factors of \citet{cochrane2005} and \citet{dahlquist2013}. All four are rebuilt fully recursively and scored against each country's own recursive prevailing mean, so the comparison holds the real-time protocol fixed and varies only the predictor.}
 \end{figure}
 
 % ===========================================================================
@@ -379,10 +354,10 @@ identical pipeline.
   \input{tables/rob_t7_fxgcf_construction}
 \end{table}
 
-Two features of the table stand out. The correlation with the unadjusted global
+The correlation with the unadjusted global
 factor is set by the construction axis, not by the weighting. The two
-top-down variants correlate $0.94$--$0.99$ with $\GCF_{t}$, whereas the two
-bottom-up variants correlate only $0.73$--$0.78$. A top-down factor projects
+top-down variants correlate $0.95$--$0.99$ with $\GCF_{t}$, whereas the two
+bottom-up variants correlate only $0.76$--$0.81$. A top-down factor projects
 one aggregate dollar return on the same aggregate cycle information that
 underlies $\GCF_{t}$, so it inherits the global cycle almost one for one and
 has little room to load on currency dynamics. The bottom-up factor, in
@@ -390,7 +365,7 @@ contrast, lets each country's regression reweight its own cycles toward the
 currency-relevant combination before aggregating, and this is where the
 distinct information comes from. The in-sample recovery for the
 dollar investor is likewise a bottom-up phenomenon. The mean $R^{2}$ is $0.14$ for
-both bottom-up variants, against $0.10$ for the top-down ones, and the count
+both bottom-up variants, against $0.10$--$0.11$ for the top-down ones, and the count
 of significant markets rises from five to ten as I move from the top-down
 GDP variant to my baseline. Out of sample, all four variants deliver only
 small pooled gains ($+0.010$ to $+0.033$), and no construction dominates

@@ -218,10 +218,10 @@ strat_plots$strat_f2_exposure <- bt %>%
   theme_thesis
 
 # -----------------------------------------------------------------------------
-# 4. The US-dollar investor: timing rx_USD with the FX-adjusted factor.
+# 4. The US-dollar investor: timing rx_USD with the dollar-return factor.
 # -----------------------------------------------------------------------------
 # Same rule, but the asset is the dollar excess return of the global portfolio
-# and the signal is the FX-adjusted global cycle factor FXGCF_oos (the factor
+# and the signal is the dollar-return global cycle factor FXGCF_oos (the factor
 # built to target dollar returns). The unadjusted GCF_oos on dollar returns is
 # reported alongside to isolate the value of the FX adjustment.
 glob_usd <- build_glob("rx_10_USD_t12") %>%
@@ -258,11 +258,11 @@ usd_disp <- usd_perf %>%
                    `OOS R2` = ifelse(is.na(r2), "--", formatC(r2, format = "f", digits = 3)))
 strat_tables$strat_t2_usd <- table_to_grob(
   as.data.frame(usd_disp),
-  title = "The US-dollar investor -- timing dollar returns with the FX-adjusted factor",
+  title = "The US-dollar investor -- timing dollar returns with the dollar-return factor",
   note  = paste0("Unhedged 10Y global bond portfolio in US dollars, ",
                  format(min(btu$date), "%Y"), "-", format(max(btu$date), "%Y"),
                  " (n=", nrow(btu), " months). FXGCF-timed and GCF-timed use the\n",
-                 "recursive FX-adjusted and unadjusted global factors; the same ",
+                 "recursive dollar-return and local-currency global factors; the same ",
                  "mean-variance rule and equal-average-exposure ",
                  "reporting as the hedged strategy.\nOOS R2 is the Campbell-Thompson statistic of ",
                  "the factor forecast. The unhedged dollar bond premium is modest over the ",
@@ -293,7 +293,7 @@ print(as.data.frame(ex_disp), row.names = FALSE)
 
 strat_tables$strat_t3_example <- table_to_grob(
   as.data.frame(ex_disp),
-  title = "Worked example -- the FX-adjusted dollar investor over three months (mid-2022)",
+  title = "Worked example -- the unhedged dollar investor over three months (mid-2022)",
   note  = paste0("Each month the investor reads the recursive FXGCF signal, updates the ",
                  "forecast E[rx] and the recursive volatility, and sets the\n",
                  "mean-variance target weight w = (1/gamma) E[rx]/vol^2; 'Action' is the ",

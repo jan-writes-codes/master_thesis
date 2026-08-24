@@ -4,7 +4,7 @@
 # Properties and dynamics of the two global factors (thesis sub-question 3).
 #
 # The global cycle factor GCF prices the hedged, local-currency bond premium
-# (duration / interest-rate-cycle risk); the FX-adjusted global cycle factor
+# (duration / interest-rate-cycle risk); the dollar-return global cycle factor
 # FXGCF prices the unhedged US-dollar premium (that same duration risk plus the
 # currency leg). The object that isolates the FX component is therefore the
 # WEDGE  w_t = FXGCF_t - GCF_t = sum_i w_i (CF_USD_i - CF_i).

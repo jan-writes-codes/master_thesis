@@ -21,8 +21,8 @@
 # Phase II  : does the global factor subsume the local factor?
 #             horse race rx_bar ~ CF_perp + GCF, CF_perp = CF orthogonal to GCF
 #             (Eq 19-20 / h-horse, h-global).
-# Phase III : does currency risk break the model, and does the FX-adjusted
-#             factor restore it? rx_USD ~ GCF (Eq 22) vs rx_USD ~ FXGCF (Eq 23).
+# Phase III : does currency risk break the model, and does the dollar-return
+#             factor restore it? rx_USD ~ GCF vs rx_USD ~ FXGCF.
 # =============================================================================
 
 suppressPackageStartupMessages({
@@ -127,13 +127,13 @@ mr_tables$mr_t1_phase1 <- table_to_grob(
                  "effects. In-sample R^2. Sample as in Table 4.1."),
   base_size = 8)
 
-# Figure: in-sample R^2 of rx ~ CF by country (Eq 18).
+# Figure: in-sample R^2 of rx ~ CF by country.
 mr_plots$mr_f1_r2_phase1 <- run_by_country(panel, rx_t12 ~ CF) %>%
   dplyr::filter(term == "CF") %>%
   ggplot2::ggplot(ggplot2::aes(stats::reorder(country, r_sq), r_sq)) +
   ggplot2::geom_col(fill = col_pri) +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  ggplot2::labs(title = expression(paste("In-sample ", R^2, " of ", rx %~% CF, " by country (Eq 18)")),
+  ggplot2::labs(title = expression(paste("In-sample ", R^2, " of ", rx %~% CF, " by country")),
                 x = NULL, y = expression(R^2)) +
   theme_thesis
 
@@ -363,12 +363,12 @@ mr_plots$mr_f2_hr_tstats <- phase2 %>%
 
 
 # =============================================================================
-# PHASE III -- The US-dollar investor and the FX-adjusted factor (Eq 21-23).
+# PHASE III -- The US-dollar investor and the dollar-return factor (Eq 21-23).
 # =============================================================================
 # For a USD investor the local-currency return is augmented by the realized
 # currency return (Eq rx-usd). We ask (a) how far currency risk erodes the
 # global-factor predictability that held in local currency, and (b) whether the
-# purpose-built FX-adjusted global factor FXGCF recovers it.
+# purpose-built dollar-return global factor FXGCF recovers it.
 
 g_usd  <- run_by_country(panel, rx_USD_t12 ~ GCF)   %>% dplyr::filter(term == "GCF")   %>%
   dplyr::transmute(country, b_g = estimate, t_g = t, r2_g = r_sq, n)
@@ -382,7 +382,7 @@ phase3 <- g_usd %>%
   dplyr::left_join(loc_usd, by = "country") %>%
   dplyr::mutate(country = ord(country)) %>% dplyr::arrange(country)
 
-# Correlation between the global and FX-adjusted global factors (key diagnostic).
+# Correlation between the global and dollar-return global factors (key diagnostic).
 gcf_fxgcf_rho <- with(fxgcf %>% dplyr::filter(!is.na(GCF), !is.na(FXGCF)), cor(GCF, FXGCF))
 
 cat("\n===== Phase III: USD-investor returns, GCF (Eq 22) vs FXGCF (Eq 23) =====\n")
@@ -403,11 +403,11 @@ t3_disp <- phase3 %>%
 
 mr_tables$mr_t3_phase3 <- table_to_grob(
   as.data.frame(t3_disp),
-  title = "Phase III -- US-dollar investor: GCF vs the FX-adjusted FXGCF",
+  title = "Phase III -- US-dollar investor: GCF vs the dollar-return FXGCF",
   note  = paste0("LHS: US-dollar excess return rx_USD_{i,t+12} (Eq 11). 'R2 (local CF)' ",
                  "repeats the dollar return on the local factor for reference; the\n",
                  "GCF and FXGCF blocks regress rx_USD on the global (Eq 22) and the ",
-                 "FX-adjusted global (Eq 23) factor. HAC t-stats in (.). The US row\n",
+                 "dollar-return global (Eq 23) factor. HAC t-stats in (.). The US row\n",
                  "carries no currency leg. cor(GCF, FXGCF) = ",
                  formatC(gcf_fxgcf_rho, format = "f", digits = 2),
                  " in this sample, so the two factors are close substitutes."),
@@ -415,15 +415,15 @@ mr_tables$mr_t3_phase3 <- table_to_grob(
 
 # Figure: USD-investor R^2, GCF vs FXGCF, by country.
 mr_plots$mr_f3_usd_r2 <- phase3 %>%
-  dplyr::select(country, `rx_USD ~ GCF (Eq 22)` = r2_g, `rx_USD ~ FXGCF (Eq 23)` = r2_f) %>%
+  dplyr::select(country, `rx_USD ~ GCF` = r2_g, `rx_USD ~ FXGCF` = r2_f) %>%
   tidyr::pivot_longer(-country, names_to = "model", values_to = "r_sq") %>%
   ggplot2::ggplot(ggplot2::aes(country, r_sq, fill = model)) +
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  ggplot2::scale_fill_manual(values = c("rx_USD ~ GCF (Eq 22)" = col_pri,
-                                        "rx_USD ~ FXGCF (Eq 23)" = col_sec), name = NULL) +
-  ggplot2::labs(title = expression(paste("Phase III: US-dollar-investor ", R^2, ": GCF vs FX-adjusted FXGCF")),
-                subtitle = "Value of the FX adjustment for a US-dollar investor",
+  ggplot2::scale_fill_manual(values = c("rx_USD ~ GCF" = col_pri,
+                                        "rx_USD ~ FXGCF" = col_sec), name = NULL) +
+  ggplot2::labs(title = expression(paste("Phase III: US-dollar-investor ", R^2, ": GCF vs dollar-return FXGCF")),
+                subtitle = "Value of the currency adjustment for a US-dollar investor",
                 x = NULL, y = expression(R^2)) +
   theme_thesis +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
@@ -433,11 +433,11 @@ mr_plots$mr_f4_gcf_fxgcf <- fxgcf %>%
   dplyr::filter(!is.na(GCF), !is.na(FXGCF)) %>%
   ggplot2::ggplot(ggplot2::aes(date)) +
   ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  ggplot2::geom_line(ggplot2::aes(y = GCF,   colour = "GCF (Eq 7)"),   linewidth = 0.5) +
-  ggplot2::geom_line(ggplot2::aes(y = FXGCF, colour = "FXGCF (Eq 23)"), linewidth = 0.5) +
-  ggplot2::scale_colour_manual(values = c("GCF (Eq 7)" = col_pri,
-                                          "FXGCF (Eq 23)" = col_sec), name = NULL) +
-  ggplot2::labs(title = "Global cycle factor vs FX-adjusted global cycle factor",
+  ggplot2::geom_line(ggplot2::aes(y = GCF,   colour = "GCF"),   linewidth = 0.5) +
+  ggplot2::geom_line(ggplot2::aes(y = FXGCF, colour = "FXGCF"), linewidth = 0.5) +
+  ggplot2::scale_colour_manual(values = c("GCF" = col_pri,
+                                          "FXGCF" = col_sec), name = NULL) +
+  ggplot2::labs(title = "Global cycle factor vs dollar-return global cycle factor",
                 subtitle = sprintf("Correlation = %.2f over the common sample", gcf_fxgcf_rho),
                 x = NULL, y = "Factor value") +
   theme_thesis
@@ -460,7 +460,7 @@ oos_npos <- function(lbl) sum(r2_oos_tab$r2_oos[r2_oos_tab$spec == lbl] > 0, na.
 oos_n    <- function(lbl) sum(!is.na(r2_oos_tab$r2_oos[r2_oos_tab$spec == lbl]))
 
 oos_summary <- tibble::tibble(
-  phase = c("I -- local", "II -- global", "III -- USD, global", "III -- USD, FX-adj."),
+  phase = c("I -- local", "II -- global", "III -- USD, global", "III -- USD, dollar-return"),
   spec  = c("rx ~ CF", "rx ~ GCF", "rx_USD ~ GCF", "rx_USD ~ FXGCF"),
   lbl   = c("rx ~ CF_oos", "rx ~ GCF_oos", "rx_USD ~ GCF_oos", "rx_USD ~ FXGCF_oos"),
   is_r2 = c(mean(phase1$r2, na.rm = TRUE), mean(phase2$r2_glb, na.rm = TRUE),

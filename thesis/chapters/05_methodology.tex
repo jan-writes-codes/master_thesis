@@ -32,7 +32,7 @@ bond-pricing literature, however, rejects this restriction.
 
 \paragraph{Local-currency returns.}
 The one-year excess return on an $n$-year bond for a domestic investor is given
-by \eqref{eq:rx}. Because return volatility scales roughly with duration, I
+by Equation~\eqref{eq:rx}. Because return volatility scales roughly with duration, I
 follow \citet{cieslak2015} and work with \emph{duration-standardised} returns,
 $\widetilde{\rx}^{(n)}_{i,t+12}=\rx^{(n)}_{i,t+12}/D^{(n)}$, and then average
 across the maturity set to obtain a single, scale-comparable return series:
@@ -63,8 +63,8 @@ and nets out the US short rate:
 \end{equation}
 where $s_{i,t}=\log(\text{USD per unit of currency }i)$, so that
 $s_{i,t+12}-s_{i,t}$ is the one-year log currency return. I apply the same
-duration-standardisation and maturity-averaging as in \eqref{eq:rxbar} to
-\eqref{eq:rx-usd} and obtain $\rxbar^{\,\mathrm{USD}}_{i,t+12}$. This dollar
+duration-standardisation and maturity-averaging as in Equation~\eqref{eq:rxbar} to
+Equation~\eqref{eq:rx-usd} and obtain $\rxbar^{\,\mathrm{USD}}_{i,t+12}$. This dollar
 return is the object of interest for the international investor and the input
 to the dollar-return factor below.
 
@@ -100,7 +100,7 @@ so that the cycle is, by definition, the residual of yields on trend inflation.
 I estimate this projection separately for every country--maturity pair by
 OLS.\footnote{Empirically the cycle is the fitted OLS
   residual $\hat\varepsilon^{(n)}_{i,t}$. I keep the population notation
-  $(\alpha_{i,n},\beta_{i,n})$ in \eqref{eq:decomp} and reserve hats for the
+  $(\alpha_{i,n},\beta_{i,n})$ in Equation~\eqref{eq:decomp} and reserve hats for the
   fitted factor in Equation~\eqref{eq:cf}.}
 
 I construct trend inflation as a backward-looking, exponentially weighted
@@ -116,7 +116,7 @@ Because the average never looks forward, $\trendinf_{i,t}$ is observable at $t$
 and introduces no look-ahead bias. The normalising constant $(1-v)/(1-v^{M})$
 makes the weights sum to one.
 
-I run the decomposition in \eqref{eq:decomp}
+I run the decomposition in Equation~\eqref{eq:decomp}
 country-by-country and maturity-by-maturity, so the loadings
 $(\alpha_{i,n},\beta_{i,n})$, and thus the cycles, are local objects. The
 cross-country structure only enters later, through the global factor. The decay
@@ -146,13 +146,12 @@ predictors:
                      \label{eq:cf}
 \end{align}
 Here, $\rxbar_{i,t+12}$ is the duration-standardised, maturity-averaged excess
-return defined in \eqref{eq:rxbar}. $\CF_{i,t}$ is, by construction, the component of the cycle
+return defined in Equation~\eqref{eq:rxbar}. $\CF_{i,t}$ is, by construction, the component of the cycle
 cross-section that is relevant for predicting returns. Because the factor is a
 fitted value rather than an observed regressor, I treat it throughout as a
 generated regressor. That means it is fitted and evaluated on the same data,
-which is the reason for the in-sample inference of
-\Cref{sec:meth-inference} and the fully-recursive out-of-sample tests of
-\Cref{sec:meth-oos}.
+which is the reason for the in-sample inference and the fully-recursive
+out-of-sample tests of \Cref{sec:meth-oos}.
 
 \paragraph{The global cycle factor and GDP weights.}
 If government bond markets are internationally integrated, investors should be
@@ -185,7 +184,7 @@ that an international investor bears. Because of this, I construct a
 dollar-return global cycle factor $\FXGCF_{t}$ that targets dollar
 returns directly, in analogy to the dollar-return global factor (FXGCP) of
 \citet{dahlquist2013}. I build the factor bottom-up, exactly as the global
-factor in \eqref{eq:gcf}, but from country-level factors that are fitted to
+factor in Equation~\eqref{eq:gcf}, but from country-level factors that are fitted to
 dollar returns. For each country, I first estimate the USD cycle
 factor $\FXCF_{i,t}$ as the fitted value of the country's dollar excess
 return on its own cycle predictors:
@@ -199,14 +198,14 @@ return on its own cycle predictors:
         \label{eq:fxcf}
 \end{align}
 I then aggregate the national USD cycle factors with the same GDP weights as
-in \eqref{eq:gcf}:
+in Equation~\eqref{eq:gcf}:
 \begin{equation}
   \FXGCF_{t} \;=\; \sum_{i\in\mathcal{G}} w_{i,t}\,\FXCF_{i,t}.
   \label{eq:fxgcf}
 \end{equation}
 
 By construction,
-\eqref{eq:fxcf-reg}--\eqref{eq:fxgcf} mirror the global
+Equations~\eqref{eq:fxcf-reg}--\eqref{eq:fxgcf} mirror the global
 factor exactly. $\FXGCF_{t}$ is to the dollar returns what $\GCF_{t}$ is to
 the local-currency returns, so any difference between the two factors can be
 attributed to the return currency alone. An alternative is the
@@ -257,8 +256,8 @@ $\CF^{\perp}_{i,t}$ is the residual of the construction regression
   \CF_{i,t} \;=\; a_{i} + b_{i}\,\GCF_{t} + \CF^{\perp}_{i,t},
   \label{eq:cf-perp}
 \end{equation}
-so that $\beta_{i}$ in \eqref{eq:h-horse} measures the incremental local
-content. Adding $\CF^{\perp}_{i,t}$ to \eqref{eq:h-global} should not raise the
+so that $\beta_{i}$ in Equation~\eqref{eq:h-horse} measures the incremental local
+content. Adding $\CF^{\perp}_{i,t}$ to Equation~\eqref{eq:h-global} should not raise the
 predictive power under integration, i.e.\ $\beta_{i}=0$.
 
 \paragraph{Phase~III: currency risk and the dollar-return factor.}
@@ -274,12 +273,12 @@ For the dollar investor, I estimate
      &= \alpha_{i} + \delta_{i}\,\FXGCF_{t} + \varepsilon_{i,t+12}.
         \label{eq:h-fxgcf}
 \end{align}
-With specifications \eqref{eq:h-usd-local}--\eqref{eq:h-usd-global}, I ask
+With specifications Equations~\eqref{eq:h-usd-local}--\eqref{eq:h-usd-global}, I ask
 whether the local-currency factors retain their predictive power once currency
-risk is introduced. With \eqref{eq:h-fxgcf}, I ask whether the purpose-built
+risk is introduced. With Equation~\eqref{eq:h-fxgcf}, I ask whether the purpose-built
 dollar-return factor $\FXGCF_{t}$ recovers the predictability that an unadjusted
 global factor loses on currency-converted returns. Together,
-\eqref{eq:h-local}--\eqref{eq:h-fxgcf} constitute the empirical programme that
+Equations~\eqref{eq:h-local}--\eqref{eq:h-fxgcf} constitute the empirical programme that
 I test in \Cref{ch:results} and stress-test in \Cref{ch:robustness}.
 
 % ===========================================================================
@@ -319,12 +318,11 @@ bears on the results.
     rather than the finer grid of the original papers. I form individual excess
     returns for $n\in\{2,5,10\}$, the maturities with an observed adjacent
     shorter yield.
-  \item \textbf{Sample.} The G10 panel spans 1989/1994--2026
-    (\Cref{sec:data-coverage}), which is shorter than with the original US samples, so I expect the replicated levels to differ
+  \item \textbf{Sample.} The estimation panel spans 1989/1994--2024
+    (\Cref{sec:data-coverage}), which is shorter than the original US samples, so I expect the replicated levels to differ
     from the published numbers.
   \item \textbf{Inference.} I replace the exact reverse-regression delta method
-    with HAC ($18$-lag Newey--West) $t$-statistics, for the identification
-    reason given in \Cref{sec:meth-inference}.
+    with HAC ($18$-lag Newey--West) $t$-statistics.
   \item \textbf{Japanese inflation series.} Japan's FRED core-CPI series ends in
     June 2021, so I splice the LSEG core-CPI index onto it, rescaled at the splice
     month (\Cref{sec:data}). Neither original study meets this problem, since both

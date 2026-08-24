@@ -695,7 +695,7 @@ tables$dh_t7_usd <- table_to_grob(
   dh_t7_df,
   title = "DH 2013 Table 7. US dollar excess return regressions",
   note  = paste0("Annual USD excess returns (US investor in a foreign bond) on ",
-                 "the global GCP and the FX-adjusted FXGCP (= our FXGCF).\n",
+                 "the global GCP and the dollar-return FXGCP (= our FXGCF).\n",
                  "Newey-West t (12 lags) in (.); adjusted R2 reported. ",
                  "EUR=Germany, others=own market; n in {2,5,10}."),
   base_size = 7, note_lines = 3)
