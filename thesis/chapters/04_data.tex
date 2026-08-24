@@ -80,10 +80,7 @@ and the estimation sample runs through April 2024, although the raw yield curves
 themselves extend to April 2026. This yields $422$ monthly
 observations for the US, $421$ for Japan, and $353$ for each of the other
 countries. The excess-return regressions then use $412$ observations for the
-United States and Japan and $353$ for each of the others. The twelve-month
-horizon costs nothing at the recent end, because the raw curves run past the
-end of the estimation window, so only the two long samples lose months, and
-they lose them at the start to the factor construction. In
+United States and Japan and $353$ for each of the others. In
 \Cref{tab:data-coverage} I summarise the effective coverage.
 
 \begin{table}[t]\centering
@@ -112,8 +109,7 @@ they lose them at the start to the factor construction. In
     column counts them. Coverage is governed at the early end by the
     availability of each Bloomberg curve and at the recent end by the annual
     GDP weights used for the global factor. The excess-return regressions use
-    $412$ observations for the United States and Japan, which lose months at
-    the start to the factor construction, and the full $353$ for the other
+    $412$ observations for the United States and Japan and $353$ for the other
     nine.}
 \end{table}
 
@@ -167,7 +163,7 @@ steps in my construction need spelling out:
 Missing values arise from the unbalanced panel and from the twelve-month leads
 and lags in the return construction. I propagate them as \texttt{NA} and drop
 them pairwise in each regression. The Japanese core-CPI splice described above is
-the only place where I fill a gap rather than drop it.
+the only place where I fill a gap instead of dropping it.
 
 \paragraph{Summary statistics.}
 In \Cref{tab:dh-t1-summary} I report the mean and standard deviation of yields

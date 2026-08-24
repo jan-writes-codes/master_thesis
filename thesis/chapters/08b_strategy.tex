@@ -100,7 +100,7 @@ passive portfolios on a monthly, one-month-holding basis.\footnote{The wealth
   and drawdown figures rebalance monthly and hold for one month, using a
   one-month excess return on the 10Y global bond portfolio.} The timing strategy ends
 the period ahead, and most of its outperformance accrues from avoiding the
-worst of the bond-market drawdowns rather than from amplifying the good years.
+worst of the bond-market drawdowns, not from amplifying the good years.
 \Cref{fig:strat-exposure} shows the mechanism. The global cycle
 factor cuts bond exposure when it signals a low risk premium and restores it
 when the signal turns favourable, whereas the mean-timing investor holds a
@@ -110,7 +110,7 @@ nearly constant position.
   \includegraphics[width=0.85\linewidth]{figures/strat_f1_cumret.pdf}
   \caption{Cumulative wealth: GCF-timed versus buy-and-hold}
   \label{fig:strat-cumret}
-  \fignotes{Wealth, measured in excess of cash, is cumulated from monthly excess returns on the GDP-weighted ten-year global government bond portfolio, rebalanced monthly with a one-month holding period. The timed portfolio sets its exposure from the mean--variance rule \eqref{eq:strat-weight} using the recursive factor $\GCF^{\mathrm{oos}}_{t}$ and a forecast that respects time~$t$. Both portfolios are scaled to equal average exposure, so the comparison reflects timing rather than leverage. The evaluation window is the period over which the fully-recursive factor is available.}
+  \fignotes{Wealth, measured in excess of cash, is cumulated from monthly excess returns on the GDP-weighted ten-year global government bond portfolio, rebalanced monthly with a one-month holding period. The timed portfolio sets its exposure from the mean--variance rule \eqref{eq:strat-weight} using the recursive factor $\GCF^{\mathrm{oos}}_{t}$ and a forecast that respects time~$t$. Both portfolios are scaled to equal average exposure, so the comparison reflects timing and not leverage. The evaluation window is the period over which the fully-recursive factor is available.}
 \end{figure}
 
 \begin{figure}[t]\centering
@@ -174,7 +174,7 @@ of episodes rather than steady accrual.
   \includegraphics[width=0.85\linewidth]{figures/strat_f4_rolling_sharpe.pdf}
   \caption{Rolling five-year Sharpe ratio}
   \label{fig:strat-rollsr}
-  \fignotes{The rolling Sharpe ratio is computed for the GCF-timed and buy-and-hold portfolios on overlapping twelve-month excess returns within a five-year window, so successive values share observations and the series is descriptive rather than a basis for inference. Both portfolios are at equal average exposure.}
+  \fignotes{The rolling Sharpe ratio is computed for the GCF-timed and buy-and-hold portfolios on overlapping twelve-month excess returns within a five-year window, so successive values share observations and the series is descriptive and should not be used for inference. Both portfolios are at equal average exposure.}
 \end{figure}
 
 The trading intensity of the strategy is modest. Because the global cycle

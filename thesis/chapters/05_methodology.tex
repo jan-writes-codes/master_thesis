@@ -289,20 +289,11 @@ I test in \Cref{ch:results} and stress-test in \Cref{ch:robustness}.
 I estimate every predictive regression by OLS and tailor
 the inference to the overlapping-return structure. The $t$-statistics use
 heteroskedasticity- and autocorrelation-consistent (HAC) Newey--West standard
-errors \citep{neweywest1987}, with the lag length set to
-$\lceil\max(1.5h,\,1.3\sqrt{T}\,)\rceil$ at a forecast horizon of $h=12$
-months. This gives $25$ lags in the nine shorter samples, $27$ in the United
-States and Japan, and $83$ in the pooled panel. For
+errors \citep{neweywest1987} with $18$ lags. For
 multi-regressor specifications I add a joint HAC Wald test that all slopes are
-zero.
-
-% ===========================================================================
-\section{Recursive Out-of-Sample Evaluation}
-\label{sec:meth-oos}
-
-Because the cycle
+zero. Because the cycle
 factors are generated regressors, I re-evaluate them fully
-recursively, rebuilding the entire factor chain
+recursively\label{sec:meth-oos}, rebuilding the entire factor chain
 (decomposition, local regression, and global aggregation) from data available at
 each date $t$ so that both the factor and the forecasting regression respect $t$
 (a ``doubly out-of-sample'' forecast), and scoring it by the
@@ -318,10 +309,8 @@ pooled across countries so that each competes against its own recursive mean and
 applied identically to the Cochrane--Piazzesi comparison factors for the
 head-to-head evidence of \Cref{ch:robustness}.
 
-% ===========================================================================
-\section{Deviations from the Original Studies}
+\paragraph{Deviations from the original studies.}
 \label{sec:meth-deviations}
-
 I collect the departures from \citet{cieslak2015}
 and \citet{dahlquist2013} here. I revisit each of them where it
 bears on the results.
@@ -332,12 +321,9 @@ bears on the results.
     shorter yield.
   \item \textbf{Sample.} The estimation panel spans 1989/1994--2024
     (\Cref{sec:data-coverage}), which is shorter than the original US samples, so I expect the replicated levels to differ
-    from the published numbers. The raw yield curves themselves run to April
-    2026, beyond the end of the estimation window.
+    from the published numbers.
   \item \textbf{Inference.} I replace the exact reverse-regression delta method
-    with Newey--West HAC $t$-statistics, because the delta method needs the
-    underlying monthly returns and is not identified from the twelve-month
-    overlapping panel I construct.
+    with HAC ($18$-lag Newey--West) $t$-statistics.
   \item \textbf{Japanese inflation series.} Japan's FRED core-CPI series ends in
     June 2021, so I splice the LSEG core-CPI index onto it, rescaled at the splice
     month (\Cref{sec:data}). Neither original study meets this problem, since both
