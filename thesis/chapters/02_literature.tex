@@ -5,15 +5,15 @@
 \chapter{Related Literature}
 \label{ch:literature}
 
-In this chapter, I position this thesis in the literature. It draws together
-three strands of research. The first is the rejection of the expectations
-hypothesis in US Treasury markets and the search for the right
-return-forecasting state variable. Then, I go deeper into the macro-finance work that
-anchors yields to slow-moving inflation trends. The third strand is the international
-evidence on common, global bond risk premia. The final discussion point is
-methodological, as out-of-sample evaluation cuts across all three and shapes my
-research design. I review each in turn, moving from the US evidence to the
-international gap this thesis aims to fill. The technical framework I build on
+In this chapter, I position this thesis in the literature.
+\Cref{sec:lit-us} begins with the rejection of the expectations
+hypothesis in US Treasury markets and the search that followed it for the right
+return-forecasting state variable, then turns to the macro-finance work that
+anchors yields to slow-moving inflation trends. \Cref{sec:lit-international}
+takes up the international evidence on common bond risk premia and identifies
+the gap this thesis addresses. Out-of-sample evaluation runs through all of
+this material and shapes the research design of \Cref{ch:methodology}, so I
+return to it at each stage instead of treating it separately. The technical framework I build on
 these ideas (the yield decomposition, the factor hierarchy, the return
 definitions, and the predictive regressions) is developed in
 \Cref{ch:methodology}.
@@ -41,28 +41,28 @@ results establish that the term premium is not constant. It is time-varying and,
 countercyclical, rising in recessions and falling in booms.
 
 Once predictability is accepted, the next question is which variable
-forecasts returns. Three positions can be distinguished. The first position holds
-that the information is contained in the yield curve itself and can be
-distilled into a single combination of forward rates, the forward-rate view
-discussed below. The second holds that macroeconomic
-variables matter beyond the curve. \citet{ludvigson2009} extract factors
+forecasts returns, and the literature has given three broadly different
+answers. One answer keeps the information inside the yield curve and distils
+it into a single combination of forward rates, the forward-rate view
+discussed below. A second looks outside the curve, holding that macroeconomic
+variables matter beyond it. \citet{ludvigson2009} extract factors
 from a large panel of macro series and show that real-activity and
 inflation factors forecast excess returns over and above forward rates and
 yields. This is the empirical origin of ``unspanned'' macro risk, which is
 predictive information that the current yield curve does not reveal.
 \citet{joslin2014} give this idea a no-arbitrage form, with output and
 inflation unspanned by the yield curve yet shaping the prices of level,
-slope, and curvature risk. The final position, articulated by \citet{duffee2011}, holds that a
+slope, and curvature risk. \citet{duffee2011} goes further still, arguing that a
 substantial part of risk-premium variation is hidden from the current
 curve altogether. Such a hidden factor can move expected short rates and term
 premia in offsetting directions, leaving the yield curve nearly unchanged.
 The change in term premia can still be used to forecast returns. The macro-anchored cycle factor at the centre
 of this thesis, which I turn to below, can be seen as a sharpened version
-of the second position, since it relies on one specific, economically
+of that second answer, since it relies on one specific, economically
 interpretable macro variable, namely trend inflation.
 
-Another challenge is an econometric
-one. \citet{bauerhamilton2018} re-examine the published evidence for
+A second challenge is econometric, and it concerns the reliability of the
+tests themselves. \citet{bauerhamilton2018} re-examine the published evidence for
 predictors beyond the level, slope, and curvature of the yield curve and
 argue that much of it is a small-sample artefact. Persistent regressors,
 overlapping returns, and the small-sample bias that \citet{stambaugh1999}
@@ -85,8 +85,8 @@ five-year US Treasuries with an in-sample $R^{2}$ of $0.35$ to $0.44$.
 This roughly triples the explanatory power of the single-spread
 regressions that preceded it. The same factor prices the entire maturity
 spectrum, as the loadings of individual bonds' returns on the factor rise
-smoothly with maturity. This smooth maturity pattern points to one
-return-forecasting factor, not maturity-specific premia. For the
+smoothly with maturity. A single return-forecasting factor produces exactly this smooth maturity
+pattern. For the
 research that followed, the CP factor is largely
 orthogonal to the level, slope, and curvature factors
 that summarise the cross-section of yields, which started the spanning

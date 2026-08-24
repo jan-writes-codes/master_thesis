@@ -52,10 +52,11 @@ variation the trend explains rises from $58\%$ (one year) to $84\%$ (ten).
   \fignotes{Each panel plots two series for one market, the nominal ten-year zero-coupon yield and its fitted trend component $\alpha_{i,10}+\beta_{i,10}\,\trendinf_{i,t}$ from the country-by-country projection \eqref{eq:decomp}. The cycle $\cyc^{(10)}_{i,t}$ is not drawn separately, it is the vertical gap between the two lines. Germany, the UK, Japan and the US are shown for legibility, and the same decomposition is applied to all eleven G10 markets in the analysis that follows. Trend inflation is the backward-looking exponentially weighted moving average of year-on-year core CPI inflation \eqref{eq:trendinf}, with window $M=120$ months and decay $v=0.987$. Yields are from Bloomberg and core CPI from FRED. Vertical scales are free across panels.}
 \end{figure}
 
-Panel~B confirms a single cycle factor: adjacent-maturity cycle correlations are
-near unity ($0.99$) and fall to $0.74$ between the one- and ten-year cycles, and
-the cycles are far less persistent than the yields (half-life $55\to10$ months
-versus $\sim46$--$56$).
+The cycles behave as a single factor. Adjacent-maturity correlations are
+near unity ($0.99$) and fall to $0.74$ between the one- and ten-year cycles.
+Panel~B shows that they are also far less persistent than the yields, with
+half-lives falling from $55$ months to $10$ across the curve against $46$ to
+$56$ for the yields themselves.
 
 The fitted factor $\CF_{t}$ \eqref{eq:cf} correlates $0.69$ with the average
 cycle in my US sample, close to the $0.61$ of \citet{cieslak2015}.
@@ -73,8 +74,9 @@ States, with an OLS fit through the scatter.
 Table~2, Panel~A, one column per predictor set. The yield curve alone explains
 $25\%$ of return variation and adding trend inflation lifts this to $45\%$ (trend loading $t=-3.6$). The
 two-predictor cycle representation recovers $27\%$ with the opposite-signed
-loadings that define the mechanism, and the BIC places essentially all posterior
-weight on the yields-plus-trend specification.
+loadings that define the mechanism. The BIC ranks the yields-plus-trend
+specification first, but only narrowly, since the relative posterior
+probabilities of the other four run from $0.84$ to $0.92$.
 
 \begin{table}[t]
   \caption{Replication of Cieslak--Povala (2015) Table~2, Panel~A: predictive regressions}
@@ -153,7 +155,7 @@ at two years, $30\%$ against $8\%$), with the unusually high Japanese fit
 
 In \Cref{tab:dh-t6} I reproduce Table~6: the global forward factor is
 significant in every market and maturity, the orthogonalised local factor adds
-little outside Italy and Japan, and the joint test rejects everywhere.
+little outside Italy, Belgium and Japan, and the joint test rejects everywhere.
 
 \begin{table}[t]
   \caption{Local and global Cochrane--Piazzesi regressions (DH Table~6)}
@@ -165,8 +167,9 @@ little outside Italy and Japan, and the joint test rejects everywhere.
 \Cref{tab:dh-t7} reproduces Table~7, the US-dollar investor's regressions. The
 unadjusted global forward factor predicts dollar returns only weakly, whereas the
 dollar-return global factor, built top-down on the average dollar return, restores
-predictability (HAC $t$ between $2.0$ and $4.4$. The euro at ten years rises from
-$7\%$ to $22\%$). This motivates the dollar-return global cycle factor of
+predictability, with HAC $t$-statistics running from $1.0$ to $4.4$ and above
+$2.0$ in fifteen of the eighteen cases. The euro at ten years rises from
+$7\%$ to $22\%$. This motivates the dollar-return global cycle factor of
 this thesis. For the cycle family, however, the same top-down adjustment is nearly
 collinear with the unadjusted global cycle factor in the G10, which is why I
 build my dollar-return cycle factor bottom-up instead (\Cref{sec:fw-fxgcf},
