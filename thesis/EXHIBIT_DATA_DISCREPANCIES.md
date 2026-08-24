@@ -142,8 +142,14 @@ correct — they differed from the fresh run only in carrying the pre-rename
 
 ## 5. Verification
 
-- Fresh run reproduces `mr_t1_phase1`, `mr_t1b_maturity`, `mr_t2_phase2`,
-  `mr_t3_phase3` and `mr_t4_oos` with **no numeric differences**.
+- Fresh run reproduces **all eleven** main-results and robustness exhibits with **no
+  numeric differences** — `mr_t1_phase1`, `mr_t1b_maturity`, `mr_t2_phase2`,
+  `mr_t3_phase3`, `mr_t4_oos`, `rob_t1_sub_is`, `rob_t2_sub_oos`, `rob_t3_italy`,
+  `rob_t4_oos_scheme`, `rob_t5_core_vs_reg` and `rob_t6_core_vs_reg_oos`. The only
+  differences anywhere were the pre-rename *"FX-adjusted"* labels in three of them.
+- Every decimal in the robustness `.tex` files was matched against the fresh R
+  output, including `rob_t2_sub_oos` and `rob_t4_oos_scheme`, which the earlier audit
+  had not listed either way. All clean.
 - Clean rebuild — 0 errors, 0 undefined references, 0 multiply-defined labels,
   0 overfull boxes, no `??`, 83 pages.
 - Zero occurrences of `FX-adjusted` or `FX-adj` anywhere in the rendered PDF,
@@ -153,10 +159,16 @@ correct — they differed from the fresh run only in carrying the pre-rename
 
 ## 6. What this does not cover
 
-`strategy.R` and `empirical.R` were not re-run, so `strat_t4_subperiod`,
-`strat_t5_costs`, `cp_t1`, `dh_t1b_inputs`, `fxd_t1_properties`, `mr_t2b_gcf_corr`
-and `mr_t2c_fx_cycle` remain unverified against fresh output. None of them has a
-committed PDF, so they cannot be checked the cheap way either. They were not
-implicated in any of the three defects found, but the lesson of §3 is that a table
-outside the main pipeline can go stale silently, and `fxd_t1_properties` and
-`mr_t2c_fx_cycle` are the ones most exposed to the Japan splice.
+`strategy.R`, `empirical.R`, `fxgcf_dynamics.R` and `sensitivity_vm.R` were not
+re-run, so `strat_t4_subperiod`, `strat_t5_costs`, `cp_t1`, `dh_t1b_inputs`,
+`fxd_t1_properties`, `mr_t2b_gcf_corr`, `mr_t2c_fx_cycle` and `rob_t8_vm_sens`
+remain unverified against fresh output. None of them has a committed PDF, so they
+cannot be checked the cheap way either.
+
+They were not implicated in any of the three defects found, and the eleven exhibits
+that *were* re-run came back numerically identical, which is reassuring about the
+data layer as a whole. The residual concern is narrower than it was. The lesson of
+§3 is specifically that a table built **outside the main pipeline** can go stale
+silently, so the exposed ones are `fxd_t1_properties` (from `fxgcf_dynamics.R`) and
+`rob_t8_vm_sens` (from `sensitivity_vm.R`), both of which touch the Japan splice
+through the cycle factors.
