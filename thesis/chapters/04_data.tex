@@ -32,7 +32,7 @@ Swiss franc (CHF), pound sterling (GBP), Japanese yen (JPY), Swedish krona
 (SEK), and US dollar (USD). The US dollar serves as the home currency for the
 international investor.
 
-I obtain four raw inputs for my analysis, drawn from two data providers:
+I obtain four raw inputs for my analysis, drawn from three data providers:
 
 \begin{description}[leftmargin=1.5em, style=nextline]
   \item[Zero-coupon yields (Bloomberg).] I obtain end-of-month yields from
@@ -79,8 +79,11 @@ April 1989 respectively. The remaining nine countries begin in December 1994,
 and the estimation sample runs through April 2024, although the raw yield curves
 themselves extend to April 2026. This yields $422$ monthly
 observations for the US, $421$ for Japan, and $353$ for each of the other
-countries. The excess-return regressions use somewhat fewer after the factor
-construction and the twelve-month return horizon. In
+countries. The excess-return regressions then use $412$ observations for the
+United States and Japan and $353$ for each of the others. The twelve-month
+horizon costs nothing at the recent end, because the raw curves run past the
+end of the estimation window, so only the two long samples lose months, and
+they lose them at the start to the factor construction. In
 \Cref{tab:data-coverage} I summarise the effective coverage.
 
 \begin{table}[t]\centering
@@ -109,8 +112,9 @@ construction and the twelve-month return horizon. In
     column counts them. Coverage is governed at the early end by the
     availability of each Bloomberg curve and at the recent end by the annual
     GDP weights used for the global factor. The excess-return regressions use
-    somewhat fewer observations after the factor construction and the
-    twelve-month return horizon.}
+    $412$ observations for the United States and Japan, which lose months at
+    the start to the factor construction, and the full $353$ for the other
+    nine.}
 \end{table}
 
 My panel is therefore unbalanced. I handle this throughout by computing
@@ -167,9 +171,9 @@ the only place where I fill a gap rather than drop it.
 
 \paragraph{Summary statistics.}
 In \Cref{tab:dh-t1-summary} I report the mean and standard deviation of yields
-for every country--maturity pair. Two features are consistent
-across countries. First, average yield curves slope upward in maturity. Second,
-volatility is broadly flat across the maturity spectrum. The short end is
+for every country--maturity pair. Average yield curves slope upward in
+maturity in every country, and volatility is broadly flat across the maturity
+spectrum. The short end is
 somewhat more volatile in the United States, the United Kingdom, Italy, and
 Japan, whereas in much of the euro area the long end is marginally more
 volatile. In \Cref{fig:yield-curve-avg} I show the average curve shapes.

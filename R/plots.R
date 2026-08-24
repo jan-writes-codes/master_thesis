@@ -373,7 +373,7 @@ plots$s5_gcf <- ggplot() +
             colour = "grey80", linewidth = 0.3) +
   geom_line(data = gcf, aes(date, GCF), colour = col_pri, linewidth = 0.8) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  labs(title = "Global cycle factor (GDP-weighted, eq 7-8)",
+  labs(title = "Global cycle factor (GDP-weighted)",
        subtitle = "Heavy line: global cycle factor GCF. Light lines: country-level local factors.",
        y = "Factor value", x = NULL) +
   theme_thesis
@@ -385,7 +385,7 @@ plots$s5_gdp_weights <- reg_data %>%
   geom_area(position = "fill") +
   scale_y_continuous(labels = percent_format()) +
   scale_fill_manual(values = country_palette) +
-  labs(title = TeX("GDP weights $w_{i,t}$ across the panel (eq 8)"),
+  labs(title = TeX("GDP weights $w_{i,t}$ across the panel"),
        y = "Weight", x = NULL, fill = NULL) +
   theme_thesis
 
@@ -654,7 +654,7 @@ plots$s9_hr_tstats <- hr_results %>%
   geom_hline(yintercept = 0, colour = "grey30") +
   scale_fill_manual(values = c("Local (CF_perp)" = col_pri,
                                "Global (GCF)"    = col_sec), name = NULL) +
-  labs(title = "DH horse-race (Eq 19): per-country HAC t-statistics",
+  labs(title = "DH horse-race: per-country HAC t-statistics",
        subtitle = TeX("$rx_{t+12} = a + \\beta\\, CF^{\\perp} + \\gamma\\, GCF + \\varepsilon$ -- dashed lines at $\\pm 1.96$"),
        x = NULL, y = "HAC t-statistic") +
   theme_thesis +

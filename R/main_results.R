@@ -22,7 +22,7 @@
 #             horse race rx_bar ~ CF_perp + GCF, CF_perp = CF orthogonal to GCF
 #             (Eq 19-20 / h-horse, h-global).
 # Phase III : does currency risk break the model, and does the dollar-return
-#             factor restore it? rx_USD ~ GCF (Eq 22) vs rx_USD ~ FXGCF (Eq 23).
+#             factor restore it? rx_USD ~ GCF vs rx_USD ~ FXGCF.
 # =============================================================================
 
 suppressPackageStartupMessages({
@@ -127,13 +127,13 @@ mr_tables$mr_t1_phase1 <- table_to_grob(
                  "effects. In-sample R^2. Sample as in Table 4.1."),
   base_size = 8)
 
-# Figure: in-sample R^2 of rx ~ CF by country (Eq 18).
+# Figure: in-sample R^2 of rx ~ CF by country.
 mr_plots$mr_f1_r2_phase1 <- run_by_country(panel, rx_t12 ~ CF) %>%
   dplyr::filter(term == "CF") %>%
   ggplot2::ggplot(ggplot2::aes(stats::reorder(country, r_sq), r_sq)) +
   ggplot2::geom_col(fill = col_pri) +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  ggplot2::labs(title = expression(paste("In-sample ", R^2, " of ", rx %~% CF, " by country (Eq 18)")),
+  ggplot2::labs(title = expression(paste("In-sample ", R^2, " of ", rx %~% CF, " by country")),
                 x = NULL, y = expression(R^2)) +
   theme_thesis
 
@@ -415,13 +415,13 @@ mr_tables$mr_t3_phase3 <- table_to_grob(
 
 # Figure: USD-investor R^2, GCF vs FXGCF, by country.
 mr_plots$mr_f3_usd_r2 <- phase3 %>%
-  dplyr::select(country, `rx_USD ~ GCF (Eq 22)` = r2_g, `rx_USD ~ FXGCF (Eq 23)` = r2_f) %>%
+  dplyr::select(country, `rx_USD ~ GCF` = r2_g, `rx_USD ~ FXGCF` = r2_f) %>%
   tidyr::pivot_longer(-country, names_to = "model", values_to = "r_sq") %>%
   ggplot2::ggplot(ggplot2::aes(country, r_sq, fill = model)) +
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.75) +
   ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  ggplot2::scale_fill_manual(values = c("rx_USD ~ GCF (Eq 22)" = col_pri,
-                                        "rx_USD ~ FXGCF (Eq 23)" = col_sec), name = NULL) +
+  ggplot2::scale_fill_manual(values = c("rx_USD ~ GCF" = col_pri,
+                                        "rx_USD ~ FXGCF" = col_sec), name = NULL) +
   ggplot2::labs(title = expression(paste("Phase III: US-dollar-investor ", R^2, ": GCF vs dollar-return FXGCF")),
                 subtitle = "Value of the currency adjustment for a US-dollar investor",
                 x = NULL, y = expression(R^2)) +
@@ -433,10 +433,10 @@ mr_plots$mr_f4_gcf_fxgcf <- fxgcf %>%
   dplyr::filter(!is.na(GCF), !is.na(FXGCF)) %>%
   ggplot2::ggplot(ggplot2::aes(date)) +
   ggplot2::geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
-  ggplot2::geom_line(ggplot2::aes(y = GCF,   colour = "GCF (Eq 7)"),   linewidth = 0.5) +
-  ggplot2::geom_line(ggplot2::aes(y = FXGCF, colour = "FXGCF (Eq 23)"), linewidth = 0.5) +
-  ggplot2::scale_colour_manual(values = c("GCF (Eq 7)" = col_pri,
-                                          "FXGCF (Eq 23)" = col_sec), name = NULL) +
+  ggplot2::geom_line(ggplot2::aes(y = GCF,   colour = "GCF"),   linewidth = 0.5) +
+  ggplot2::geom_line(ggplot2::aes(y = FXGCF, colour = "FXGCF"), linewidth = 0.5) +
+  ggplot2::scale_colour_manual(values = c("GCF" = col_pri,
+                                          "FXGCF" = col_sec), name = NULL) +
   ggplot2::labs(title = "Global cycle factor vs dollar-return global cycle factor",
                 subtitle = sprintf("Correlation = %.2f over the common sample", gcf_fxgcf_rho),
                 x = NULL, y = "Factor value") +

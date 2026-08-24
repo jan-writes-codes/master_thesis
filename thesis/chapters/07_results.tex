@@ -140,7 +140,7 @@ $\rxbar_{i,t+12}=\alpha_i+\beta_i\,\CF^{\perp}_{i,t}+\gamma_i\,\GCF_{t}
   \includegraphics[width=0.9\linewidth]{figures/mr_f2_hr_tstats.pdf}
   \caption{Phase~II horse race: per-country HAC $t$-statistics}
   \label{fig:mr-hr-tstats}
-  \fignotes{Each pair of bars reports the Newey--West HAC $t$-statistics with $18$ lags on the orthogonalised local factor $\CF^{\perp}_{i,t}$ and on the global factor $\GCF_{t}$ in the joint regression \eqref{eq:h-horse}, country by country. Dashed lines mark $\pm1.96$. The orthogonalised local factor is the residual of $\CF_{i,t}$ on $\GCF_{t}$ \eqref{eq:cf-perp}, so its coefficient measures incremental local content. Returns are the duration-standardised, maturity-averaged local-currency excess returns \eqref{eq:rxbar}, and the twelve-month horizon makes the residuals overlapping.}
+  \fignotes{Each pair of bars reports the Newey--West HAC $t$-statistics on the orthogonalised local factor $\CF^{\perp}_{i,t}$ and on the global factor $\GCF_{t}$ in the joint regression \eqref{eq:h-horse}, country by country. Dashed lines mark $\pm1.96$. The orthogonalised local factor is the residual of $\CF_{i,t}$ on $\GCF_{t}$ \eqref{eq:cf-perp}, so its coefficient measures incremental local content. Returns are the duration-standardised, maturity-averaged local-currency excess returns \eqref{eq:rxbar}, and the twelve-month horizon makes the residuals overlapping.}
 \end{figure}
 
 The evidence favours a strong but incomplete form of integration.
@@ -262,11 +262,12 @@ interpretation in \Cref{ch:discussion}.
   \fignotes{The two lines are the global cycle factor $\GCF_{t}$ \eqref{eq:gcf}, built from local-currency returns, and the dollar-return global cycle factor $\FXGCF_{t}$ \eqref{eq:fxgcf}, built bottom-up as the GDP-weighted average of the per-country USD cycle factors. Both use the same weights, so any difference between them is attributable to the return currency alone. They share the global cycle but remain distinct, correlating $0.81$ over the common sample, the span on which both factors are defined.}
 \end{figure}
 
-The answer to the last research question is twofold. Currency risk
+Currency risk
 does break the global-factor predictability for an unhedged dollar investor in
 most markets and cuts the average $R^{2}$ from $25\%$ to $9\%$. The dollar-return global cycle factor restores a large part of this
 predictability in sample, raising the average fit to $14\%$ and restoring
-significance in ten of eleven markets. Before I ask whether this in-sample
+significance in ten of eleven markets. Together these answer the last research
+question. Before I ask whether this in-sample
 recovery survives in real time, I look more closely at how the two global
 factors relate to one another over the sample, because this relationship is
 what decides whether the FX adjustment can matter at all.
@@ -348,8 +349,7 @@ dispersion $0.71$). The brief decoupling at the right edge of
   \fignotes{The upper panel repeats the trailing $36$-month rolling correlation of $\GCF_{t}$ and $\FXGCF_{t}$. The lower panel plots the GDP-weighted G10 one-year yield, smoothed with a $36$-month moving average so that it is measured over the same window as the correlation above it. The two plotted series correlate $-0.42$, so the factors are most distinct when rates are high and differentials wide, and collapse onto each other at the synchronised zero lower bound. The reported $-0.42$ is between the two plotted series, not between the underlying factors.}
 \end{figure}
 
-This dynamic reconciles two facts. It
-explains why my full-sample FX adjustment recovers less than
+This dynamic explains why my full-sample FX adjustment recovers less than
 \citet{dahlquist2013} report. Their forward-rate factor retains the
 rate-level information that drives carry and their sample is weighted towards
 the high-differential decades. My detrended cycle factor removes the level and
@@ -411,8 +411,9 @@ the eleven markets, as \Cref{fig:mr-oos} shows, which plots the recursive $R^{2}
 local and global factors side by side for each market. Aggregating the eleven
 national cycles into one GDP-weighted factor averages away the country-specific
 estimation noise that causes the local factor to fail, so the global factor
-predicts out of sample where the local factor cannot. In this thesis, this is strong
-support for integration. The global cycle factor is the more efficient in-sample factor, it is the only cycle factor with real-time predictive content. This real-time predictability is
+predicts out of sample where the local factor cannot. This is strong
+support for integration. The global cycle factor matches the local factors in
+sample and is the only cycle factor with real-time predictive content. This real-time predictability is
 also economically exploitable. In \Cref{ch:strategy}, I turn the global factor into
 a bond-timing strategy for a currency-hedged investor and show that it raises
 the Sharpe ratio of a global bond portfolio and delivers a positive
@@ -465,13 +466,13 @@ The three phases combine into a consistent account of international
 bond-return predictability through the lens of the macro-anchored cycle. First,
 the cycle factor of \citet{cieslak2015} generalises to the G10. It
 predicts one-year excess returns with the theoretically predicted sign structure
-in all eleven markets and with an average in-sample $R^{2}$ of $25\%$. Furthermore, this predictability is overwhelmingly a global phenomenon. A single GDP-weighted
+in all eleven markets and with an average in-sample $R^{2}$ of $25\%$. Second, this predictability is overwhelmingly a global phenomenon. A single GDP-weighted
 global cycle factor is significant in every market and matches the explanatory
 power of the local factors. Once it is included, local predictability
 survives in only three of the eleven markets. The evidence thus supports strong,
-though not complete, integration of government bond risk premia. This is the
-central message of \citet{dahlquist2013}, now established for the cycle factor
-rather than the forward-rate factor. Last, the global investor's problem is
+though not complete, integration of government bond risk premia.
+\citet{dahlquist2013} establish the same result for the forward-rate factor,
+and it now holds for the cycle factor as well. Third, the global investor's problem is
 currency risk. Dollar conversion erases most of the global
 factor's predictive power for the unhedged investor. The bottom-up dollar-return factor recovers much of
 it in-sample, raising the average dollar-investor $R^{2}$ from $9\%$
@@ -488,8 +489,8 @@ this real-time edge is much smaller than its in-sample fit and, as
 predictability is therefore led by the global cycle factor, with the FX
 adjustment recovering a real but conditional edge for the currency-converted
 investor. The contrast between the local factor's strong in-sample fit and its
-negative out-of-sample $R^{2}$ is a considerable sign that global predictability
-deserves my attention.
+negative out-of-sample $R^{2}$ is the clearest indication that global
+predictability is the finding that matters.
 
 I develop the summary out-of-sample evidence above in full, per country, across
 subsamples, and against the forward-rate factor, in \Cref{ch:robustness}, and I
