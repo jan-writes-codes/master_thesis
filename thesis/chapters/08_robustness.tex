@@ -61,7 +61,7 @@ the baseline five-year minimum but turns negative under both a three-year
 ($-0.12$) and a seven-year ($-0.10$) minimum. Its eleven per-country USD
 regressions have less stable recursive coefficients than the single global
 aggregate, and shifting the training minimum shifts which early forecasts
-enter the evaluation window. I read this as a caution. The dollar-return
+enter the evaluation window. I would not push the dollar-return result further than this. The dollar-return
 factor's real-time edge exists at the baseline but is not a robust feature of
 every reasonable scheme.
 
@@ -109,7 +109,7 @@ from 2013 onward. The two crisis windows are short, with thirty and thirty-six
 forecast origins respectively, so the $t$-statistics they produce are by
 construction noisier than the full-sample figures, and the in-sample $R^{2}$ in
 short, volatile windows is mechanically higher. The point of the exercise is
-therefore the pattern across windows, not the precise level in any one of them.
+therefore the pattern across windows, and I treat the level in any single window as indicative.
 
 In \Cref{tab:rob-sub-is}, I report the in-sample results. The local-currency
 cycle predictability is present in every subsample and never collapses.
@@ -138,8 +138,8 @@ $t$-statistics turn negative ($-2.1$ for FXGCF, $-1.6$ for GCF). The strong
 full-sample dollar-investor fit that I document in \Cref{sec:res-phase3} is
 therefore largely a pre-2008 phenomenon. Once the post-crisis currency regime
 of near-zero rate differentials and synchronised monetary policy sets in
-(\Cref{sec:res-phase3}), the cyclical signal in dollar returns disappears. I read this as a
-limitation of the dollar-return factor rather than a firm conclusion, and the
+(\Cref{sec:res-phase3}), the cyclical signal in dollar returns disappears. This is a
+limitation of the dollar-return factor, and I do not treat it as settled, though the
 subsample evidence states it more sharply than the pooled regression can.
 
 \begin{table}[t]
@@ -224,7 +224,7 @@ fast-moving forward curve, is therefore no accident, and it underpins the
 global factor's real-time stability. The integration finding of
 \Cref{ch:results} is stronger for the cycle factor than for the forward factor.
 \citet{dahlquist2013} established global integration in-sample for four markets
-with the forward-rate factor, whereas I establish it out-of-sample across the
+with the forward-rate factor, whereas I establish it out of sample across the
 G10 with the macro-anchored cycle.
 
 \begin{figure}[t]\centering
@@ -281,7 +281,7 @@ global cycle factor's real-time advantage, which is the central finding of
 \Cref{sec:res-oos}, survives on core CPI ($R^{2}_{\mathrm{oos}}=+0.05$) but
 disappears on headline CPI ($-0.02$). The local factor remains negative under
 both, while the dollar-return factor is the exception. It is slightly
-better on headline ($+0.035$ versus $+0.021$). A plausible reading is
+better on headline ($+0.035$ versus $+0.021$). One explanation is
 that the energy-price component that contaminates the headline trend also moves
 exchange rates \citep{ferraro2015} and is therefore not pure noise for a
 dollar-return factor. \Cref{tab:rob-core-headline-oos} reports the out-of-sample
@@ -298,11 +298,13 @@ not pass through to the yield curve, inflate the headline trend.
 \section{Sensitivity to Construction Choices}
 \label{sec:rob-sensitivity}
 
-The following construction choices underlie the cycle factor, and it is worth stating how
-much my results depend on each of them. The first is the exponentially-weighted
-moving average that defines trend inflation, with decay parameter $v=0.987$ and
-window $M=120$ months. These values follow \citet{cieslak2015} directly, and the
-cycle factor inherits its robustness to them from the nature of the object.
+Three construction choices underlie the cycle factor, and it is worth stating how
+much my results depend on each of them.
+
+Trend inflation is an exponentially-weighted
+moving average with decay parameter $v=0.987$ and
+window $M=120$ months, both following \citet{cieslak2015} directly. The
+cycle factor inherits its robustness to these values from the nature of the object.
 Trend inflation is a deliberately slow-moving anchor, so moderate changes in the
 decay weight or the window length shift the estimated trend by small amounts and
 leave the cycle, the residual of yields on this trend, and hence the factor
@@ -315,16 +317,20 @@ baseline, rising above $0.98$ for the slow-decay specifications closest to it.
 Only the fastest decay ($v=0.859$) moves the factor
 considerably, and even then it stays highly correlated with the baseline. At that
 decay the window length is immaterial because the weights beyond five years are
-already negligible. The second is the maturity grid used to form the cycle and the
-excess return. The one-, two-, four-, five-, nine-, and ten-year points available
-in the data, summarised by the duration-standardised, maturity-averaged return
+already negligible.
+
+The cycle and the excess return are formed on the maturity grid available in
+the data, at one, two, four, five, nine, and ten years, and summarised by the
+duration-standardised, maturity-averaged return
 \eqref{eq:rxbar}. In \Cref{sec:res-phase1}, I showed that the predictability
 holds at each individual maturity, not only for the average, with loadings that
-are flat-to-rising across the curve. The maturity-averaged factor is thus a
-summary of a curve-wide phenomenon and not an artefact of any single segment. And the third is the GDP weighting of the global factor, which I compute each
-month over the countries in the panel so that the weights sum to one. Because the
-global factor is dominated by the large core economies whose cycles co-move
-strongly, the aggregate is not sensitive to the precise weighting of the smaller
+are flat-to-rising across the curve, so the maturity-averaged factor summarises
+a curve-wide phenomenon.
+
+The global factor is GDP-weighted, with weights recomputed each
+month over the countries present in the panel so that they sum to one. Because the
+aggregate is dominated by the large core economies whose cycles co-move
+strongly, it is not sensitive to the precise weighting of the smaller
 markets.
 
 \begin{table}[t]

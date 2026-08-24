@@ -26,8 +26,7 @@ future short rates plus at most a constant term premium,%
 \end{equation*}
 so excess returns from holding longer maturities should not be forecastable,
 because whatever is known today about future short rates is already priced
-into the curve. The EH is the null hypothesis of bond pricing.
-However, it fails empirically. Four decades of evidence on US treasuries
+into the curve. The EH is the null hypothesis of bond pricing, and it fails empirically. Four decades of evidence on US treasuries
 document that excess returns are forecastable with information available at
 the start of the holding period. This evidence begins with the forward--spot
 spread of \citet{famabliss1987} and the yield spread regressions of
@@ -47,9 +46,9 @@ remains which macroeconomic forces drive the premium.
 forecast bond returns above the information in the yield curve, and
 \citet{cieslak2015} provide a clear economic mechanism. They
 decompose nominal yields into a slow-moving trend-inflation component and
-transitory cycles. The first is a discounted moving average of past core
-inflation which serves as an anchor and the latter are the deviations from
-it. A single cycle
+transitory cycles. Trend inflation is a discounted moving average of past core
+inflation and anchors the level of the curve. The cycles are what remains once
+that anchor is removed. A single cycle
 factor built from these detrended yields predicts US Treasury excess
 returns more strongly than the CP factor and subsumes it.
 The economic intuition is that the trend pins down where yields will settle,
@@ -142,15 +141,16 @@ country's dollar excess return is projected on its own cycles and
 aggregated with GDP weights, isolating the component of the
 cycles that is informative for a US investor's currency-converted returns.
 
-Three features distinguish my evidence from similar factors in previous research. The
-first is breadth. Relative to the four markets of \citet{dahlquist2013} and
-\citet{zhang2021}, I cover the full G10 cross-section of eleven markets,
-including Italy, the one periphery market in the euro area. The second is the
-predictive object. While \citet{zhang2021} add inflation and real-rate
-trends to yield-curve regressions, I carry the cycle-factor construction
-itself abroad, so that the US benchmark and the international evidence are
-directly comparable factor by factor. The third is real-time evaluation. I
-re-estimate all factors fully recursively and score them with the out-of-sample $R^{2}$. I complement this with a crisis-subsample
+My evidence differs from the closest existing work in three ways that govern
+what it can be compared against. \citet{dahlquist2013} and
+\citet{zhang2021} each work with four markets, whereas I cover all eleven G10
+markets, and among them Italy, the one euro-area periphery market in the
+group. \citet{zhang2021} also stop at adding inflation and real-rate
+trends to yield-curve regressions, while I carry the cycle-factor construction
+itself abroad, which makes the US benchmark and the international evidence
+comparable factor by factor. Every factor here is then
+re-estimated fully recursively and scored with the out-of-sample $R^{2}$, a
+standard the existing macro-anchored work has not applied. I complement this with a crisis-subsample
 analysis, a horse race against the global forward-rate factor, a
 core-versus-headline-inflation comparison and a market-timing strategy.
 I also
