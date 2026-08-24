@@ -10,16 +10,19 @@ scratch — 0 errors, 0 undefined references, 0 multiply-defined labels, 0 overf
 boxes, no `??`, and zero occurrences of `we`, `our`, `us`, `FX-adjusted` or
 `Chapter A/B`.
 
-**The 7 open items all need the author or the supervisor, not an edit:**
-1. 🔴 **X-2** — **three** tables disagree with the R output, all traceable to the
-   commit that propagated the Japan imputation. Re-run the pipeline, or transcribe
-   from the committed PDFs? Full write-up in `EXHIBIT_DATA_DISCREPANCIES.md`.
-2. **X-3** — two table files that no chapter includes. Drop them or wire them in.
-3. **S-84 / Q-2** — whether the contribution statement deliberately omits the local
+**The 6 open items all need the author or the supervisor, not an edit:**
+1. **X-3** — two table files that no chapter includes. Drop them or wire them in.
+2. **S-84 / Q-2** — whether the contribution statement deliberately omits the local
    factor.
-4. **Q-1, Q-6, Q-7** — for the supervisor: what to send her from the robustness
+3. **Q-1, Q-6, Q-7** — for the supervisor: what to send her from the robustness
    chapter she read quickly, the follow-up meeting she offered, and whether the
    Japanese core-CPI splice warrants a robustness check of its own.
+
+**X-2 is now closed.** The pipeline was re-run and all three stale tables were
+corrected from fresh output. `rob_t7` turned out to be worse than first diagnosed —
+all four of its rows had drifted, not two cells, because it is transcribed from
+`fxgcf_comparison/`, a directory the Japan-imputation commit never touched. Full
+write-up in `EXHIBIT_DATA_DISCREPANCIES.md`.
 
 **Build note:** the thesis compiles with `latexmk -pdf main.tex` (0 errors). Two cheap
 regression checks to run after every batch of edits:
@@ -767,10 +770,13 @@ These are the highest-leverage items. Each one is a full-document sweep.
       `fxd_t1_properties` agrees with the text. Commit `57e223f` states in its own
       message that the Japan imputation moved this from **0.78 to 0.81**, and
       `rob_t7` is **not among the tables that commit updated**. Its pooled
-      $R^{2}_{\mathrm{oos}}$ (+0.019 against Table 4's 0.021) is stale for the same
+      $R^{2}_{\mathrm{oos}}$ (+0.019 against Table 4's 0.021) was stale for the same
       reason. **`rob_t7` has no committed PDF**, so the X-2 comparison could not have
-      caught it — her cross-reference did. Written up as §3 of
-      `EXHIBIT_DATA_DISCREPANCIES.md`. **Number not changed**, it belongs to X-2.
+      caught it — her cross-reference did. ✅ **Now fixed.** The re-run showed **all
+      four rows** had drifted rather than the two cells first diagnosed, since the
+      table is transcribed from `fxgcf_comparison/`, which `57e223f` never touched.
+      The baseline row now reads **0.81** and **+0.021**, agreeing with the text and
+      with Table 4. Written up as §3 of `EXHIBIT_DATA_DISCREPANCIES.md`.
 - [ ] **S-84** (p.61) The **contribution statement appears to drop the local factor** — is
       there a specific reason? *(→ Q-2)*
 
@@ -801,36 +807,37 @@ These are the highest-leverage items. Each one is a full-document sweep.
 
 ## Part 2b — Found by compiling (NOT flagged by the supervisor)
 
-- [ ] **X-2 · Two exhibit tables disagree with the R output in the repo.** 🔴 **HIGH —
-      needs the author, cannot be settled without re-running the pipeline**
-      The `.tex` tables are hand-transcribed from R-generated PDFs that are committed
-      alongside them (`thesis/tables/*.pdf`). Comparing the decimal values in each
-      `.tex` against its `.pdf` shows **two genuine mismatches**, both traceable to the
-      commit **`57e223f` "Propagate Japan imputation to all exhibit tables"**
-      (2026-07-11):
+- [x] **X-2 · Three exhibit tables disagreed with the R output.** ✅ **FIXED by a
+      pipeline re-run**
+      The `.tex` tables are hand-transcribed from R-generated PDFs committed alongside
+      them (`thesis/tables/*.pdf`). All three defects trace to commit **`57e223f`
+      "Propagate Japan imputation to all exhibit tables"** (2026-07-11):
       - 🔴 **`mr_t1b_maturity` — Table B.1, "Phase I by maturity".** That commit
-        regenerated the **PDF** but never updated the **`.tex`**, which was last
-        touched on 2026-06-11 in a commit labelled *"conversion in progress"*. **The
-        propagation missed this table.** Japan's two-year row reads
-        **$0.57$ / $(1.97)$ / $0.126$** in the thesis against
-        **$0.56$ / $(2.32)$ / $0.173$** in the current R output, and the pooled row
-        differs in the last digit ($14.32$ vs $14.33$, $0.253$ vs $0.254$,
-        $15.44$ vs $15.56$).
-      - ⚠️ **`mr_t2_phase2` — Table 5, Phase II.** Both sides were touched by the same
-        commit, yet Switzerland's two $p$-value cells read **$0.012$** in the thesis
-        and **$0.010$** in the R output. Looks like a transcription slip. Neither
-        value changes any significance statement, but the number is wrong.
+        regenerated the **PDF** but never updated the **`.tex`**. Japan's three rows
+        and the pooled row are now corrected, e.g. Japan's two-year row
+        $0.57$ / $(1.97)$ / $0.126$ → **$0.56$ / $(2.32)$ / $0.173$**.
+      - ⚠️ **`mr_t2_phase2` — Table 5, Phase II.** A transcription slip. Switzerland's
+        two $p$-value cells read $0.012$ against $0.010$ in the R output. Corrected.
+      - 🔴 **`rob_t7_fxgcf_construction` — Table 20.** Raised by the supervisor's
+        *"0.81 — is this consistent with Table 6.5?"*. **All four rows** had drifted,
+        not the two cells first diagnosed, because this table is transcribed from
+        `fxgcf_comparison/`, a directory `57e223f` never touched. That script was
+        re-run and the table rebuilt from its output.
+      **Key setup detail for anyone re-running this.** The pipeline's default
+      `FXGCF_METHOD` is `td_gdp`, but the thesis baseline is **bottom-up**. Only
+      `FXGCF_METHOD=bu_gdp` reproduces the committed exhibits.
+      **Verified:** the fresh run reproduces `mr_t1_phase1`, `mr_t1b_maturity`,
+      `mr_t2_phase2`, `mr_t3_phase3` and `mr_t4_oos` with no numeric differences, so
+      the environment matches the one the exhibits were built in.
       **Not defects — checked and cleared:** `dh_t3_cp_corr`, `dh_t4_fb_cp`,
-      `dh_t6_local_global` and `dh_t7_usd` also differ, but in the **opposite
-      direction** — their `.tex` was updated by `57e223f` while their `.pdf` has not
-      been regenerated since 2026-06-08. There the thesis is current and the PDF is
-      the stale artefact. `dh_t1_corr10y`, `dh_t1_summary`, `mr_t4_oos`,
-      `rob_t1_sub_is`, `rob_t5_core_vs_reg`, `rob_t6_core_vs_reg_oos` and
-      `strat_t2_usd` **match exactly**.
-      📄 **Full cell-by-cell write-up in `EXHIBIT_DATA_DISCREPANCIES.md`**, including
-      the effect on the surrounding prose (checked sentence by sentence — almost
-      nothing changes) and the two options for fixing it. **No reported number has
-      been changed**; that is the author's call.
+      `dh_t6_local_global` and `dh_t7_usd` differ in the **opposite direction** —
+      their `.tex` was updated by `57e223f` while their `.pdf` has not been
+      regenerated since 2026-06-08. There the thesis is current and the PDF is the
+      stale artefact. `dh_t1_corr10y`, `dh_t1_summary`, `mr_t4_oos`, `rob_t1_sub_is`,
+      `rob_t5_core_vs_reg`, `rob_t6_core_vs_reg_oos` and `strat_t2_usd` **match
+      exactly**.
+      📄 **Full write-up in `EXHIBIT_DATA_DISCREPANCIES.md`**, including the prose
+      checks and the three sentences in `08_robustness.tex` that were updated with it.
 
 - [x] **X-4 · The Japanese core-CPI splice was undocumented, and the thesis said the
       opposite.** ✅ **DOCUMENTED** *(found while investigating X-2)*
@@ -908,23 +915,26 @@ squarely under her instruction to check cross-references systematically (G-13).
 - [x] **NUM-2** The **1.4% vs 1.5%** figure on p.44. *(S-80)*
       ✅ **RESOLVED without author input.** 1.43% rounds to 1.4%. See **S-80**.
 - [x] **NUM-3** The **0.81** on p.61 vs **Table 6.5**. *(S-83)*
-      🔴 **RESOLVED as a real defect.** Table 20 is stale at 0.78. See **S-83** and
-      §3 of `EXHIBIT_DATA_DISCREPANCIES.md`. Fix belongs to **X-2**.
+      🔴 **RESOLVED as a real defect, now fixed.** Table 20 was stale at 0.78 and
+      reads **0.81** after the pipeline re-run. See **S-83** and §3 of
+      `EXHIBIT_DATA_DISCREPANCIES.md`.
 - [x] **NUM-4** The **9% dollar-return figure** — Sweden only, or general? *(S-67)*
       ✅ **RESOLVED without author input** — cross-country mean (0.0855), not Sweden
       (0.074). See **S-67**.
 - [x] **NUM-5** Re-check **every remaining cross-reference and reported number** against the
       current exhibits, since renumbering (G-6) and restructuring (STR-1..4) will move them.
+      ✅ **DONE.** Every table with a committed PDF was compared cell by cell (X-2),
+      every cross-reference was resolved by the compiler with **0 undefined and 0
+      `??`**, and every forward equation reference was checked by position (G-7).
+      The **eight tables with no committed PDF** were the residual risk, and the
+      pipeline re-run under X-2 cleared the main-results and robustness families and
+      caught `rob_t7`. What is still unverified against fresh output is listed in §6
+      of `EXHIBIT_DATA_DISCREPANCIES.md`.
 
 ---
 
 ## Part 4 — Questions back to the supervisor
 
-      ✅ **DONE as far as it can be done without re-running R.** Every table with a
-      committed PDF was compared cell by cell (X-2), every cross-reference was
-      resolved by the compiler with **0 undefined and 0 `??`**, and every forward
-      equation reference was checked by position (G-7). The residual risk is the
-      **eight tables with no committed PDF**, which only a pipeline re-run can clear.
 - [ ] **Q-1** She read **Chapter 6 (Robustness)** more quickly and offered to look at anything
       more closely. → Decide what to send back: candidates are the **OOS estimation-scheme
       stress test**, the **core-vs-regional CPI variants**, and the **FXGCF construction
