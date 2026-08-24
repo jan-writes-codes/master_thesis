@@ -1,22 +1,61 @@
-% Title page. Replace institution/program/date details with the program's
-% official template if one is mandated.
-\begin{titlepage}
-\centering
-\vspace*{2cm}
+% Title page — WU's official master's thesis cover sheet
+% (ThesisTemplate_NEW.tex, supplied by the programme).
+%
+% Deviations from the supplied file, all of them required to graft a
+% standalone `article` cover page onto this `report` document:
+%   * The template's global \renewcommand{\familydefault}{\sfdefault} would
+%     set the WHOLE thesis in sans-serif, so the switch is scoped to this page
+%     with \sffamily instead.
+%   * \newgeometry/\restoregeometry confine the template's 2cm margins to this
+%     page; the rest of the document keeps the 2.5cm margins of preamble.tex.
+%   * Per the template's own instruction ("Bitte die nicht relevanten Teile
+%     löschen / Please delete any irrelevant parts") the instruction line
+%     itself, the joint-thesis note and the co-supervisor row are removed.
+%
+% >>> PLACEHOLDERS still to be filled in before submission are marked [LIKE
+% >>> THIS]. Search this file for "[" to find them.
+\newgeometry{a4paper, left=2cm, right=2cm, top=2cm, bottom=2cm}
+\thispagestyle{empty}
+\begingroup
+\sffamily
 
-{\LARGE\bfseries Stuck in the Cycle:\\[0.3em]
-Expected Returns in International\\[0.3em]
-Government Bond Markets\par}
+\begin{figure}[h!]
+    \raggedleft
+    \includegraphics[scale=1]{WULogo.png}
+\end{figure}
 
-\vspace{2cm}
-{\large Master's Thesis\par}
+\begin{center}
+    \textbf{\huge MASTERARBEIT / MASTER'S THESIS} \\
+    \vspace{1.5cm}
 
-\vspace{2cm}
-{\large\bfseries Jan Heissenberger\par}
+    Titel und ggf.\ Untertitel der Masterarbeit /
+    Title and, if applicable, subtitle of the Master's Thesis \\
 
-\vspace{0.5cm}
-{\normalsize Supervised by Giorgia Simion, Ph.D.\par}
+    \LARGE Stuck in the Cycle: Expected Returns in\\International Government Bond Markets \\
+    \vspace{2.5cm}
 
-\vfill
-{\normalsize \today\par}
-\end{titlepage}
+    \normalsize verfasst von / submitted by \\
+    \vspace{0.5cm}
+
+    \textit{\Large [ACADEMIC DEGREE(S)] Jan Heissenberger} \\
+    \vspace{2cm}
+
+    angestrebter akademischer Grad / intended degree: \\
+    \Large Master of Science (WU) / MSc (WU)
+        \\
+\vspace{1cm}
+\normalsize
+
+    \begin{tabular}{ll}
+        Matrikelnummer / student ID number: & [STUDENT ID] \\
+        Studium / degree programme: & [DEGREE PROGRAMME] \\
+        Betreut von / Supervisor: & Giorgia Simion, Ph.D. \\
+    \end{tabular}
+    \vspace{2cm}
+
+    \textbf{Wien, [MONAT] 2026 / Vienna, [MONTH] 2026}
+\end{center}
+
+\endgroup
+\restoregeometry
+\clearpage
