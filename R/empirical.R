@@ -32,11 +32,11 @@ source("R/thesis_utils.R")
 
 # ============================================================
 # CP 2015  –  Table 1: Properties of interest-rate cycles
-# US data, sample through 2014-12-31
+# US data, sample through 2011-12-31 (CP 2015 end their sample in Dec 2011)
 # ============================================================
 
 us_cycle_raw <- cycle %>%
-  dplyr::filter(country == "US", as.Date(date) <= as.Date("2014-12-31")) %>%
+  dplyr::filter(country == "US", as.Date(date) <= as.Date("2011-12-31")) %>%
   dplyr::filter(!is.na(yield), !is.na(trend_inf))
 
 us_mats <- sort(unique(us_cycle_raw$maturity))
@@ -68,7 +68,7 @@ t1a <- map_dfr(us_mats, function(m) {
 cat("\n===== CP 2015 Table 1 — Panel A =====\n")
 cat("y_t^(n) = a_n + b_n * tau_t^CPI + eps   [US, NW 18 lags]\n\n")
 print(t1a, digits = 4)
-# Results (sample 1989m3 – 2014m12; CP 2015 uses 1975m1 – 2014m12):
+# Results (sample 1989m3 – 2011m12; CP 2015 use 1971m11 – 2011m12, 470 obs):
 #   maturity  a_n_x100    t_a    b_n    t_b  R2_bar
 #          1   -175.80  -1.72   1.78   5.79   0.583   [CP: -0.35 (-0.45)  1.43 (8.64)  0.71]
 #          2   -174.90  -1.87   1.90   6.96   0.649   [CP: -0.12 (-0.17)  1.44(10.31)  0.77]
@@ -149,7 +149,7 @@ print(t1b_stats, digits = 4)
 
 # --- Sanity check: Figure 2 of CP 2015 (cor(c_bar, CF) ≈ 0.61) -----------
 us_data <- reg_data %>%
-  dplyr::filter(country == "US", as.Date(date) <= as.Date("2014-12-31"))
+  dplyr::filter(country == "US", as.Date(date) <= as.Date("2011-12-31"))
 
 cat(sprintf("\nFigure 2 check: cor(c_bar, CF) = %.2f   [CP 2015 report ~0.61]\n",
             cor(us_data$c_bar, us_data$CF, use = "pairwise.complete.obs")))
@@ -170,9 +170,9 @@ tables$cp_t1_panelA <- table_to_grob(
   as.data.frame(t1a_disp),
   title = "CP 2015 Table 1A. Yields on trend inflation",
   note  = paste0("y_t^(n) = a_n + b_n tau_t^CPI + e_t, by maturity. US, ",
-                 "1989m3-2014m12. Newey-West t-stats (18 lags).\n",
+                 "1989m3-2011m12. Newey-West t-stats (18 lags).\n",
                  "a_n in basis points. Sample is shorter than CP 2015 ",
-                 "(1975-2014), so intercept levels differ; slopes and R2 align."),
+                 "(1971m11-2011m12), so intercept levels differ; slopes and R2 align."),
   base_size = 9, note_lines = 3)
 
 t1b_disp <- t1b_stats %>%
@@ -188,7 +188,7 @@ tables$cp_t1_panelB <- table_to_grob(
   title = "CP 2015 Table 1B. Cycle and yield properties",
   note  = paste0("Standard deviation (in %) and AR(1) half-life (in months) of ",
                  "the maturity-specific cycle c^(n) and the yield y^(n).\n",
-                 "US, 1989m3-2014m12. Half-life = ln(0.5)/ln(|psi|). Shorter ",
+                 "US, 1989m3-2011m12. Half-life = ln(0.5)/ln(|psi|). Shorter ",
                  "half-lives than CP reflect the post-1989 sample."),
   base_size = 9, note_lines = 3)
 
@@ -196,7 +196,7 @@ tables$cp_t1_panelB <- table_to_grob(
 # ============================================================
 # CP 2015  –  Table 2: Predictive regressions
 # LHS: rx_bar_{t+1} = duration-standardized, maturity-averaged excess return
-# (reg_data$rx_t12).  US data, sample through 2014-12-31.
+# (reg_data$rx_t12).  US data, sample through 2011-12-31.
 # t-stats: Hansen-Hodrick / Newey-West HAC, 18 lags (cp_inference.R; the
 #   paper's exact reverse-regression delta method needs monthly returns + the
 #   CP appendix, neither available here -- see cp_inference.R header).
@@ -218,7 +218,7 @@ us_yw <- cycle %>%
                      names_prefix = "y_")
 
 t2_df <- reg_data %>%
-  dplyr::filter(country == "US", as.Date(date) <= as.Date("2014-12-31")) %>%
+  dplyr::filter(country == "US", as.Date(date) <= as.Date("2011-12-31")) %>%
   dplyr::select(ym, date, rx_t12, rx_2_t12, rx_5_t12, rx_10_t12,
                 cycle_1y, cycle_2y, cycle_5y, cycle_10y, c_bar, CF) %>%
   dplyr::left_join(us_yw,  by = "ym") %>%
@@ -276,7 +276,7 @@ t2_stats <- tibble::tibble(
 )
 
 cat("\n===== CP 2015 Table 2 — Panel A: Predictive regressions =====\n")
-cat(sprintf("LHS rx_bar_{t+1}; US %d obs (1990m1-2014m12); NW(18) HAC t-stats\n\n", T2))
+cat(sprintf("LHS rx_bar_{t+1}; US %d obs (1990m1-2011m12); NW(18) HAC t-stats\n\n", T2))
 cat("Coefficients:\n");                                 print(round(est_mat, 2))
 cat("\nNewey-West HAC (18 lags) t-stats:\n");           print(round(t_mat, 2))
 cat("\nRegression statistics:\n");                      print(as.data.frame(t2_stats), digits = 3)
@@ -330,7 +330,7 @@ tables$cp_t2_panelA <- table_to_grob(
   t2a_disp,
   title = "CP 2015 Table 2A. Predictive regressions of rx_bar",
   note  = paste0("LHS: duration-standardized, maturity-averaged excess return ",
-                 "rx_bar_{t+1}. US, ", T2, " obs (1990m1-2014m12).\n",
+                 "rx_bar_{t+1}. US, ", T2, " obs (1990m1-2011m12).\n",
                  "Cells: coefficient (Newey-West HAC t-stat, 18 lags). ",
                  "Rel.prob.(BIC) = exp((BIC_best - BIC_i)/2); best model = 1.00."),
   base_size = 8, note_lines = 3)
@@ -362,7 +362,7 @@ tables$cp_t2_panelB <- table_to_grob(
 
 t4_mats <- c(2L, 5L, 10L)
 t4_df <- reg_data %>%
-  dplyr::filter(country == "US", as.Date(date) <= as.Date("2014-12-31")) %>%
+  dplyr::filter(country == "US", as.Date(date) <= as.Date("2011-12-31")) %>%
   dplyr::select(ym, date, rx_2_t12, rx_5_t12, rx_10_t12,
                 cycle_1y, cycle_2y, cycle_5y, cycle_10y, CF) %>%
   dplyr::left_join(us_yw,  by = "ym") %>%
