@@ -452,7 +452,7 @@ rm(list = intersect(c("cycle_wide", "cycle_mats",
 # Test for local CF (US): 2
 us_data <- reg_data %>%
   filter(country == "US") %>%
-  filter(date <= "2014/12/31")
+  filter(date <= "2011/12/31")
 
 fit_us <- lm(rx_2_t12 ~ CF, data = us_data)
 summary(fit_us)

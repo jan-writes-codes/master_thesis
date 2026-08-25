@@ -296,7 +296,7 @@ plots$s3_us_cbar_vs_cf <- us_data %>%
   geom_smooth(method = "lm", se = TRUE, colour = col_pri) +
   labs(title = "US: average cycle vs local cycle factor",
        subtitle = sprintf("Correlation rho = %.2f (CP-2015 target ~ 0.61)", us_rho),
-       x = TeX("$\\bar{c}_{US,t}$"), y = TeX("$CF_{US,t}$")) +
+       x = expression(bar(c)["US,t"]), y = expression(CF["US,t"])) +
   theme_thesis
 
 # 3c. US predictive scatter: rx_{t+12} vs CF

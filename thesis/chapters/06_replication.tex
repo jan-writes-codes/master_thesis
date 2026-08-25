@@ -18,9 +18,11 @@ through the forward-rate factor. This exercise is, however, not a mechanical
 re-run, since my data, my sample window, and my inference differ from the
 originals. The relevant test is therefore agreement on signs, magnitudes and statistical
 significance. I restrict the United States return regressions to January
-1990--December 2014 ($300$ months) to align with the window of
-\citet{cieslak2015}. The yield--cycle decomposition, which
-needs no returns, uses the full US yield history from March 1989. Inference uses the block bootstrap of
+1990--December 2011 ($264$ months), so that they end where
+\citet{cieslak2015} end theirs. Their sample opens in November 1971 and my
+Bloomberg curves only begin in 1989, so the two share a closing date but not a
+starting one. The yield--cycle decomposition, which
+needs no returns, starts earlier still, in March 1989, where my US curve begins. Inference uses the block bootstrap of
 \Cref{sec:meth-inference} and Newey--West HAC standard errors, with $18$ lags
 for the Cieslak--Povala tables and $12$ lags for the Dahlquist--Hasseltoft
 tables, matching each original specification.
@@ -33,8 +35,8 @@ The cycle mechanism starts by splitting each yield into a slow trend component,
 driven by trend inflation, and a transitory cycle. In \Cref{tab:cp-t1} I
 reproduce Table~1 of \citet{cieslak2015}. Panel~A regresses each US yield on
 trend inflation \eqref{eq:decomp}: the slope is large and significant at every
-maturity ($1.63$--$1.88$, HAC $t$ from $5.8$ to $12.8$), and the share of yield
-variation the trend explains rises from $58\%$ (one year) to $84\%$ (ten).
+maturity ($1.47$--$1.67$, HAC $t$ from $4.6$ to $14.0$), and the share of yield
+variation the trend explains rises from $51\%$ (one year) to $84\%$ (ten).
 \Cref{fig:s2-yield-decomp} shows the same split for four representative markets
 (Germany, the UK, Japan, and the US).
 
@@ -53,12 +55,12 @@ variation the trend explains rises from $58\%$ (one year) to $84\%$ (ten).
 \end{figure}
 
 The cycles behave as a single factor. Adjacent-maturity correlations are
-near unity ($0.99$) and fall to $0.74$ between the one- and ten-year cycles.
+near unity ($0.99$) and fall to $0.73$ between the one- and ten-year cycles.
 Panel~B shows that they are also far less persistent than the yields, with
-half-lives falling from $55$ months to $10$ across the curve against $46$ to
-$56$ for the yields themselves.
+half-lives falling from $50$ months to $8$ across the curve against $43$ to
+$53$ for the yields themselves.
 
-The fitted factor $\CF_{t}$ \eqref{eq:cf} correlates $0.69$ with the average
+The fitted factor $\CF_{t}$ \eqref{eq:cf} correlates $0.63$ with the average
 cycle in my US sample, close to the $0.61$ of \citet{cieslak2015}.
 \Cref{fig:s3-cbar-cf} plots the two series against one another for the United
 States, with an OLS fit through the scatter.
@@ -67,16 +69,16 @@ States, with an OLS fit through the scatter.
   \includegraphics[width=0.7\linewidth]{figures/s3_us_cbar_vs_cf.pdf}
   \caption{The cycle factor against the average cycle (United States)}
   \label{fig:s3-cbar-cf}
-  \fignotes{Each point is one month for the United States. The horizontal axis is the average cycle $\cycbar_{\mathrm{US},t}$ \eqref{eq:cbar} and the vertical axis the return-forecasting factor $\CF_{\mathrm{US},t}$, the fitted value of the one-year-ahead excess return projected on the one-year cycle and the average cycle \eqref{eq:cf}. The solid line is an OLS fit with its confidence band. The sample runs through December 2014, the end of the window of \citet{cieslak2015}. The correlation of $0.69$ is the counterpart of the $0.61$ they report in their Figure~2.}
+  \fignotes{Each point is one month for the United States. The horizontal axis is the average cycle $\cycbar_{\mathrm{US},t}$ \eqref{eq:cbar} and the vertical axis the return-forecasting factor $\CF_{\mathrm{US},t}$, the fitted value of the one-year-ahead excess return projected on the one-year cycle and the average cycle \eqref{eq:cf}. The solid line is an OLS fit with its confidence band. The sample runs through December 2011, where \citet{cieslak2015} end theirs. The correlation of $0.63$ is the counterpart of the $0.61$ they report in their Figure~2.}
 \end{figure}
 
 \Cref{tab:cp-t2a} reports the predictive regressions of \citet{cieslak2015},
 Table~2, Panel~A, one column per predictor set. The yield curve alone explains
-$25\%$ of return variation and adding trend inflation lifts this to $45\%$ (trend loading $t=-3.6$). The
-two-predictor cycle representation recovers $27\%$ with the opposite-signed
+$22\%$ of return variation and adding trend inflation lifts this to $49\%$ (trend loading $t=-5.0$). The
+two-predictor cycle representation recovers $24\%$ with the opposite-signed
 loadings that define the mechanism. The BIC ranks the yields-plus-trend
 specification first, but only narrowly, since the relative posterior
-probabilities of the other four run from $0.84$ to $0.92$.
+probabilities of the other four run from $0.80$ to $0.89$.
 
 \begin{table}[t]
   \caption{Replication of Cieslak--Povala (2015) Table~2, Panel~A: predictive regressions}
@@ -88,7 +90,7 @@ probabilities of the other four run from $0.84$ to $0.92$.
 \Cref{tab:cp-t2b} reports the distribution of the predictive $\bar{R}^{2}$ under a
 simulated expectations-hypothesis null, across a grid of persistence parameters.
 Read against that null, whose $95$th percentile runs from $4.5\%$ to $12.5\%$
-across the grid, the realised $27\%$--$45\%$ sits far in the right tail. My
+across the grid, the realised $24\%$--$49\%$ sits far in the right tail. My
 Monte Carlo reproduces the shape of the null but not the exact published
 percentiles.
 
@@ -100,9 +102,9 @@ percentiles.
 \end{table}
 
 Finally, \Cref{tab:cp-t4} shows the single cycle factor loading positively and
-significantly at every maturity ($0.69$/$1.37$/$1.42$ at two/five/ten years),
+significantly at every maturity ($0.70$/$1.47$/$1.51$ at two/five/ten years),
 with the opposite-signed cycle structure and the long end most predictable
-($R^{2}=32\%$ at ten years). I thus reproduce the US evidence in its essentials.
+($R^{2}=29\%$ at ten years). I thus reproduce the US evidence in its essentials.
 
 \begin{table}[t]
   \caption{Replication of Cieslak--Povala (2015) Table~4: individual returns on the cycle factor}
