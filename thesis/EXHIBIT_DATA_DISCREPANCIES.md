@@ -172,3 +172,57 @@ data layer as a whole. The residual concern is narrower than it was. The lesson 
 silently, so the exposed ones are `fxd_t1_properties` (from `fxgcf_dynamics.R`) and
 `rob_t8_vm_sens` (from `sensitivity_vm.R`), both of which touch the Japan splice
 through the cycle factors.
+
+---
+
+## 7. Found while re-running the replication (2026-08-25) — one open item
+
+Re-running `empirical.R` for the Cieslak--Povala window fix regenerated the
+Dahlquist--Hasseltoft tables as a side effect, which finally allowed the four
+"PDF is the stale side" entries in §4 to be checked properly.
+
+**A trap to know about first.** `empirical.R:683` builds the DH Table~7
+"FXGCP" column from the thesis's own `FXGCF` object, so the **DH replication
+silently depends on `FXGCF_METHOD`**. A first re-run left the variable unset,
+took the `td_gdp` default, and produced a `dh_t7_usd.pdf` that disagreed with
+its `.tex` in 40 cells. Re-running with `FXGCF_METHOD=bu_gdp` made it match
+exactly. This is the second place that variable silently changes results, after
+the Phase~III block in `main_results.R`. **Always set it.**
+
+**Three of the four are now cleared.** Under `FXGCF_METHOD=bu_gdp`,
+`dh_t3_cp_corr`, `dh_t4_fb_cp` and `dh_t7_usd` reproduce their `.tex` with no
+numeric differences at all, so their `.tex` was current and only the committed
+PDF had been stale. Those PDFs are now regenerated and agree.
+
+### 🔴 `dh_t6_local_global` — the one that does not reconcile
+
+**67 of 264 numbers in the `.tex` do not appear in the freshly generated PDF.**
+The pattern is diagnostic. The local columns (`b_CP`, `R2_loc`) match exactly,
+and every difference sits in the **global** columns, `b_GCP` and the
+orthogonalised `b_CP-perp`:
+
+| Cell | `.tex` | Fresh output |
+|---|---|---|
+| BE 2y, `b_CP-perp` | 1.47 | **1.49** |
+| BE 5y, `b_GCP` | 7.44 | **7.43** |
+| BE 5y, `b_CP-perp` | 5.30 | **5.37** |
+| BE 10y, `b_GCP` | 13.75 | **13.71** |
+| BE 10y, `b_CP-perp` | 8.14 | **8.29** |
+
+Only the GDP-weighted global factor and the quantity orthogonalised against it
+move, which is the signature of a change in the **GDP weights**, i.e. of the
+Japanese CPI splice. That makes this the same defect class as
+`mr_t1b_maturity` and `rob_t7_fxgcf_construction` in §1 and §3, and it is the
+fourth table commit `57e223f` did not fully propagate.
+
+**No prose depends on the affected cells.** The claim that the orthogonalised
+local factor "adds little outside Italy, Belgium and Japan" was recomputed
+from the fresh output and the ranking is unchanged (IT $0.29/0.25/0.23$,
+JP $0.18$, BE $0.16/0.13$, JP $0.12$), so the sentence holds either way. The
+differences are second-decimal throughout and change no significance statement.
+
+**Not fixed, because it is the author's call.** Updating the `.tex` means
+rewriting 67 reported numbers, which is a change to results rather than a
+copy-edit. The regenerated PDF is committed so the mismatch is visible and
+diagnosable rather than hidden, and so that the reference artefact reflects
+what the pipeline actually produces today.
