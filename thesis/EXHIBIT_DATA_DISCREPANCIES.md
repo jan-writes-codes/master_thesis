@@ -175,7 +175,7 @@ through the cycle factors.
 
 ---
 
-## 7. Found while re-running the replication (2026-08-25) — one open item
+## 7. Found while re-running the replication (2026-08-25)
 
 Re-running `empirical.R` for the Cieslak--Povala window fix regenerated the
 Dahlquist--Hasseltoft tables as a side effect, which finally allowed the four
@@ -194,7 +194,7 @@ the Phase~III block in `main_results.R`. **Always set it.**
 numeric differences at all, so their `.tex` was current and only the committed
 PDF had been stale. Those PDFs are now regenerated and agree.
 
-### 🔴 `dh_t6_local_global` — the one that does not reconcile
+### `dh_t6_local_global` — ✅ FIXED
 
 **67 of 264 numbers in the `.tex` do not appear in the freshly generated PDF.**
 The pattern is diagnostic. The local columns (`b_CP`, `R2_loc`) match exactly,
@@ -221,8 +221,7 @@ from the fresh output and the ranking is unchanged (IT $0.29/0.25/0.23$,
 JP $0.18$, BE $0.16/0.13$, JP $0.12$), so the sentence holds either way. The
 differences are second-decimal throughout and change no significance statement.
 
-**Not fixed, because it is the author's call.** Updating the `.tex` means
-rewriting 67 reported numbers, which is a change to results rather than a
-copy-edit. The regenerated PDF is committed so the mismatch is visible and
-diagnosable rather than hidden, and so that the reference artefact reflects
-what the pipeline actually produces today.
+**Now corrected.** All 33 data rows were rebuilt from the regenerated PDF and
+checked positionally, row by row and column by column, so that all 264 numbers
+match the R output exactly. The source formatting and column alignment of the
+original file are preserved.
