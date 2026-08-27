@@ -3,20 +3,22 @@
 **Source:** `master_thesis_preliminary_Heissenberger_GS1.pdf` (82 pp., 86 annotations
 by `gsimion`) + covering email from Giorgia Simion, 2026-07.
 
-**Status:** **119 of 126 items done.** All 86 of the supervisor's annotations and all
+**Status:** **121 of 126 items done.** All 86 of the supervisor's annotations and all
 four email-level requests are addressed, except where a decision is the author's to
 make. Every `G-` and `STR-` item is complete. Verified by a clean rebuild from
 scratch — 0 errors, 0 undefined references, 0 multiply-defined labels, 0 overfull
 boxes, no `??`, and zero occurrences of `we`, `our`, `us`, `FX-adjusted` or
 `Chapter A/B`.
 
-**The 6 open items all need the author or the supervisor, not an edit:**
+**The 4 remaining open items need the author or the supervisor, not an edit:**
 1. **X-3** — two table files that no chapter includes. Drop them or wire them in.
-2. **S-84 / Q-2** — whether the contribution statement deliberately omits the local
-   factor.
-3. **Q-1, Q-6, Q-7** — for the supervisor: what to send her from the robustness
+   They are not `\input` anywhere, so they do not reach the PDF.
+2. **Q-1, Q-6, Q-7** — for the supervisor: what to send her from the robustness
    chapter she read quickly, the follow-up meeting she offered, and whether the
    Japanese core-CPI splice warrants a robustness check of its own.
+
+**S-84 / Q-2 is now closed** — the local factor is named in the conclusion's
+contribution statement, matching the introduction.
 
 **X-2 is now closed.** The pipeline was re-run and all three stale tables were
 corrected from fresh output. `rob_t7` turned out to be worse than first diagnosed —
@@ -777,8 +779,14 @@ These are the highest-leverage items. Each one is a full-document sweep.
       table is transcribed from `fxgcf_comparison/`, which `57e223f` never touched.
       The baseline row now reads **0.81** and **+0.021**, agreeing with the text and
       with Table 4. Written up as §3 of `EXHIBIT_DATA_DISCREPANCIES.md`.
-- [ ] **S-84** (p.61) The **contribution statement appears to drop the local factor** — is
-      there a specific reason? *(→ Q-2)*
+- [x] **S-84** (p.61) The **contribution statement appears to drop the local factor** — is
+      there a specific reason? ✅ **FIXED** — there was no reason, it was an omission.
+      The conclusion said *"a unified, macro-anchored global cycle factor together with
+      its dollar-return counterpart"*, which also contradicted the introduction's
+      *"a family of three nested cycle factors -- local, global, and dollar-return"*.
+      It now reads *"a nested family of macro-anchored cycle factors -- local, global,
+      and dollar-return"*, so both statements name the same three. **Q-2 is closed
+      with it** — nothing left to ask her.
 
 ### Bibliography & Appendices
 - [x] **S-85** (p.65) **BibTeX has eaten capitalisations.** ✅ *Confirmed — cause is
