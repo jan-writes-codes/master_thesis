@@ -8,8 +8,8 @@
 In this chapter, I describe the data and develop the methodology of my
 empirical analysis. I first describe the data I use to construct the cycle
 factors and to run the predictive regressions of \Cref{ch:results}. I assemble
-all series in a single workbook (\texttt{data.xlsx}) and process them into a
-monthly country--maturity panel, implemented in \texttt{data\_preparation.R}. I
+all series in a single workbook and process them into a
+monthly country--maturity panel. I
 begin with the cross-sectional universe and the four raw inputs (yields,
 inflation, GDP, and exchange rates) with their sources and units, then present
 the sample coverage, my cleaning and alignment choices, and summary statistics.
@@ -39,8 +39,7 @@ I obtain four raw inputs for my analysis, drawn from three data providers:
     Bloomberg's fitted zero-coupon government curves,
     one curve per country, at maturities of $1,2,4,5,9$ and $10$ years. Each
     country maps to a Bloomberg curve identifier (e.g.\ \texttt{I25} for the US,
-    \texttt{I22} for the UK, \texttt{I18} for Japan), which I record in the
-    workbook's \texttt{curve\_translation} sheet. Yields are continuously
+    \texttt{I22} for the UK, \texttt{I18} for Japan). Yields are continuously
     compounded and quoted in percent per annum.
   \item[Core CPI (FRED).] I use monthly seasonally adjusted core
     consumer price indices, one per country. The workbook stores the \emph{index level}.

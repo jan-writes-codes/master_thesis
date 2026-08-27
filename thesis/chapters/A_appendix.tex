@@ -66,7 +66,7 @@ This section collects supporting figures referenced in the main text.
   \includegraphics[width=0.85\linewidth]{figures/mr_f1_r2_phase1.pdf}
   \caption{In-sample $R^{2}$ of the local regression by country}
   \label{fig:mr-r2-phase1}
-  \fignotes{Bars report the in-sample $R^{2}$ of the country-level Phase~I regression \eqref{eq:h-local}, $\rxbar_{i,t+12}\sim\CF_{i,t}$, of the duration-standardised, maturity-averaged excess return \eqref{eq:rxbar} on the local cycle factor. Because the factor is the fitted value of Equation~\eqref{eq:cf}, this $R^{2}$ equals the fit of the underlying two-predictor forecasting regression reported in \Cref{tab:mr-phase1}. Countries appear in order of $R^{2}$.}
+  \fignotes{Bars report the in-sample $R^{2}$ of the country-level Phase~I regression, $\rxbar_{i,t+12}\sim\CF_{i,t}$, of the duration-standardised, maturity-averaged excess return on the local cycle factor. Because the factor is the fitted value of Equation~\eqref{eq:cf}, this $R^{2}$ equals the fit of the underlying two-predictor forecasting regression reported in \Cref{tab:mr-phase1}. Countries appear in order of $R^{2}$.}
 \end{figure}
 
 \begin{figure}[htbp]\centering
@@ -85,21 +85,21 @@ This section collects supporting figures referenced in the main text.
   \end{minipage}
   \caption{In-sample $R^{2}$ and factor correlations by country}
   \label{fig:s10-is}
-  \fignotes{The left panel reports the in-sample $R^{2}$ by country of the local and global cycle factors against the local and global forward-rate factors, each in a univariate regression on the maturity-averaged excess return \eqref{eq:rxbar}. The right panel reports the per-country correlation between the local cycle factor \eqref{eq:cf} and the local Cochrane--Piazzesi factor. A low correlation with a comparable fit indicates that the two predictors carry different information. The right panel orders countries by correlation.}
+  \fignotes{The left panel reports the in-sample $R^{2}$ by country of the local and global cycle factors against the local and global forward-rate factors, each in a univariate regression on the maturity-averaged excess return. The right panel reports the per-country correlation between the local cycle factor and the local Cochrane--Piazzesi factor. A low correlation with a comparable fit indicates that the two predictors carry different information. The right panel orders countries by correlation.}
 \end{figure}
 
 \begin{figure}[htbp]\centering
   \includegraphics[width=0.88\linewidth]{figures/rob_f3_core_vs_reg.pdf}
   \caption{In-sample $R^{2}$: core versus headline CPI}
   \label{fig:rob-core-headline}
-  \fignotes{Bars compare the in-sample $R^{2}$ of the local predictive regression \eqref{eq:h-local}, $\rxbar_{i,t+12}\sim\CF_{i,t}$, by country, when trend inflation \eqref{eq:trendinf} is built on core CPI, excluding food and energy, against all-items headline CPI. Only the inflation series changes. The window $M=120$ and decay $v=0.987$, the yield--cycle decomposition and the factor construction are held at their baseline values. Core CPI is the baseline used throughout the thesis.}
+  \fignotes{Bars compare the in-sample $R^{2}$ of the local predictive regression, $\rxbar_{i,t+12}\sim\CF_{i,t}$, by country, when trend inflation is built on core CPI, excluding food and energy, against all-items headline CPI. Only the inflation series changes. The window $M=120$ and decay $v=0.987$, the yield--cycle decomposition and the factor construction are held at their baseline values. Core CPI is the baseline used throughout the thesis.}
 \end{figure}
 
 \begin{figure}[htbp]\centering
   \includegraphics[width=0.9\linewidth]{figures/mr_f2_r2_ladder.pdf}
   \caption{Phase~II in-sample $R^{2}$ by country and specification}
   \label{fig:mr-r2-ladder}
-  \fignotes{For each country the three bars report the in-sample $R^{2}$ of the three nested Phase~II specifications, the local factor alone \eqref{eq:h-local}, the global factor alone \eqref{eq:h-global}, and the joint horse race \eqref{eq:h-horse} in which the local factor enters orthogonalised. Under full integration the third bar should not exceed the second, since the orthogonalised local factor then adds nothing.}
+  \fignotes{For each country the three bars report the in-sample $R^{2}$ of the three nested Phase~II specifications, the local factor alone, the global factor alone, and the joint horse race in which the local factor enters orthogonalised. Under full integration the third bar should not exceed the second, since the orthogonalised local factor then adds nothing.}
 \end{figure}
 
 \begin{figure}[htbp]\centering
@@ -118,5 +118,5 @@ This section collects supporting figures referenced in the main text.
   \end{minipage}
   \caption{Recursive versus full-sample global cycle factor}
   \label{fig:s8-gcf-conv}
-  \fignotes{The left panel plots the full-sample global cycle factor $\GCF_{t}$ \eqref{eq:gcf} against its fully-recursive counterpart $\GCF^{\mathrm{oos}}_{t}$, which is rebuilt at each date from data available then. The two are expected to differ early in the sample, while the trend-inflation average \eqref{eq:trendinf} is still filling its window, and convergence after that burn-in signals a stable real-time estimator. The right panel reports the per-country correlation between the full-sample and recursive local cycle factors, where a value closer to one means the full-sample look-ahead added little. Countries are sorted by correlation.}
+  \fignotes{The left panel plots the full-sample global cycle factor $\GCF_{t}$ against its fully-recursive counterpart $\GCF^{\mathrm{oos}}_{t}$, which is rebuilt at each date from data available then. The two are expected to differ early in the sample, while the trend-inflation average is still filling its window, and convergence after that burn-in signals a stable real-time estimator. The right panel reports the per-country correlation between the full-sample and recursive local cycle factors, where a value closer to one means the full-sample look-ahead added little. Countries are sorted by correlation.}
 \end{figure}

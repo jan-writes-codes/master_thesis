@@ -60,12 +60,12 @@ In this section, I cover the implementation. Each
 month $t$, using only information available at $t$: \emph{(i)} I re-estimate
 the full generated-regressor chain on outcomes realised by $t$ (a twelve-month
 lag), with a sixty-month minimum training history (\Cref{sec:meth-oos}). This
-regards trend inflation \eqref{eq:trendinf}, the yield-cycle decomposition
-\eqref{eq:decomp}, the local-factor regressions \eqref{eq:cf-reg}, and the GDP aggregation \eqref{eq:gcf}. \emph{(ii)} I form the forecast
+regards trend inflation (Eq.~\ref{eq:trendinf}), the yield-cycle decomposition
+(Eq.~\ref{eq:decomp}), the local-factor regressions (Eq.~\ref{eq:cf-reg}), and the GDP aggregation (Eq.~\ref{eq:gcf}). \emph{(ii)} I form the forecast
 $\widehat{\E}_{t}[\rx_{t+12}]=\hat a_{t}+\hat b_{t}\,\GCF^{\mathrm{oos}}_{t}$
 from the recursive regression, \emph{(iii)} I estimate the variance
 $\widehat{\sigma}^{2}_{t}$ on an expanding window, \emph{(iv)} I set the
-target weight to the mean-variance exposure \eqref{eq:strat-weight}, truncated
+target weight to the mean-variance exposure (Eq.~\ref{eq:strat-weight}), truncated
 at zero (long-only) and rescaled to unit average exposure for reporting, and
 \emph{(v)} I rebalance monthly, with one-way turnover $|w_{t}-w_{t-1}|$.
 
@@ -110,7 +110,7 @@ nearly constant position.
   \includegraphics[width=0.85\linewidth]{figures/strat_f1_cumret.pdf}
   \caption{Cumulative wealth: GCF-timed versus buy-and-hold}
   \label{fig:strat-cumret}
-  \fignotes{Wealth, measured in excess of cash, is cumulated from monthly excess returns on the GDP-weighted ten-year global government bond portfolio, rebalanced monthly with a one-month holding period. The timed portfolio sets its exposure from the mean--variance rule \eqref{eq:strat-weight} using the recursive factor $\GCF^{\mathrm{oos}}_{t}$ and a forecast that respects time~$t$. Both portfolios are scaled to equal average exposure, so the comparison reflects timing and not leverage. The evaluation window is the period over which the fully-recursive factor is available.}
+  \fignotes{Wealth, measured in excess of cash, is cumulated from monthly excess returns on the GDP-weighted ten-year global government bond portfolio, rebalanced monthly with a one-month holding period. The timed portfolio sets its exposure from the mean--variance rule (Eq.~\ref{eq:strat-weight}) using the recursive factor $\GCF^{\mathrm{oos}}_{t}$ and a forecast that respects time~$t$. Both portfolios are scaled to equal average exposure, so the comparison reflects timing and not leverage. The evaluation window is the period over which the fully-recursive factor is available.}
 \end{figure}
 
 \begin{figure}[t]\centering
@@ -207,7 +207,7 @@ the economic value but do not overturn its existence.
 \label{sec:strat-fx}
 
 A US-based investor who holds the global bond portfolio unhedged earns the
-dollar excess return \eqref{eq:rx-usd}, which adds the currency return to the
+dollar excess return (Eq.~\ref{eq:rx-usd}), which adds the currency return to the
 local bond return. The signal for this investor is the dollar-return
 global cycle factor $\FXGCF_{t}$, which I built in \Cref{sec:fw-fxgcf} to
 target dollar returns directly. In \Cref{tab:strat-usd}, I run the timing

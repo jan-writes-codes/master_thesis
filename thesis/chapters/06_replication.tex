@@ -7,10 +7,10 @@
 
 Before I take the macro-anchored cycle factor to the G10, I first have to show
 that my pipeline produces comparable results. In this appendix, I therefore validate the
-entire pipeline, namely the trend-inflation construction \eqref{eq:trendinf}, the
-yield--cycle decomposition \eqref{eq:decomp}, the cycle factor \eqref{eq:cf}, the
+entire pipeline, namely the trend-inflation construction (Eq.~\ref{eq:trendinf}), the
+yield--cycle decomposition (Eq.~\ref{eq:decomp}), the cycle factor (Eq.~\ref{eq:cf}), the
 forward-rate factor of \citet{cochrane2005}, and the global aggregation
-\eqref{eq:gcf}, against the two studies it builds on. In \Cref{sec:rep-cp}, I
+(Eq.~\ref{eq:gcf}), against the two studies it builds on. In \Cref{sec:rep-cp}, I
 reproduce the United States evidence of \citet{cieslak2015}, who introduced the
 cycle mechanism. In \Cref{sec:rep-dh}, I reproduce the international evidence of
 \citet{dahlquist2013}, who established the global integration of bond risk premia
@@ -34,7 +34,7 @@ tables, matching each original specification.
 The cycle mechanism starts by splitting each yield into a slow trend component,
 driven by trend inflation, and a transitory cycle. In \Cref{tab:cp-t1} I
 reproduce Table~1 of \citet{cieslak2015}. Panel~A regresses each US yield on
-trend inflation \eqref{eq:decomp}: the slope is large and significant at every
+trend inflation (Eq.~\ref{eq:decomp}): the slope is large and significant at every
 maturity ($1.47$--$1.67$, HAC $t$ from $4.6$ to $14.0$), and the share of yield
 variation the trend explains rises from $51\%$ (one year) to $84\%$ (ten).
 \Cref{fig:s2-yield-decomp} shows the same split for four representative markets
@@ -51,7 +51,7 @@ variation the trend explains rises from $51\%$ (one year) to $84\%$ (ten).
   \includegraphics[width=0.9\linewidth]{figures/s2_yield_decomp.pdf}
   \caption{Yield--cycle decomposition for four representative markets}
   \label{fig:s2-yield-decomp}
-  \fignotes{Each panel plots two series for one market, the nominal ten-year zero-coupon yield and its fitted trend component $\alpha_{i,10}+\beta_{i,10}\,\trendinf_{i,t}$ from the country-by-country projection \eqref{eq:decomp}. The cycle $\cyc^{(10)}_{i,t}$ is not drawn separately, it is the vertical gap between the two lines. Germany, the UK, Japan and the US are shown for legibility, and the same decomposition is applied to all eleven G10 markets in the analysis that follows. Trend inflation is the backward-looking exponentially weighted moving average of year-on-year core CPI inflation \eqref{eq:trendinf}, with window $M=120$ months and decay $v=0.987$. Yields are from Bloomberg and core CPI from FRED. Vertical scales are free across panels.}
+  \fignotes{Each panel plots two series for one market, the nominal ten-year zero-coupon yield and its fitted trend component $\alpha_{i,10}+\beta_{i,10}\,\trendinf_{i,t}$ from the country-by-country projection (Eq.~\ref{eq:decomp}). The cycle $\cyc^{(10)}_{i,t}$ is not drawn separately, it is the vertical gap between the two lines. Germany, the UK, Japan and the US are shown for legibility, and the same decomposition is applied to all eleven G10 markets in the analysis that follows. Trend inflation is the backward-looking exponentially weighted moving average of year-on-year core CPI inflation (Eq.~\ref{eq:trendinf}), with window $M=120$ months and decay $v=0.987$. Yields are from Bloomberg and core CPI from FRED. Vertical scales are free across panels.}
 \end{figure}
 
 The cycles behave as a single factor. Adjacent-maturity correlations are
@@ -60,7 +60,7 @@ Panel~B shows that their persistence falls away with maturity while that of
 the yields does not. The cycle half-life drops from $50$ months at one year to
 $8$ at ten, against $53$ down to $43$ for the yields.
 
-The fitted factor $\CF_{t}$ \eqref{eq:cf} correlates $0.63$ with the average
+The fitted factor $\CF_{t}$ (Eq.~\ref{eq:cf}) correlates $0.63$ with the average
 cycle in my US sample, close to the $0.61$ of \citet{cieslak2015}.
 \Cref{fig:s3-cbar-cf} plots the two series against one another for the United
 States, with an OLS fit through the scatter.
@@ -69,7 +69,7 @@ States, with an OLS fit through the scatter.
   \includegraphics[width=0.7\linewidth]{figures/s3_us_cbar_vs_cf.pdf}
   \caption{The cycle factor against the average cycle (United States)}
   \label{fig:s3-cbar-cf}
-  \fignotes{Each point is one month for the United States. The horizontal axis is the average cycle $\cycbar_{\mathrm{US},t}$ \eqref{eq:cbar} and the vertical axis the return-forecasting factor $\CF_{\mathrm{US},t}$, the fitted value of the one-year-ahead excess return projected on the one-year cycle and the average cycle \eqref{eq:cf}. The solid line is an OLS fit with its confidence band. The sample runs through December 2011, where \citet{cieslak2015} end theirs. The correlation of $0.63$ is the counterpart of the $0.61$ they report in their Figure~2.}
+  \fignotes{Each point is one month for the United States. The horizontal axis is the average cycle $\cycbar_{\mathrm{US},t}$ and the vertical axis the return-forecasting factor $\CF_{\mathrm{US},t}$, the fitted value of the one-year-ahead excess return projected on the one-year cycle and the average cycle. The solid line is an OLS fit with its confidence band. The sample runs through December 2011, where \citet{cieslak2015} end theirs. The correlation of $0.63$ is the counterpart of the $0.61$ they report in their Figure~2.}
 \end{figure}
 
 \Cref{tab:cp-t2a} reports the predictive regressions of \citet{cieslak2015},
