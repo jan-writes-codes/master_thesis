@@ -947,8 +947,10 @@ squarely under her instruction to check cross-references systematically (G-13).
       more closely. → Decide what to send back: candidates are the **OOS estimation-scheme
       stress test**, the **core-vs-regional CPI variants**, and the **FXGCF construction
       alternatives**.
-- [ ] **Q-2** S-84: confirm whether **dropping the local factor from the contribution
-      statement** is intentional.
+- [x] **Q-2** S-84: confirm whether **dropping the local factor from the contribution
+      statement** is intentional. ✅ **RESOLVED (author decision, nothing to ask her).**
+      It was not intentional. The conclusion now names all three factors, matching the
+      introduction. Verified in the submitted PDF, p.62.
 - [x] **Q-3** ✅ **RESOLVED (author decision, no need to ask her).** G-4 renames the
       **prose only** to **"dollar-return"**; the symbol `FXGCF_t` is **retained** to avoid
       rippling into every exhibit and the R scripts. Applied and compiled.
