@@ -138,10 +138,10 @@ maturity-specific measurement error. I define the local cycle factor as
 the fitted value of the one-year-ahead excess return projected on these two
 predictors:
 \begin{align}
-  \rxbar_{i,t+12} &= \gamma_{0} + \gamma_{i,1}\,\cyc^{(1)}_{i,t}
+  \rxbar_{i,t+12} &= \gamma_{i,0} + \gamma_{i,1}\,\cyc^{(1)}_{i,t}
                      + \gamma_{i,2}\,\cycbar_{i,t} + \varepsilon_{i,t+12},
                      \label{eq:cf-reg}\\[2pt]
-  \CF_{i,t}       &= \hat\gamma_{i,1}\,\cyc^{(1)}_{i,t}
+  \CF_{i,t}       &= \hat\gamma_{i,0} + \hat\gamma_{i,1}\,\cyc^{(1)}_{i,t}
                      + \hat\gamma_{i,2}\,\cycbar_{i,t}.
                      \label{eq:cf}
 \end{align}
@@ -193,7 +193,7 @@ return on its own cycle predictors:
      &= \delta_{i,0} + \delta_{i,1}\,\cyc^{(1)}_{i,t}
         + \delta_{i,2}\,\cycbar_{i,t} + \varepsilon_{i,t+12},
         \label{eq:fxcf-reg}\\[2pt]
-  \FXCF_{i,t} &= \hat\delta_{i,1}\,\cyc^{(1)}_{i,t}
+  \FXCF_{i,t} &= \hat\delta_{i,0} + \hat\delta_{i,1}\,\cyc^{(1)}_{i,t}
               + \hat\delta_{i,2}\,\cycbar_{i,t}.
         \label{eq:fxcf}
 \end{align}
@@ -292,7 +292,8 @@ errors \citep{neweywest1987} with $18$ lags. For
 multi-regressor specifications I add a joint HAC Wald test that all slopes are
 zero. Because the cycle
 factors are generated regressors, I re-evaluate them fully
-recursively\label{sec:meth-oos}, rebuilding the entire factor chain
+recursively\label{sec:meth-oos}, requiring a sixty-month minimum training
+history before the first real-time forecast and rebuilding the entire factor chain
 (decomposition, local regression, and global aggregation) from data available at
 each date $t$ so that both the factor and the forecasting regression respect $t$
 (a ``doubly out-of-sample'' forecast), and scoring it by the

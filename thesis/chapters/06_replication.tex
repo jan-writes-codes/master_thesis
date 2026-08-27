@@ -22,8 +22,8 @@ significance. I restrict the United States return regressions to January
 \citet{cieslak2015} end theirs. Their sample opens in November 1971 and my
 Bloomberg curves only begin in 1989, so the two share a closing date but not a
 starting one. The yield--cycle decomposition, which
-needs no returns, starts earlier still, in March 1989, where my US curve begins. Inference uses the block bootstrap of
-\Cref{sec:meth-inference} and Newey--West HAC standard errors, with $18$ lags
+needs no returns, starts earlier still, in March 1989, where my US curve begins. Inference uses the Newey--West HAC standard errors of
+\Cref{sec:meth-inference}, with $18$ lags
 for the Cieslak--Povala tables and $12$ lags for the Dahlquist--Hasseltoft
 tables, matching each original specification.
 
@@ -56,9 +56,9 @@ variation the trend explains rises from $51\%$ (one year) to $84\%$ (ten).
 
 The cycles behave as a single factor. Adjacent-maturity correlations are
 near unity ($0.99$) and fall to $0.73$ between the one- and ten-year cycles.
-Panel~B shows that they are also far less persistent than the yields, with
-half-lives falling from $50$ months to $8$ across the curve against $43$ to
-$53$ for the yields themselves.
+Panel~B shows that their persistence falls away with maturity while that of
+the yields does not. The cycle half-life drops from $50$ months at one year to
+$8$ at ten, against $53$ down to $43$ for the yields.
 
 The fitted factor $\CF_{t}$ \eqref{eq:cf} correlates $0.63$ with the average
 cycle in my US sample, close to the $0.61$ of \citet{cieslak2015}.
@@ -90,7 +90,7 @@ probabilities of the other four run from $0.80$ to $0.89$.
 \Cref{tab:cp-t2b} reports the distribution of the predictive $\bar{R}^{2}$ under a
 simulated expectations-hypothesis null, across a grid of persistence parameters.
 Read against that null, whose $95$th percentile runs from $4.5\%$ to $12.5\%$
-across the grid, the realised $24\%$--$49\%$ sits far in the right tail. My
+across the grid, the realised $13\%$--$49\%$ sits above it at every specification. My
 Monte Carlo reproduces the shape of the null but not the exact published
 percentiles.
 
@@ -189,6 +189,6 @@ Taken together, the two replications establish that my engine reproduces both
 pillars: the macro-anchored cycle mechanism of \citet{cieslak2015} on US data
 and the global-integration evidence of \citet{dahlquist2013} on the G10,
 including the dollar-return construction. The differences from the originals, namely a
-sample beginning in 1990 and HAC and bootstrap inference, do not disturb the qualitative agreement. With the engine
+sample beginning in 1990 and HAC inference, do not disturb the qualitative agreement. With the engine
 validated, I turn in \Cref{ch:results} to applying the macro-anchored cycle
 factor, rather than the forward-rate factor, to the international cross-section.
